@@ -1,0 +1,90 @@
+add_edit_role {
+    page_title
+    role_form
+}
+
+add_edit_client {
+    page_title
+    client_form
+    -> проверять value кнопки -> "save-and-add-order"
+                              -> "only-save"
+}
+
+add_edit_company {
+    page_title
+    company_form
+}
+
+log_in {
+    login_form
+}
+
+get_companies {
+    page_title
+    companies[] = {
+        title
+        full_name
+        pk (уже есть в выборке из базы)
+    }
+}
+
+get_clients {
+    page_title
+    clients[] = {
+        person_full_name
+        person_phone
+        organization
+        organization_phone
+        email
+        pk (уже есть в выборке из базы)
+    }
+}
+
+get_roles {
+    page_title
+    roles[] = {
+        role
+        login
+        full_name
+        pk (уже есть в выборке из базы)
+    }
+}
+
+get_orders {
+    page_title
+    orders[] = {
+        role {
+            full_name
+        }
+        client {
+            organization_or_full_name
+            full_name
+            person_phone
+            organization
+            organization_phone
+            email
+            account_number
+        }
+        unique_number
+        company {
+            title
+        }
+        bill
+        payment_date
+        products[] {
+            product {
+                title
+            }
+            count_of_products
+        }
+        order_status
+        ready_date
+        city
+        comment
+        pk (уже есть в выборке из базы)
+    }
+}
+
+models:
+    добавить is_deleted в Products ?
+    зачем order_date в Order_Product ?

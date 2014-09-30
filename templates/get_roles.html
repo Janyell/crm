@@ -1,0 +1,49 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <div class="container">
+        <h2 class="center">{{ page_title }}</h2>
+        {% if roles %}
+            <table class="table table-hover table-bordered" id="role-table">
+                <thead>
+                    <tr>
+                        <th>Роль</th>
+                        <th>Логин</th>
+                        <th>ФИО</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for role in roles %}
+                        <tr>
+                            <td>{{ role.role }}</td>
+                            <td>{{ role.login }}</td>
+                            <td>{{ role.full_name }}</td>
+                            <td><a class="btn btn-mini" href="{% url "edit_role" %}?id={{ role.pk }}"><i class="icon-pencil"></i></a></td>
+                            <td><a class="btn btn-mini" href="#"><i class="icon-remove"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h5 class="center">Не было добавлено ни одной роли</h5>
+        {% endif %}
+        <a href="{% url "add_role" %}" class="btn">Добавить роль</a>
+    </div>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("#role-table").dataTable({
+                    "language": {
+                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                    },
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 3, 4 ] },
+                        { "bSearchable": false, "aTargets": [ 3, 4 ] }
+                    ]
+                });
+            });
+        })(jQuery);
+    </script>
+{%endblock%}

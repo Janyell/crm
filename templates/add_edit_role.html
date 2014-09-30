@@ -1,0 +1,70 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <div class="container">
+        <form class="form-horizontal form-add-role form-add" method="post" action="{{ request.path }}">
+            <h2 class="form-add__head">{{ page_title }}</h2>
+            <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
+            <div class="control-group">
+                <label class="control-label" for="inputLogin">
+                    Логин
+                    <span class="required-input">*</span>
+                </label>
+                <div class="controls">
+                    {{ role_form.login }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPassword">
+                    Пароль
+                    <span class="required-input">*</span>
+                </label>
+                <div class="controls">
+                    {{ role_form.password }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="selectRole">
+                    Роль
+                    <span class="required-input">*</span>
+                </label>
+                <div class="controls">
+                    {{ role_form.role }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputSurname">
+                    Фамилия
+                </label>
+                <div class="controls">
+                    {{ role_form.last_name }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputName">
+                    Имя
+                </label>
+                <div class="controls">
+                    {{ role_form.name }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPatronymic">
+                    Отчество
+                </label>
+                <div class="controls">
+                    {{ role_form.patronymic }}
+                </div>
+            </div>
+            <div class="form-add__tips">
+                <div class="form-add-tips__tip">
+                    <span class="required-input">*</span> - поле, обязательное для заполнения
+                </div>
+            </div>
+            <div class="form-add__submits">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button type="reset" class="btn">Отменить</button>
+            </div>
+        </form>
+    </div>
+{%endblock%}

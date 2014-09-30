@@ -1,0 +1,44 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <div class="container">
+        <form class="form-horizontal form-add form-add-company" method="post" action="">
+            <h2 class="form-add__head">{{ page_title }}</h2>
+            <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
+            <div class="control-group">
+                <label class="control-label" for="inputTitle">
+                    Название
+                    <span class="required-input">*</span>
+                </label>
+                <div class="controls">
+                    {{ company_form.title }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputRepresentative">
+                    Представитель
+                </label>
+                <div class="controls">
+                     <div class="form-add__input">
+                        {{ company_form.last_name }}
+                    </div>
+                    <div class="form-add__input">
+                        {{ company_form.name }}
+                    </div>
+                    <div class="form-add__input_last">
+                        {{ company_form.patronymic }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-add__tips">
+                <div class="form-add-tips__tip">
+                    <span class="required-input">*</span> - поле, обязательное для заполнения
+                </div>
+            </div>
+            <div class="form-add__submits">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button type="reset" class="btn">Отменить</button>
+            </div>
+        </form>
+    </div>
+{%endblock%}

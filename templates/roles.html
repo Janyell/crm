@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <title>Клиенты &middot; Завод "Триумф"</title>
+
+        <!-- Le styles -->
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/DT_bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="#">Завод "Триумф"</a>
+                    <div class="nav-collapse collapse">
+                        <p class="navbar-text pull-right">
+                            Username
+                            <a href="#" class="navbar-link navbar-link_logout">Выйти</a>
+                        </p>
+                        <ul class="nav">
+                            <li><a href="#">Главная</a></li>
+                            <li class="active"><a href="#">Клиенты</a></li>
+                            <li><a href="#">Заказы</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <h2 class="center">Роли</h2>
+            <table class="table table-hover table-bordered" id="role-table">
+                <thead>
+                    <tr>
+                        <th>Роль</th>
+                        <th>Логин</th>
+                        <th>ФИО</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Менеджер</td>
+                        <td>e.sicheva</td>
+                        <td>Сычева Евгения Алексеевна</td>
+                        <td><a class="btn btn-mini" href="#"><i class="icon-pencil"></i></a></td>
+                        <td><a class="btn btn-mini" href="#"><i class="icon-remove"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td>Производство</td>
+                        <td>plant</td>
+                        <td></td>
+                        <td><a class="btn btn-mini" href="#"><i class="icon-pencil"></i></a></td>
+                        <td><a class="btn btn-mini" href="#"><i class="icon-remove"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="#" class="btn">Добавить роль</a>
+        </div>
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="js/DT_bootstrap.js"></script>
+        <script type="text/javascript" src="js/date-de.js"></script>
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function(){
+                    $("#role-table").dataTable({
+                        "language": {
+                            "url": "language/ru_RU.txt"
+                        },
+                        "aoColumnDefs": [ 
+                            { "bSortable": false, "aTargets": [ 3, 4 ] },
+                            { "bSearchable": false, "aTargets": [ 3, 4 ] }
+                        ],
+                    });
+                });
+            })(jQuery);
+        </script>
+    </body>
+</html>

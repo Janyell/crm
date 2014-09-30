@@ -1,0 +1,98 @@
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+.sidebar-nav {
+    padding: 9px 0;
+}
+.navbar-link_logout {
+    padding-left: 20px; 
+}
+.required-input {
+    color: red;
+}
+.required-input_second {
+    color: blue;
+}
+.form-add__input {
+    margin-bottom: 10px;
+}
+.form-add__input_last {
+    margin-bottom: 0px;
+}
+.form-add-client__organization-type {
+    width: 60px;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: middle;
+    *display: inline;
+}
+.form-add-client__organization-name {
+    width: 146px;
+}
+.form-add {
+    margin: 0 auto;
+    width: 550px;
+    padding: 0 20px; 
+}
+.form-add-order {
+    width: 100%;
+}
+.form-add__head {
+    text-align: center;
+}
+.form-add__submits {
+    text-align: right;
+}
+.form-add__submits > button {
+    margin: 0 5px;
+}
+.form-add-tips__tip {
+    margin-bottom: 10px; 
+}
+.container_full-width {
+    width: 95%;
+    padding: 0 20px; 
+}
+.dataTables_filter input[type="search"] {
+    margin-left: 10px; 
+}
+.dataTables_length select {
+    margin: 0 5px;
+}
+.client-info__head {
+    float: left;
+    width: 160px;
+    text-align: right;
+    font-weight: bold;
+}
+.client-info__data {
+    margin-left: 180px;
+}
+.client-info__item {
+    margin: 5px 0;
+}
+#add-product-table_wrapper, .select-product-table_wrapper {
+    width: 450px;
+    padding: 10px;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    *display: inline;
+}
+#add-product-table th:last-child, .select-product-table th:last-child {
+    width: 34px;
+}
+.select-product-table th:nth-child(2) {
+    width: 85px;
+}
+.select-product__number {
+    width: 71px;
+}
+.center {
+    text-align: center;
+}
+.text-error {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
