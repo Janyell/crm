@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -62,14 +64,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'base_for_api',
         'USER': 'root',
-        'PASSWORD': 'max',
+        'PASSWORD': '123',
     }
 }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'Europe/Moscow'
 
@@ -84,3 +86,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, "templates"),
+)
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
+
+TEMPLATE_CONTEXT_PROCESSORS += (
+    'django.core.context_processors.request',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)

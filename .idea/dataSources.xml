@@ -6,7 +6,7 @@
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://127.0.0.1/base_for_api</jdbc-url>
       <user-name>root</user-name>
-      <user-password>dfc7dfcbdfd2</user-password>
+      <user-password>df9bdf98df99</user-password>
       <libraries />
     </data-source>
   </component>

@@ -1,5 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from django.db import models
-
 from datetime import datetime
 from time import strftime
 
@@ -40,7 +41,14 @@ class UnixTimestampField(models.DateTimeField):
 class Roles(models.Model):
     login = models.CharField(max_length=15, unique=True)
     password = models.CharField(max_length=50)
-    role = models.IntegerField()
+    LEADERSHIP = 0
+    MANAGER = 1
+    PRODUCTION = 2
+    ROLES_CHOICES = (
+        (MANAGER, 'Менеджер'),
+        (PRODUCTION, 'Производство'),
+    )
+    role = models.IntegerField(choices=ROLES_CHOICES, default=MANAGER)
     name = models.CharField(max_length=25, null=True)
     last_name = models.CharField(max_length=50, null=True)
     patronymic = models.CharField(max_length=50, null=True)
@@ -77,7 +85,17 @@ class Orders(models.Model):
     company = models.ForeignKey(Companies, null=True)
     bill = models.FloatField(null=True)
     payment_date = UnixTimestampField(auto_created=True)
-    order_status = models.IntegerField(null=True)
+    IN_PRODUCTION = 0
+    NEED_SURCHARGE = 1
+    SHIPPED = 2
+    READY = 3
+    ORDER_STATUS_CHOICES = (
+        (IN_PRODUCTION, 'В производстве'),
+        (NEED_SURCHARGE, 'Нужна доплата'),
+        (SHIPPED, 'Отгружен'),
+        (READY, 'Готов'),
+    )
+    order_status = models.IntegerField(null=True, choices=ORDER_STATUS_CHOICES)
     bill_status = models.IntegerField(null=True)
     ready_date = UnixTimestampField(auto_created=True)
     comment = models.TextField(null=True)
