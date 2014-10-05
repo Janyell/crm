@@ -84,7 +84,3 @@ get_orders {
         pk (уже есть в выборке из базы)
     }
 }
-
-models:
-    добавить is_deleted в Products ?
-    зачем order_date в Order_Product ?

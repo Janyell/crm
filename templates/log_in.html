@@ -48,7 +48,7 @@
 
     <body>
         <div class="container">
-            <form class="form-signin">
+            <form class="form-signin" method="POST">
                 <h2 class="form-signin-heading">Пожалуйста, авторизуйтесь</h2>
                 {% if author_form.errors %}
                     <div class="text-error">
@@ -56,8 +56,9 @@
                         Проверьте правильность введенных данных.
                     </div>
                 {% endif %}
-                {{ login_form.login }}
+                {{ login_form.username }}
                 {{ login_form.password }}
+                {% csrf_token %}
                 <button class="btn btn-large btn-primary" type="submit">Войти</button>
             </form>
         </div>

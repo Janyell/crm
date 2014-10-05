@@ -3,6 +3,7 @@
 from django.db import models
 from datetime import datetime
 from time import strftime
+from django.contrib.auth.models import User, UserManager
 
 
 class UnixTimestampField(models.DateTimeField):
@@ -38,9 +39,11 @@ class UnixTimestampField(models.DateTimeField):
         return strftime('%Y-%m-%d %H:%M:%S', value.timetuple())
 
 
-class Roles(models.Model):
-    login = models.CharField(max_length=15, unique=True)
-    password = models.CharField(max_length=50)
+class Roles(User):
+    """User with app settings."""
+    # Use UserManager to get the create_user method, etc.
+    # login = models.CharField(max_length=15, unique=True)
+    # password = models.CharField(max_length=50)
     LEADERSHIP = 0
     MANAGER = 1
     PRODUCTION = 2
@@ -49,31 +52,32 @@ class Roles(models.Model):
         (PRODUCTION, 'Производство'),
     )
     role = models.IntegerField(choices=ROLES_CHOICES, default=MANAGER)
-    name = models.CharField(max_length=25, null=True)
-    last_name = models.CharField(max_length=50, null=True)
-    patronymic = models.CharField(max_length=50, null=True)
+    name = models.CharField(max_length=25, null=True, blank=True)
+    surname = models.CharField(max_length=50, null=True, blank=True)
+    patronymic = models.CharField(max_length=50, null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
+    objects = UserManager()
 
 
 class Clients(models.Model):
-    name = models.CharField(max_length=25, null=True)
-    last_name = models.CharField(max_length=50, null=True)
-    patronymic = models.CharField(max_length=50, null=True)
-    organization = models.CharField(max_length=250, null=True)
-    organization_phone = models.CharField(max_length=15, null=True)
-    person_phone = models.CharField(max_length=15, null=True)
-    email = models.EmailField(null=True, unique=True)
+    name = models.CharField(max_length=25, null=True, blank=True)
+    last_name = models.CharField(max_length=50, null=True, blank=True)
+    patronymic = models.CharField(max_length=50, null=True, blank=True)
+    organization = models.CharField(max_length=250, null=True, blank=True)
+    organization_phone = models.CharField(max_length=15, null=True, blank=True, unique=True)
+    person_phone = models.CharField(max_length=15, null=True, blank=True, unique=True)
+    email = models.EmailField(null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
     creation_date = UnixTimestampField(auto_created=True)
-    account_number = models.CharField(max_length=50, null=True)
+    account_number = models.CharField(max_length=50, null=True, blank=True)
     is_interested = models.BooleanField(default=0)
 
 
 class Companies(models.Model):
     title = models.CharField(max_length=250, unique=True)
-    name = models.CharField(max_length=25, null=True)
-    last_name = models.CharField(max_length=50, null=True)
-    patronymic = models.CharField(max_length=50, null=True)
+    name = models.CharField(max_length=25, null=True, blank=True)
+    last_name = models.CharField(max_length=50, null=True, blank=True)
+    patronymic = models.CharField(max_length=50, null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
 
 
@@ -107,6 +111,7 @@ class Orders(models.Model):
 
 class Products(models.Model):
     title = models.CharField(max_length=500)
+    is_deleted= models.BooleanField(default=0)
 
 
 class Order_Product(models.Model):

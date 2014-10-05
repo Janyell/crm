@@ -7,9 +7,9 @@ from base_api.models import *
 class RoleForm(ModelForm):
     class Meta:
         model = Roles
-        exclude = ['is_deleted']
+        fields = ['username', 'password', 'role', 'surname', 'name', 'patronymic']
         widgets = {
-            'login': TextInput(attrs={'id': "inputLogin",
+            'username': TextInput(attrs={'id': "inputLogin",
                                       'placeholder': "Логин",
                                       'required': 1}),
             'password': PasswordInput(attrs={'id': "inputPassword",
@@ -17,7 +17,7 @@ class RoleForm(ModelForm):
                                              'required': 1}),
             'role': Select(attrs={'id': "selectRole",
                                   'required': 1}),
-            'last_name': TextInput(attrs={'id': "inputSurname",
+            'surname': TextInput(attrs={'id': "inputSurname",
                                           'placeholder': "Фамилия"}),
             'name': TextInput(attrs={'id': "inputName",
                                      'placeholder': "Имя"}),
@@ -65,9 +65,9 @@ class CompanyForm(ModelForm):
 class LoginForm(ModelForm):
     class Meta:
         model = Roles
-        fields = ['login', 'password']
+        fields = ['username', 'password']
         widgets = {
-            'login': TextInput(attrs={'class': "input-block-level",
+            'username': TextInput(attrs={'class': "input-block-level",
                                       'placeholder': "Логин",
                                       'required': 1}),
             'password': PasswordInput(attrs={'class': "input-block-level",

@@ -18,7 +18,7 @@
                     {% for role in roles %}
                         <tr>
                             <td>{{ role.role }}</td>
-                            <td>{{ role.login }}</td>
+                            <td>{{ role.username }}</td>
                             <td>{{ role.full_name }}</td>
                             <td><a class="btn btn-mini" href="{% url "edit_role" %}?id={{ role.pk }}"><i class="icon-pencil"></i></a></td>
                             <td><a class="btn btn-mini" href="#"><i class="icon-remove"></i></a></td>
