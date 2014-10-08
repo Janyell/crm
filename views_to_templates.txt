@@ -1,86 +1,15 @@
-add_edit_role {
+add_edit_order {
     page_title
-    role_form
-}
-
-add_edit_client {
-    page_title
-    client_form
-    -> проверять value кнопки -> "save-and-add-order"
-                              -> "only-save"
-}
-
-add_edit_company {
-    page_title
-    company_form
-}
-
-log_in {
-    login_form
-}
-
-get_companies {
-    page_title
-    companies[] = {
-        title
-        full_name
-        pk (уже есть в выборке из базы)
-    }
-}
-
-get_clients {
-    page_title
-    clients[] = {
-        person_full_name
-        person_phone
-        organization
-        organization_phone
-        email
-        pk (уже есть в выборке из базы)
-    }
-}
-
-get_roles {
-    page_title
-    roles[] = {
-        role
-        login
-        full_name
-        pk (уже есть в выборке из базы)
-    }
-}
-
-get_orders {
-    page_title
-    orders[] = {
-        role {
-            full_name
-        }
-        client {
-            organization_or_full_name
-            full_name
-            person_phone
-            organization
-            organization_phone
-            email
-            account_number
-        }
-        unique_number
-        company {
+    order_form {
+        products(вся) {
             title
+            pk
+            count_of_products(если нет в данном заказе, то нет и здесь)
         }
-        bill
-        payment_date
-        products[] {
-            product {
-                title
-            }
-            count_of_products
-        }
-        order_status
-        ready_date
-        city
-        comment
-        pk (уже есть в выборке из базы)
+        остальное в форме есть
     }
+}
+
+order_form {
+    'client.organization_or_full_name': Select(attrs={'id': "selectClient", 'required': 1}),
 }

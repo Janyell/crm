@@ -19,11 +19,15 @@
                             <td>{{ company.title }}</td>
                             <td>{{ company.full_name }}</td>
                             <td>
-                                <a class="btn btn-mini" href="{% url "edit_company" %}?id={{ company.pk }}">
+                                <a class="btn btn-mini" href="/companies/edit/{{ company.pk }}/">
                                     <i class="icon-pencil"></i>
                                 </a>
                             </td>
-                            <td><a class="btn btn-mini" href="#"><i class="icon-remove"></i></a></td>
+                            <td>
+                                <a class="btn btn-mini" href="/companies/delete/{{ company.pk }}/">
+                                    <i class="icon-remove"></i>
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

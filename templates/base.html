@@ -7,11 +7,16 @@
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/DT_bootstrap.css">
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css">
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css">
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/DT_bootstrap.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/date-de.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datetimepicker.pt-RU.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/add-new-product.js"></script>
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -40,8 +45,9 @@
                             <li class={% navactive request 'get_roles add_role edit_role' %}>
                                 <a href="{% url "get_roles" %}">Роли</a>
                             </li>
-                            <li class={% navactive request 'get_companies add_company edit_company' %}>
-                                <a href="{% url "get_companies" %}">Компании</a></li>
+                            <li class={% navactive request 'get_companies add_company' %}>
+                                <a href="{% url "get_companies" %}">Компании</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
