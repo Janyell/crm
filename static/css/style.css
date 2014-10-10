@@ -96,10 +96,3 @@ body {
     font-weight: bold;
     margin-bottom: 10px;
 }
-
-input.datetime {
-    width: 180px;
-}
-#inputComments {
-    resize: none;
-}

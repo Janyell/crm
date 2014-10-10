@@ -7,176 +7,41 @@ from base_api.forms import *
 from django.http import *
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
+from base_api.full_views.company_views import *
+from base_api.full_views.role_views import *
+from base_api.full_views.client_views import *
 
 
 def add_edit_role(request):
-    # строки закомменчены чтобы добавлять новых пользователей при удалении базы
-    # if not request.user.is_active:
-    #     return HttpResponseRedirect('/login/')
-    if request.method == 'POST':
-        form = RoleForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            role = form.cleaned_data['role']
-            surname = form.cleaned_data['surname']
-            name = form.cleaned_data['name']
-            patronymic = form.cleaned_data['patronymic']
+    return full_add_edit_role(request)
 
-            new_author = Roles.objects.create(username=username,
-                                              is_staff=0, is_active=1, date_joined=datetime.now(),
-                                              role=role, surname=surname, name=name, patronymic=patronymic)
-            new_author.set_password(password)
-            new_author.save()
-            return HttpResponseRedirect('/roles/')
-    else:
-        form = RoleForm()
-    out = {}
-    out.update({'role_form': form})
-    out.update({'page_title': "Добавление роли"})
-    return render(request, "add_edit_role.html", out)
+
+def delete_role(request):
+    return full_delete_roles(request)
 
 
 def get_roles(request):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    roles = Roles.objects.filter(is_deleted=0)
-    for r in roles:
-        r.full_name = r.surname + ' ' + r.name + ' ' + r.patronymic
-    out = {}
-    out.update({'page_title': "Роли"})
-    out.update({'roles': roles})
-    return render(request, 'get_roles.html', out)
+    return full_get_roles(request)
 
 
 def add_edit_company(request, id, action):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    if request.method == 'POST':
-        form = CompanyForm(request.POST)
-        if form.is_valid():
-            title = form.cleaned_data['title']
-            last_name = form.cleaned_data['last_name']
-            name = form.cleaned_data['name']
-            patronymic = form.cleaned_data['patronymic']
-            new_company = Companies.objects.create(title=title, last_name=last_name, name=name, patronymic=patronymic)
-            return HttpResponseRedirect('/companies/')
-        else:
-            if action == 'edit':
-                title = form.cleaned_data['title']
-                last_name = form.cleaned_data['last_name']
-                name = form.cleaned_data['name']
-                patronymic = form.cleaned_data['patronymic']
-                new_company = Companies(title=title, last_name=last_name, name=name, patronymic=patronymic)
-                new_company.save()
-    else:
-        if action == 'edit':
-            company = Companies.objects.get(pk=id)
-            form = CompanyForm({'title': company.title})
-        # сделать выбор - если есть id в параметрах, отрисовывать поля, если нет - пустую форму
-        else:
-            form = CompanyForm()
-    out = {}
-    out.update({'company_form': form})
-    out.update({'page_title': "Добавление компании"})
-    return render(request, 'add_edit_company.html', out)
+    return full_add_edit_company(request, id, action)
 
 
 def delete_company(request, id):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    company = Companies.objects.get(pk=id)
-    company.delete()
-    return HttpResponseRedirect('/companies/')
+    return full_delete_company(request, id)
 
 
 def get_companies(request):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    companies = Companies.objects.filter(is_deleted=0)
-    for c in companies:
-        c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
-    out = {}
-    out.update({'page_title': "Компании"})
-    out.update({'companies': companies})
-    return render(request, 'get_companies.html', out)
+    return full_get_companies(request)
 
 
 def add_edit_client(request):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    if request.method == 'POST':
-        form = ClientForm(request.POST)
-        out = {}
-        if form.is_valid():
-            organization = form.cleaned_data['organization']
-            last_name = form.cleaned_data['last_name']
-            name = form.cleaned_data['name']
-            patronymic = form.cleaned_data['patronymic']
-            person_phone = form.cleaned_data['person_phone']
-            organization_phone = form.cleaned_data['organization_phone']
-            email = form.cleaned_data['email']
-            if organization == '' and last_name == '' and name == '' and patronymic == '':
-                out.update({"error": 3})
-                out.update({'client_form': form})
-                out.update({'page_title': "Добавление клиента"})
-                return render(request, 'add_edit_client.html', out)
-            if person_phone == '' and organization_phone == '' and email == '':
-                out.update({"error": 2})
-                out.update({'client_form': form})
-                out.update({'page_title': "Добавление клиента"})
-                return render(request, 'add_edit_client.html', out)
-            if organization != '':
-                try:
-                    is_org_exist = Clients.objects.get(organization=organization)
-                except ObjectDoesNotExist:
-                    # TODO выбор типа организации
-                    if 'ip' in form.data:
-                        organization = "ИП " + organization
-                    print (organization)
-                    new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
-                                                        patronymic=patronymic, person_phone=person_phone,
-                                                        organization_phone=organization_phone, email=email)
-                    if 'save-and-add-order' in form.data:
-                        return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
-                    elif 'only-save' in form.data:
-                        return HttpResponseRedirect('/clients/')
-                    return HttpResponseRedirect('/clients/')
-                out.update({"error": 1})
-                out.update({'client_form': form})
-                out.update({'page_title': "Добавление клиента"})
-                return render(request, 'add_edit_client.html', out)
-            else:
-                new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
-                                                    patronymic=patronymic, person_phone=person_phone,
-                                                    organization_phone=organization_phone, email=email)
-                if 'save-and-add-order' in form.data:
-                    return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
-                elif 'only-save' in form.data:
-                    return HttpResponseRedirect('/clients/')
-                return HttpResponseRedirect('/clients/')
-        else:
-            print(form.errors)
-    else:
-        form = ClientForm()
-    out = {}
-    out.update({'client_form': form})
-    out.update({'page_title': "Добавление клиента"})
-    return render(request, 'add_edit_client.html', out)
+    return full_add_edit_client(request)
 
 
 def get_clients(request):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    clients = Clients.objects.filter(is_deleted=0)
-    for c in clients:
-        c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
-    out = {}
-    out.update({'page_title': "Клиенты"})
-    out.update({'clients': clients})
-    return render(request, 'get_clients.html', out)
+    return full_get_clients(request)
 
 
 def add_edit_order(request):
