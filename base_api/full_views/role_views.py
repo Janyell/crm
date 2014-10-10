@@ -7,17 +7,16 @@ from base_api.forms import *
 from django.http import *
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
-from confirm import *
 
 
 def full_add_edit_role(request):
     # строки закомменчены чтобы добавлять новых пользователей при удалении базы
     # if not request.user.is_active:
     #     return HttpResponseRedirect('/login/')
-    action = request.GET['']
     if request.method == 'POST':
         form = RoleForm(request.POST)
-        if action == 'edit':
+        if 'id' in request.POST:
+            id = request.POST['id']
             username = request.POST['username']
             password = request.POST['password']
             role = request.POST['role']
@@ -45,7 +44,8 @@ def full_add_edit_role(request):
                 new_author.save()
                 return HttpResponseRedirect('/roles/')
     else:
-        if action == 'edit':
+        if 'id' in request.GET:
+            id = request.GET['id']
             author = Roles.objects.get(pk=id)
             form = RoleForm({'username': author.username, 'role': author.role, 'surname': author.surname,
                              'name': author.name, 'patronymic': author.patronymic})
