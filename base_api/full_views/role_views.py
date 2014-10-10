@@ -57,13 +57,6 @@ def full_add_edit_role(request):
     return render(request, "add_edit_role.html", out)
 
 
-def remove_file_context(request):
-    id = request.GET['id']
-    role = Roles.objects.get(pk=id)
-    return RequestContext(request, {'file': role})
-
-
-@confirm_required('remove_file_confirm.html', remove_file_context)
 def full_delete_roles(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
