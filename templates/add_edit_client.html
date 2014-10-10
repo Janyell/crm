@@ -5,21 +5,6 @@
         <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
-            {% if error == 1 %}
-                <div class="text-error">
-                    Такое контактное лицо или организация уже существует!
-                </div>
-            {% endif %}
-            {% if error == 2 %}
-                <div class="text-error">
-                    Хотя бы одно из полей "Телефон" и "E-mail" обязательно для заполнения.
-                </div>
-            {% endif %}
-            {% if error == 3 %}
-                <div class="text-error">
-                    Хотя бы одно из полей "Контактное лицо" и "Организация" обязательно для заполнения.
-                </div>
-            {% endif %}
             <div class="control-group">
                 <label class="control-label" for="inputСontactPerson">
                     Контактное лицо
@@ -45,7 +30,7 @@
                 <div class="controls">
                     <div class="form-add-client__organization-type">
                         <label class="radio">
-                            <input type="radio" name="organization-type" value="ip" client_form.org_type="ip"/>
+                            <input type="radio" name="organization-type" value="ip" />
                             <abbr title="Индивидуальный предприниматель">ИП</abbr>
                         </label>
                         <label class="radio">
