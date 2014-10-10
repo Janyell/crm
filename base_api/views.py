@@ -6,12 +6,13 @@ from base_api.models import *
 from base_api.forms import *
 from django.http import *
 from django.contrib.auth import authenticate, login, logout
+from django.core.exceptions import ObjectDoesNotExist
 
-# add_edit_role {
-#     page_title
-#     role_form
-# }
+
 def add_edit_role(request):
+    # строки закомменчены чтобы добавлять новых пользователей при удалении базы
+    # if not request.user.is_active:
+    #     return HttpResponseRedirect('/login/')
     if request.method == 'POST':
         form = RoleForm(request.POST)
         if form.is_valid():
@@ -27,7 +28,7 @@ def add_edit_role(request):
                                               role=role, surname=surname, name=name, patronymic=patronymic)
             new_author.set_password(password)
             new_author.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/roles/')
     else:
         form = RoleForm()
     out = {}
@@ -37,6 +38,10 @@ def add_edit_role(request):
 
 
 def get_roles(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
     roles = Roles.objects.filter(is_deleted=0)
     for r in roles:
         r.full_name = r.surname + ' ' + r.name + ' ' + r.patronymic
@@ -46,7 +51,9 @@ def get_roles(request):
     return render(request, 'get_roles.html', out)
 
 
-def add_edit_company(request):
+def add_edit_company(request, id, action):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if form.is_valid():
@@ -54,21 +61,40 @@ def add_edit_company(request):
             last_name = form.cleaned_data['last_name']
             name = form.cleaned_data['name']
             patronymic = form.cleaned_data['patronymic']
-
             new_company = Companies.objects.create(title=title, last_name=last_name, name=name, patronymic=patronymic)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/companies/')
         else:
-            print(form.errors)
+            if action == 'edit':
+                title = form.cleaned_data['title']
+                last_name = form.cleaned_data['last_name']
+                name = form.cleaned_data['name']
+                patronymic = form.cleaned_data['patronymic']
+                new_company = Companies(title=title, last_name=last_name, name=name, patronymic=patronymic)
+                new_company.save()
     else:
+        if action == 'edit':
+            company = Companies.objects.get(pk=id)
+            form = CompanyForm({'title': company.title})
         # сделать выбор - если есть id в параметрах, отрисовывать поля, если нет - пустую форму
-        form = CompanyForm()
+        else:
+            form = CompanyForm()
     out = {}
     out.update({'company_form': form})
     out.update({'page_title': "Добавление компании"})
     return render(request, 'add_edit_company.html', out)
 
 
+def delete_company(request, id):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    company = Companies.objects.get(pk=id)
+    company.delete()
+    return HttpResponseRedirect('/companies/')
+
+
 def get_companies(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
     companies = Companies.objects.filter(is_deleted=0)
     for c in companies:
         c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
@@ -79,8 +105,11 @@ def get_companies(request):
 
 
 def add_edit_client(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
     if request.method == 'POST':
         form = ClientForm(request.POST)
+        out = {}
         if form.is_valid():
             organization = form.cleaned_data['organization']
             last_name = form.cleaned_data['last_name']
@@ -89,15 +118,45 @@ def add_edit_client(request):
             person_phone = form.cleaned_data['person_phone']
             organization_phone = form.cleaned_data['organization_phone']
             email = form.cleaned_data['email']
-
-            new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
-                                                patronymic=patronymic, person_phone=person_phone,
-                                                organization_phone=organization_phone, email=email)
-            if 'save-and-add-order' in form.data:
-                return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
-            elif 'only-save' in form.data:
+            if organization == '' and last_name == '' and name == '' and patronymic == '':
+                out.update({"error": 3})
+                out.update({'client_form': form})
+                out.update({'page_title': "Добавление клиента"})
+                return render(request, 'add_edit_client.html', out)
+            if person_phone == '' and organization_phone == '' and email == '':
+                out.update({"error": 2})
+                out.update({'client_form': form})
+                out.update({'page_title': "Добавление клиента"})
+                return render(request, 'add_edit_client.html', out)
+            if organization != '':
+                try:
+                    is_org_exist = Clients.objects.get(organization=organization)
+                except ObjectDoesNotExist:
+                    # TODO выбор типа организации
+                    if 'ip' in form.data:
+                        organization = "ИП " + organization
+                    print (organization)
+                    new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
+                                                        patronymic=patronymic, person_phone=person_phone,
+                                                        organization_phone=organization_phone, email=email)
+                    if 'save-and-add-order' in form.data:
+                        return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
+                    elif 'only-save' in form.data:
+                        return HttpResponseRedirect('/clients/')
+                    return HttpResponseRedirect('/clients/')
+                out.update({"error": 1})
+                out.update({'client_form': form})
+                out.update({'page_title': "Добавление клиента"})
+                return render(request, 'add_edit_client.html', out)
+            else:
+                new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
+                                                    patronymic=patronymic, person_phone=person_phone,
+                                                    organization_phone=organization_phone, email=email)
+                if 'save-and-add-order' in form.data:
+                    return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
+                elif 'only-save' in form.data:
+                    return HttpResponseRedirect('/clients/')
                 return HttpResponseRedirect('/clients/')
-            return HttpResponseRedirect('/')
         else:
             print(form.errors)
     else:
@@ -109,6 +168,8 @@ def add_edit_client(request):
 
 
 def get_clients(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
     clients = Clients.objects.filter(is_deleted=0)
     for c in clients:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
@@ -138,6 +199,7 @@ def log_in(request):
             username = request.POST["username"]
             password = request.POST["password"]
             user = authenticate(username=username, password=password)
+            print (user)
             if user is not None:
                 login(request, user)
                 return HttpResponseRedirect('/')
@@ -156,7 +218,7 @@ def log_out(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     logout(request)
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect("/login/")
 
 
 def page_not_found(request):

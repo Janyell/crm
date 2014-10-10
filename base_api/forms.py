@@ -74,3 +74,35 @@ class LoginForm(ModelForm):
                                              'placeholder': "Пароль",
                                              'required': 1})
         }
+
+
+class OrdersForm(ModelForm):
+    class Meta:
+        model = Orders
+        exclude = ['is_deleted', 'role', 'in_archive', 'order_date']
+        widgets = {
+            'company': Select(attrs={'id': "selectCompany"}),
+            'bill': TextInput(attrs={'id': "inputBill"}),
+            'payment_date': TextInput(attrs={'id': "inputPaymentDate",
+                                             'class': "datetime",
+                                             'placeholder': "ДД.ММ.ГГГГ ЧЧ:ММ"}),
+            'order_status': Select(attrs={'id': "selectStatus"}),
+            'city': TextInput(attrs={'id': "inputCity",
+                                     'placeholder': "Город"}),
+            'comment': Textarea(attrs={'id': "inputComment",
+                                       'placeholder': "Комментарии"}),
+            'source': Select(attrs={'id': "selectSource"}),
+            'ready_date': TextInput(attrs={'id': "inputReadyDate",
+                                           'class': "datetime",
+                                           'placeholder': "ДД.ММ.ГГГГ ЧЧ:ММ"})
+        }
+"""
+class ProductForm(ModelForm):
+    class Meta:
+        model = Products
+        exclude = ['is_deleted']
+        widgets = {
+            'title': Select(attrs={'id': "selectProduct",
+                                   'required': 1}),
+        }
+"""

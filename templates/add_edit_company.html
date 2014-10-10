@@ -5,6 +5,11 @@
         <form class="form-horizontal form-add form-add-company" method="post" action="">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
+            {% if company_form.errors %}
+                <div class="text-error">
+                    Такое название уже существует!
+                </div>
+            {% endif %}
             <div class="control-group">
                 <label class="control-label" for="inputTitle">
                     Название
