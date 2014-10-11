@@ -49,24 +49,12 @@ def get_clients(request):
 
 
 def add_edit_order(request):
+
+    OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.all())
+    OrdersForm.base_fields['clients'] = ClientModelChoiceField(queryset=Clients.objects.all())
+
     form = OrdersForm()
     out = {}
-    all_clients = Clients.objects.filter()
-    i = 0
-    client = []
-    for cl in all_clients:
-        if cl.organization == '':
-            client.append(cl.last_name + cl.name + cl.patronymic)
-        else:
-            client.append(cl.organization)
-        i = i + 1
-    form.organization_or_full_name = client
-
-    all_companies = Companies.objects.filter()
-    companies = []
-    for com in all_companies:
-        companies = com.title
-    form.company = companies
 
     all_products = Products.objects.filter()
     products = []

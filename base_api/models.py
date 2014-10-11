@@ -83,7 +83,15 @@ class Companies(models.Model):
 
 class Orders(models.Model):
     role = models.ForeignKey(Roles)
-    source = models.IntegerField()
+    EMAIL = 0
+    CALL = 1
+    SITE = 2
+    ORDER_SOURCE_CHOICES = (
+        (EMAIL, 'Электронная почта'),
+        (CALL, 'Звонок'),
+        (SITE, 'Заявка с сайта'),
+    )
+    source = models.IntegerField(choices=ORDER_SOURCE_CHOICES)
     client = models.ForeignKey(Clients)
     unique_number = models.CharField(max_length=50, unique=True)
     company = models.ForeignKey(Companies, null=True)
