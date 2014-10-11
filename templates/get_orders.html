@@ -28,8 +28,17 @@
                     <tr>
                         <td>{{ order.role.full_name }}</td>
                         <td>
-                            <a href="#client-info" role="button" data-toggle="modal">
-                                {{ order.client.organization_or_full_name }}
+                            <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
+                                <div class="get-client-info__head">
+                                    {{ order.client.organization_or_full_name }}
+                                </div>
+                                <div class="hidden get-client-info__data">
+                                    <div class="client-data__full-name">{{ order.client.full_name }}</div>
+                                    <div class="client-data__contact-person-phone">{{ order.client.person_phone }}</div>
+                                    <div class="client-data__organization">{{ order.client.organization }}</div>
+                                    <div class="client-data__organization-phone">{{ order.client.organization_phone }}</div>
+                                    <div class="client-data__email">{{ order.client.email }}</div>
+                                </div>
                             </a>
                         </td>
                         <td>{{ order.unique_number }}</td>
@@ -61,63 +70,47 @@
         {% endif %}
         <a href="{% url "add_order" %}" class="btn">Добавить заказ</a>
     </div>
-
     <div class="modal hide fade" id="client-info" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="clientInfoLabel">Информация о клиенте &middot; {{ order.client.organization_or_full_name }}</h3>
+            <h3>Информация о клиенте &middot; </h3>
         </div>
         <div class="modal-body client-info">
-            {% if order.client.full_name %}
-                <div class="client-info__item client-info__contact-person">
-                    <div class="client-info__head">
-                        Контактное лицо
-                    </div>
-                    <div class="client-info__data">
-                        {{ order.client.full_name }}
-                    </div>
+            <div class="client-info__item client-info__contact-person clearfix">
+                <div class="client-info__head">
+                    Контактное лицо
                 </div>
-            {% endif %}
-            {% if order.client.person_phone %}
-                <div class="client-info__item client-info__phone">
-                    <div class="client-info__head">
-                        Телефон контактного лица
-                    </div>
-                    <div class="client-info__data">
-                        {{ order.client.person_phone }}
-                    </div>
+                <div class="client-info__data">
                 </div>
-            {% endif %}
-            {% if order.client.organization %}
-                <div class="client-info__item client-info__organization">
-                    <div class="client-info__head">
-                        Организация
-                    </div>
-                    <div class="client-info__data">
-                        {{ order.client.organization }}
-                    </div>
+            </div>
+            <div class="client-info__item client-info__contact-person-phone clearfix">
+                <div class="client-info__head">
+                    Телефон контактного лица
                 </div>
-            {% endif %}
-            {% if order.client.organization_phone %}
-                <div class="client-info__item client-info__phone">
-                    <div class="client-info__head">
-                        Телефон организации
-                    </div>
-                    <div class="client-info__data">
-                        {{ order.client.organization_phone }}
-                    </div>
+                <div class="client-info__data">
                 </div>
-            {% endif %}
-            {% if order.client.email %}
-                <div class="client-info__item client-info__email">
-                    <div class="client-info__head">
-                        E-mail
-                    </div>
-                    <div class="client-info__data">
-                        <a href="mailto:{{ order.client.email }}">{{ order.client.email }}</a>
-                    </div>
+            </div>
+            <div class="client-info__item client-info__organization clearfix">
+                <div class="client-info__head">
+                    Организация
                 </div>
-            {% endif %}
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__organization-phone clearfix">
+                <div class="client-info__head">
+                    Телефон организации
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__email clearfix">
+                <div class="client-info__head">
+                    E-mail
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
@@ -136,6 +129,22 @@
                         { "bSearchable": false, "aTargets": [ 12, 13 ] },
                         { "sType": "de_datetime", "aTargets": [ 6, 9 ] }
                     ]
+                });
+                $('.get-client-info').bind('click', function(){
+                    var organization_or_full_name = $(this).find('.get-client-info__head').text();
+                    $('#client-info .modal-header > h3').append(organization_or_full_name);
+                    var $client_info__data = $('#client-info .modal-body');
+                    var full_name = $(this).find('.client-data__full-name').text();
+                    $client_info__data.find('.client-info__contact-person > .client-info__data').text(full_name);
+                    var person_phone = $(this).find('.client-data__contact-person-phone').text();
+                    $client_info__data.find('.client-info__contact-person-phone > .client-info__data').text(person_phone);
+                    var organization = $(this).find('.client-data__organization').text();
+                    $client_info__data.find('.client-info__organization > .client-info__data').text(organization);
+                    var organization_phone = $(this).find('.client-data__organization-phone').text();
+                    $client_info__data.find('.client-info__organization-phone > .client-info__data').text(organization_phone);
+                    var email = $(this).find('.client-data__email').text();
+                    $client_info__data.find('.client-info__email > .client-info__data')
+                            .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
                 });
             });
         })(jQuery);

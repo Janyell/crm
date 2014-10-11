@@ -13,3 +13,10 @@ add_edit_order {
 order_form {
     'client.organization_or_full_name': Select(attrs={'id': "selectClient", 'required': 1}),
 }
+
+
+Если надо вставить какой-то элемент только на странице с название вьюхи example:
+{% url 'example' as example_url %}
+{% if request.path == example_url %}
+    код
+{% endif %}

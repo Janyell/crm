@@ -75,5 +75,15 @@
                 <button type="reset" class="btn">Отменить</button>
             </div>
         </form>
+        {% url 'add_role' as add_role_url %}
+        {% if request.path == add_role_url %}
+            <script type="text/javascript">
+            (function($){
+                $(document).ready(function(){
+                    $('#inputPassword').attr("required", "1");
+                });
+            })(jQuery);
+            </script>
+        {% endif %}
     </div>
 {%endblock%}
