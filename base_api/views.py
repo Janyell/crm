@@ -113,3 +113,7 @@ def page_not_found(request):
 
 def get_old_orders(request):
     pass
+
+
+def get_interested_clients(request):
+    pass
