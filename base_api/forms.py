@@ -112,7 +112,7 @@ class OrdersForm(forms.ModelForm):
                                            'class': "datetime",
                                            'placeholder': "ДД.ММ.ГГГГ ЧЧ:ММ"})
         }
-"""
+        """
 class ProductForm(ModelForm):
     class Meta:
         model = Products

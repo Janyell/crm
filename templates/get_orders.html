@@ -2,6 +2,7 @@
 
 {%block content%}
     <div class="container container_full-width">
+        <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
         <h2 class="center">{{ page_title }}</h2>
         {% if orders %}
         <table class="table table-hover table-bordered" id="order-table">

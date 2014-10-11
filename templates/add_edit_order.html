@@ -2,6 +2,7 @@
 
 {%block content%}
     <div class="container">
+        <a href="{% url "get_orders" %}" class="btn">Назад</a>
         <form class="form-horizontal form-add form-add-order" method="post" action="">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
@@ -59,7 +60,7 @@
             </div>
             {% if order_form.products %}
                 <select multiple class="product-select hidden" name="products[]">
-                    {% for product in products %}
+                    {% for product in order_form.products %}
                         <option value="{{ product.pk }}"
                             {% if product.count_of_products %}
                                 data-number="{{ product.count_of_products }}"
@@ -163,7 +164,7 @@
             </div>
             <div class="form-add__submits">
                 <button type="submit" class="btn btn-primary">Сохранить</button>
-                <button type="button" class="btn">Отменить</button>
+                <button type="button" class="btn">Очистить</button>
             </div>
         </form>
     </div>

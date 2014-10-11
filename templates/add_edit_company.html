@@ -2,6 +2,7 @@
 
 {%block content%}
     <div class="container">
+        <a href="{% url "get_companies" %}" class="btn">Назад</a>
         <form class="form-horizontal form-add form-add-company" method="post" action="">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
@@ -45,7 +46,7 @@
             </div>
             <div class="form-add__submits">
                 <button type="submit" class="btn btn-primary">Сохранить</button>
-                <button type="reset" class="btn">Отменить</button>
+                <button type="reset" class="btn">Очистить</button>
             </div>
         </form>
     </div>
