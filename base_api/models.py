@@ -91,7 +91,7 @@ class Orders(models.Model):
         (CALL, 'Звонок'),
         (SITE, 'Заявка с сайта'),
     )
-    source = models.IntegerField(choices=ORDER_SOURCE_CHOICES)
+    source = models.IntegerField(choices=ORDER_SOURCE_CHOICES, default=EMAIL)
     client = models.ForeignKey(Clients)
     unique_number = models.CharField(max_length=50, unique=True)
     company = models.ForeignKey(Companies, null=True)
