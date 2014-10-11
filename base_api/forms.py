@@ -79,6 +79,7 @@ class OrdersForm(ModelForm):
     class Meta:
         model = Orders
         exclude = ['is_deleted', 'role', 'in_archive', 'order_date']
+        company = ModelChoiceField(queryset=Companies.objects.all().values('title'))
         widgets = {
             'client': Select(attrs={'id': "selectClient", 'required': 1}),
             'company': Select(attrs={'id': "selectCompany"}),
@@ -96,7 +97,7 @@ class OrdersForm(ModelForm):
                                            'class': "datetime",
                                            'placeholder': "ДД.ММ.ГГГГ ЧЧ:ММ"})
         }
-"""
+        """
 class ProductForm(ModelForm):
     class Meta:
         model = Products

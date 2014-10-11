@@ -63,7 +63,7 @@
             </div>
             {% if order_form.products %}
                 <select multiple class="product-select hidden" name="products[]">
-                    {% for product in products %}
+                    {% for product in order_form.products %}
                         <option value="{{ product.pk }}"
                             {% if product.count_of_products %}
                                 data-number="{{ product.count_of_products }}"

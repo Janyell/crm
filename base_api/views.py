@@ -65,7 +65,7 @@ def add_edit_order(request):
     all_companies = Companies.objects.filter()
     companies = []
     for com in all_companies:
-        companies.append(com.title)
+        companies = com.title
     form.company = companies
 
     all_products = Products.objects.filter()
