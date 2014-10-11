@@ -24,12 +24,12 @@ def get_roles(request):
     return full_get_roles(request)
 
 
-def add_edit_company(request, action):
-    return full_add_edit_company(request, action)
+def add_edit_company(request):
+    return full_add_edit_company(request)
 
 
 def delete_company(request):
-    return full_delete_company(request, id)
+    return full_delete_company(request)
 
 
 def get_companies(request):
@@ -40,12 +40,43 @@ def add_edit_client(request):
     return full_add_edit_client(request)
 
 
+def delete_client(request):
+    return full_delete_clients(request)
+
+
 def get_clients(request):
     return full_get_clients(request)
 
 
 def add_edit_order(request):
-    return render(request, 'add_edit_order.html')
+    form = OrdersForm()
+    out = {}
+    all_clients = Clients.objects.filter()
+    i = 0
+    client = []
+    for cl in all_clients:
+        if cl.organization == '':
+            client.append(cl.last_name + cl.name + cl.patronymic)
+        else:
+            client.append(cl.organization)
+        i = i + 1
+    form.organization_or_full_name = client
+
+    all_companies = Companies.objects.filter()
+    companies = []
+    for com in all_companies:
+        companies.append(com.title)
+    form.company = companies
+
+    all_products = Products.objects.filter()
+    products = []
+    for pr in all_products:
+        products.append(pr.title)
+    form.products = products
+
+    out.update({'order_form': form})
+    out.update({'page_title': "Добавление заказа"})
+    return render(request, 'add_edit_order.html', out)
 
 
 def get_orders(request):

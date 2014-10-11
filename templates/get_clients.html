@@ -26,8 +26,10 @@
                             <td>{{ client.organization_phone }}</td>
                             <td>{{ client.email }}</td>
                             <td><a class="btn" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a></td>
-                            <td><a class="btn" href="{% url "edit_client" %}?=id={{ client.pk }}"><i class="icon-pencil"></i></a></td>
-                            <td><a class="btn" href="#"><i class="icon-remove"></i></a></td>
+                            <td><a class="btn" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a></td>
+                            <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
+                                <i class="icon-remove"></i></a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -36,6 +38,16 @@
             <h5 class="center">Не было добавлено ни одного клиента</h5>
         {% endif %}
         <a href="{% url "add_client" %}" class="btn">Добавить клиента</a>
+    </div>
+     <div class="modal hide fade" id="delete-client" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Вы уверены, что хотите удалить этого клиента?</h3>
+        </div>
+        <div class="modal-footer">
+            <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
     </div>
     <script type="text/javascript">
         (function($){
@@ -48,6 +60,10 @@
                         { "bSortable": false, "aTargets": [ 5, 6, 7 ] },
                         { "bSearchable": false, "aTargets": [ 5, 6, 7 ] }
                     ]
+                });
+                 $('.delete-button').bind('click', function(){
+                    var id = $(this).attr('value');
+                    $('#delete__ok').attr({'href': '{% url "delete_client" %}?id=' + id});
                 });
             });
         })(jQuery);

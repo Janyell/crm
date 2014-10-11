@@ -9,19 +9,32 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
 
 
-def full_add_edit_company(request, action):
+def full_add_edit_company(request):
+    out = {}
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if request.method == 'POST':
         form = CompanyForm(request.POST)
-        if action == 'edit':
+        if 'pk' in request.POST:
+            id_company = request.POST['pk']
             title = request.POST['title']
             last_name = request.POST['last_name']
             name = request.POST['name']
             patronymic = request.POST['patronymic']
-            new_company = Companies(id=id, title=title, last_name=last_name, name=name, patronymic=patronymic)
-            new_company.save(force_update=True)
-            return HttpResponseRedirect('/companies/')
+            if Companies.objects.filter(title=title).count() == 0:
+                new_company = Companies(id=id_company, title=title, last_name=last_name, name=name, patronymic=patronymic)
+                new_company.save(force_update=True)
+                return HttpResponseRedirect('/companies/')
+            else:
+                exist_company = Companies.objects.get(title=title)
+                if str(exist_company.id) == id_company:
+                    new_company = Companies(id=id_company, title=title, last_name=last_name,
+                                            name=name, patronymic=patronymic)
+                    new_company.save(force_update=True)
+                    return HttpResponseRedirect('/companies/')
+                else:
+                    out.update({"error": 1})
+                    out.update({'page_title': "Редактирование компании"})
         else:
             if form.is_valid():
                 title = form.cleaned_data['title']
@@ -30,22 +43,27 @@ def full_add_edit_company(request, action):
                 patronymic = form.cleaned_data['patronymic']
                 new_company = Companies.objects.create(title=title, last_name=last_name, name=name, patronymic=patronymic)
                 return HttpResponseRedirect('/companies/')
+            else:
+                out.update({'page_title': "Добавление компании"})
     else:
-        if action == 'edit':
-            company = Companies.objects.get(pk=id)
+        if 'id' in request.GET:
+            id_company = request.GET['id']
+            out.update({"error": 0})
+            company = Companies.objects.get(pk=id_company)
             form = CompanyForm({'title': company.title, 'last_name': company.last_name,
                                 'name': company.name, 'patronymic': company.patronymic})
+            out.update({'page_title': "Редактирование компании"})
         else:
             form = CompanyForm()
-    out = {}
+            out.update({'page_title': "Добавление компании"})
     out.update({'company_form': form})
-    out.update({'page_title': "Добавление компании"})
     return render(request, 'add_edit_company.html', out)
 
 
 def full_delete_company(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    id = request.GET['id']
     company = Companies.objects.get(pk=id)
     company.delete()
     return HttpResponseRedirect('/companies/')

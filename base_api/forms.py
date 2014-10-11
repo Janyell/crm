@@ -80,6 +80,7 @@ class OrdersForm(ModelForm):
         model = Orders
         exclude = ['is_deleted', 'role', 'in_archive', 'order_date']
         widgets = {
+            'client': Select(attrs={'id': "selectClient", 'required': 1}),
             'company': Select(attrs={'id': "selectCompany"}),
             'bill': TextInput(attrs={'id': "inputBill"}),
             'payment_date': TextInput(attrs={'id': "inputPaymentDate",

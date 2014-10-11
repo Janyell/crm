@@ -19,7 +19,6 @@ def full_add_edit_role(request):
         if 'pk' in request.POST:
             id_role = request.POST['pk']
             username = request.POST['username']
-            password = request.POST['password']
             role = request.POST['role']
             surname = request.POST['surname']
             name = request.POST['name']
@@ -27,7 +26,6 @@ def full_add_edit_role(request):
             if Roles.objects.filter(username=username).count() == 0:
                 new_author = Roles(id=id_role, username=username, role=role, surname=surname,
                                    name=name, patronymic=patronymic)
-                new_author.set_password(password)
                 new_author.save(force_update=True)
                 return HttpResponseRedirect('/roles/')
             else:
@@ -35,7 +33,6 @@ def full_add_edit_role(request):
                 if str(exist_role.id) == id_role:
                     new_author = Roles(id=id_role, username=username, role=role, surname=surname,
                                        name=name, patronymic=patronymic)
-                    new_author.set_password(password)
                     new_author.save(force_update=True)
                     return HttpResponseRedirect('/roles/')
                 else:
@@ -56,6 +53,13 @@ def full_add_edit_role(request):
                 new_author.set_password(password)
                 new_author.save()
                 return HttpResponseRedirect('/roles/')
+            else:
+                username = request.POST['username']
+                if Roles.objects.filter(username=username).count() == 0:
+                    out.update({"error": 2})
+                else:
+                    out.update({"error": 1})
+                out.update({'page_title': "Добавление роли"})
     else:
         if 'id' in request.GET:
             id_role = request.GET['id']
@@ -88,6 +92,10 @@ def full_get_roles(request):
     roles = Roles.objects.filter(is_deleted=0)
     for r in roles:
         r.full_name = r.surname + ' ' + r.name + ' ' + r.patronymic
+        if r.role == 1:
+            r.role = "Менеджер"
+        elif r.role == 2:
+            r.role = "Производство"
     out = {}
     out.update({'page_title': "Роли"})
     out.update({'roles': roles})
