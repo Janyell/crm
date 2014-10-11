@@ -1,7 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.forms import *
+from django import forms
 from base_api.models import *
+from django.forms import ModelChoiceField
+
+
+class CompanyModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.title
+
+
+class ClientModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        if obj.organization == '':
+            return obj.last_name + obj.name + obj.patronymic
+        else:
+            return obj.organization
 
 
 class RoleForm(ModelForm):
@@ -75,7 +90,7 @@ class LoginForm(ModelForm):
         }
 
 
-class OrdersForm(ModelForm):
+class OrdersForm(forms.ModelForm):
     class Meta:
         model = Orders
         exclude = ['is_deleted', 'role', 'in_archive', 'order_date']

@@ -102,6 +102,6 @@ input.datetime {
 #inputComments {
     resize: none;
 }
-.hidden {
+select.hidden {
     display: none;
 }
