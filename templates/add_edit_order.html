@@ -15,7 +15,11 @@
                         <span class="required-input">*</span>
                     </label>
                     <div class="controls">
-                        {{ order_form.client.organization_or_full_name }}
+                        {% for client in order_form.organization_or_full_name %}
+                            <tr>
+                                <td>{{ client }}</td>
+                            </tr>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
