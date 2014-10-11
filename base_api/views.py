@@ -109,3 +109,7 @@ def page_not_found(request):
     out = {}
     out.update({'page_title': "Страница не найдена"})
     return render(request, 'page_not_found.html', out)
+
+
+def get_old_orders(request):
+    pass

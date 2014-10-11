@@ -2,6 +2,7 @@
 
 {%block content%}
     <div class="container">
+        <a href="{% url "get_roles" %}" class="btn">Назад</a>
         <form class="form-horizontal form-add-role form-add" method="POST" action="{{ request.path }}">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
@@ -31,7 +32,10 @@
             <div class="control-group">
                 <label class="control-label" for="inputPassword">
                     Пароль
-                    <span class="required-input">*</span>
+                    {% url 'add_role' as add_role_url %}
+                    {% if request.path == add_role_url %}
+                        <span class="required-input">*</span>
+                    {% endif %}
                 </label>
                 <div class="controls">
                     {{ role_form.password }}
@@ -77,7 +81,7 @@
             </div>
             <div class="form-add__submits">
                 <button type="submit" class="btn btn-primary">Сохранить</button>
-                <button type="reset" class="btn">Отменить</button>
+                <button type="reset" class="btn">Очистить</button>
             </div>
         </form>
         {% url 'add_role' as add_role_url %}

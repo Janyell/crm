@@ -2,6 +2,7 @@
 
 {%block content%}
     <div class="container">
+    <a href="{% url "get_clients" %}" class="btn">Назад</a>
         <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
@@ -121,7 +122,7 @@
             <div class="form-add__submits">
                 <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заказа</button>
                 <button type="submit" class="btn" name="only-save" value="only-save">Сохранить</button>
-                <button type="reset" class="btn">Отменить</button>
+                <button type="reset" class="btn">Очистить</button>
             </div>
         </form>
     </div>
