@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b7a90fd-86fb-4af3-8eeb-735f4105b015" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/get_clients.html" afterPath="$PROJECT_DIR$/templates/get_clients.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/urls.py" afterPath="$PROJECT_DIR$/api/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base_api/views.py" afterPath="$PROJECT_DIR$/base_api/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="api.iws" />
@@ -590,7 +587,11 @@
       <created>1413038207808</created>
       <updated>1413038207808</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="add interested;">
+      <created>1413039164317</created>
+      <updated>1413039164317</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -659,7 +660,8 @@
     <MESSAGE value="fixed bug in client card;" />
     <MESSAGE value="fix reset + back;" />
     <MESSAGE value="required source;" />
-    <option name="LAST_COMMIT_MESSAGE" value="required source;" />
+    <MESSAGE value="add interested;" />
+    <option name="LAST_COMMIT_MESSAGE" value="add interested;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
