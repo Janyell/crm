@@ -19,7 +19,7 @@
                             <td>{{ company.title }}</td>
                             <td>{{ company.full_name }}</td>
                             <td>
-                                <a class="btn btn-mini" href="/companies/edit/{{ company.pk }}/">
+                                <a class="btn btn-mini" href="{% url "edit_company" %}?id={{ company.pk }}&action=edit">
                                     <i class="icon-pencil"></i>
                                 </a>
                             </td>

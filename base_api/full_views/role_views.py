@@ -13,21 +13,34 @@ def full_add_edit_role(request):
     # строки закомменчены чтобы добавлять новых пользователей при удалении базы
     # if not request.user.is_active:
     #     return HttpResponseRedirect('/login/')
+    out = {}
     if request.method == 'POST':
         form = RoleForm(request.POST)
-        if 'id' in request.POST:
-            id = request.POST['id']
+        if 'pk' in request.POST:
+            id_role = request.POST['pk']
             username = request.POST['username']
             password = request.POST['password']
             role = request.POST['role']
             surname = request.POST['surname']
             name = request.POST['name']
             patronymic = request.POST['patronymic']
-            new_author = Roles(id=id, username=username, role=role, surname=surname,
-                               name=name, patronymic=patronymic)
-            new_author.set_password(password)
-            new_author.save(force_update=True)
-            return HttpResponseRedirect('/roles/')
+            if Roles.objects.filter(username=username).count() == 0:
+                new_author = Roles(id=id_role, username=username, role=role, surname=surname,
+                                   name=name, patronymic=patronymic)
+                new_author.set_password(password)
+                new_author.save(force_update=True)
+                return HttpResponseRedirect('/roles/')
+            else:
+                exist_role = Roles.objects.get(username=username)
+                if str(exist_role.id) == id_role:
+                    new_author = Roles(id=id_role, username=username, role=role, surname=surname,
+                                       name=name, patronymic=patronymic)
+                    new_author.set_password(password)
+                    new_author.save(force_update=True)
+                    return HttpResponseRedirect('/roles/')
+                else:
+                    out.update({"error": 1})
+                    out.update({'page_title': "Редактирование роли"})
         else:
             if form.is_valid():
                 username = form.cleaned_data['username']
@@ -45,15 +58,16 @@ def full_add_edit_role(request):
                 return HttpResponseRedirect('/roles/')
     else:
         if 'id' in request.GET:
-            id = request.GET['id']
-            author = Roles.objects.get(pk=id)
+            id_role = request.GET['id']
+            out.update({"error": 0})
+            author = Roles.objects.get(pk=id_role)
             form = RoleForm({'username': author.username, 'role': author.role, 'surname': author.surname,
-                             'name': author.name, 'patronymic': author.patronymic})
+                             'name': author.name, 'patronymic': author.patronymic, 'pk': id_role})
+            out.update({'page_title': "Редактирование роли"})
         else:
             form = RoleForm()
-    out = {}
+            out.update({'page_title': "Добавление роли"})
     out.update({'role_form': form})
-    out.update({'page_title': "Добавление роли"})
     return render(request, "add_edit_role.html", out)
 
 

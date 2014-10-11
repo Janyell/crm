@@ -22,7 +22,7 @@ class RoleForm(ModelForm):
             'name': TextInput(attrs={'id': "inputName",
                                      'placeholder': "Имя"}),
             'patronymic': TextInput(attrs={'id': "inputPatronymic",
-                                           'placeholder': "Отчество"}),
+                                           'placeholder': "Отчество"})
         }
 
 

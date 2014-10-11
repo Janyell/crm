@@ -24,11 +24,11 @@ def get_roles(request):
     return full_get_roles(request)
 
 
-def add_edit_company(request, id, action):
-    return full_add_edit_company(request, id, action)
+def add_edit_company(request, action):
+    return full_add_edit_company(request, action)
 
 
-def delete_company(request, id):
+def delete_company(request):
     return full_delete_company(request, id)
 
 

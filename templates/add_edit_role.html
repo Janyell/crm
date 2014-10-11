@@ -5,10 +5,14 @@
         <form class="form-horizontal form-add-role form-add" method="POST" action="{{ request.path }}">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
-            {% if role_form.errors %}
+
+            {% if error != 0 and role_form.errors %}
                 <div class="text-error">
                     Пользователь с таким логином уже существует!
                 </div>
+            {% endif %}
+            {% if request.GET.id %}
+                <input type="hidden" name="pk" value="{{ request.GET.id }}">
             {% endif %}
             <div class="control-group">
                 <label class="control-label" for="inputLogin">

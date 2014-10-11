@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
 
 
-def full_add_edit_company(request, id, action):
+def full_add_edit_company(request, action):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if request.method == 'POST':
@@ -43,7 +43,7 @@ def full_add_edit_company(request, id, action):
     return render(request, 'add_edit_company.html', out)
 
 
-def full_delete_company(request, id):
+def full_delete_company(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     company = Companies.objects.get(pk=id)
