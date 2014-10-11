@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3b7a90fd-86fb-4af3-8eeb-735f4105b015" name="Default" comment="added forms and templates;">
+    <list default="true" id="3b7a90fd-86fb-4af3-8eeb-735f4105b015" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/get_roles.html" afterPath="$PROJECT_DIR$/templates/get_roles.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/settings.py" afterPath="$PROJECT_DIR$/api/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="api.iws" />
@@ -26,6 +28,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/api/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.54086536" vertical-offset="750" max-vertical-offset="1680">
+              <caret line="66" column="24" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/base_api/views.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -41,8 +53,8 @@
       <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/base_api/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="645" max-vertical-offset="1680">
-              <caret line="44" column="18" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="18" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="630" max-vertical-offset="1680">
+              <caret line="43" column="18" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -80,11 +92,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="get_roles.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="get_roles.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/get_roles.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.9208443" vertical-offset="521" max-vertical-offset="1050">
-              <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+            <state vertical-scroll-proportion="-14.541667" vertical-offset="551" max-vertical-offset="1050">
+              <caret line="60" column="19" selection-start-line="60" selection-start-column="19" selection-end-line="60" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -112,10 +124,10 @@
         <option value="$PROJECT_DIR$/templates/add_edit_client.html" />
         <option value="dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_companies" />
         <option value="$PROJECT_DIR$/base_api/models.py" />
-        <option value="$PROJECT_DIR$/api/settings.py" />
         <option value="$PROJECT_DIR$/base_api/views.py" />
         <option value="$PROJECT_DIR$/templates/add_edit_role.html" />
         <option value="$PROJECT_DIR$/templates/get_roles.html" />
+        <option value="$PROJECT_DIR$/api/settings.py" />
       </list>
     </option>
   </component>
@@ -625,7 +637,15 @@
       <created>1412952553850</created>
       <updated>1412952553850</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="add delete modal;">
+      <created>1413002140297</created>
+      <updated>1413002140297</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add delete modal;">
+      <created>1413002325852</created>
+      <updated>1413002325852</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -690,7 +710,8 @@
       <TodoPanelSettings />
     </option>
     <MESSAGE value="added forms and templates;" />
-    <option name="LAST_COMMIT_MESSAGE" value="added forms and templates;" />
+    <MESSAGE value="add delete modal;" />
+    <option name="LAST_COMMIT_MESSAGE" value="add delete modal;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -970,14 +991,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1095" max-vertical-offset="1695">
-          <caret line="73" column="22" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/base_api/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="1965">
@@ -999,21 +1012,21 @@
         <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="810">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1412704154000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1413002157521" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1030,8 +1043,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/base_api/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="309" max-vertical-offset="1215">
-          <caret line="44" column="18" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="630" max-vertical-offset="1680">
+          <caret line="43" column="18" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="18" />
           <folding />
         </state>
       </provider>
@@ -1112,8 +1125,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/get_roles.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9208443" vertical-offset="521" max-vertical-offset="1050">
-          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+        <state vertical-scroll-proportion="-14.541667" vertical-offset="551" max-vertical-offset="1050">
+          <caret line="60" column="19" selection-start-line="60" selection-start-column="19" selection-end-line="60" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.54086536" vertical-offset="750" max-vertical-offset="1680">
+          <caret line="66" column="24" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
           <folding />
         </state>
       </provider>
