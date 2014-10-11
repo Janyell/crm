@@ -80,7 +80,8 @@ def full_delete_roles(request):
         return HttpResponseRedirect('/login/')
     id = request.GET['id']
     role = Roles.objects.get(pk=id)
-    role.delete()
+    role.is_deleted = 1
+    role.save(update_fields=["is_deleted"])
     return HttpResponseRedirect('/roles/')
 
 

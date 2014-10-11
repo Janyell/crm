@@ -15,7 +15,7 @@
                         <span class="required-input">*</span>
                     </label>
                     <div class="controls">
-                        {{ order_form.clients }}
+                        {{ order_form.client }}
                     </div>
                 </div>
             </div>
@@ -103,10 +103,18 @@
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="selectStatus">
-                        Статус
+                        Статус заказа
                     </label>
                     <div class="controls">
                         {{ order_form.order_status }}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="selectBillStatus">
+                        Статус оплаты
+                    </label>
+                    <div class="controls">
+                        {{ order_form.bill_status }}
                     </div>
                 </div>
                 <div class="control-group">

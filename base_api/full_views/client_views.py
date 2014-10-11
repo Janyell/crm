@@ -159,7 +159,8 @@ def full_delete_clients(request):
         return HttpResponseRedirect('/login/')
     id = request.GET['id']
     client = Clients.objects.get(pk=id)
-    client.delete()
+    client.is_deleted = 1
+    client.save(update_fields=["is_deleted"])
     return HttpResponseRedirect('/clients/')
 
 

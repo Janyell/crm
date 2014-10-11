@@ -10,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from base_api.full_views.company_views import *
 from base_api.full_views.role_views import *
 from base_api.full_views.client_views import *
+from base_api.full_views.order_views import *
 
 
 def add_edit_role(request):
@@ -49,26 +50,11 @@ def get_clients(request):
 
 
 def add_edit_order(request):
-
-    OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.all())
-    OrdersForm.base_fields['clients'] = ClientModelChoiceField(queryset=Clients.objects.all())
-
-    form = OrdersForm()
-    out = {}
-
-    all_products = Products.objects.filter()
-    products = []
-    for pr in all_products:
-        products.append(pr.title)
-    form.products = products
-
-    out.update({'order_form': form})
-    out.update({'page_title': "Добавление заказа"})
-    return render(request, 'add_edit_order.html', out)
+    return full_add_edit_order(request)
 
 
 def get_orders(request):
-    return render(request, 'get_orders.html')
+    return full_get_orders(request)
 
 
 def analyst(request):
