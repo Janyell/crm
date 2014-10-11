@@ -6,9 +6,14 @@
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
 
-            {% if error != 0 and role_form.errors %}
+            {% if error == 1 and role_form.errors %}
                 <div class="text-error">
                     Пользователь с таким логином уже существует!
+                </div>
+            {% endif %}
+            {% if error == 2 %}
+                <div class="text-error">
+                    Для логина и пароля вы можете использовать только латинские буквы и цифры.
                 </div>
             {% endif %}
             {% if request.GET.id %}

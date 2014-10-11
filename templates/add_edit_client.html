@@ -20,6 +20,9 @@
                     Хотя бы одно из полей "Контактное лицо" и "Организация" обязательно для заполнения.
                 </div>
             {% endif %}
+            {% if request.GET.id %}
+                <input type="hidden" name="pk" value="{{ request.GET.id }}">
+            {% endif %}
             <div class="control-group">
                 <label class="control-label" for="inputСontactPerson">
                     Контактное лицо

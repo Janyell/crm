@@ -40,6 +40,10 @@ def add_edit_client(request):
     return full_add_edit_client(request)
 
 
+def delete_client(request):
+    return full_delete_clients(request)
+
+
 def get_clients(request):
     return full_get_clients(request)
 
