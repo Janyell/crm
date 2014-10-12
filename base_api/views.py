@@ -53,6 +53,10 @@ def add_edit_order(request):
     return full_add_edit_order(request)
 
 
+def delete_order(request):
+    return full_delete_order(request)
+
+
 def get_orders(request):
     return full_get_orders(request)
 
