@@ -65,7 +65,8 @@ def full_delete_company(request):
         return HttpResponseRedirect('/login/')
     id = request.GET['id']
     company = Companies.objects.get(pk=id)
-    company.delete()
+    company.is_deleted = 1
+    company.save(update_fields=["is_deleted"])
     return HttpResponseRedirect('/companies/')
 
 

@@ -93,8 +93,7 @@ class LoginForm(ModelForm):
 class OrdersForm(forms.ModelForm):
     class Meta:
         model = Orders
-        exclude = ['is_deleted', 'role', 'in_archive', 'order_date']
-        company = ModelChoiceField(queryset=Companies.objects.all().values('title'))
+        exclude = ['is_deleted', 'role', 'in_archive', 'order_date', 'unique_number']
         widgets = {
             'client': Select(attrs={'id': "selectClient", 'required': 1}),
             'company': Select(attrs={'id': "selectCompany"}),
@@ -103,11 +102,12 @@ class OrdersForm(forms.ModelForm):
                                              'class': "datetime",
                                              'placeholder': "ДД.ММ.ГГГГ ЧЧ:ММ"}),
             'order_status': Select(attrs={'id': "selectStatus"}),
+            'bill_status': Select(attrs={'id': "selectBillStatus"}),
             'city': TextInput(attrs={'id': "inputCity",
                                      'placeholder': "Город"}),
             'comment': Textarea(attrs={'id': "inputComment",
                                        'placeholder': "Комментарии"}),
-            'source': Select(attrs={'id': "selectSource"}),
+            'source': Select(attrs={'id': "selectSource", 'required': 1}),
             'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                            'class': "datetime",
                                            'placeholder': "ДД.ММ.ГГГГ ЧЧ:ММ"})
