@@ -1,0 +1,50 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <script src="{{ STATIC_URL }}js/Chart.min.js"></script>
+
+    <div class="container">
+    <a href="{% url "analyze_products" %}" class="btn">Назад</a>
+        <h2 class="center">{{ page_title }}</h2>
+        <form method="get" action="{% url "view_analyzed_product" %}" class="analyzed-product form-horizontal">
+            <input type="hidden" class="analyzed-product__id" name="id" value="{{ request.GET.id }}" />
+            <div class="control-group">
+                <label class="control-label" for="selectPeriod">
+                    Период
+                </label>
+                <div class="controls">
+                    <select name="period" id="selectPeriod">
+                        <option value="month">Последний месяц</option>
+                        <option value="year">Последний год</option>
+                        <option value="all">Весь период продаж</option>
+                    </select>
+                </div>
+            </div>
+            <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
+        </form>
+        <canvas id="analyzed-product-chart" width="940" height="400"></canvas>
+    </div>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
+                var data = {
+                    labels: [{{ analyzed_product.period }} "January", "February", "March", "April", "May", "June", "July"],
+                    datasets: [
+                        {
+                            label: "My First dataset",
+                            fillColor: "rgba(220,220,220,0.2)",
+                            strokeColor: "rgba(220,220,220,1)",
+                            pointColor: "rgba(220,220,220,1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(220,220,220,1)",
+                            data: [{{ analyzed_product.data }} 65, 59, 80, 81, 56, 55, 40]
+                        }
+                    ]
+                };
+                var analyzedProductChart = new Chart(ctx).Line(data);
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

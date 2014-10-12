@@ -1,53 +1,51 @@
 {%extends "base.html"%}
 
 {%block content%}
-    <script src="{{ STATIC_URL }}js/Chart.min.js"></script>
-
-    <form class="form-horizontal form-add" method="get" action="">
-        <h2 class="form-add__head">{{ page_title }}</h2>
-        <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
-        {% if error != 0 and company_form.errors %}
-            <div class="text-error">
-
-            </div>
-        {% endif %}
-        <div class="control-group">
-            <label class="control-label" for="selectPeriod">
-                Период
-                <span class="required-input">*</span>
-            </label>
-            <div class="controls">
-                 <select id="selectPeriod" name="period">
-                     <option value="month">Последний месяц</option>
-                     <option value="year">Последний год</option>
-                     <option value="all">Весь период продаж</option>
-                 </select>
-            </div>
+    <div class="container container_mini-width">
+        <h2 class="center">{{ page_title }}</h2>
         <table class="table table-hover table-bordered" id="analyze-product-table">
-                <thead>
-                    <tr>
-                        <th>Продукция</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if products %}
-                        {% for product in products %}
-                            <tr>
-                                <td>{{ product.title }}</td>
-                                <td>
-                                    <a class="btn" href="{% url "analyze_products" %}?id={{ product.pk }}">Анализировать</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-                </tbody>
-            </table>
-    {% if analyzed_data %}
-        <div class="container">
-            <canvas id="analyze_products" width="940" height="400"></canvas>
-        </div>
-    {% endif %}
+            <thead>
+                <tr>
+                    <th>Продукция</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if products %}
+                    {% for product in products %}
+                        <tr>
+                            <td>{{ product.title }}</td>
+                            <td>
+                                <a class="btn analyze-button" data-toggle="modal" href="#analyzed-product" value="{{ product.pk }}">Анализировать</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="modal hide fade" id="analyzed-product" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+        <form method="get" action="{% url "view_analyzed_product" %}">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4> Выберите анализируемый период </h4>
+            </div>
+            <div class="modal-body analyzed-product">
+                <input type="hidden" class="analyzed-product__id" name="id" value="" />
+                <div class="center analyzed-product__period">
+                    <select name="period">
+                        <option value="month">Последний месяц</option>
+                        <option value="year">Последний год</option>
+                        <option value="all">Весь период продаж</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-primary" value="Анализировать"/>
+                <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+            </div>
+        </form>
+    </div>
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -59,6 +57,10 @@
                         { "bSortable": false, "aTargets": [ 1 ] },
                         { "bSearchable": false, "aTargets": [ 1 ] }
                     ]
+                });
+                 $('.analyze-button').bind('click', function(){
+                    var id = $(this).attr('value');
+                    $('#analyzed-product .analyzed-product__id').attr('value',id);
                 });
             });
             $(window).load(function() {

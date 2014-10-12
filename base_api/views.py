@@ -110,4 +110,12 @@ def get_interested_clients(request):
 
 
 def analyze_products(request):
-    pass
+    out = {}
+    out.update({'page_title': "Анализ продукта"})
+    return render(request, 'analyze_products.html', out)
+
+
+def view_analyzed_product(request):
+    out = {}
+    out.update({'page_title': "Анализ продукта"})
+    return render(request, 'view_analyzed_product.html', out)
