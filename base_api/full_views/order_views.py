@@ -17,6 +17,10 @@ def full_add_edit_order(request):
     out = {}
     if request.method == 'POST':
         form = OrdersForm(request.POST)
+        if 'pk' in request.POST:
+            print("grfhjbafhjb")
+        payment_date = request.POST['payment_date']
+        print(payment_date)
         if form.is_valid():
             client = form.cleaned_data['client']
             role = Roles.objects.get(id=request.user.id)
@@ -35,27 +39,63 @@ def full_add_edit_order(request):
                                               bill_status=bill_status, ready_date=ready_date, comment=comment)
             products_list = request.POST.getlist('products[]')
             for id_of_pr in products_list:
-                name_of_pr = 'select-product__number_' + id_of_pr
-                count_of_products = request.POST[name_of_pr]
-                product = Products.objects.get(id=id_of_pr)
+                if int(id_of_pr) < 0:
+                    name_of_pr = 'select-product__title_' + id_of_pr
+                    title_of_product = request.POST[name_of_pr]
+                    name_of_pr = 'select-product__number_' + id_of_pr
+                    count_of_products = request.POST[name_of_pr]
+                    product = Products.objects.create(title=title_of_product)
+                else:
+                    name_of_pr = 'select-product__number_' + id_of_pr
+                    count_of_products = request.POST[name_of_pr]
+                    product = Products.objects.get(id=id_of_pr)
                 new_order_product_link = Order_Product.objects.create(order=new_order, product=product,
                                                                       order_date=datetime.now(),
                                                                       count_of_products=count_of_products)
             return HttpResponseRedirect('/orders/')
         else:
             print(form.errors)
+            OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
+                                                                        required=False)
+            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0))
+            form = OrdersForm()
+            form.products = Products.objects.filter(is_deleted=0)
+            out.update({'error': 1})
+            out.update({'order_form': form})
             out.update({'page_title': "Добавление заказа"})
     else:
-        OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                    required=False)
-        OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0))
-        form = OrdersForm()
-
-        all_products = Products.objects.filter(is_deleted=0)
-        form.products = all_products
-
-        out.update({'order_form': form})
-        out.update({'page_title': "Добавление заказа"})
+        if 'client-id' in request.GET:
+            OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
+                                                                        required=False)
+            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0))
+            client_id = request.GET['client-id']
+            client = Clients.objects.get(id=client_id)
+            form = OrdersForm({'client': client})
+            form.products = Products.objects.filter(is_deleted=0)
+            out.update({'order_form': form})
+            out.update({'page_title': "Добавление заказа"})
+        elif 'id' in request.GET:
+            id_order = request.GET['id']
+            out.update({"error": 0})
+            order = Orders.objects.get(pk=id_order)
+            OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
+                                                                        required=False)
+            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0))
+            form = OrdersForm({'client': order.client, 'company': order.company, 'bill': order.bill,
+                               'payment_date': order.payment_date, 'order_status': order.order_status,
+                               'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
+                               'source': order.source, 'ready_date': order.ready_date})
+            form.products = Products.objects.filter(is_deleted=0)
+            out.update({'order_form': form})
+            out.update({'page_title': "Редактирование заказа"})
+        else:
+            OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
+                                                                        required=False)
+            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0))
+            form = OrdersForm()
+            form.products = Products.objects.filter(is_deleted=0)
+            out.update({'order_form': form})
+            out.update({'page_title': "Добавление заказа"})
     return render(request, 'add_edit_order.html', out)
 
 

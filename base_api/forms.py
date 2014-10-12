@@ -14,7 +14,7 @@ class CompanyModelChoiceField(ModelChoiceField):
 class ClientModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         if obj.organization == '':
-            return obj.last_name + obj.name + obj.patronymic
+            return obj.last_name + ' ' + obj.name + ' ' + obj.patronymic
         else:
             return obj.organization
 
@@ -25,14 +25,14 @@ class RoleForm(ModelForm):
         fields = ['username', 'password', 'role', 'surname', 'name', 'patronymic']
         widgets = {
             'username': TextInput(attrs={'id': "inputLogin",
-                                      'placeholder': "Логин",
-                                      'required': 1}),
+                                         'placeholder': "Логин",
+                                         'required': 1}),
             'password': PasswordInput(attrs={'id': "inputPassword",
                                              'placeholder': "Пароль"}),
             'role': Select(attrs={'id': "selectRole",
                                   'required': 1}),
             'surname': TextInput(attrs={'id': "inputSurname",
-                                          'placeholder': "Фамилия"}),
+                                        'placeholder': "Фамилия"}),
             'name': TextInput(attrs={'id': "inputName",
                                      'placeholder': "Имя"}),
             'patronymic': TextInput(attrs={'id': "inputPatronymic",
@@ -92,6 +92,7 @@ class LoginForm(ModelForm):
 
 class OrdersForm(forms.ModelForm):
     class Meta:
+        payment_date = DateTimeField(input_formats=['%d.%m.%YY %H:%M'], required=False)
         model = Orders
         exclude = ['is_deleted', 'role', 'in_archive', 'order_date', 'unique_number']
         widgets = {

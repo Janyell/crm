@@ -124,7 +124,7 @@ class Orders(models.Model):
 
 
 class Products(models.Model):
-    title = models.CharField(max_length=500)
+    title = models.CharField(max_length=255, unique=True)
     is_deleted = models.BooleanField(default=0)
 
 

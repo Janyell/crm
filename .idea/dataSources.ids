@@ -153,10 +153,11 @@
     </table>
     <table name="base_api_products" schema="" catalog="base_for_api" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="title" sqlType="VARCHAR" precision="500" scale="0" nullable="false" jdbcType="12"/>
+      <column name="title" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="is_deleted" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
       <primary-key name="PRIMARY" columns="id"/>
       <exported-key name="product_id_refs_id_dd546aef" table="base_api_order_product" schema="" catalog="base_for_api" columns="product_id"/>
+      <index name="unique_title" unique="true" columns="title"/>
     </table>
     <table name="base_api_roles" schema="" catalog="base_for_api" type="TABLE">
       <column name="user_ptr_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
