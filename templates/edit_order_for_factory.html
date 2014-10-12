@@ -1,0 +1,64 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <div class="container">
+        <a href="{% url "get_orders" %}" class="btn">Назад</a>
+        <form class="form-horizontal form-add form-add-order" method="post" action="">
+            <h2 class="form-add__head">{{ page_title }}</h2>
+            {% if request.GET.id %}
+                <input type="hidden" name="pk" value="{{ request.GET.id }}">
+            {% endif %}
+            <div class="form-add">
+                <div class="control-group">
+                    <label class="control-label">
+                        Номер заказа
+                    </label>
+                    <div class="controls">
+                        {{ unique_number }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-add">
+                <div class="control-group">
+                    <label class="control-label" for="selectStatus">
+                        Статус заказа
+                    </label>
+                    <div class="controls">
+                        {{ order_form.order_status }}
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="inputReadyDate">
+                        Дата готовности
+                    </label>
+                    <div class="controls">
+                        <div id="readyDate" class="input-append date">
+                            {{ order_form.ready_date }}
+                            <span class="add-on">
+                                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-add__submits">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button type="button" class="btn">Очистить</button>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $('#readyDate').datetimepicker({
+                    format: 'yyyy-MM-dd hh:mm:ss',
+                    language: 'ru',
+                    pickSeconds: false
+                });
+            });
+        })(jQuery);
+    </script>
+{%endblock%}

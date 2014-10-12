@@ -13,6 +13,8 @@ def full_add_edit_company(request):
     out = {}
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if 'pk' in request.POST:
@@ -63,6 +65,8 @@ def full_add_edit_company(request):
 def full_delete_company(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     id = request.GET['id']
     company = Companies.objects.get(pk=id)
     company.is_deleted = 1
@@ -73,6 +77,8 @@ def full_delete_company(request):
 def full_get_companies(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     companies = Companies.objects.filter(is_deleted=0)
     for c in companies:
         c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic

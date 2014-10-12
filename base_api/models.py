@@ -50,6 +50,7 @@ class Roles(User):
     ROLES_CHOICES = (
         (MANAGER, 'Менеджер'),
         (PRODUCTION, 'Производство'),
+        (LEADERSHIP, 'Руководство'),
     )
     role = models.IntegerField(choices=ROLES_CHOICES, default=MANAGER)
     name = models.CharField(max_length=25, null=True, blank=True)

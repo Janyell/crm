@@ -61,7 +61,13 @@ def get_orders(request):
     return full_get_orders(request)
 
 
+def edit_order_for_factory(request):
+    return full_edit_order_for_factory(request)
+
+
 def analyst(request):
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     return render(request, 'index.html')
 
 
@@ -101,6 +107,12 @@ def page_not_found(request):
     return render(request, 'page_not_found.html', out)
 
 
+def permission_deny(request):
+    out = {}
+    out.update({'page_title': "К сожалению, у вас нет доступа к данной странице."})
+    return render(request, 'page_not_found.html', out)
+
+
 def get_old_orders(request):
     return full_get_old_orders(request)
 
@@ -110,12 +122,20 @@ def get_interested_clients(request):
 
 
 def analyze_products(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     out = {}
     out.update({'page_title': "Анализ продукта"})
     return render(request, 'analyze_products.html', out)
 
 
 def view_analyzed_product(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     out = {}
     out.update({'page_title': "Анализ продукта"})
     return render(request, 'view_analyzed_product.html', out)

@@ -4,7 +4,9 @@
     <div class="container container_full-width">
     {% url 'get_orders' as get_orders_url %}
         {% if request.path == get_orders_url %}
-            <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
+            {% if user_role != 2 %}
+                <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
+            {% endif %}
         {% endif %}
         <h2 class="center">{{ page_title }}</h2>
         {% if orders %}
@@ -14,9 +16,13 @@
                     <th>Менеджер</th>
                     <th>Название организации</th>
                     <th>Номер заказа</th>
-                    <th>Компания</th>
+                    {% if user_role != 2 %}
+                        <th>Компания</th>
+                    {% endif %}
                     <th>Номер счета</th>
-                    <th>Сумма счета</th>
+                    {% if user_role != 2 %}
+                        <th>Сумма счета</th>
+                    {% endif %}
                     <th>Дата оплаты</th>
                     <th>Продукция</th>
                     <th>Статус</th>
@@ -24,7 +30,9 @@
                     <th>Доставка город</th>
                     <th>Комментарии</th>
                     <th></th>
-                    <th></th>
+                    {% if user_role != 2 %}
+                        <th></th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -36,19 +44,23 @@
                                 <div class="get-client-info__head">
                                     {{ order.client.organization_or_full_name }}
                                 </div>
-                                <div class="hidden get-client-info__data">
-                                    <div class="client-data__full-name">{{ order.client.full_name }}</div>
-                                    <div class="client-data__contact-person-phone">{{ order.client.person_phone }}</div>
-                                    <div class="client-data__organization">{{ order.client.organization }}</div>
-                                    <div class="client-data__organization-phone">{{ order.client.organization_phone }}</div>
-                                    <div class="client-data__email">{{ order.client.email }}</div>
-                                </div>
+                                    <div class="hidden get-client-info__data">
+                                        <div class="client-data__full-name">{{ order.client.full_name }}</div>
+                                        <div class="client-data__contact-person-phone">{{ order.client.person_phone }}</div>
+                                        <div class="client-data__organization">{{ order.client.organization }}</div>
+                                        <div class="client-data__organization-phone">{{ order.client.organization_phone }}</div>
+                                        <div class="client-data__email">{{ order.client.email }}</div>
+                                    </div>
                             </a>
                         </td>
                         <td>{{ order.unique_number }}</td>
+                    {% if user_role != 2 %}
                         <td>{{ order.company.title }}</td>
+                    {% endif %}
                         <td>{{ order.client.account_number }}</td>
+                    {% if user_role != 2 %}
                         <td>{{ order.bill }}</td>
+                    {% endif %}
                         <td>{{ order.payment_date }}</td>
                         <td>
                             {% if order.products %}
@@ -63,10 +75,17 @@
                         <td>{{ order.ready_date }}</td>
                         <td>{{ order.city }}</td>
                         <td>{{ order.comment }}</td>
-                        <td><a class="btn btn-mini" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a></td>
-                        <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
+                        {% if user_role != 2 %}
+                            <td><a class="btn btn-mini" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a></td>
+                        {% endif %}
+                        {% if user_role != 2 %}
+                            <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
                             <i class="icon-remove"></i></a>
-                        </td>
+                            </td>
+                        {% endif %}
+                        {% if user_role == 2 %}
+                            <td><a class="btn btn-mini" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
@@ -75,9 +94,13 @@
             <h5 class="center">Нет ни одного текущего заказа</h5>
         {% endif %}
         {% if request.path == get_orders_url %}
-            <a href="{% url "add_order" %}" class="btn">Добавить заказ</a>
+            {% if user_role != 2 %}
+                <a href="{% url "add_order" %}" class="btn">Добавить заказ</a>
+            {% endif %}
         {% endif %}
     </div>
+
+    {% if user_role != 2 %}
     <div class="modal hide fade" id="client-info" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -124,6 +147,7 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    {% endif %}
 
     <div class="modal hide fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
         <div class="modal-header">

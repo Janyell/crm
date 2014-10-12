@@ -13,6 +13,8 @@ def full_add_edit_role(request):
     # строки закомменчены чтобы добавлять новых пользователей при удалении базы
     # if not request.user.is_active:
     #     return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops')
     out = {}
     if request.method == 'POST':
         form = RoleForm(request.POST)
@@ -78,6 +80,8 @@ def full_add_edit_role(request):
 def full_delete_roles(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops')
     id = request.GET['id']
     role = Roles.objects.get(pk=id)
     role.is_deleted = 1
@@ -88,8 +92,8 @@ def full_delete_roles(request):
 def full_get_roles(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops')
     roles = Roles.objects.filter(is_deleted=0)
     for r in roles:
         r.full_name = r.surname + ' ' + r.name + ' ' + r.patronymic

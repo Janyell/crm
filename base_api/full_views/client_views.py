@@ -13,6 +13,8 @@ import sys
 def full_add_edit_client(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     out = {}
     if request.method == 'POST':
         form = ClientForm(request.POST)
@@ -176,6 +178,8 @@ def full_add_edit_client(request):
 def full_delete_clients(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     id = request.GET['id']
     client = Clients.objects.get(pk=id)
     client.is_deleted = 1
@@ -186,6 +190,8 @@ def full_delete_clients(request):
 def full_get_clients(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     clients = Clients.objects.filter(is_deleted=0, is_interested=0)
     for c in clients:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
@@ -198,6 +204,8 @@ def full_get_clients(request):
 def full_get_interested_clients(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     clients = Clients.objects.filter(is_interested=1, is_deleted=0)
     for c in clients:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic

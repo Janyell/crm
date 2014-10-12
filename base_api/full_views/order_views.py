@@ -14,6 +14,8 @@ import string
 def full_add_edit_order(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     out = {}
     if request.method == 'POST':
         form = OrdersForm(request.POST)
@@ -266,6 +268,8 @@ def full_add_edit_order(request):
 def full_delete_order(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
     id = request.GET['id']
     order = Orders.objects.get(pk=id, is_deleted=0)
     order.is_deleted = 1
@@ -299,6 +303,8 @@ def full_get_orders(request):
         else:
             order.order_status = ''
     out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    out = {'user_role': user_role}
     out.update({'page_title': "Заказы"})
     out.update({'orders': orders})
     return render(request, 'get_orders.html', out)
@@ -307,6 +313,8 @@ def full_get_orders(request):
 def full_get_old_orders(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops')
     orders = Orders.objects.filter(is_deleted=0, in_archive=1)
     for order in orders:
         if order.client.organization == '':
@@ -335,8 +343,45 @@ def full_get_old_orders(request):
     return render(request, 'get_orders.html', out)
 
 
+def full_edit_order_for_factory(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 2:
+        return HttpResponseRedirect('/oops')
+    out = {}
+    if request.method == 'POST':
+        if 'pk' in request.POST:
+            pk = request.POST['pk']
+            if request.POST['order_status'] != '':
+                order_status = int(request.POST['order_status'])
+            else:
+                order_status = None
+            if request.POST['ready_date'] != '':
+                ready_date = request.POST['ready_date']
+                ready_date = datetime.strptime(ready_date, '%Y-%m-%d %H:%M:%S')
+            else:
+                ready_date = None
+            new_order = Orders.objects.get(id=pk, is_deleted=0)
+            new_order.order_status = order_status
+            new_order.ready_date = ready_date
+            new_order.save(force_update=True)
+            return HttpResponseRedirect('/orders/')
+        else:
+            return HttpResponseRedirect('/orders')
+    else:
+        if 'id' in request.GET:
+            id_order = request.GET['id']
+            out.update({"error": 0})
+            order = Orders.objects.get(pk=id_order, is_deleted=0)
+            form = OrdersForm({'order_status': order.order_status,
+                               'ready_date': order.ready_date})
+            out.update({'order_form': form})
+            out.update({'unique_number': order.unique_number})
+            out.update({'page_title': "Редактирование заказа"})
+        else:
+            return HttpResponseRedirect('/orders/')
+    return render(request, 'edit_order_for_factory.html', out)
+
+
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
-
-
-# def
