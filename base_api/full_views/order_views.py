@@ -383,5 +383,17 @@ def full_edit_order_for_factory(request):
     return render(request, 'edit_order_for_factory.html', out)
 
 
+def full_add_in_archive(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops')
+    id = request.GET['id']
+    order = Orders.objects.get(pk=id, is_deleted=0)
+    order.in_archive = 1
+    order.save(update_fields=["in_archive"])
+    return HttpResponseRedirect('/orders/')
+
+
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))

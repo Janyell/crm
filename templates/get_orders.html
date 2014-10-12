@@ -34,6 +34,10 @@
                     <th>Доставка город</th>
                     <th>Комментарии</th>
                     <th></th>
+                    {% url 'get_orders' as get_orders_url %}
+                    {% if request.path == get_orders_url %}
+                        <th></th>
+                    {% endif %}
                     {% if user_role != 2 %}
                         <th></th>
                     {% endif %}
@@ -92,8 +96,11 @@
                         </td>
                         <td>{{ order.city }}</td>
                         <td>{{ order.comment }}</td>
-                        {% if user_role != 2 %}
-                            <td><a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a></td>
+                        {% url 'get_orders' as get_orders_url %}
+                        {% if request.path == get_orders_url %}
+                            {% if user_role != 2 %}
+                                <td><a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a></td>
+                            {% endif %}
                         {% endif %}
                         {% if user_role != 2 %}
                             <td><a class="btn btn-mini" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a></td>
@@ -167,6 +174,7 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    {% endif %}
 
     <div class="modal hide fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
         <div class="modal-header">

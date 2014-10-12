@@ -12,6 +12,7 @@
                         <th>Организация</th>
                         <th>Телефон организации</th>
                         <th>E-mail</th>
+                        <th>Номер счета</th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -25,6 +26,11 @@
                             <td>{{ client.organization }}</td>
                             <td>{{ client.organization_phone }}</td>
                             <td>{{ client.email }}</td>
+                            <td>
+                                {% if client.account_number != None %}
+                                    {{ client.account_number }}
+                                {% endif %}
+                            </td>
                             <td><a class="btn" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a></td>
                             <td><a class="btn" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a></td>
                             <td><a class="btn delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
@@ -61,8 +67,8 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 5, 6, 7 ] },
-                        { "bSearchable": false, "aTargets": [ 5, 6, 7 ] }
+                        { "bSortable": false, "aTargets": [ 8, 6, 7 ] },
+                        { "bSearchable": false, "aTargets": [ 8, 6, 7 ] }
                     ]
                 });
                  $('.delete-button').bind('click', function(){

@@ -117,6 +117,10 @@ def get_old_orders(request):
     return full_get_old_orders(request)
 
 
+def add_in_archive(request):
+    return full_add_in_archive(request)
+
+
 def get_interested_clients(request):
     return full_get_interested_clients(request)
 
@@ -140,5 +144,3 @@ def view_analyzed_product(request):
     out.update({'page_title': "Анализ продаж продукта"})
     return render(request, 'view_analyzed_product.html', out)
 
-def add_in_archive(request):
-    pass
