@@ -127,7 +127,7 @@ def analyze_products(request):
     if Roles.objects.get(id=request.user.id).role == 2:
         return HttpResponseRedirect('/oops')
     out = {}
-    out.update({'page_title': "Анализ продукта"})
+    out.update({'page_title': "Анализ продаж продукта"})
     return render(request, 'analyze_products.html', out)
 
 
@@ -137,5 +137,8 @@ def view_analyzed_product(request):
     if Roles.objects.get(id=request.user.id).role == 2:
         return HttpResponseRedirect('/oops')
     out = {}
-    out.update({'page_title': "Анализ продукта"})
+    out.update({'page_title': "Анализ продаж продукта"})
     return render(request, 'view_analyzed_product.html', out)
+
+def add_in_archive(request):
+    pass

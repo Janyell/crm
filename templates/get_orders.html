@@ -2,11 +2,15 @@
 
 {%block content%}
     <div class="container container_full-width">
-    {% url 'get_orders' as get_orders_url %}
+        {% url 'get_orders' as get_orders_url %}
         {% if request.path == get_orders_url %}
             {% if user_role != 2 %}
                 <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
             {% endif %}
+        {% endif %}
+        {% url 'get_old_orders' as get_old_orders_url %}
+        {% if request.path == get_old_orders_url %}
+        <a href="{% url "get_orders" %}" class="btn">Назад</a>
         {% endif %}
         <h2 class="center">{{ page_title }}</h2>
         {% if orders %}
@@ -57,11 +61,20 @@
                     {% if user_role != 2 %}
                         <td>{{ order.company.title }}</td>
                     {% endif %}
-                        <td>{{ order.client.account_number }}</td>
-                    {% if user_role != 2 %}
-                        <td>{{ order.bill }}</td>
-                    {% endif %}
-                        <td>{{ order.payment_date }}</td>
+                        <td>{% if order.client.account_number != None %}
+                                {{ order.client.account_number }}
+                            {% endif %}
+                        </td>
+                        {% if user_role != 2 %}
+                        <td>{% if order.bill != None %}
+                                {{ order.bill }}
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                        <td>{% if order.payment_date != None %}
+                                {{ order.payment_date }}
+                            {% endif %}
+                        </td>
                         <td>
                             {% if order.products %}
                                 {% for product in order.products %}
@@ -72,9 +85,16 @@
                             {% endif %}
                         </td>
                         <td>{{ order.order_status }}</td>
-                        <td>{{ order.ready_date }}</td>
+                        <td>
+                            {% if order.ready_date != None %}
+                                {{ order.ready_date }}
+                            {% endif %}
+                        </td>
                         <td>{{ order.city }}</td>
                         <td>{{ order.comment }}</td>
+                        {% if user_role != 2 %}
+                            <td><a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a></td>
+                        {% endif %}
                         {% if user_role != 2 %}
                             <td><a class="btn btn-mini" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a></td>
                         {% endif %}
@@ -104,7 +124,7 @@
     <div class="modal hide fade" id="client-info" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>Информация о клиенте &middot; </h3>
+            <h3 class="center">Информация о клиенте</h3>
         </div>
         <div class="modal-body client-info">
             <div class="client-info__item client-info__contact-person clearfix">
@@ -147,7 +167,6 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
-    {% endif %}
 
     <div class="modal hide fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
         <div class="modal-header">
@@ -168,14 +187,12 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13 ] },
-                        { "bSearchable": false, "aTargets": [ 12, 13 ] },
+                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14 ] },
+                        { "bSearchable": false, "aTargets": [ 12, 13, 14 ] },
                         { "sType": "de_datetime", "aTargets": [ 6, 9 ] }
                     ]
                 });
                 $('.get-client-info').bind('click', function(){
-                    var organization_or_full_name = $(this).find('.get-client-info__head').text();
-                    $('#client-info .modal-header > h3').append(organization_or_full_name);
                     var $client_info__data = $('#client-info .modal-body');
                     var full_name = $(this).find('.client-data__full-name').text();
                     $client_info__data.find('.client-info__contact-person > .client-info__data').text(full_name);
