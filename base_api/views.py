@@ -102,11 +102,11 @@ def page_not_found(request):
 
 
 def get_old_orders(request):
-    pass
+    return full_get_old_orders(request)
 
 
 def get_interested_clients(request):
-    pass
+    return full_get_interested_clients(request)
 
 
 def analyze_products(request):

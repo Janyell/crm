@@ -174,3 +174,15 @@ def full_get_clients(request):
     out.update({'page_title': "Клиенты"})
     out.update({'clients': clients})
     return render(request, 'get_clients.html', out)
+
+
+def full_get_interested_clients(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    clients = Clients.objects.filter(is_interested=1, is_deleted=0)
+    for c in clients:
+        c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
+    out = {}
+    out.update({'page_title': "Интересовавшиеся клиенты"})
+    out.update({'clients': clients})
+    return render(request, 'get_clients.html', out)
