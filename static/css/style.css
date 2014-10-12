@@ -30,7 +30,7 @@ body {
 .form-add-client__organization-name {
     width: 146px;
 }
-.form-add {
+.form-add, .container_mini-width, form.analyzed-product {
     margin: 0 auto;
     width: 550px;
     padding: 0 20px; 
@@ -104,4 +104,10 @@ input.datetime {
 }
 select.hidden, div.hidden {
     display: none !important;
+}
+#analyze-product-table th:nth-child(2) {
+    width: 127px;
+}
+#analyzed-product > form {
+    margin: 0px;
 }

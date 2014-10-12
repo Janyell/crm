@@ -43,7 +43,7 @@ class RoleForm(ModelForm):
 class ClientForm(ModelForm):
     class Meta:
         model = Clients
-        exclude = ['is_deleted', 'creation_date', 'account_number', 'is_interested']
+        exclude = ['is_deleted', 'creation_date', 'is_interested']
         widgets = {
             'last_name': TextInput(attrs={'id': "inputСontactPerson",
                                           'placeholder': "Фамилия"}),
@@ -57,7 +57,9 @@ class ClientForm(ModelForm):
             'organization_phone': TextInput(attrs={'id': "inputOrganizationPhone",
                                                    'placeholder': "+7"}),
             'email': EmailInput(attrs={'id': "inputEmail",
-                                       'placeholder': "E-mail"})
+                                       'placeholder': "E-mail"}),
+            'account_number': TextInput(attrs={'id': 'inputAccountNumber',
+                                               'placeholder': 'Номер счета'})
         }
 
 
