@@ -11,6 +11,16 @@
                     Ошибка в заполнении формы заказа.
                 </div>
             {% endif %}
+            {% if error == 2 %}
+                <div class="text-error">
+                    Данное наименование уже есть в списке продукции.
+                </div>
+            {% endif %}
+            {% if error == 3 %}
+                <div class="text-error">
+                    Вы не добавили ни один продукт в заказ.
+                </div>
+            {% endif %}
             {% if request.GET.id %}
                 <input type="hidden" name="pk" value="{{ request.GET.id }}">
             {% endif %}
