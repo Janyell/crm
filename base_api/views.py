@@ -117,3 +117,9 @@ def get_old_orders(request):
 
 def get_interested_clients(request):
     pass
+
+
+def analyze_products(request):
+    out = {}
+    out.update({'page_title': "Анализ продуктов"})
+    return render(request, 'analyze_products.html', out)

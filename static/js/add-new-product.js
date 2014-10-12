@@ -29,8 +29,11 @@
 		}
 		else {
 			product_id = --ij;
-			product_title = '<input type="text" name="select-product__title" name="select-product__title_' + product_id + '" placeholder="Другое">'
-			add_product_select_selected_option(product_id);
+            console.log('sdsds');
+            console.log(product_id);
+			product_title = '<input type="text" class="select-product__title" name="select-product__title_' + product_id + '" placeholder="Другое">'
+			console.log(product_title);
+            add_product_select_selected_option(product_id);
 		}
 		$('.select-product-table__plus').before('<tr class="select-product_' + product_id + '">' +
 			'<td>' + product_title + '</td>' +
