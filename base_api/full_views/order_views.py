@@ -35,7 +35,11 @@ def full_add_edit_order(request):
                 bill = float(request.POST['bill'])
             else:
                 bill = None
-            payment_date = request.POST['payment_date']
+            if request.POST['payment_date'] != '':
+                payment_date = request.POST['payment_date']
+                payment_date = datetime.strptime(payment_date, '%Y-%m-%d %H:%M:%S')
+            else:
+                payment_date = None
             if request.POST['order_status'] != '':
                 order_status = int(request.POST['order_status'])
             else:
@@ -44,18 +48,23 @@ def full_add_edit_order(request):
                 bill_status = int(request.POST['bill_status'])
             else:
                 bill_status = None
-            ready_date = request.POST['ready_date']
+            if request.POST['ready_date'] != '':
+                ready_date = request.POST['ready_date']
+                ready_date = datetime.strptime(ready_date, '%Y-%m-%d %H:%M:%S')
+            else:
+                ready_date = None
             comment = request.POST['comment']
             city = request.POST['city']
             new_order = Orders.objects.get(id=pk, is_deleted=0)
+            new_order.role = role
             new_order.client = client
             new_order.source = source
             new_order.company = company
             new_order.bill = bill
-            # new_order.payment_date = payment_date
+            new_order.payment_date = payment_date
             new_order.order_status = order_status
             new_order.bill_status = bill_status
-            # new_order.ready_date = ready_date
+            new_order.ready_date = ready_date
             new_order.comment = comment
             new_order.city = city
             new_order.save(force_update=True)
@@ -279,6 +288,16 @@ def full_get_orders(request):
         for pr in prs:
             products_list.append(pr)
         order.products = products_list
+        if order.order_status == 0:
+            order.order_status = 'В производстве'
+        elif order.order_status == 1:
+            order.order_status = 'Нужна доплата'
+        elif order.order_status == 2:
+            order.order_status = 'Отгружен'
+        elif order.order_status  == 3:
+            order.order_status = 'Готов'
+        else:
+            order.order_status = ''
     out = {}
     out.update({'page_title': "Заказы"})
     out.update({'orders': orders})
@@ -300,8 +319,18 @@ def full_get_old_orders(request):
         for pr in prs:
             products_list.append(pr)
         order.products = products_list
+        if order.order_status == 0:
+            order.order_status = 'В производстве'
+        elif order.order_status == 1:
+            order.order_status = 'Нужна доплата'
+        elif order.order_status == 2:
+            order.order_status = 'Отгружен'
+        elif order.order_status  == 3:
+            order.order_status = 'Готов'
+        else:
+            order.order_status = ''
     out = {}
-    out.update({'page_title': "Заказы"})
+    out.update({'page_title': "Архив заказов"})
     out.update({'orders': orders})
     return render(request, 'get_orders.html', out)
 

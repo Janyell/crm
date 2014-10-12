@@ -97,6 +97,8 @@ def full_get_roles(request):
             r.role = "Менеджер"
         elif r.role == 2:
             r.role = "Производство"
+        elif r.role == 0:
+            r.role = "Руководство"
     out = {}
     out.update({'page_title': "Роли"})
     out.update({'roles': roles})

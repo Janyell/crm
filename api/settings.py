@@ -64,7 +64,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'base_for_api',
         'USER': 'root',
-        'PASSWORD': '123',
+        'PASSWORD': '',
     }
 }
 
@@ -77,7 +77,7 @@ TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -106,3 +106,7 @@ AUTHENTICATION_BACKENDS = (
 # AUTHOR_MODEL = 'ask.Roles'
 #
 # AUTH_USER_MODULE = 'ask.Roles'
+
+DATETIME_FORMAT = (
+    'd.m.Y H:i'
+)

@@ -92,7 +92,8 @@ class LoginForm(ModelForm):
 
 class OrdersForm(forms.ModelForm):
     class Meta:
-        payment_date = DateTimeField(input_formats=['%d.%m.%YY %H:%M'], required=False)
+        # payment_date = SplitDateTimeField(input_date_formats=['%d.%m.%YY', '%Y-%m-%d'], input_time_formats=['%H:%M'],
+        #                                   required=False)
         model = Orders
         exclude = ['is_deleted', 'role', 'in_archive', 'order_date', 'unique_number']
         widgets = {

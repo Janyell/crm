@@ -2,7 +2,10 @@
 
 {%block content%}
     <div class="container container_full-width">
-        <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
+    {% url 'get_orders' as get_orders_url %}
+        {% if request.path == get_orders_url %}
+            <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
+        {% endif %}
         <h2 class="center">{{ page_title }}</h2>
         {% if orders %}
         <table class="table table-hover table-bordered" id="order-table">
@@ -71,7 +74,9 @@
         {% else %}
             <h5 class="center">Нет ни одного текущего заказа</h5>
         {% endif %}
-        <a href="{% url "add_order" %}" class="btn">Добавить заказ</a>
+        {% if request.path == get_orders_url %}
+            <a href="{% url "add_order" %}" class="btn">Добавить заказ</a>
+        {% endif %}
     </div>
     <div class="modal hide fade" id="client-info" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
         <div class="modal-header">

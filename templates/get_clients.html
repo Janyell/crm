@@ -38,7 +38,10 @@
             <h5 class="center">Не было добавлено ни одного клиента</h5>
         {% endif %}
         <a href="{% url "add_client" %}" class="btn">Добавить клиента</a>
-        <a href="{% url "get_interested_clients" %}" class="btn">Перейти к базе "Интересовавшиеся"</a>
+            {% url 'get_clients' as get_clients_url %}
+                {% if request.path == get_clients_url %}
+                    <a href="{% url "get_interested_clients" %}" class="btn">Перейти к базе "Интересовавшиеся"</a>
+                {% endif %}
     </div>
      <div class="modal hide fade" id="delete-client" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
         <div class="modal-header">
