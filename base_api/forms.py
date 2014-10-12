@@ -113,13 +113,12 @@ class OrdersForm(forms.ModelForm):
                                            'class': "datetime",
                                            'placeholder': "ДД.ММ.ГГГГ ЧЧ:ММ"})
         }
-        """
-class ProductForm(ModelForm):
+
+"""class ProductForm(ModelForm):
     class Meta:
         model = Products
         exclude = ['is_deleted']
         widgets = {
             'title': Select(attrs={'id': "selectProduct",
                                    'required': 1}),
-        }
-"""
+        }"""
