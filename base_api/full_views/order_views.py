@@ -32,7 +32,7 @@ def full_add_edit_order(request):
             else:
                 company = None
             if request.POST['bill'] != '':
-                bill = int(request.POST['bill'])
+                bill = float(request.POST['bill'])
             else:
                 bill = None
             payment_date = request.POST['payment_date']
@@ -267,7 +267,28 @@ def full_delete_order(request):
 def full_get_orders(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    orders = Orders.objects.filter(is_deleted=0)
+    orders = Orders.objects.filter(is_deleted=0, in_archive=0)
+    for order in orders:
+        if order.client.organization == '':
+            order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        else:
+            order.client.organization_or_full_name = order.client.organization
+        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
+        products_list = []
+        for pr in prs:
+            products_list.append(pr)
+        order.products = products_list
+    out = {}
+    out.update({'page_title': "Заказы"})
+    out.update({'orders': orders})
+    return render(request, 'get_orders.html', out)
+
+
+def full_get_old_orders(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    orders = Orders.objects.filter(is_deleted=0, in_archive=1)
     for order in orders:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
