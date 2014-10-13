@@ -321,7 +321,7 @@ def full_get_old_orders(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
+    if user_role != 2:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -357,7 +357,7 @@ def full_edit_order_for_factory(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
+    if user_role != 2:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})

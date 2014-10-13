@@ -4,7 +4,7 @@
     <div class="container container_full-width">
         {% url 'get_orders' as get_orders_url %}
         {% if request.path == get_orders_url %}
-            {% if user_role != 2 %}
+            {% if user_role == 0 %}
                 <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
             {% endif %}
         {% endif %}
