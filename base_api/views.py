@@ -146,3 +146,116 @@ def analyze_products(request):
 
 def view_analyzed_product(request):
     return full_view_analyzed_product(request)
+
+
+# Менеджер количество выставленных счетов
+def analyze_manager_order_give(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    managers = []
+    orders_count = []
+    managers_ids = Roles.objects.filter(role=1, is_deleted=0)
+    for managers_id in managers_ids:
+        orders_count.append(Orders.objects.filter(role_id=managers_id, is_deleted=0).count())
+        managers.append(str(managers_id.surname + ' ' + managers_id.name))
+    amount_str = str(orders_count)[1:-1]
+    out.update({'page_title': "Анализ"})
+    out.update({'data': amount_str})
+    out.update({'managers': managers})
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    return render(request, 'analyze_manager_order_give.html', out)
+
+
+# Менеджер количество отгрузок
+def analyze_manager_order_out(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    managers = []
+    orders_count = []
+    managers_ids = Roles.objects.filter(role=1, is_deleted=0)
+    for managers_id in managers_ids:
+        count = Orders.objects.filter(role_id=managers_id, is_deleted=0, order_status=2).count()
+        count += Orders.objects.filter(role_id=managers_id, is_deleted=0, order_status=3).count()
+        orders_count.append(count)
+        managers.append(str(managers_id.surname + ' ' + managers_id.name))
+    amount_str = str(orders_count)[1:-1]
+    out.update({'page_title': "Анализ"})
+    out.update({'data': amount_str})
+    out.update({'managers': managers})
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    return render(request, 'analyze_manager_order_out.html', out)
+
+
+# Менеджер сумма выставленных счетов
+def analyze_manager_order_sum(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    managers = []
+    orders_bill = []
+    managers_ids = Roles.objects.filter(role=1, is_deleted=0)
+    for managers_id in managers_ids:
+        managers_orders = Orders.objects.filter(role_id=managers_id, is_deleted=0)
+        bill = 0
+        for managers_order in managers_orders:
+            bill += managers_order.bill
+        orders_bill.append(bill)
+        managers.append(str(managers_id.surname + ' ' + managers_id.name))
+    amount_str = str(orders_bill)[1:-1]
+    out.update({'page_title': "Анализ"})
+    out.update({'data': amount_str})
+    out.update({'managers': managers})
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    return render(request, 'analyze_manager_order_sum.html', out)
+
+
+# Менеджер сумма отгрузок
+def analyze_manager_order_out_sum(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    managers = []
+    orders_bill = []
+    managers_ids = Roles.objects.filter(role=1, is_deleted=0)
+    for managers_id in managers_ids:
+        managers_orders = Orders.objects.filter(role_id=managers_id, is_deleted=0, order_status=2)
+        bill = 0
+        for managers_order in managers_orders:
+            bill += managers_order.bill
+        managers_orders = Orders.objects.filter(role_id=managers_id, is_deleted=0, order_status=3)
+        for managers_order in managers_orders:
+            bill += managers_order.bill
+        orders_bill.append(bill)
+        managers.append(str(managers_id.surname + ' ' + managers_id.name))
+    amount_str = str(orders_bill)[1:-1]
+    out.update({'page_title': "Анализ"})
+    out.update({'data': amount_str})
+    out.update({'managers': managers})
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    return render(request, 'analyze_manager_order_out_sum.html', out)
