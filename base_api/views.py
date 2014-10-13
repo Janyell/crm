@@ -148,6 +148,14 @@ def view_analyzed_product(request):
     return full_view_analyzed_product(request)
 
 
+def analyze_sale(request):
+    return render_to_response('analyze_sale.html')
+
+
+def analyze_managers(request):
+    return render(request, 'analyze_managers.html')    return full_view_analyzed_product(request)
+
+
 # Менеджер количество выставленных счетов
 def analyze_manager_order_give(request):
     if not request.user.is_active:
