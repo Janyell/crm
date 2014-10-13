@@ -150,6 +150,7 @@ def view_analyzed_product(request):
     current_mounth = current_mounth[:2]
     current_year = current_time[:4]
     analyzed_product = Products.objects.get(id=product_id)
+    product_name = analyzed_product.title
     product_in_orders = Order_Product.objects.filter(product_id=product_id, is_deleted=0)
     period = []
     amount = []
@@ -189,12 +190,35 @@ def view_analyzed_product(request):
             if data_year == current_year:
                 amount[int(data_mounth) - 1] = int(amount[int(data_mounth) - 1] + pr.count_of_products)
     elif type_of_period == 'all':
-        pass
+        all_date_of_orders = Order_Product.objects.filter(product_id=product_id, is_deleted=0).order_by('order_date')
+        first_data = str(all_date_of_orders[0].order_date)
+        first_data_mounth = first_data[5:]
+        first_data_mounth = first_data_mounth[:2]
+        first_data_year = first_data[:4]
+        amount_of_period = (int(current_year) - int(first_data_year)) * 12 + int(current_mounth)\
+                           - int(first_data_mounth) + 1
+        for i in range(amount_of_period):
+            period.append(i+1)
+            amount.append(0)
+        for pr in product_in_orders:
+            order = Orders.objects.get(id=pr.order_id)
+            data = str(order.order_date)
+            data_mounth = data[5:]
+            data_mounth = data_mounth[:2]
+            data_year = data[:4]
+            data_year_and_mounth = data[:7]
+            current_year_and_mounth = current_year + '-' + current_mounth
+            i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
+            amount[i] = int(amount[i] + pr.count_of_products)
+
+
     amount_str = str(amount)[1:-1]
+    print(amount_str)
     period_str = str(period)[1:-1]
     out.update({'page_title': "Анализ продаж продукта"})
     out.update({'select_period': period_str})
     out.update({'data': amount_str})
+    out.update({'product_name': product_name})
     out.update({'period': type_of_period})
     return render(request, 'view_analyzed_product.html', out)
 

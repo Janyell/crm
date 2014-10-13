@@ -5,7 +5,7 @@
 
     <div class="container">
     <a href="{% url "analyze_products" %}" class="btn">Назад</a>
-        <h2 class="center">{{ page_title }}</h2>
+        <h2 class="center">{{ page_title }} {{ product_name }}</h2>
         <form method="get" action="{% url "view_analyzed_product" %}" class="analyzed-product form-horizontal">
             <input type="hidden" class="analyzed-product__id" name="id" value="{{ request.GET.id }}" />
             <div class="control-group">
@@ -13,7 +13,7 @@
                     Период
                 </label>
                 <div class="controls">
-                    <select name="period" id="selectPeriod">
+                    <select name="period" id="selectPeriod" option="year">
                         <option value="month">Последний месяц</option>
                         <option value="year">Последний год</option>
                         <option value="all">Весь период продаж</option>
