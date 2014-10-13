@@ -77,9 +77,10 @@ def full_add_edit_order(request):
                     title_of_product = request.POST[name_of_pr]
                     if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
                         out.update({"error": 2})
-                        OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                                    required=False)
-                        OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0))
+                        OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+                        OrdersForm.base_fields['client'] = ClientModelChoiceField(
+                            queryset=Clients.objects.filter(is_deleted=0))
                         form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
@@ -107,14 +108,14 @@ def full_add_edit_order(request):
                     if Order_Product.objects.filter(product_id=product.id, order_id=pk, is_deleted=0).count() != 0:
                         order_product = Order_Product.objects.get(product_id=product.id, order_id=pk, is_deleted=0)
                         new_order_product_link = Order_Product(id=order_product.id, order=new_order, product=product,
-                                                                          order_date=datetime.now(),
-                                                                          count_of_products=count_of_products)
+                                                               order_date=datetime.now(),
+                                                               count_of_products=count_of_products)
                         new_order_product_link.save(force_update=True)
                     else:
                         new_order_product_link = Order_Product.objects.create(order=new_order,
                                                                               product=product,
-                                                                          order_date=datetime.now(),
-                                                                          count_of_products=count_of_products)
+                                                                              order_date=datetime.now(),
+                                                                              count_of_products=count_of_products)
             return HttpResponseRedirect('/orders/')
         if form.is_valid():
             client = form.cleaned_data['client']
@@ -172,6 +173,8 @@ def full_add_edit_order(request):
                     new_order_product_link = Order_Product.objects.create(order=new_order, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products)
+                    client.is_interested = 0
+                    client.save(update_fields=["is_interested"])
             if is_order_create:
                 return HttpResponseRedirect('/orders/')
             else:
