@@ -14,9 +14,9 @@
                 </label>
                 <div class="controls">
                     <select name="period" id="selectPeriod" option="year">
-                        <option value="month">Последний месяц</option>
-                        <option value="year">Последний год</option>
-                        <option value="all">Весь период продаж</option>
+                        <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>Последний месяц</option>
+                        <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>Последний год</option>
+                        <option value="all"{% if request.GET.period == "all" %} selected="selected"{% endif %}>Весь период продаж</option>
                     </select>
                 </div>
             </div>
@@ -29,7 +29,12 @@
             $(document).ready(function(){
                 var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
                 var data = {
-                    labels: [{{ select_period }}],
+                    labels: [
+                        {% if select_period %}
+                            {% for select_period__title in select_period %}
+                                {{ select_period__title }}
+                            {% endfor %}
+                        {% endif %}],
                     datasets: [
                         {
                             label: "Анализ продаж продукта",

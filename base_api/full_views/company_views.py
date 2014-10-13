@@ -10,11 +10,14 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 def full_add_edit_company(request):
-    out = {}
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if 'pk' in request.POST:
@@ -66,7 +69,7 @@ def full_delete_company(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
+        return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     company = Companies.objects.get(pk=id)
     company.is_deleted = 1
@@ -77,12 +80,15 @@ def full_delete_company(request):
 def full_get_companies(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     companies = Companies.objects.filter(is_deleted=0)
     for c in companies:
         c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
-    out = {}
     out.update({'page_title': "Компании"})
     out.update({'companies': companies})
     return render(request, 'get_companies.html', out)

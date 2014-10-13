@@ -20,13 +20,9 @@
                     <th>Менеджер</th>
                     <th>Название организации</th>
                     <th>Номер заказа</th>
-                    {% if user_role != 2 %}
-                        <th>Компания</th>
-                    {% endif %}
+                    <th>Компания</th>
                     <th>Номер счета</th>
-                    {% if user_role != 2 %}
-                        <th>Сумма счета</th>
-                    {% endif %}
+                    <th>Сумма счета</th>
                     <th>Дата оплаты</th>
                     <th>Продукция</th>
                     <th>Статус</th>
@@ -34,13 +30,8 @@
                     <th>Доставка город</th>
                     <th>Комментарии</th>
                     <th></th>
-                    {% url 'get_orders' as get_orders_url %}
-                    {% if request.path == get_orders_url %}
-                        <th></th>
-                    {% endif %}
-                    {% if user_role != 2 %}
-                        <th></th>
-                    {% endif %}
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -48,10 +39,11 @@
                     <tr>
                         <td>{{ order.role }}</td>
                         <td>
-                            <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
-                                <div class="get-client-info__head">
-                                    {{ order.client.organization_or_full_name }}
-                                </div>
+                            {% if user_role != 2 %}
+                                <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
+                                    <div class="get-client-info__head">
+                                        {{ order.client.organization_or_full_name }}
+                                    </div>
                                     <div class="hidden get-client-info__data">
                                         <div class="client-data__full-name">{{ order.client.full_name }}</div>
                                         <div class="client-data__contact-person-phone">{{ order.client.person_phone }}</div>
@@ -59,22 +51,21 @@
                                         <div class="client-data__organization-phone">{{ order.client.organization_phone }}</div>
                                         <div class="client-data__email">{{ order.client.email }}</div>
                                     </div>
-                            </a>
+                                </a>
+                            {% else %}
+                                {{ order.client.organization_or_full_name }}
+                            {% endif %}
                         </td>
                         <td>{{ order.unique_number }}</td>
-                    {% if user_role != 2 %}
                         <td>{{ order.company.title }}</td>
-                    {% endif %}
                         <td>{% if order.client.account_number != None %}
                                 {{ order.client.account_number }}
                             {% endif %}
                         </td>
-                        {% if user_role != 2 %}
                         <td>{% if order.bill != None %}
                                 {{ order.bill }}
                             {% endif %}
                         </td>
-                        {% endif %}
                         <td>{% if order.payment_date != None %}
                                 {{ order.payment_date }}
                             {% endif %}
@@ -96,23 +87,17 @@
                         </td>
                         <td>{{ order.city }}</td>
                         <td>{{ order.comment }}</td>
-                        {% url 'get_orders' as get_orders_url %}
-                        {% if request.path == get_orders_url %}
+                        <td><a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a></td>
+                        <td>
                             {% if user_role != 2 %}
-                                <td><a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a></td>
+                                <a class="btn btn-mini" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                            {% else %}
+                                <a class="btn btn-mini" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                             {% endif %}
-                        {% endif %}
-                        {% if user_role != 2 %}
-                            <td><a class="btn btn-mini" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a></td>
-                        {% endif %}
-                        {% if user_role != 2 %}
-                            <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
+                        </td>
+                        <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
                             <i class="icon-remove"></i></a>
-                            </td>
-                        {% endif %}
-                        {% if user_role == 2 %}
-                            <td><a class="btn btn-mini" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a></td>
-                        {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -197,7 +182,14 @@
                     "aoColumnDefs": [
                         { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14 ] },
                         { "bSearchable": false, "aTargets": [ 12, 13, 14 ] },
-                        { "sType": "de_datetime", "aTargets": [ 6, 9 ] }
+                        { "sType": "de_datetime", "aTargets": [ 6, 9 ] },
+                        {% if user_role == 2 %}
+                            { "bVisible": false,  "aTargets": [3, 5, 12, 14]},
+                        {% endif %}
+                        {% url 'get_old_orders' as get_old_orders_url %}
+                        {% if request.path == get_old_orders_url %}
+                            { "bVisible": false,  "aTargets": [12]},
+                        {% endif %}
                     ]
                 });
                 $('.get-client-info').bind('click', function(){
