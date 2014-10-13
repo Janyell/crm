@@ -1,0 +1,90 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <script src="{{ STATIC_URL }}js/Chart.min.js"></script>
+
+    <div class="container">
+    <a href="{% url "analyst" %}" class="btn">Назад</a>
+        <h2 class="center">{{ page_title }}</h2>
+        <form method="get" action="{% url "analyze_managers" %}" class="analyzed-product form-horizontal">
+            <input type="hidden" class="analyzed-product__id" name="id" value="{{ request.GET.id }}" />
+            <div class="control-group">
+                <label class="control-label" for="selectGraphic">
+                    Графики
+                </label>
+                <div class="controls">
+                    <select name="graphic" id="selectGraphic">
+                        <option value="sum">Cумма выставленных счетов / сумма отгрузок</option>
+                        <option value="number">Количество выставленных счетов / количество отгрузок</option>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="selectManager">
+                    Менеджер
+                </label>
+                <div class="controls">
+                    <select name="id" id="selectManager">
+                        {% for manager in managers %}
+                            <option value="{{ manager.pk }}"{% if request.GET.id == manager.pk %} selected="selected"{% endif %}>{{ manager.full_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="selectPeriod">
+                    Период
+                </label>
+                <div class="controls">
+                    <select name="period" id="selectPeriod">
+                        <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>Последний месяц</option>
+                        <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>Последний год</option>
+                        <option value="all"{% if request.GET.period == "all" %} selected="selected"{% endif %}>Весь период продаж</option>
+                    </select>
+                </div>
+            </div>
+            <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
+        </form>
+        {% if select_period %}
+            <canvas id="analyzed-product-chart" width="940" height="400"></canvas>
+        {% endif %}
+    </div>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
+                var data = {
+                    labels: [
+                        {% if select_period %}
+                            {% for select_period__title in select_period %}
+                                '{{ select_period__title }}',
+                            {% endfor %}
+                        {% endif %}],
+                    datasets: [
+                        {
+                            label: "Cумма выставленных счетов / сумма отгрузок",
+                            fillColor: "rgba(220,220,220,0.2)",
+                            strokeColor: "rgba(220,220,220,1)",
+                            pointColor: "rgba(220,220,220,1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(220,220,220,1)",
+                            data: [{{ sum_data }}]
+                        },
+                        {
+                            label: "Количество выставленных счетов / количество отгрузок",
+                            fillColor: "rgba(151,187,205,0.2)",
+                            strokeColor: "rgba(151,187,205,1)",
+                            pointColor: "rgba(151,187,205,1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(151,187,205,1)",
+                            data: [{{ number_data }}]
+                        }
+                    ]
+                };
+                var analyzedProductChart = new Chart(ctx).Line(data);
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

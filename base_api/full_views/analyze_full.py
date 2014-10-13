@@ -84,8 +84,8 @@ def full_view_analyzed_product(request):
             if data_year == current_year:
                 amount[int(data_mounth) - 1] = int(amount[int(data_mounth) - 1] + pr.count_of_products)
         period_str = []
-        period_str.append("'Январь',")
-        period_str.append("'Февраль'")
+        period_str.append('Январь')
+        period_str.append('Февраль')
         # period_str.append("Март,")
         # period_str.append("Апрель,")
         # period_str.append("Май,")

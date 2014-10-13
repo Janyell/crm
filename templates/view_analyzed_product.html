@@ -6,11 +6,6 @@
     <div class="container">
     <a href="{% url "analyze_products" %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }} {{ product_name }}</h2>
-            {% if select_period %}
-                {% for select_period__title in select_period %}
-                    {{ select_period__title }}
-                {% endfor %}
-            {% endif %}
         <form method="get" action="{% url "view_analyzed_product" %}" class="analyzed-product form-horizontal">
             <input type="hidden" class="analyzed-product__id" name="id" value="{{ request.GET.id }}" />
             <div class="control-group">
@@ -18,7 +13,7 @@
                     Период
                 </label>
                 <div class="controls">
-                    <select name="period" id="selectPeriod" option="year">
+                    <select name="period" id="selectPeriod">
                         <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>Последний месяц</option>
                         <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>Последний год</option>
                         <option value="all"{% if request.GET.period == "all" %} selected="selected"{% endif %}>Весь период продаж</option>
@@ -34,11 +29,10 @@
             $(document).ready(function(){
                 var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
                 var data = {
-{#                    labels: ['Январь', 'Февраль'],#}
                     labels: [
                         {% if select_period %}
                             {% for select_period__title in select_period %}
-                                {{ select_period__title }}
+                                '{{ select_period__title }}',
                             {% endfor %}
                         {% endif %}],
                     datasets: [
