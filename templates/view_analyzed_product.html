@@ -6,6 +6,11 @@
     <div class="container">
     <a href="{% url "analyze_products" %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }} {{ product_name }}</h2>
+            {% if select_period %}
+                {% for select_period__title in select_period %}
+                    {{ select_period__title }}
+                {% endfor %}
+            {% endif %}
         <form method="get" action="{% url "view_analyzed_product" %}" class="analyzed-product form-horizontal">
             <input type="hidden" class="analyzed-product__id" name="id" value="{{ request.GET.id }}" />
             <div class="control-group">

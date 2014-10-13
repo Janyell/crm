@@ -69,7 +69,8 @@ def full_view_analyzed_product(request):
             data_year = data[:4]
             if data_year == current_year and data_mounth == current_mounth:
                 amount[int(data_day) - 1] = int(amount[int(data_day) - 1] + pr.count_of_products)
-        period_str = str(period)[1:-1]
+        # period_str = str(period)[1:-1]
+        period_str = period
     elif type_of_period == 'year':
         for i in range(12):
             period.append(i+1)
@@ -118,35 +119,35 @@ def full_view_analyzed_product(request):
             amount[i] = int(amount[i] + pr.count_of_products)
         period_str = []
         for i in range(amount_of_period):
-            if ((i+1) % 12) == 1:
+            if ((i+1+int(first_data_mounth)) % 12) == 1:
                 period_str.append("Январь")
-            elif ((i+1) % 12) == 2:
+            elif ((i+1+int(first_data_mounth)) % 12) == 2:
                 period_str.append("Февраль")
-            elif ((i+1) % 12) == 3:
+            elif ((i+1+int(first_data_mounth)) % 12) == 3:
                 period_str.append("Март")
-            elif ((i+1) % 12) == 4:
+            elif ((i+1+int(first_data_mounth)) % 12) == 4:
                 period_str.append("Апрель")
-            elif ((i+1) % 12) == 5:
+            elif ((i+1+int(first_data_mounth)) % 12) == 5:
                 period_str.append("Май")
-            elif ((i+1) % 12) == 6:
+            elif ((i+1+int(first_data_mounth)) % 12) == 6:
                 period_str.append("Июнь")
-            elif ((i+1) % 12) == 7:
+            elif ((i+1+int(first_data_mounth)) % 12) == 7:
                 period_str.append("Июль")
-            elif ((i+1) % 12) == 8:
+            elif ((i+1+int(first_data_mounth)) % 12) == 8:
                 period_str.append("Август")
-            elif ((i+1) % 12) == 9:
+            elif ((i+1+int(first_data_mounth)) % 12) == 9:
                 period_str.append("Сентябрь")
-            elif ((i+1) % 12) == 10:
+            elif ((i+1+int(first_data_mounth)) % 12) == 10:
                 period_str.append("Октябрь")
-            elif ((i+1) % 12) == 11:
+            elif ((i+1+int(first_data_mounth)) % 12) == 11:
                 period_str.append("Ноябрь")
-            elif ((i+1) % 12) == 12:
+            elif ((i+1+int(first_data_mounth)) % 12) == 0:
                 period_str.append("Декабрь")
         print(period_str)
     amount_str = str(amount)[1:-1]
     print(period)
     out.update({'page_title': "Анализ продаж продукта"})
-    out.update({'select_period': period})
+    out.update({'select_period': period_str})
     out.update({'data': amount_str})
     out.update({'product_name': product_name})
     out.update({'period': type_of_period})
