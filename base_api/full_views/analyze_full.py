@@ -12,21 +12,29 @@ from django.core.exceptions import ObjectDoesNotExist
 def full_analyze_products(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
     out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     products = Products.objects.filter(is_deleted=0)
     out.update({'products': products})
     out.update({'page_title': "Анализ продаж продукта"})
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
     return render(request, 'analyze_products.html', out)
 
 
 def full_view_analyzed_product(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
     out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     product_id = request.GET['id']
     type_of_period = request.GET['period']
     current_time = str(datetime.now())
@@ -136,10 +144,12 @@ def full_view_analyzed_product(request):
                 period_str.append("Декабрь")
         print(period_str)
     amount_str = str(amount)[1:-1]
-    print(amount_str)
+    print(period)
     out.update({'page_title': "Анализ продаж продукта"})
-    out.update({'select_period': period_str})
+    out.update({'select_period': period})
     out.update({'data': amount_str})
     out.update({'product_name': product_name})
     out.update({'period': type_of_period})
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
     return render(request, 'view_analyzed_product.html', out)
