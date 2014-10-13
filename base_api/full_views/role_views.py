@@ -13,9 +13,12 @@ def full_add_edit_role(request):
     # строки закомменчены чтобы добавлять новых пользователей при удалении базы
     # if not request.user.is_active:
     #     return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role != 0:
-        return HttpResponseRedirect('/oops')
     out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     if request.method == 'POST':
         form = RoleForm(request.POST)
         if 'pk' in request.POST:
@@ -81,7 +84,7 @@ def full_delete_roles(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role != 0:
-        return HttpResponseRedirect('/oops')
+        return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     role = Roles.objects.get(pk=id)
     role.is_deleted = 1
@@ -92,8 +95,12 @@ def full_delete_roles(request):
 def full_get_roles(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role != 0:
-        return HttpResponseRedirect('/oops')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     roles = Roles.objects.filter(is_deleted=0)
     for r in roles:
         r.full_name = r.surname + ' ' + r.name + ' ' + r.patronymic
@@ -103,7 +110,6 @@ def full_get_roles(request):
             r.role = "Производство"
         elif r.role == 0:
             r.role = "Руководство"
-    out = {}
     out.update({'page_title': "Роли"})
     out.update({'roles': roles})
     return render(request, 'get_roles.html', out)

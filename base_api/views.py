@@ -66,9 +66,13 @@ def edit_order_for_factory(request):
 
 
 def analyst(request):
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
-    return render(request, 'index.html')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    return render(request, 'index.html', out)
 
 
 def log_in(request):
@@ -82,7 +86,10 @@ def log_in(request):
             print (user)
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect('/')
+                if Roles.objects.get(id=request.user.id).role == 2:
+                    return HttpResponseRedirect('/orders/')
+                else:
+                    return HttpResponseRedirect('/')
             else:
                 out.update({"error": 1})
         else:
@@ -91,7 +98,10 @@ def log_in(request):
         out.update({'page_title': "Авторизация"})
         return render(request, 'log_in.html', out)
     else:
-        return HttpResponseRedirect('/')
+        if Roles.objects.get(id=request.user.id).role == 2:
+            return HttpResponseRedirect('/orders/')
+        else:
+            return HttpResponseRedirect('/')
 
 
 def log_out(request):
@@ -103,13 +113,17 @@ def log_out(request):
 
 def page_not_found(request):
     out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    out = {'user_role': user_role}
     out.update({'page_title': "Страница не найдена"})
     return render(request, 'page_not_found.html', out)
 
 
 def permission_deny(request):
     out = {}
-    out.update({'page_title': "К сожалению, у вас нет доступа к данной странице."})
+    user_role = Roles.objects.get(id=request.user.id).role
+    out = {'user_role': user_role}
+    out.update({'page_title': "К сожалению, у вас нет доступа к данной странице"})
     return render(request, 'page_not_found.html', out)
 
 
@@ -128,21 +142,29 @@ def get_interested_clients(request):
 def analyze_products(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
     out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     products = Products.objects.filter(is_deleted=0)
     out.update({'products': products})
     out.update({'page_title': "Анализ продаж продукта"})
+    user_role = Roles.objects.get(id=request.user.id).role
+    out = {'user_role': user_role}
     return render(request, 'analyze_products.html', out)
 
 
 def view_analyzed_product(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
     out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     product_id = request.GET['id']
     type_of_period = request.GET['period']
     current_time = str(datetime.now())
@@ -220,5 +242,7 @@ def view_analyzed_product(request):
     out.update({'data': amount_str})
     out.update({'product_name': product_name})
     out.update({'period': type_of_period})
+    user_role = Roles.objects.get(id=request.user.id).role
+    out = {'user_role': user_role}
     return render(request, 'view_analyzed_product.html', out)
 

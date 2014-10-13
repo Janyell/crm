@@ -14,9 +14,12 @@ import string
 def full_add_edit_order(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
     out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     if request.method == 'POST':
         form = OrdersForm(request.POST)
         if 'pk' in request.POST:
@@ -269,7 +272,7 @@ def full_delete_order(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
+        return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     order = Orders.objects.get(pk=id, is_deleted=0)
     order.is_deleted = 1
@@ -298,7 +301,7 @@ def full_get_orders(request):
             order.order_status = 'Нужна доплата'
         elif order.order_status == 2:
             order.order_status = 'Отгружен'
-        elif order.order_status  == 3:
+        elif order.order_status == 3:
             order.order_status = 'Готов'
         else:
             order.order_status = ''
@@ -313,8 +316,12 @@ def full_get_orders(request):
 def full_get_old_orders(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role != 0:
-        return HttpResponseRedirect('/oops')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     orders = Orders.objects.filter(is_deleted=0, in_archive=1)
     for order in orders:
         if order.client.organization == '':
@@ -337,7 +344,6 @@ def full_get_old_orders(request):
             order.order_status = 'Готов'
         else:
             order.order_status = ''
-    out = {}
     out.update({'page_title': "Архив заказов"})
     out.update({'orders': orders})
     return render(request, 'get_orders.html', out)
@@ -346,9 +352,12 @@ def full_get_old_orders(request):
 def full_edit_order_for_factory(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role != 2:
-        return HttpResponseRedirect('/oops')
     out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     if request.method == 'POST':
         if 'pk' in request.POST:
             pk = request.POST['pk']
@@ -387,7 +396,7 @@ def full_add_in_archive(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
+        return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     order = Orders.objects.get(pk=id, is_deleted=0)
     order.in_archive = 1

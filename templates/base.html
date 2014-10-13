@@ -26,28 +26,34 @@
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <a class="brand" href="{% url "index" %}">Завод "Триумф"</a>
+                    <a class="brand" href="{% if user_role == 2 %}{% url "get_orders" %}{% else %}{% url "index" %}{% endif %}">Завод "Триумф"</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
                             {{ user.username }}
                             <a href="{% url "logout" %}" class="navbar-link navbar-link_logout">Выйти</a>
                         </p>
                         <ul class="nav">
-                            <li class={% navactive request 'index analyst analyze_products view_analyzed_product' %}>
-                                <a href="{% url "analyst" %}">Аналитика</a>
-                            </li>
-                            <li class={% navactive request 'get_clients add_client edit_client get_interested_clients' %}>
-                                <a href="{% url "get_clients" %}">Клиенты</a>
-                            </li>
+                            {% if user_role != 2 %}
+                                <li class={% navactive request 'index analyst analyze_products view_analyzed_product' %}>
+                                    <a href="{% url "analyst" %}">Аналитика</a>
+                                </li>
+                                <li class={% navactive request 'get_clients add_client edit_client get_interested_clients' %}>
+                                    <a href="{% url "get_clients" %}">Клиенты</a>
+                                </li>
+                            {% endif %}
                             <li class={% navactive request 'get_orders add_order edit_order get_old_orders edit_order_for_factory' %}>
                                 <a href="{% url "get_orders" %}">Заказы</a>
                             </li>
-                            <li class={% navactive request 'get_roles add_role edit_role' %}>
-                                <a href="{% url "get_roles" %}">Роли</a>
-                            </li>
-                            <li class={% navactive request 'get_companies add_company edit_company' %}>
-                                <a href="{% url "get_companies" %}">Компании</a>
-                            </li>
+                            {% if user_role != 2 %}
+                                {% if user_role == 0 %}
+                                    <li class={% navactive request 'get_roles add_role edit_role' %}>
+                                        <a href="{% url "get_roles" %}">Роли</a>
+                                    </li>
+                                {% endif %}
+                                <li class={% navactive request 'get_companies add_company edit_company' %}>
+                                    <a href="{% url "get_companies" %}">Компании</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>

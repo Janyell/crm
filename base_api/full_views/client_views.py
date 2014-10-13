@@ -13,9 +13,12 @@ import sys
 def full_add_edit_client(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
     out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     if request.method == 'POST':
         form = ClientForm(request.POST)
         if 'pk' in request.POST:
@@ -209,12 +212,15 @@ def full_delete_clients(request):
 def full_get_clients(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     clients = Clients.objects.filter(is_deleted=0, is_interested=0)
     for c in clients:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
-    out = {}
     out.update({'page_title': "Клиенты"})
     out.update({'clients': clients})
     return render(request, 'get_clients.html', out)
@@ -223,12 +229,15 @@ def full_get_clients(request):
 def full_get_interested_clients(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
-        return HttpResponseRedirect('/oops')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     clients = Clients.objects.filter(is_interested=1, is_deleted=0)
     for c in clients:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
-    out = {}
     out.update({'page_title': "Интересовавшиеся клиенты"})
     out.update({'clients': clients})
     return render(request, 'get_clients.html', out)
