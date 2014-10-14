@@ -173,4 +173,11 @@ def analyze_total_sales(request):
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
-    return render(request, 'analyze_total_sales.html')
+    return render(request, 'analyze_total_sales.html', out)
+
+
+def analyze_period(request):
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    return render(request,'analyze_period.html', out)
