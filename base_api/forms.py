@@ -102,7 +102,7 @@ class OrdersForm(forms.ModelForm):
             'bill': TextInput(attrs={'id': "inputBill"}),
             'payment_date': TextInput(attrs={'id': "inputPaymentDate",
                                              'class': "datetime",
-                                             'placeholder': "ДД.ММ.ГГГГ ЧЧ:ММ"}),
+                                             'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
             'order_status': Select(attrs={'id': "selectStatus"}),
             'bill_status': Select(attrs={'id': "selectBillStatus"}),
             'city': TextInput(attrs={'id': "inputCity",
@@ -112,7 +112,7 @@ class OrdersForm(forms.ModelForm):
             'source': Select(attrs={'id': "selectSource", 'required': 1}),
             'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                            'class': "datetime",
-                                           'placeholder': "ДД.ММ.ГГГГ ЧЧ:ММ"})
+                                           'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"})
         }
 
 

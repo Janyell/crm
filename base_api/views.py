@@ -15,6 +15,7 @@ from base_api.full_views.analyze_products import *
 from base_api.full_views.analyze_managers import *
 from base_api.full_views.analyze_sales_by_managers import *
 from base_api.full_views.analyze_total_sales import *
+from base_api.full_views.analyze_period import *
 
 
 def add_edit_role(request):
@@ -171,10 +172,7 @@ def analyze_sales_by_managers(request):
 
 
 def analyze_period(request):
-    out = {}
-    user_role = Roles.objects.get(id=request.user.id).role
-    out.update({'user_role': user_role})
-    return render(request, 'analyze_period.html', out)
+    return full_analyze_period(request)
 
 
 def give_order_status(request):
