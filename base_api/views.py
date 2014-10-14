@@ -178,20 +178,28 @@ def analyze_managers(request):
         manager = Roles.objects.get(id=manager_id)
         period = []
         orders_count = []
+        shipped_orders_count = []
         if type_of_period == 'month':
             long_mounths = ['01', '03', '05', '07', '08', '10', '12']
             for i in range(28):
                 period.append(i+1)
                 orders_count.append(0)
+                shipped_orders_count.append(0)
             if current_mounth != 02:
                 period.append(29)
                 period.append(30)
                 orders_count.append(0)
                 orders_count.append(0)
+                shipped_orders_count.append(0)
+                shipped_orders_count.append(0)
                 if current_mounth in long_mounths:
                     period.append(31)
                     orders_count.append(0)
+                    shipped_orders_count.append(0)
             orders = Orders.objects.filter(role_id=manager.id, is_deleted=0)
+            shipped_orders1 = Orders.objects.filter(role_id=manager.id, is_deleted=0, order_status=2)
+            shipped_orders2 = Orders.objects.filter(role_id=manager.id, is_deleted=0, order_status=3)
+            shipped_orders = shipped_orders1 | shipped_orders2
             for order in orders:
                 data = str(order.order_date)
                 data_mounth = data[5:]
@@ -205,6 +213,19 @@ def analyze_managers(request):
                     if type_of_graphic == 'sum':
                         if order.bill != None:
                             orders_count[int(data_day) - 1] += int(order.bill)
+            for order in shipped_orders:
+                data = str(order.order_date)
+                data_mounth = data[5:]
+                data_mounth = data_mounth[:2]
+                data_day = data[8:]
+                data_day = data_day[:2]
+                data_year = data[:4]
+                if data_year == current_year and data_mounth == current_mounth:
+                    if type_of_graphic == 'number':
+                        shipped_orders_count[int(data_day) - 1] += 1
+                    if type_of_graphic == 'sum':
+                        if order.bill != None:
+                            shipped_orders_count[int(data_day) - 1] += int(order.bill)
             period_str = period
         elif type_of_period == 'year':
             for i in range(12):
@@ -289,127 +310,16 @@ def analyze_managers(request):
                 elif ((i+int(first_data_mounth)) % 12) == 0:
                     period_str.append('Декабрь')
         orders_count_str = str(orders_count)[1:-1]
+        shipped_orders_count_str = str(shipped_orders_count)[1:-1]
         out.update({'select_period': period_str})
         out.update({'bill_data': orders_count_str})
+        out.update({'shipped_data': shipped_orders_count_str})
         out.update({'period': type_of_period})
     out.update({'page_title': "Анализ работы менеджеров"})
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'managers': managers})
     return render(request, 'analyze_managers.html', out)
-
-
-# Менеджер количество выставленных счетов
-def analyze_manager_order_give(request):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    out = {}
-    user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
-        return HttpResponseRedirect('/oops/')
-    else:
-        out.update({'user_role': user_role})
-    managers = []
-    orders_count = []
-    managers_ids = Roles.objects.filter(role=1, is_deleted=0)
-    for managers_id in managers_ids:
-        orders_count.append(Orders.objects.filter(role_id=managers_id, is_deleted=0).count())
-        managers.append(str(managers_id.surname + ' ' + managers_id.name))
-    amount_str = str(orders_count)[1:-1]
-    out.update({'page_title': "Анализ"})
-    out.update({'data': amount_str})
-    out.update({'managers': managers})
-    user_role = Roles.objects.get(id=request.user.id).role
-    out.update({'user_role': user_role})
-    return render(request, 'analyze_manager_order_give.html', out)
-
-
-# Менеджер количество отгрузок
-def analyze_manager_order_out(request):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    out = {}
-    user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
-        return HttpResponseRedirect('/oops/')
-    else:
-        out.update({'user_role': user_role})
-    managers = []
-    orders_count = []
-    managers_ids = Roles.objects.filter(role=1, is_deleted=0)
-    for managers_id in managers_ids:
-        count = Orders.objects.filter(role_id=managers_id, is_deleted=0, order_status=2).count()
-        count += Orders.objects.filter(role_id=managers_id, is_deleted=0, order_status=3).count()
-        orders_count.append(count)
-        managers.append(str(managers_id.surname + ' ' + managers_id.name))
-    amount_str = str(orders_count)[1:-1]
-    out.update({'page_title': "Анализ"})
-    out.update({'data': amount_str})
-    out.update({'managers': managers})
-    user_role = Roles.objects.get(id=request.user.id).role
-    out.update({'user_role': user_role})
-    return render(request, 'analyze_manager_order_out.html', out)
-
-
-# Менеджер сумма выставленных счетов
-def analyze_manager_order_sum(request):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    out = {}
-    user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
-        return HttpResponseRedirect('/oops/')
-    else:
-        out.update({'user_role': user_role})
-    managers = []
-    orders_bill = []
-    managers_ids = Roles.objects.filter(role=1, is_deleted=0)
-    for managers_id in managers_ids:
-        managers_orders = Orders.objects.filter(role_id=managers_id, is_deleted=0)
-        bill = 0
-        for managers_order in managers_orders:
-            bill += managers_order.bill
-        orders_bill.append(bill)
-        managers.append(str(managers_id.surname + ' ' + managers_id.name))
-    amount_str = str(orders_bill)[1:-1]
-    out.update({'page_title': "Анализ"})
-    out.update({'data': amount_str})
-    out.update({'managers': managers})
-    user_role = Roles.objects.get(id=request.user.id).role
-    out.update({'user_role': user_role})
-    return render(request, 'analyze_manager_order_sum.html', out)
-
-
-# Менеджер сумма отгрузок
-def analyze_manager_order_out_sum(request):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    out = {}
-    user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
-        return HttpResponseRedirect('/oops/')
-    else:
-        out.update({'user_role': user_role})
-    managers = []
-    orders_bill = []
-    managers_ids = Roles.objects.filter(role=1, is_deleted=0)
-    for managers_id in managers_ids:
-        managers_orders = Orders.objects.filter(role_id=managers_id, is_deleted=0, order_status=2)
-        bill = 0
-        for managers_order in managers_orders:
-            bill += managers_order.bill
-        managers_orders = Orders.objects.filter(role_id=managers_id, is_deleted=0, order_status=3)
-        for managers_order in managers_orders:
-            bill += managers_order.bill
-        orders_bill.append(bill)
-        managers.append(str(managers_id.surname + ' ' + managers_id.name))
-    amount_str = str(orders_bill)[1:-1]
-    out.update({'page_title': "Анализ"})
-    out.update({'data': amount_str})
-    out.update({'managers': managers})
-    user_role = Roles.objects.get(id=request.user.id).role
-    out.update({'user_role': user_role})
-    return render(request, 'analyze_manager_order_out_sum.html', out)
 
 
 def analyze_sales_by_managers(request):
