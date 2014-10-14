@@ -25,7 +25,7 @@
                 <div class="controls">
                     <select name="id" id="selectManager">
                         {% for manager in managers %}
-                            <option value="{{ manager.pk }}"{% if request.GET.id == manager.pk %} selected="selected"{% endif %}>{{ manager.full_name }}</option>
+                            <option value="{{ manager.pk }}"{% if request.GET.id == manager.pk|upper %} selected="selected"{% endif %}>{{ manager.full_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
