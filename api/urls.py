@@ -38,5 +38,6 @@ urlpatterns = patterns('',
                        url(r'^companies/edit/$', 'base_api.views.add_edit_company', name='edit_company'),
                        url(r'^companies/delete/$', 'base_api.views.delete_company', name='delete_company'),
                        url(r'^oops/$', 'base_api.views.permission_deny', name='permission_deny'),
+                       url(r'^order_status/$', 'base_api.views.give_order_status', name='give_order_status'),
                        url(r'', 'base_api.views.page_not_found', name='404'),
 )

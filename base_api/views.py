@@ -174,4 +174,20 @@ def analyze_period(request):
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
-    return render(request,'analyze_period.html', out)
+    return render(request, 'analyze_period.html', out)
+
+
+def give_order_status(request):
+    order_unic = request.GET['id']
+    order_status = Orders.objects.get(unique_number=order_unic).order_status
+    if order_status == 0:
+        order_status_str = 'В производстве'
+    if order_status == 1:
+        order_status_str = 'Нужна доплата'
+    if order_status == 2:
+        order_status_str = 'Отгружен'
+    if order_status == 3:
+        order_status_str = 'Готов'
+    out = {}
+    out.update({'page_title': order_status_str})
+    return render(request, 'page_not_found.html', out)
