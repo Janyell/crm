@@ -103,7 +103,7 @@ def full_view_analyzed_product(request):
         first_data_mounth = first_data_mounth[:2]
         first_data_year = first_data[:4]
         amount_of_period = (int(current_year) - int(first_data_year)) * 12 + int(current_mounth)\
-                           - int(first_data_mounth) + 1
+                           - int(first_data_mounth) + 2
         for i in range(amount_of_period):
             period.append(i+1)
             amount.append(0)

@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b7a90fd-86fb-4af3-8eeb-735f4105b015" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/api.iml" afterPath="$PROJECT_DIR$/.idea/api.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base_api/views.py" afterPath="$PROJECT_DIR$/base_api/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base_api/full_views/analyze_managers.py" afterPath="$PROJECT_DIR$/base_api/full_views/analyze_managers.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base_api/full_views/analyze_products.py" afterPath="$PROJECT_DIR$/base_api/full_views/analyze_products.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base_api/full_views/analyze_sales_by_managers.py" afterPath="$PROJECT_DIR$/base_api/full_views/analyze_sales_by_managers.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base_api/full_views/analyze_total_sales.py" afterPath="$PROJECT_DIR$/base_api/full_views/analyze_total_sales.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="api.iws" />
@@ -31,8 +32,8 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/base_api/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="8181" max-vertical-offset="11760">
-              <caret line="555" column="14" selection-start-line="555" selection-start-column="14" selection-end-line="555" selection-end-column="14" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2256" max-vertical-offset="2745">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="23" />
               <folding>
                 <element signature="e#42#97#0" expanded="true" />
               </folding>
@@ -40,22 +41,50 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/base_api/models.py">
+      <file leaf-file-name="analyze_managers.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_managers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1365" max-vertical-offset="2145">
-              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1890" max-vertical-offset="3240">
+              <caret line="137" column="59" selection-start-line="137" selection-start-column="59" selection-end-line="137" selection-end-column="59" />
+              <folding>
+                <element signature="e#42#97#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="analyze_total_sales.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/analyze_total_sales.html">
+      <file leaf-file-name="analyze_products.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_products.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.13274336" vertical-offset="465" max-vertical-offset="1035">
-              <caret line="35" column="37" selection-start-line="35" selection-start-column="37" selection-end-line="35" selection-end-column="37" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2415">
+              <caret line="105" column="55" selection-start-line="105" selection-start-column="55" selection-end-line="105" selection-end-column="55" />
+              <folding>
+                <element signature="e#42#97#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="analyze_sales_by_managers.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_sales_by_managers.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1830" max-vertical-offset="3300">
+              <caret line="136" column="59" selection-start-line="136" selection-start-column="59" selection-end-line="136" selection-end-column="59" />
+              <folding>
+                <element signature="e#42#97#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="analyze_total_sales.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_total_sales.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.33742332" vertical-offset="1965" max-vertical-offset="3435">
+              <caret line="142" column="59" selection-start-line="142" selection-start-column="59" selection-end-line="142" selection-end-column="59" />
+              <folding>
+                <element signature="e#42#97#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,8 +124,6 @@
         <option value="$PROJECT_DIR$/base_api/full_views/role_views.py" />
         <option value="$PROJECT_DIR$/templates/get_clients.html" />
         <option value="$PROJECT_DIR$/templates/get_orders.html" />
-        <option value="$PROJECT_DIR$/api/settings.py" />
-        <option value="$PROJECT_DIR$/base_api/full_views/analyze_full.py" />
         <option value="$PROJECT_DIR$/templates/analyze_sale.html" />
         <option value="$PROJECT_DIR$/templates/view_analyzed_product.html" />
         <option value="$PROJECT_DIR$/api/urls.py" />
@@ -109,8 +136,14 @@
         <option value="dbtable:/9bb4da4f/bc65a1ed-51c1-4972-a960-e2d54e6b299c/base_for_api..auth_user" />
         <option value="$PROJECT_DIR$/templates/analyze_managers.html" />
         <option value="$PROJECT_DIR$/templates/analyze_sales_by_managers.html" />
-        <option value="$PROJECT_DIR$/base_api/views.py" />
         <option value="$PROJECT_DIR$/templates/analyze_total_sales.html" />
+        <option value="$PROJECT_DIR$/api/settings.py" />
+        <option value="$PROJECT_DIR$/base_api/full_views/analyze_full.py" />
+        <option value="$PROJECT_DIR$/base_api/views.py" />
+        <option value="$PROJECT_DIR$/base_api/full_views/analyze_products.py" />
+        <option value="$PROJECT_DIR$/base_api/full_views/analyze_managers.py" />
+        <option value="$PROJECT_DIR$/base_api/full_views/analyze_sales_by_managers.py" />
+        <option value="$PROJECT_DIR$/base_api/full_views/analyze_total_sales.py" />
       </list>
     </option>
   </component>
@@ -160,7 +193,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -259,6 +291,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -363,27 +396,7 @@
       <option name="PARAMETERS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="api" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
@@ -409,7 +422,27 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="api" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -584,12 +617,20 @@
       <created>1413273041783</created>
       <updated>1413273041783</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="add all analyst's views">
+      <created>1413285333518</created>
+      <updated>1413285333518</updated>
+    </task>
+    <task id="LOCAL-00023" summary="all analyst's views are perfect">
+      <created>1413289154628</created>
+      <updated>1413289154628</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32819724" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -597,7 +638,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32875606" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1914378" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19466881" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
@@ -640,7 +681,9 @@
     <MESSAGE value="add manager analyst's template;" />
     <MESSAGE value="add manager analyst's views" />
     <MESSAGE value="add manager analyst's views all" />
-    <option name="LAST_COMMIT_MESSAGE" value="add manager analyst's views all" />
+    <MESSAGE value="add all analyst's views" />
+    <MESSAGE value="all analyst's views are perfect" />
+    <option name="LAST_COMMIT_MESSAGE" value="all analyst's views are perfect" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -648,37 +691,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/base_api/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="429" max-vertical-offset="990">
-          <caret line="47" column="46" selection-start-line="47" selection-start-column="46" selection-end-line="47" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/manage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="240">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="495" max-vertical-offset="1380">
-          <caret line="62" column="31" selection-start-line="62" selection-start-column="31" selection-end-line="62" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="429" max-vertical-offset="990">
-          <caret line="47" column="46" selection-start-line="47" selection-start-column="46" selection-end-line="47" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/manage.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="240">
@@ -892,7 +904,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.610998" vertical-offset="180" max-vertical-offset="1770">
           <caret line="32" column="110" selection-start-line="32" selection-start-column="110" selection-end-line="32" selection-end-column="110" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -974,26 +985,10 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.320059" vertical-offset="758" max-vertical-offset="1740">
-          <caret line="66" column="23" selection-start-line="66" selection-start-column="23" selection-end-line="66" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/analyze_managers.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.40265486" vertical-offset="223" max-vertical-offset="1410">
           <caret line="27" column="84" selection-start-line="27" selection-start-column="84" selection-end-line="27" selection-end-column="84" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_full.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1275" max-vertical-offset="2310">
-          <caret line="99" column="8" selection-start-line="99" selection-start-column="8" selection-end-line="100" selection-end-column="58" />
           <folding />
         </state>
       </provider>
@@ -1030,21 +1025,77 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/api/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44195518" vertical-offset="758" max-vertical-offset="1740">
+          <caret line="66" column="21" selection-start-line="66" selection-start-column="21" selection-end-line="66" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyze_total_sales.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.14849187" vertical-offset="461" max-vertical-offset="1035">
+          <caret line="35" column="37" selection-start-line="35" selection-start-column="37" selection-end-line="35" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base_api/templatetags/smart_if.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6075">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/base_api/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="8181" max-vertical-offset="11760">
-          <caret line="555" column="14" selection-start-line="555" selection-start-column="14" selection-end-line="555" selection-end-column="14" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2256" max-vertical-offset="2745">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="23" />
           <folding>
             <element signature="e#42#97#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/analyze_total_sales.html">
+    <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_products.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13274336" vertical-offset="465" max-vertical-offset="1035">
-          <caret line="35" column="37" selection-start-line="35" selection-start-column="37" selection-end-line="35" selection-end-column="37" />
-          <folding />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2415">
+          <caret line="105" column="55" selection-start-line="105" selection-start-column="55" selection-end-line="105" selection-end-column="55" />
+          <folding>
+            <element signature="e#42#97#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_managers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1890" max-vertical-offset="3240">
+          <caret line="137" column="59" selection-start-line="137" selection-start-column="59" selection-end-line="137" selection-end-column="59" />
+          <folding>
+            <element signature="e#42#97#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_sales_by_managers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1830" max-vertical-offset="3300">
+          <caret line="136" column="59" selection-start-line="136" selection-start-column="59" selection-end-line="136" selection-end-column="59" />
+          <folding>
+            <element signature="e#42#97#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_total_sales.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33742332" vertical-offset="1965" max-vertical-offset="3435">
+          <caret line="142" column="59" selection-start-line="142" selection-start-column="59" selection-end-line="142" selection-end-column="59" />
+          <folding>
+            <element signature="e#42#97#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
