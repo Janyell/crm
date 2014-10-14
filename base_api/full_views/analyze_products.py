@@ -143,6 +143,7 @@ def full_view_analyzed_product(request):
                 period_str.append('Ноябрь')
             elif ((i+int(first_data_mounth)) % 12) == 0:
                 period_str.append('Декабрь')
+        amount = amount[::-1]
     amount_str = str(amount)[1:-1]
     out.update({'page_title': "Анализ продаж продукта"})
     out.update({'select_period': period_str})
