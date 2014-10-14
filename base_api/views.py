@@ -290,7 +290,7 @@ def analyze_managers(request):
                     period_str.append('Декабрь')
         orders_count_str = str(orders_count)[1:-1]
         out.update({'select_period': period_str})
-        out.update({'number_data': orders_count_str})
+        out.update({'bill_data': orders_count_str})
         out.update({'period': type_of_period})
     out.update({'page_title': "Анализ работы менеджеров"})
     user_role = Roles.objects.get(id=request.user.id).role
