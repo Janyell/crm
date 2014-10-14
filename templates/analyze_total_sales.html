@@ -21,44 +21,54 @@
             </div>
             <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
         </form>
-        <canvas id="analyze-total-sales-chart" width="940" height="400"></canvas>
+        {% if select_period %}
+            <canvas id="analyze-total-sales-chart" width="940" height="400"></canvas>
+            <div class="chart-caption">
+                <div class="chart-caption__color chart-caption__color_first"></div>
+                Cумма выставленных счетов
+            </div>
+            <div class="chart-caption">
+                <div class="chart-caption__color chart-caption__color_second"></div>
+                Cумма отгрузок
+            </div>
+            <script type="text/javascript">
+                (function($){
+                    $(document).ready(function(){
+                        var ctx = document.getElementById("analyze-total-sales-chart").getContext("2d");
+                        var data = {
+                            labels: [
+                                {% if select_period %}
+                                    {% for select_period__title in select_period %}
+                                        '{{ select_period__title }}',
+                                    {% endfor %}
+                                {% endif %}],
+                            datasets: [
+                                {
+                                    label: "Воронка продаж общая: сумма выставленных счетов",
+                                    fillColor: "rgba(220,220,220,0.2)",
+                                    strokeColor: "rgba(220,220,220,1)",
+                                    pointColor: "rgba(220,220,220,1)",
+                                    pointStrokeColor: "#fff",
+                                    pointHighlightFill: "#fff",
+                                    pointHighlightStroke: "rgba(220,220,220,1)",
+                                    data: [{{ bill_data }}]
+                                },
+                                {
+                                    label: "Воронка продаж общая: сумма отгрузок",
+                                    fillColor: "rgba(151,187,205,0.2)",
+                                    strokeColor: "rgba(151,187,205,1)",
+                                    pointColor: "rgba(151,187,205,1)",
+                                    pointStrokeColor: "#fff",
+                                    pointHighlightFill: "#fff",
+                                    pointHighlightStroke: "rgba(151,187,205,1)",
+                                    data: [{{ shipped_data }}]
+                                }
+                            ]
+                        };
+                        var analyzedSalesByManagersChart = new Chart(ctx).Line(data);
+                    });
+                })(jQuery);
+            </script>
+        {% endif %}
     </div>
-    <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                var ctx = document.getElementById("analyze-total-sales-chart").getContext("2d");
-                var data = {
-                    labels: [
-                        {% if select_period %}
-                            {% for select_period__title in select_period %}
-                                '{{ select_period__title }}',
-                            {% endfor %}
-                        {% endif %}],
-                    datasets: [
-                        {
-                            label: "Воронка продаж общая: сумма выставленных счетов",
-                            fillColor: "rgba(220,220,220,0.2)",
-                            strokeColor: "rgba(220,220,220,1)",
-                            pointColor: "rgba(220,220,220,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(220,220,220,1)",
-                            data: [{{ bill_data }}]
-                        },
-                        {
-                            label: "Воронка продаж общая: сумма отгрузок",
-                            fillColor: "rgba(151,187,205,0.2)",
-                            strokeColor: "rgba(151,187,205,1)",
-                            pointColor: "rgba(151,187,205,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(151,187,205,1)",
-                            data: [{{ shipped_data }}]
-                        }
-                    ]
-                };
-                var analyzedSalesByManagersChart = new Chart(ctx).Line(data);
-            });
-        })(jQuery);
-    </script>
 {%endblock%}

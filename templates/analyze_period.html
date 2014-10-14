@@ -3,47 +3,77 @@
 {%block content%}
     <div class="container container_mini-width">
         <a href="{% url "analyst" %}" class="btn">Назад</a>
-        <h2 class="center">{{ page_title }}</h2>
-        <table class="table table-hover table-bordered" id="analyze-product-table">
-            <thead>
-                <tr>
-                    <th>Продукция</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if products %}
-                    {% for product in products %}
+        <div class="analyze-period__wrap">
+            <form method="get" action="{% url "analyze_period" %}" class="form-horizontal form-analyze">
+                <h2 class="center">{{ page_title }}</h2>
+                <h5>Анализировать</h5>
+                <div class="control-group">
+                    <label class="control-label" for="inputSinceDate">
+                        C
+                    </label>
+                    <div class="controls">
+                        <div id="sinceDate" class="input-append date">
+                            <input type="text" id="inputSinceDate" placeholder="ГГГГ-ММ-ДД ЧЧ:ММ:СС" name="since-date" value="{{ since_date }}">
+                            <span class="add-on">
+                                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputUntilDate">
+                        До
+                    </label>
+                    <div class="controls">
+                        <div id="untilDate" class="input-append date">
+                            <input type="text" id="inputUntilDate" placeholder="ГГГГ-ММ-ДД ЧЧ:ММ:СС" name="until-date" value="{{ until_date }}">
+                            <span class="add-on">
+                                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
+            </form>
+        </div>
+        {% if analysed_data %}
+            <table class="table table-hover table-bordered" id="analyze-period-table">
+                <thead>
+                    <tr>
+                        <th>Продукция</th>
+                        <th>Количество, шт</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in analysed_data %}
                         <tr>
                             <td>{{ product.title }}</td>
-                            <td>
-                                <a class="btn analyze-button" data-toggle="modal" href="#analyzed-product" value="{{ product.pk }}">Анализировать</a>
-                            </td>
+                            <td>{{ product.number }}</td>
                         </tr>
                     {% endfor %}
-                {% endif %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        {% endif %}
     </div>
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
-                $("#analyze-product-table").dataTable({
+                $("#analyze-period-table").dataTable({
                     "language": {
                         "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
-                    },
-                    "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 1 ] },
-                        { "bSearchable": false, "aTargets": [ 1 ] }
-                    ]
+                    }
                 });
-                 $('.analyze-button').bind('click', function(){
-                    var id = $(this).attr('value');
-                    $('#analyzed-product .analyzed-product__id').attr('value',id);
+                $('#sinceDate').datetimepicker({
+                    format: 'yyyy-MM-dd hh:mm:ss',
+                    language: 'ru'
+                });
+                $('#untilDate').datetimepicker({
+                    format: 'yyyy-MM-dd hh:mm:ss',
+                    language: 'ru'
                 });
             });
             $(window).load(function() {
-                $("#analyze-product-table_filter input[type='search']").attr("placeholder", "Поиск");
+                $("#analyze-period-table_filter input[type='search']").attr("placeholder", "Поиск");
             });
         })(jQuery);
     </script>

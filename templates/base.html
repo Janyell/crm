@@ -35,7 +35,7 @@
                         </p>
                         <ul class="nav">
                             {% if user_role != 2 %}
-                                <li class={% navactive request 'index analyst analyze_products view_analyzed_product analyze_managers analyze_total_sales analyze_sales_by_managers' %}>
+                                <li class={% navactive request 'index analyst analyze_products view_analyzed_product analyze_managers analyze_total_sales analyze_sales_by_managers analyze_period' %}>
                                     <a href="{% url "analyst" %}">Аналитика</a>
                                 </li>
                                 <li class={% navactive request 'get_clients add_client edit_client get_interested_clients' %}>

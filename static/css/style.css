@@ -111,3 +111,23 @@ select.hidden, div.hidden {
 #analyzed-product > form {
     margin: 0px;
 }
+.chart-caption__color {
+    float: left;
+    width: 13px;
+    height: 13px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    vertical-align: bottom;
+}
+.chart-caption__color_first {
+    background-color: rgb(220,220,220);
+}
+.chart-caption__color_second {
+    background-color: rgb(151,187,205);
+}
+.chart-caption__color_third {
+    background-color: rgb(148,204,167);
+}
+.analyze-period__wrap {
+    height: 230px;
+}

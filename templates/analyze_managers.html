@@ -46,44 +46,60 @@
         </form>
         {% if select_period %}
             <canvas id="analyzed-managers-chart" width="940" height="400"></canvas>
-        {% endif %}
+            <div class="chart-caption">
+                <div class="chart-caption__color chart-caption__color_first"></div>
+                {% if request.GET.graphic == "sum" %}
+                    Cумма выставленных счетов
+                {% else %}
+                    Количество выставленных счетов
+                {% endif %}
+            </div>
+            <div class="chart-caption">
+                <div class="chart-caption__color chart-caption__color_second"></div>
+                {% if request.GET.graphic == "sum" %}
+                    Cумма отгрузок
+                {% else %}
+                    Количество отгрузок
+                {% endif %}
+            </div>
+            <script type="text/javascript">
+                (function($){
+                    $(document).ready(function(){
+                        var ctx = document.getElementById("analyzed-managers-chart").getContext("2d");
+                        var data = {
+                            labels: [
+                                {% if select_period %}
+                                    {% for select_period__title in select_period %}
+                                        '{{ select_period__title }}',
+                                    {% endfor %}
+                                {% endif %}],
+                            datasets: [
+                                {
+                                    label: "Cумма / количество выставленных счетов",
+                                    fillColor: "rgba(220,220,220,0.2)",
+                                    strokeColor: "rgba(220,220,220,1)",
+                                    pointColor: "rgba(220,220,220,1)",
+                                    pointStrokeColor: "#fff",
+                                    pointHighlightFill: "#fff",
+                                    pointHighlightStroke: "rgba(220,220,220,1)",
+                                    data: [{{ bill_data }}]
+                                },
+                                {
+                                    label: "Сумма / количество отгрузок",
+                                    fillColor: "rgba(151,187,205,0.2)",
+                                    strokeColor: "rgba(151,187,205,1)",
+                                    pointColor: "rgba(151,187,205,1)",
+                                    pointStrokeColor: "#fff",
+                                    pointHighlightFill: "#fff",
+                                    pointHighlightStroke: "rgba(151,187,205,1)",
+                                    data: [{{ shipped_data }}]
+                                }
+                            ]
+                        };
+                        var analyzedManagersChart = new Chart(ctx).Line(data);
+                    });
+                })(jQuery);
+            </script>
+    {% endif %}
     </div>
-    <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                var ctx = document.getElementById("analyzed-managers-chart").getContext("2d");
-                var data = {
-                    labels: [
-                        {% if select_period %}
-                            {% for select_period__title in select_period %}
-                                '{{ select_period__title }}',
-                            {% endfor %}
-                        {% endif %}],
-                    datasets: [
-                        {
-                            label: "Cумма / количество выставленных счетов",
-                            fillColor: "rgba(220,220,220,0.2)",
-                            strokeColor: "rgba(220,220,220,1)",
-                            pointColor: "rgba(220,220,220,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(220,220,220,1)",
-                            data: [{{ bill_data }}]
-                        },
-                        {
-                            label: "Сумма / количество отгрузок",
-                            fillColor: "rgba(151,187,205,0.2)",
-                            strokeColor: "rgba(151,187,205,1)",
-                            pointColor: "rgba(151,187,205,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(151,187,205,1)",
-                            data: [{{ shipped_data }}]
-                        }
-                    ]
-                };
-                var analyzedManagersChart = new Chart(ctx).Line(data);
-            });
-        })(jQuery);
-    </script>
 {% endblock %}

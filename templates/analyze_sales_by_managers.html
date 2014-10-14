@@ -21,54 +21,68 @@
             </div>
             <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
         </form>
-        <canvas id="analyze-sales-by-managers-chart" width="940" height="400"></canvas>
+        {% if select_period %}
+            <canvas id="analyze-sales-by-managers-chart" width="940" height="400"></canvas>
+            <div class="chart-caption">
+                <div class="chart-caption__color chart-caption__color_first"></div>
+                Поступило звонков
+            </div>
+            <div class="chart-caption">
+                <div class="chart-caption__color chart-caption__color_second"></div>
+                Выставлено счетов
+            </div>
+            <div class="chart-caption">
+                <div class="chart-caption__color chart-caption__color_third"></div>
+                Отгружено
+            </div>
+            <script type="text/javascript">
+                (function($){
+                    $(document).ready(function(){
+                        var ctx = document.getElementById("analyze-sales-by-managers-chart").getContext("2d");
+                        var data = {
+                            labels: [
+                                {% if select_period %}
+                                    {% for select_period__title in select_period %}
+                                        '{{ select_period__title }}',
+                                    {% endfor %}
+                                {% endif %}],
+                            datasets: [
+                                {
+                                    label: "Воронка продаж по менеджерам: поступило звонков",
+                                    fillColor: "rgba(220,220,220,0.2)",
+                                    strokeColor: "rgba(220,220,220,1)",
+                                    pointColor: "rgba(220,220,220,1)",
+                                    pointStrokeColor: "#fff",
+                                    pointHighlightFill: "#fff",
+                                    pointHighlightStroke: "rgba(220,220,220,1)",
+                                    data: [{{ call_data }}]
+                                },
+                                {
+                                    label: "Воронка продаж по менеджерам: выставлено счетов",
+                                    fillColor: "rgba(151,187,205,0.2)",
+                                    strokeColor: "rgba(151,187,205,1)",
+                                    pointColor: "rgba(151,187,205,1)",
+                                    pointStrokeColor: "#fff",
+                                    pointHighlightFill: "#fff",
+                                    pointHighlightStroke: "rgba(151,187,205,1)",
+                                    data: [{{ bill_data }}]
+                                },
+                                {
+                                    label: "Воронка продаж по менеджерам: отгружено",
+                                    fillColor: "rgba(148,204,167,0.2)",
+                                    strokeColor: "rgba(148,204,167,1)",
+                                    pointColor: "rgba(148,204,167,1)",
+                                    pointStrokeColor: "#fff",
+                                    pointHighlightFill: "#fff",
+                                    pointHighlightStroke: "rgba(148,204,167,1)",
+                                    data: [{{ shipped_data }}]
+                                }
+                            ]
+                        };
+                        var analyzedSalesByManagersChart = new Chart(ctx).Line(data);
+                    });
+                })(jQuery);
+            </script>
+        {% endif %}
     </div>
-    <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                var ctx = document.getElementById("analyze-sales-by-managers-chart").getContext("2d");
-                var data = {
-                    labels: [
-                        {% if select_period %}
-                            {% for select_period__title in select_period %}
-                                '{{ select_period__title }}',
-                            {% endfor %}
-                        {% endif %}],
-                    datasets: [
-                        {
-                            label: "Воронка продаж по менеджерам: поступило звонков",
-                            fillColor: "rgba(220,220,220,0.2)",
-                            strokeColor: "rgba(220,220,220,1)",
-                            pointColor: "rgba(220,220,220,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(220,220,220,1)",
-                            data: [{{ call_data }}]
-                        },
-                        {
-                            label: "Воронка продаж по менеджерам: выставлено счетов",
-                            fillColor: "rgba(151,187,205,0.2)",
-                            strokeColor: "rgba(151,187,205,1)",
-                            pointColor: "rgba(151,187,205,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(151,187,205,1)",
-                            data: [{{ bill_data }}]
-                        },
-                        {
-                            label: "Воронка продаж по менеджерам: отгружено",
-                            fillColor: "rgba(148,204,167,0.2)",
-                            strokeColor: "rgba(148,204,167,1)",
-                            pointColor: "rgba(148,204,167,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(148,204,167,1)",
-                            data: [{{ shipped_data }}]
-                        }
-                    ]
-                };
-                var analyzedSalesByManagersChart = new Chart(ctx).Line(data);
-            });
-        })(jQuery);
-    </script>
 {%endblock%}
