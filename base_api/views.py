@@ -419,9 +419,15 @@ def analyze_sales_by_managers(request):
     return render(request, 'analyze_sales_by_managers.html', out)
 
 
-def analyze_total_sales_by_managers(request):
-    return render_to_response('analyze_total_sales_by_managers.html')
-
-
 def analyze_total_sales(request):
-    return render_to_response('analyze_total_sales.html')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    return render(request, 'analyze_total_sales.html', out)
+
+
+def analyze_period(request):
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    return render(request,'analyze_period.html', out)

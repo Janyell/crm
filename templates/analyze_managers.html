@@ -13,8 +13,8 @@
                 </label>
                 <div class="controls">
                     <select name="graphic" id="selectGraphic">
-                        <option value="sum">Cумма выставленных счетов / сумма отгрузок</option>
-                        <option value="number">Количество выставленных счетов / количество отгрузок</option>
+                        <option value="sum"{% if request.GET.graphic == "sum" %} selected="selected"{% endif %}>Cумма выставленных счетов / сумма отгрузок</option>
+                        <option value="number"{% if request.GET.graphic == "number" %} selected="selected"{% endif %}>Количество выставленных счетов / количество отгрузок</option>
                     </select>
                 </div>
             </div>
@@ -61,24 +61,24 @@
                         {% endif %}],
                     datasets: [
                         {
-                            label: "Cумма выставленных счетов / сумма отгрузок",
+                            label: "Cумма / количество выставленных счетов",
                             fillColor: "rgba(220,220,220,0.2)",
                             strokeColor: "rgba(220,220,220,1)",
                             pointColor: "rgba(220,220,220,1)",
                             pointStrokeColor: "#fff",
                             pointHighlightFill: "#fff",
                             pointHighlightStroke: "rgba(220,220,220,1)",
-                            data: [{{ sum_data }}]
+                            data: [{{ bill_data }}]
                         },
                         {
-                            label: "Количество выставленных счетов / количество отгрузок",
+                            label: "Сумма / количество отгрузок",
                             fillColor: "rgba(151,187,205,0.2)",
                             strokeColor: "rgba(151,187,205,1)",
                             pointColor: "rgba(151,187,205,1)",
                             pointStrokeColor: "#fff",
                             pointHighlightFill: "#fff",
                             pointHighlightStroke: "rgba(151,187,205,1)",
-                            data: [{{ number_data }}]
+                            data: [{{ shipped_data }}]
                         }
                     ]
                 };
