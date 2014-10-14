@@ -21,12 +21,12 @@
             </div>
             <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
         </form>
-        <canvas id="analyzed-sales-by-managers-chart" width="940" height="400"></canvas>
+        <canvas id="analyze-sales-by-managers-chart" width="940" height="400"></canvas>
     </div>
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
-                var ctx = document.getElementById("analyzed-sales-by-managers-chart").getContext("2d");
+                var ctx = document.getElementById("analyze-sales-by-managers-chart").getContext("2d");
                 var data = {
                     labels: [
                         {% if select_period %}

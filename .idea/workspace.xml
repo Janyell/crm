@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b7a90fd-86fb-4af3-8eeb-735f4105b015" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/analyze_sales_by_managers.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/analyze_total_sales.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/analyze_managers.html" afterPath="$PROJECT_DIR$/templates/analyze_managers.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/index.html" afterPath="$PROJECT_DIR$/templates/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/analyze_sales_by_managers.html" afterPath="$PROJECT_DIR$/templates/analyze_sales_by_managers.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/analyze_total_sales.html" afterPath="$PROJECT_DIR$/templates/analyze_total_sales.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/css/style.css" afterPath="$PROJECT_DIR$/static/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/urls.py" afterPath="$PROJECT_DIR$/api/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base_api/views.py" afterPath="$PROJECT_DIR$/base_api/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -36,8 +33,8 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/base_api/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2045" max-vertical-offset="2565">
-              <caret line="165" column="4" selection-start-line="165" selection-start-column="4" selection-end-line="165" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2147" max-vertical-offset="2550">
+              <caret line="170" column="0" selection-start-line="170" selection-start-column="0" selection-end-line="170" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -63,21 +60,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="analyze_products.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/analyze_products.html">
+      <file leaf-file-name="analyze_sales_by_managers.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/analyze_sales_by_managers.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="1155">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="71" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="view_analyzed_product.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/view_analyzed_product.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0" vertical-offset="135" max-vertical-offset="900">
-              <caret line="9" column="55" selection-start-line="9" selection-start-column="55" selection-end-line="9" selection-end-column="55" />
+            <state vertical-scroll-proportion="-40.625" vertical-offset="0" max-vertical-offset="1185">
+              <caret line="65" column="50" selection-start-line="65" selection-start-column="38" selection-end-line="65" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -93,10 +80,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="base.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4918033" vertical-offset="360" max-vertical-offset="1050">
+            <state vertical-scroll-proportion="-7.5" vertical-offset="360" max-vertical-offset="1050">
               <caret line="36" column="179" selection-start-line="36" selection-start-column="179" selection-end-line="36" selection-end-column="179" />
               <folding />
             </state>
@@ -106,18 +93,18 @@
       <file leaf-file-name="style.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1770">
-              <caret line="32" column="110" selection-start-line="32" selection-start-column="110" selection-end-line="32" selection-end-column="110" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="377" max-vertical-offset="1770">
+              <caret line="32" column="117" selection-start-line="32" selection-start-column="117" selection-end-line="32" selection-end-column="117" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="analyze_managers.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="analyze_managers.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/analyze_managers.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="1410">
-              <caret line="8" column="88" selection-start-line="8" selection-start-column="72" selection-end-line="8" selection-end-column="88" />
+            <state vertical-scroll-proportion="0.6967213" vertical-offset="945" max-vertical-offset="1410">
+              <caret line="80" column="45" selection-start-line="80" selection-start-column="45" selection-end-line="80" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -126,8 +113,8 @@
       <file leaf-file-name="analyze_total_sales.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/analyze_total_sales.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="1200">
-              <caret line="8" column="57" selection-start-line="8" selection-start-column="44" selection-end-line="8" selection-end-column="57" />
+            <state vertical-scroll-proportion="-10.25" vertical-offset="579" max-vertical-offset="1035">
+              <caret line="55" column="45" selection-start-line="55" selection-start-column="38" selection-end-line="55" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -175,12 +162,12 @@
         <option value="$PROJECT_DIR$/templates/view_analyzed_product.html" />
         <option value="$PROJECT_DIR$/api/urls.py" />
         <option value="$PROJECT_DIR$/templates/index.html" />
-        <option value="$PROJECT_DIR$/base_api/views.py" />
-        <option value="$PROJECT_DIR$/templates/analyze_total_sales.html" />
-        <option value="$PROJECT_DIR$/templates/analyze_sales_by_managers.html" />
-        <option value="$PROJECT_DIR$/templates/analyze_managers.html" />
-        <option value="$PROJECT_DIR$/static/css/style.css" />
         <option value="$PROJECT_DIR$/templates/base.html" />
+        <option value="$PROJECT_DIR$/templates/analyze_sales_by_managers.html" />
+        <option value="$PROJECT_DIR$/base_api/views.py" />
+        <option value="$PROJECT_DIR$/static/css/style.css" />
+        <option value="$PROJECT_DIR$/templates/analyze_total_sales.html" />
+        <option value="$PROJECT_DIR$/templates/analyze_managers.html" />
       </list>
     </option>
   </component>
@@ -675,7 +662,11 @@
       <created>1413227993657</created>
       <updated>1413227993657</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="add analyst's template;">
+      <created>1413233942748</created>
+      <updated>1413233942749</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -729,7 +720,8 @@
     <MESSAGE value="hmm... where is my commit?" />
     <MESSAGE value="fixed None's bugs;" />
     <MESSAGE value="add manager analyst's template;" />
-    <option name="LAST_COMMIT_MESSAGE" value="add manager analyst's template;" />
+    <MESSAGE value="add analyst's template;" />
+    <option name="LAST_COMMIT_MESSAGE" value="add analyst's template;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1042,6 +1034,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyze_sale.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="402">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.5" vertical-offset="360" max-vertical-offset="1050">
+          <caret line="36" column="179" selection-start-line="36" selection-start-column="179" selection-end-line="36" selection-end-column="179" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/view_analyzed_product.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0" vertical-offset="135" max-vertical-offset="900">
+          <caret line="9" column="55" selection-start-line="9" selection-start-column="55" selection-end-line="9" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/analyze_products.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="1155">
@@ -1060,56 +1076,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/base_api/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2045" max-vertical-offset="2565">
-          <caret line="165" column="4" selection-start-line="165" selection-start-column="4" selection-end-line="165" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/view_analyzed_product.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.0" vertical-offset="135" max-vertical-offset="900">
-          <caret line="9" column="55" selection-start-line="9" selection-start-column="55" selection-end-line="9" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/analyze_sale.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="402">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/analyze_sales_by_managers.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.24844721" vertical-offset="0" max-vertical-offset="1185">
-          <caret line="8" column="81" selection-start-line="8" selection-start-column="81" selection-end-line="8" selection-end-column="106" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/analyze_managers.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="1410">
-          <caret line="8" column="88" selection-start-line="8" selection-start-column="72" selection-end-line="8" selection-end-column="88" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/analyze_total_sales.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="1200">
-          <caret line="8" column="57" selection-start-line="8" selection-start-column="44" selection-end-line="8" selection-end-column="57" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2147" max-vertical-offset="2550">
+          <caret line="170" column="0" selection-start-line="170" selection-start-column="0" selection-end-line="170" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1770">
-          <caret line="32" column="110" selection-start-line="32" selection-start-column="110" selection-end-line="32" selection-end-column="110" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="377" max-vertical-offset="1770">
+          <caret line="32" column="117" selection-start-line="32" selection-start-column="117" selection-end-line="32" selection-end-column="117" />
           <folding />
         </state>
       </provider>
@@ -1122,10 +1098,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base.html">
+    <entry file="file://$PROJECT_DIR$/templates/analyze_sales_by_managers.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4918033" vertical-offset="360" max-vertical-offset="1050">
-          <caret line="36" column="179" selection-start-line="36" selection-start-column="179" selection-end-line="36" selection-end-column="179" />
+        <state vertical-scroll-proportion="-40.625" vertical-offset="0" max-vertical-offset="1185">
+          <caret line="65" column="50" selection-start-line="65" selection-start-column="38" selection-end-line="65" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyze_total_sales.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.25" vertical-offset="579" max-vertical-offset="1035">
+          <caret line="55" column="45" selection-start-line="55" selection-start-column="38" selection-end-line="55" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyze_managers.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6967213" vertical-offset="945" max-vertical-offset="1410">
+          <caret line="80" column="45" selection-start-line="80" selection-start-column="45" selection-end-line="80" selection-end-column="45" />
           <folding />
         </state>
       </provider>
