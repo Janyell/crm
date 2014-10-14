@@ -6,30 +6,8 @@
     <div class="container">
     <a href="{% url "analyst" %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }}</h2>
-        <form method="get" action="{% url "analyze_managers" %}" class="analyze-managers form-horizontal">
-            <div class="control-group">
-                <label class="control-label" for="selectGraphic">
-                    Графики
-                </label>
-                <div class="controls">
-                    <select name="graphic" id="selectGraphic">
-                        <option value="sum">Cумма выставленных счетов / сумма отгрузок</option>
-                        <option value="number">Количество выставленных счетов / количество отгрузок</option>
-                    </select>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="selectManager">
-                    Менеджер
-                </label>
-                <div class="controls">
-                    <select name="id" id="selectManager">
-                        {% for manager in managers %}
-                            <option value="{{ manager.pk }}"{% if request.GET.id == manager.pk %} selected="selected"{% endif %}>{{ manager.full_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
+        <form method="get" action="{% url "view_analyzed_product" %}" class="analyzed-product form-horizontal">
+            <input type="hidden" class="analyzed-product__id" name="id" value="{{ request.GET.id }}" />
             <div class="control-group">
                 <label class="control-label" for="selectPeriod">
                     Период
@@ -44,14 +22,12 @@
             </div>
             <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
         </form>
-        {% if select_period %}
-            <canvas id="analyzed-managers-chart" width="940" height="400"></canvas>
-        {% endif %}
+        <canvas id="analyzed-sales-by-managers-chart" width="940" height="400"></canvas>
     </div>
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
-                var ctx = document.getElementById("analyzed-managers-chart").getContext("2d");
+                var ctx = document.getElementById("analyzed-sales-by-managers-chart").getContext("2d");
                 var data = {
                     labels: [
                         {% if select_period %}
@@ -61,29 +37,39 @@
                         {% endif %}],
                     datasets: [
                         {
-                            label: "Cумма выставленных счетов / сумма отгрузок",
+                            label: "Воронка продаж по менеджерам: поступило звонков",
                             fillColor: "rgba(220,220,220,0.2)",
                             strokeColor: "rgba(220,220,220,1)",
                             pointColor: "rgba(220,220,220,1)",
                             pointStrokeColor: "#fff",
                             pointHighlightFill: "#fff",
                             pointHighlightStroke: "rgba(220,220,220,1)",
-                            data: [{{ sum_data }}]
+                            data: [{{ call_data }}]
                         },
                         {
-                            label: "Количество выставленных счетов / количество отгрузок",
+                            label: "Воронка продаж по менеджерам: выставлено счетов",
                             fillColor: "rgba(151,187,205,0.2)",
                             strokeColor: "rgba(151,187,205,1)",
                             pointColor: "rgba(151,187,205,1)",
                             pointStrokeColor: "#fff",
                             pointHighlightFill: "#fff",
                             pointHighlightStroke: "rgba(151,187,205,1)",
-                            data: [{{ number_data }}]
+                            data: [{{ bill_data }}]
+                        },
+                        {
+                            label: "Воронка продаж по менеджерам: отгружено",
+                            fillColor: "rgba(148,204,167,0.2)",
+                            strokeColor: "rgba(148,204,167,1)",
+                            pointColor: "rgba(148,204,167,1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(148,204,167,1)",
+                            data: [{{ shipped_data }}]
                         }
                     ]
                 };
-                var analyzedManagersChart = new Chart(ctx).Line(data);
+                var analyzedSalesByManagersChart = new Chart(ctx).Line(data);
             });
         })(jQuery);
     </script>
-{% endblock %}
+{%endblock%}

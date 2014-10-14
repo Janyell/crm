@@ -30,7 +30,7 @@ body {
 .form-add-client__organization-name {
     width: 146px;
 }
-.form-add, .container_mini-width, form.analyzed-product {
+.form-add, .container_mini-width, form.analyzed-product, form.analyze-sales-by-managers, form.analyze-managers {
     margin: 0 auto;
     width: 550px;
     padding: 0 20px; 

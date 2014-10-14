@@ -123,7 +123,7 @@ def page_not_found(request):
 def permission_deny(request):
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    out = {'user_role': user_role}
+    out.update({'user_role': user_role})
     out.update({'page_title': "К сожалению, у вас нет доступа к данной странице"})
     return render(request, 'page_not_found.html', out)
 
@@ -149,7 +149,10 @@ def view_analyzed_product(request):
 
 
 def analyze_sale(request):
-    return render_to_response('analyze_sale.html')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    return render(request, 'analyze_sale.html', out)
 
 
 def analyze_managers(request):
@@ -279,7 +282,6 @@ def analyze_managers(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'managers': managers})
-    return render(request, 'view_analyzed_product.html', out)
     return render(request, 'analyze_managers.html')
 
 
@@ -393,4 +395,19 @@ def analyze_manager_order_out_sum(request):
     out.update({'managers': managers})
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
-    return render(request, 'analyze_manager_order_out_sum.html', out)
+    return render(request, 'analyze_manager_order_out_sum.html', out)    out = {}
+
+
+def analyze_sales_by_managers(request):
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    return render(request, 'analyze_sales_by_managers.html', out)
+
+
+def analyze_total_sales_by_managers(request):
+    return render_to_response('analyze_total_sales_by_managers.html')
+
+
+def analyze_total_sales(request):
+    return render_to_response('analyze_total_sales.html')
