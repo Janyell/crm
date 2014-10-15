@@ -3,6 +3,11 @@
 {%block content%}
     <div class="container container_mini-width">
         <h2 class="center">{{ page_title }}</h2>
+            {% if error == 1 %}
+                <div class="text-error">
+                    Такой товар уже существует!
+                </div>
+            {% endif %}
         {% if products %}
             <table class="table table-hover table-bordered" id="product-table">
                 <thead>

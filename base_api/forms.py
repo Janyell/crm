@@ -121,6 +121,6 @@ class ProductForm(ModelForm):
         model = Products
         exclude = ['is_deleted']
         widgets = {
-            'title': Select(attrs={'id': "inputTitle",
-                                   'required': 1}),
+            'title': TextInput(attrs={'id': "inputTitle",
+                                      'required': 1}),
         }

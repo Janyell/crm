@@ -16,6 +16,7 @@ from base_api.full_views.analyze_managers import *
 from base_api.full_views.analyze_sales_by_managers import *
 from base_api.full_views.analyze_total_sales import *
 from base_api.full_views.analyze_period import *
+from base_api.full_views.product_views import *
 
 
 def add_edit_role(request):
@@ -194,8 +195,12 @@ def give_order_status(request):
 
 
 def get_products(request):
-    return render(request, 'get_products.html')
+    return full_get_products(request)
 
 
 def delete_product(request):
-    pass
+    return full_delete_product(request)
+
+
+def add_product(request):
+    return full_add_product(request)
