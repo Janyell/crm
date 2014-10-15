@@ -24,11 +24,6 @@ def full_add_edit_order(request):
         form = OrdersForm(request.POST)
         if 'pk' in request.POST:
             pk = request.POST['pk']
-            if request.POST['client'] != '':
-                id_client = int(request.POST['client'])
-                client = Clients.objects.get(id=id_client, is_deleted=0)
-            else:
-                client = None
             role = Roles.objects.get(id=request.user.id, is_deleted=0)
             source = request.POST['source']
             if request.POST['company'] != '':
@@ -36,10 +31,6 @@ def full_add_edit_order(request):
                 company = Companies.objects.get(id=id_company, is_deleted=0)
             else:
                 company = None
-            if request.POST['bill'] != '':
-                bill = float(request.POST['bill'])
-            else:
-                bill = None
             if request.POST['payment_date'] != '':
                 payment_date = request.POST['payment_date']
                 payment_date = datetime.strptime(payment_date, '%Y-%m-%d %H:%M:%S')
@@ -60,6 +51,54 @@ def full_add_edit_order(request):
                 ready_date = None
             comment = request.POST['comment']
             city = request.POST['city']
+            if request.POST['client'] != '':
+                id_client = int(request.POST['client'])
+                client = Clients.objects.get(id=id_client, is_deleted=0)
+            else:
+                out.update({"error": 1})
+                OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                    queryset=Companies.objects.filter(is_deleted=0), required=False)
+                OrdersForm.base_fields['client'] = ClientModelChoiceField(
+                    queryset=Clients.objects.filter(is_deleted=0))
+                form = OrdersForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
+                                   'payment_date': payment_date, 'order_status': order_status,
+                                   'bill_status': bill_status, 'city': city, 'comment': comment,
+                                   'source': source, 'ready_date': ready_date})
+                form.products = Products.objects.filter(is_deleted=0)
+                products_list = request.POST.getlist('products[]')
+                for product in form.products:
+                    if str(product.id) in products_list:
+                        name_of_pr = 'select-product__number_' + str(product.id)
+                        count_of_products = request.POST[name_of_pr]
+                        product.count_of_products = count_of_products
+                out.update({'order_form': form})
+                out.update({'page_title': "Редактирование заказа"})
+                return render(request, 'add_edit_order.html', out)
+            if request.POST['bill'] != '':
+                try:
+                    bill = float(request.POST['bill'])
+                except Exception:
+                    out.update({"error": 1})
+                    OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                        queryset=Companies.objects.filter(is_deleted=0), required=False)
+                    OrdersForm.base_fields['client'] = ClientModelChoiceField(
+                        queryset=Clients.objects.filter(is_deleted=0))
+                    form = OrdersForm({'client': client, 'company': company, 'bill': request.POST['bill'],
+                                       'payment_date': payment_date, 'order_status': order_status,
+                                       'bill_status': bill_status, 'city': city, 'comment': comment,
+                                       'source': source, 'ready_date': ready_date})
+                    form.products = Products.objects.filter(is_deleted=0)
+                    products_list = request.POST.getlist('products[]')
+                    for product in form.products:
+                        if str(product.id) in products_list:
+                            name_of_pr = 'select-product__number_' + str(product.id)
+                            count_of_products = request.POST[name_of_pr]
+                            product.count_of_products = count_of_products
+                    out.update({'order_form': form})
+                    out.update({'page_title': "Редактирование заказа"})
+                    return render(request, 'add_edit_order.html', out)
+            else:
+                bill = None
             new_order = Orders.objects.get(id=pk, is_deleted=0)
             new_order.role = role
             new_order.client = client
@@ -135,6 +174,7 @@ def full_add_edit_order(request):
             city = form.cleaned_data['city']
             products_list = request.POST.getlist('products[]')
             is_order_create = False
+            new_order_was_not_created = True
             for id_of_pr in products_list:
                 if int(id_of_pr) < 0:
                     name_of_pr = 'select-product__title_' + id_of_pr
@@ -169,7 +209,9 @@ def full_add_edit_order(request):
                     product = Products.objects.get(id=id_of_pr, is_deleted=0)
                 if int(count_of_products) > 0:
                     is_order_create = True
-                    new_order = Orders.objects.create(order_date=datetime.now(), client=client, role=role, source=source,
+                    if new_order_was_not_created:
+                        new_order_was_not_created = False
+                        new_order = Orders.objects.create(order_date=datetime.now(), client=client, role=role, source=source,
                                               unique_number=unique_number, company=company, bill=bill,
                                               payment_date=payment_date, order_status=order_status, city=city,
                                               bill_status=bill_status, ready_date=ready_date, comment=comment)

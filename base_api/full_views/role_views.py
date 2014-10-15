@@ -10,12 +10,11 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 def full_add_edit_role(request):
-    # строки закомменчены чтобы добавлять новых пользователей при удалении базы
-    # if not request.user.is_active:
-    #     return HttpResponseRedirect('/login/')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
+    if user_role != 0:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -24,6 +23,7 @@ def full_add_edit_role(request):
         if 'pk' in request.POST:
             id_role = request.POST['pk']
             username = request.POST['username']
+            password = request.POST['password']
             role = request.POST['role']
             surname = request.POST['surname']
             name = request.POST['name']
@@ -31,14 +31,22 @@ def full_add_edit_role(request):
             if Roles.objects.filter(username=username).count() == 0:
                 new_author = Roles(id=id_role, username=username, role=role, surname=surname,
                                    name=name, patronymic=patronymic)
-                new_author.save(force_update=True)
+                if password != '':
+                    new_author.set_password(password)
+                    new_author.save()
+                else:
+                    new_author.save(update_fields=["username", "role", "surname", "name", "patronymic"])
                 return HttpResponseRedirect('/roles/')
             else:
                 exist_role = Roles.objects.get(username=username)
                 if str(exist_role.id) == id_role:
                     new_author = Roles(id=id_role, username=username, role=role, surname=surname,
                                        name=name, patronymic=patronymic)
-                    new_author.save(force_update=True)
+                    if password != '':
+                        new_author.set_password(password)
+                        new_author.save()
+                    else:
+                        new_author.save(update_fields=["username", "role", "surname", "name", "patronymic"])
                     return HttpResponseRedirect('/roles/')
                 else:
                     out.update({"error": 1})
@@ -87,8 +95,7 @@ def full_delete_roles(request):
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     role = Roles.objects.get(pk=id)
-    role.is_deleted = 1
-    role.save(update_fields=["is_deleted"])
+    role.delete()
     return HttpResponseRedirect('/roles/')
 
 
@@ -97,7 +104,7 @@ def full_get_roles(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
+    if user_role != 0:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
