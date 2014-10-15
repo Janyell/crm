@@ -71,6 +71,8 @@ def edit_order_for_factory(request):
 
 
 def analyst(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
     if user_role == 2:

@@ -158,7 +158,7 @@ def full_add_edit_client(request):
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
                                                                 is_interested=1, account_number=account_number)
-                            return HttpResponseRedirect('/clients/')
+                            return HttpResponseRedirect('/clients/interested/')
                         return HttpResponseRedirect('/clients/')
                     out.update({"error": 1})
                     out.update({'client_form': form})
@@ -176,7 +176,7 @@ def full_add_edit_client(request):
                                                             patronymic=patronymic, person_phone=person_phone,
                                                             organization_phone=organization_phone, email=email,
                                                             is_interested=1, account_number=account_number)
-                        return HttpResponseRedirect('/clients/')
+                        return HttpResponseRedirect('/clients/interested/')
                     return HttpResponseRedirect('/clients/')
             else:
                 out.update({'page_title': "Добавление клиента"})
