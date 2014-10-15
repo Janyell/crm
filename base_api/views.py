@@ -191,3 +191,11 @@ def give_order_status(request):
     out = {}
     out.update({'page_title': order_status_str})
     return render(request, 'page_not_found.html', out)
+
+
+def get_products(request):
+    return render(request, 'get_products.html')
+
+
+def delete_product(request):
+    pass

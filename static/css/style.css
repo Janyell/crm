@@ -131,3 +131,6 @@ select.hidden, div.hidden {
 .analyze-period__wrap {
     height: 230px;
 }
+#product-table_wrapper {
+    margin-bottom: 40px;
+}

@@ -1,0 +1,78 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <div class="container container_mini-width">
+        <h2 class="center">{{ page_title }}</h2>
+        {% if products %}
+            <table class="table table-hover table-bordered" id="product-table">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td>{{ product.title }}</td>
+                            <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-product" value="{{ product.pk }}">
+                                <i class="icon-remove"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="modal hide fade" id="delete-product" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>Вы уверены, что хотите удалить этот продукт?</h3>
+                </div>
+                <div class="modal-footer">
+                    <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                </div>
+            </div>
+            <script type="text/javascript">
+                (function($){
+                    $(document).ready(function(){
+                        $("#product-table").dataTable({
+                            "language": {
+                                "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
+                            },
+                            "aoColumnDefs": [
+                                { "bSortable": false, "aTargets": [ 1 ] },
+                                { "bSearchable": false, "aTargets": [ 1 ] }
+                            ]
+                        });
+                         $('.delete-button').bind('click', function(){
+                            var id = $(this).attr('value');
+                            $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id});
+                        });
+                    });
+                })(jQuery);
+            </script>
+        {% else %}
+           <h5 class="center">Не было добавлено ни одного продукта</h5>
+        {% endif %}
+        <form action="{% url "get_products" %}" method="post" class="form-add form-horizontal">
+            <h5 class="form-add-heading">Для добавления продукции заполните, пожалуйста, следующую форму:</h5>
+            <div class="control-group">
+                <label class="control-label" for="inputPersonPhone">
+                    Название
+                    <span class="required-input">*</span>
+                </label>
+                <div class="controls">
+                    {{ product_form.title }}
+                </div>
+            </div>
+            <div class="form-add__tips">
+                <div class="form-add-tips__tip">
+                    <span class="required-input">*</span> - поле, обязательное для заполнения
+                </div>
+            </div>
+            <div class="form-add__submits">
+                <button type="submit" class="btn btn-primary">Добавить продукцию</button>
+            </div>
+        </form>
+    </div>
+{%endblock%}
