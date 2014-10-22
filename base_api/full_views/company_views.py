@@ -26,28 +26,22 @@ def full_add_edit_company(request):
             last_name = request.POST['last_name']
             name = request.POST['name']
             patronymic = request.POST['patronymic']
-            if Companies.objects.filter(title=title).count() == 0:
-                new_company = Companies(id=id_company, title=title, last_name=last_name, name=name, patronymic=patronymic)
-                new_company.save(force_update=True)
-                return HttpResponseRedirect('/companies/')
-            else:
-                exist_company = Companies.objects.get(title=title)
-                if str(exist_company.id) == id_company:
-                    new_company = Companies(id=id_company, title=title, last_name=last_name,
-                                            name=name, patronymic=patronymic)
-                    new_company.save(force_update=True)
-                    return HttpResponseRedirect('/companies/')
-                else:
-                    out.update({"error": 1})
-                    out.update({'page_title': "Редактирование компании"})
+            new_company = Companies(id=id_company, title=title, last_name=last_name, name=name, patronymic=patronymic)
+            new_company.save(force_update=True)
+            return HttpResponseRedirect('/companies/')
         else:
             if form.is_valid():
                 title = form.cleaned_data['title']
                 last_name = form.cleaned_data['last_name']
                 name = form.cleaned_data['name']
                 patronymic = form.cleaned_data['patronymic']
-                new_company = Companies.objects.create(title=title, last_name=last_name, name=name, patronymic=patronymic)
-                return HttpResponseRedirect('/companies/')
+                if Companies.objects.filter(title=title, is_deleted=0).count() == 0:
+                    new_company = Companies.objects.create(title=title, last_name=last_name, name=name,
+                                                           patronymic=patronymic)
+                    return HttpResponseRedirect('/companies/')
+                else:
+                    out.update({"error": 1})
+                    out.update({'page_title': "Добавление компании"})
             else:
                 out.update({'page_title': "Добавление компании"})
     else:

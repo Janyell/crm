@@ -24,7 +24,6 @@ def full_add_edit_order(request):
         form = OrdersForm(request.POST)
         if 'pk' in request.POST:
             pk = request.POST['pk']
-            role = Roles.objects.get(id=request.user.id, is_deleted=0)
             source = request.POST['source']
             if request.POST['company'] != '':
                 id_company = int(request.POST['company'])
@@ -100,7 +99,6 @@ def full_add_edit_order(request):
             else:
                 bill = None
             new_order = Orders.objects.get(id=pk, is_deleted=0)
-            new_order.role = role
             new_order.client = client
             new_order.source = source
             new_order.company = company
@@ -218,8 +216,6 @@ def full_add_edit_order(request):
                     new_order_product_link = Order_Product.objects.create(order=new_order, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products)
-                    client.is_interested = 0
-                    client.save(update_fields=["is_interested"])
             if is_order_create:
                 return HttpResponseRedirect('/orders/')
             else:

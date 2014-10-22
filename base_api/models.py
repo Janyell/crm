@@ -70,12 +70,11 @@ class Clients(models.Model):
     email = models.EmailField(null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
     creation_date = UnixTimestampField(auto_created=True)
-    account_number = models.CharField(max_length=50, null=True, blank=True)
     is_interested = models.BooleanField(default=0)
 
 
 class Companies(models.Model):
-    title = models.CharField(max_length=250, unique=True)
+    title = models.CharField(max_length=250)
     name = models.CharField(max_length=25, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
     patronymic = models.CharField(max_length=50, null=True, blank=True)
@@ -104,7 +103,6 @@ class Orders(models.Model):
     READY = 3
     ORDER_STATUS_CHOICES = (
         (IN_PRODUCTION, 'В производстве'),
-        (NEED_SURCHARGE, 'Нужна доплата'),
         (SHIPPED, 'Отгружен'),
         (READY, 'Готов'),
     )
@@ -112,7 +110,7 @@ class Orders(models.Model):
     SET = 0
     PAID = 1
     BILL_STATUS_CHOICES = (
-        (SET, 'Выставлен'),
+        (SET, 'Нужна доплата'),
         (PAID, 'Оплачен'),
     )
     bill_status = models.IntegerField(null=True, choices=BILL_STATUS_CHOICES, blank=True)
@@ -122,6 +120,7 @@ class Orders(models.Model):
     order_date = UnixTimestampField(auto_created=True)
     city = models.CharField(max_length=256, null=True, blank=True)
     in_archive = models.BooleanField(default=0)
+    account_number = models.CharField(max_length=50, null=True, blank=True)
 
 
 class Products(models.Model):
