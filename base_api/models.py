@@ -98,9 +98,8 @@ class Orders(models.Model):
     bill = models.FloatField(null=True, blank=True)
     payment_date = UnixTimestampField(auto_created=True, blank=True, null=True)
     IN_PRODUCTION = 0
-    NEED_SURCHARGE = 1
-    SHIPPED = 2
-    READY = 3
+    SHIPPED = 1
+    READY = 2
     ORDER_STATUS_CHOICES = (
         (IN_PRODUCTION, 'В производстве'),
         (SHIPPED, 'Отгружен'),
@@ -109,8 +108,10 @@ class Orders(models.Model):
     order_status = models.IntegerField(null=True, choices=ORDER_STATUS_CHOICES, blank=True)
     SET = 0
     PAID = 1
+    NEED_SURCHARGE = 2
     BILL_STATUS_CHOICES = (
-        (SET, 'Нужна доплата'),
+        (SET, 'Выставлен'),
+        (NEED_SURCHARGE, 'Нужна доплата'),
         (PAID, 'Оплачен'),
     )
     bill_status = models.IntegerField(null=True, choices=BILL_STATUS_CHOICES, blank=True)

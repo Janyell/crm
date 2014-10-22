@@ -316,6 +316,8 @@ def full_delete_order(request):
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     order = Orders.objects.get(pk=id, is_deleted=0)
+    if request.user.username != order.role:
+        return HttpResponseRedirect('/oops/')
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
     return HttpResponseRedirect('/orders/')
