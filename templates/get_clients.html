@@ -7,6 +7,7 @@
             <a href="{% url 'get_clients' %}" class="btn">Назад</a>
         {% endif %}
         <h2 class="center">{{ page_title }}</h2>
+        <a href="{% url "add_client" %}" class="btn btn_add-client">Добавить клиента</a>
         {% if clients %}
             <table class="table table-hover table-bordered" id="order-table">
                 <thead>

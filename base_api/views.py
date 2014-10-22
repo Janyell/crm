@@ -76,7 +76,7 @@ def analyst(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
+    if user_role != 0:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -94,7 +94,7 @@ def log_in(request):
             print (user)
             if user is not None:
                 login(request, user)
-                if Roles.objects.get(id=request.user.id).role == 2:
+                if Roles.objects.get(id=request.user.id).role != 0:
                     return HttpResponseRedirect('/orders/')
                 else:
                     return HttpResponseRedirect('/')
@@ -106,7 +106,7 @@ def log_in(request):
         out.update({'page_title': "Авторизация"})
         return render(request, 'log_in.html', out)
     else:
-        if Roles.objects.get(id=request.user.id).role == 2:
+        if Roles.objects.get(id=request.user.id).role != 0:
             return HttpResponseRedirect('/orders/')
         else:
             return HttpResponseRedirect('/')
