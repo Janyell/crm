@@ -17,24 +17,24 @@
 		var $this = $(this);
 		var product_id = $this.attr('data-productId');
 		var product_title;
-		var number = 0;
+		var number = 1;
 		if (product_id != null) {
 			if ($( '.select-product_' + product_id ).size() != 0)
 				return;
 			product_title = $this.parent().prev().text();
 			select_product_select_option(product_id);
 			number = $('select.product-select option[value="' + product_id + '"]').attr('data-number');
-			if (!number)
-				number = 0;
+			console.log(number);
+            if (!number) {
+                number = 1;
+            }
 		}
 		else {
 			product_id = --ij;
-            console.log('sdsds');
-            console.log(product_id);
 			product_title = '<input type="text" class="select-product__title" name="select-product__title_' + product_id + '" placeholder="Другое">'
-			console.log(product_title);
             add_product_select_selected_option(product_id);
 		}
+        console.log(number);
 		$('.select-product-table__plus').before('<tr class="select-product_' + product_id + '">' +
 			'<td>' + product_title + '</td>' +
 			'<td><input type="number" min="0" value="'+ number +'" step="1" class="select-product__number" name="select-product__number_' + product_id + '" />' +

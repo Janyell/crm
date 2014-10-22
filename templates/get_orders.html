@@ -13,6 +13,11 @@
         <a href="{% url "get_orders" %}" class="btn">Назад</a>
         {% endif %}
         <h2 class="center">{{ page_title }}</h2>
+        {% if request.path == get_orders_url %}
+            {% if user_role != 2 %}
+                <a href="{% url "add_order" %}" class="btn btn_add-order">Добавить заказ</a>
+            {% endif %}
+        {% endif %}
         {% if orders %}
         <table class="table table-hover table-bordered" id="order-table">
             <thead>
@@ -58,8 +63,8 @@
                         </td>
                         <td>{{ order.unique_number }}</td>
                         <td>{{ order.company.title }}</td>
-                        <td>{% if order.client.account_number != None %}
-                                {{ order.client.account_number }}
+                        <td>{% if order.account_number != None %}
+                                {{ order.account_number }}
                             {% endif %}
                         </td>
                         <td>{% if order.bill != None %}
@@ -74,7 +79,7 @@
                             {% if order.products %}
                                 {% for product in order.products %}
                                     <div>
-                                        {{ product.product.title }} - {{ product.count_of_products}}
+                                        {{ product.product.title }} - {{ product.count_of_products }} шт.
                                     </div>
                                 {% endfor %}
                             {% endif %}
@@ -86,7 +91,14 @@
                             {% endif %}
                         </td>
                         <td>{{ order.city }}</td>
-                        <td>{{ order.comment }}</td>
+                        <td>
+                            {% if order.comment %}
+                                <a class="btn btn-mini comment-button" data-toggle="modal" href="#view-order-comment"
+                                   value="{{ order.comment }}">
+                                    <i class="icon-resize-full"></i>
+                                </a>
+                            {% endif %}
+                        </td>
                         <td><a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a></td>
                         <td>
                             {% if user_role != 2 %}
@@ -104,11 +116,6 @@
         </table>
         {% else %}
             <h5 class="center">Нет ни одного текущего заказа</h5>
-        {% endif %}
-        {% if request.path == get_orders_url %}
-            {% if user_role != 2 %}
-                <a href="{% url "add_order" %}" class="btn">Добавить заказ</a>
-            {% endif %}
         {% endif %}
     </div>
 
@@ -160,8 +167,20 @@
         </div>
     </div>
     {% endif %}
-
-    <div class="modal hide fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+    <div class="modal hide fade" id="view-order-comment" tabindex="-1" role="dialog" aria-labelledby="CommentLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Комментарий к заказу</h3>
+        </div>
+        <div class="modal-body">
+            <div class="comment__data">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+    <div class="modal hide fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">×</a>
             <h3>Вы уверены, что хотите удалить этот заказ?</h3>
@@ -181,7 +200,7 @@
                     },
                     "aoColumnDefs": [
                         { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14 ] },
-                        { "bSearchable": false, "aTargets": [ 12, 13, 14 ] },
+                        { "bSearchable": false, "aTargets": [11, 12, 13, 14 ] },
                         { "sType": "de_datetime", "aTargets": [ 6, 9 ] },
                         {% if user_role == 2 %}
                             { "bVisible": false,  "aTargets": [3, 5, 12, 14]},
@@ -209,6 +228,10 @@
                 $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
                     $('#delete__ok').attr({'href': '{% url "delete_order" %}?id=' + id});
+                });
+                $('.comment-button').bind('click', function(){
+                    var comment = $(this).attr('value');
+                    $('.comment__data').html(comment);
                 });
             });
         })(jQuery);
