@@ -199,6 +199,22 @@ def full_analyze_managers(request):
             orders_count = orders_count[::-1]
             shipped_orders_count = shipped_orders_count[::-1]
         orders_count_str = str(orders_count)[1:-1]
+        # новый формат денежных единиц - вариант с пробелами
+        # orders_count_str_reverse = orders_count_str[::-1]
+        # orders_count_str_right_format = ''
+        # for i in range(0, len(orders_count_str)/3):
+        #     if i != (len(orders_count_str)/3):
+        #         orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i] + \
+        #                                         orders_count_str_reverse[i+1] + orders_count_str_reverse[i+2] + ' '
+        #     else:
+        #         if (len(orders_count_str) % 3) == 2:
+        #             orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i] + \
+        #                                             orders_count_str_reverse[i+1]
+        #         elif (len(orders_count_str) % 3) == 1:
+        #             orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i]
+        # orders_count_str = orders_count_str_right_format[::-1]
+        # orders_count_str = orders_count_str[1:]
+        #
         shipped_orders_count_str = str(shipped_orders_count)[1:-1]
         out.update({'select_period': period_str})
         out.update({'bill_data': orders_count_str})

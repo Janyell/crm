@@ -95,7 +95,7 @@ class Orders(models.Model):
     client = models.ForeignKey(Clients)
     unique_number = models.CharField(max_length=50, unique=True)
     company = models.ForeignKey(Companies, null=True, blank=True)
-    bill = models.FloatField(null=True, blank=True)
+    bill = models.IntegerField(null=True, blank=True)
     payment_date = UnixTimestampField(auto_created=True, blank=True, null=True)
     IN_PRODUCTION = 0
     SHIPPED = 1

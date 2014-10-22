@@ -75,7 +75,7 @@ def full_add_edit_order(request):
                 return render(request, 'add_edit_order.html', out)
             if request.POST['bill'] != '':
                 try:
-                    bill = float(request.POST['bill'])
+                    bill = int(request.POST['bill'])
                 except Exception:
                     out.update({"error": 1})
                     OrdersForm.base_fields['company'] = CompanyModelChoiceField(
@@ -348,6 +348,24 @@ def full_get_orders(request):
             order.order_status = 'Готов'
         else:
             order.order_status = ''
+        if order.bill != None:
+            orders_count_str = str(order.bill)
+            orders_count_str_reverse = orders_count_str[::-1]
+            orders_count_str_right_format = ''
+            j = 0
+            for i in range(0, len(orders_count_str)/3 + 1):
+                j += 1
+                if i != (len(orders_count_str)/3):
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+                else:
+                    if (len(orders_count_str) % 3) == 2:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                        orders_count_str_reverse[i*j+1]
+                    elif (len(orders_count_str) % 3) == 1:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+            orders_count_str = orders_count_str_right_format[::-1]
+            order.bill_right_format = orders_count_str
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
     out = {'user_role': user_role}
