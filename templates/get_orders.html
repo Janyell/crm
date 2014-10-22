@@ -63,8 +63,8 @@
                         </td>
                         <td>{{ order.unique_number }}</td>
                         <td>{{ order.company.title }}</td>
-                        <td>{% if order.client.account_number != None %}
-                                {{ order.client.account_number }}
+                        <td>{% if order.account_number != None %}
+                                {{ order.account_number }}
                             {% endif %}
                         </td>
                         <td>{% if order.bill != None %}
