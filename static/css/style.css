@@ -10,6 +10,7 @@ body {
 }
 .required-input {
     color: red;
+    font-weight: normal;
 }
 .required-input_second {
     color: blue;
@@ -18,7 +19,7 @@ body {
     margin-bottom: 10px;
 }
 .form-add__input_last {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 .form-add-client__organization-type {
     width: 60px;
@@ -109,7 +110,7 @@ select.hidden, div.hidden {
     width: 127px;
 }
 #analyzed-product > form {
-    margin: 0px;
+    margin: 0;
 }
 .chart-caption__color {
     float: left;
@@ -134,6 +135,30 @@ select.hidden, div.hidden {
 #product-table_wrapper {
     margin-bottom: 40px;
 }
-.btn_add-client, .btn_add-order {
+.btn_add-client, .btn_add-order, .btn_add-claim {
     margin-bottom: 10px;
+}
+.comment__data {
+    display: none;
+}
+
+@media print {
+    body {
+        color: #000;
+    }
+    .navbar, .btn {
+        display: none;
+    }
+    h2 {
+        page-break-after: avoid;
+    }
+    img {
+        max-width: 100% !important;
+    }
+    a[href^="#"]:after {
+    content: "";
+    }
+    .comment__data {
+        display: block;
+    }
 }

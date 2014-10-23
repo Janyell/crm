@@ -1,0 +1,25 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <div class="container">
+        <a href="{% url "get_orders" %}" class="btn">Назад</a>
+        <form class="form-horizontal form-add form-add-order" method="post" action="">
+            <h2 class="form-add__head">{{ page_title }}</h2>
+            <input type="hidden" name="pk" value="{{ request.GET.id }}">
+            <div class="form-add">
+                <div class="control-group">
+                    <label class="control-label">
+                        Комментарии
+                    </label>
+                    <div class="controls">
+                        {{ order_form.comment }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-add__submits">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button type="button" class="btn">Очистить</button>
+            </div>
+        </form>
+    </div>
+{%endblock%}

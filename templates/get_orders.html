@@ -97,18 +97,27 @@
                                    value="{{ order.comment }}">
                                     <i class="icon-resize-full"></i>
                                 </a>
+                                <div class="comment__data">{{ order.comment }}</div>
                             {% endif %}
                         </td>
                         <td><a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a></td>
                         <td>
-                            {% if user_role != 2 %}
+                            {% if user_role == 0 or user_role == 1 and order.role == user.username %}
                                 <a class="btn btn-mini" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                             {% else %}
-                                <a class="btn btn-mini" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                {% if user_role != 2 %}
+                                    <a class="btn btn-mini" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                {% else %}
+                                    <a class="btn btn-mini" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                {% endif %}
                             {% endif %}
                         </td>
-                        <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
-                            <i class="icon-remove"></i></a>
+                        <td>
+                            {% if user_role == 0 or user_role == 1 and order.role == user.username %}
+                            <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
+                                <i class="icon-remove"></i>
+                            </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -117,6 +126,7 @@
         {% else %}
             <h5 class="center">Нет ни одного текущего заказа</h5>
         {% endif %}
+        <a href="{% url "get_claims" %}" class="btn">Перейти к заявкам</a>
     </div>
 
     {% if user_role != 2 %}
@@ -166,6 +176,16 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    <div class="modal hide fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Вы уверены, что хотите удалить этот заказ?</h3>
+        </div>
+        <div class="modal-footer">
+            <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
     {% endif %}
     <div class="modal hide fade" id="view-order-comment" tabindex="-1" role="dialog" aria-labelledby="CommentLabel" aria-hidden="true">
         <div class="modal-header">
@@ -180,17 +200,6 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
-    <div class="modal hide fade" id="delete-order" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-            <h3>Вы уверены, что хотите удалить этот заказ?</h3>
-        </div>
-        <div class="modal-footer">
-            <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
-            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-        </div>
-    </div>
-
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
