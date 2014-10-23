@@ -10,6 +10,7 @@ body {
 }
 .required-input {
     color: red;
+    font-weight: normal;
 }
 .required-input_second {
     color: blue;
@@ -18,7 +19,7 @@ body {
     margin-bottom: 10px;
 }
 .form-add__input_last {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 .form-add-client__organization-type {
     width: 60px;
@@ -109,7 +110,7 @@ select.hidden, div.hidden {
     width: 127px;
 }
 #analyzed-product > form {
-    margin: 0px;
+    margin: 0;
 }
 .chart-caption__color {
     float: left;

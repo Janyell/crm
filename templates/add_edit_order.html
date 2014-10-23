@@ -2,7 +2,15 @@
 
 {%block content%}
     <div class="container">
-        <a href="{% url "get_orders" %}" class="btn">Назад</a>
+        {% url 'add_claim' as add_claim_url %}
+        {% url 'edit_claim' as edit_claim_url %}
+        <a href="
+        {% if request.path == add_claim_url or request.path == edit_claim_url %}
+            {% url "get_claims" %}
+        {% else %}
+            {% url "get_orders" %}
+        {% endif %}
+        " class="btn">Назад</a>
         <form class="form-horizontal form-add form-add-order" method="post" action="">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
@@ -67,7 +75,7 @@
                 <table class="select-product-table table table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>Выбранная продукция</th>
+                            <th>Выбранная продукция <span class="required-input">*</span></th>
                             <th>Количество</th>
                             <th></th>
                         </tr>
@@ -112,6 +120,16 @@
                         {{ order_form.bill }}
                     </div>
                 </div>
+                {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                <div class="control-group">
+                    <label class="control-label" for="selectStatus">
+                        Статус заявки
+                    </label>
+                    <div class="controls">
+                        {{ order_form.order_status }}
+                    </div>
+                </div>
+                {% else %}
                 <div class="control-group">
                     <label class="control-label" for="inputPaymentDate">
                         Дата оплаты
@@ -180,6 +198,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             <div class="form-add__tips">
                 <div class="form-add-tips__tip">
                     <span class="required-input">*</span> - поля, обязательные для заполнения
@@ -203,6 +222,7 @@
                         { "bSearchable": false, "aTargets": [ 1 ] }
                     ]
                 });
+                {% if request.path != add_claim_url and request.path != edit_claim_url %}
                 $('#paymentDate').datetimepicker({
                     format: 'yyyy-MM-dd hh:mm:ss',
                     language: 'ru',
@@ -213,6 +233,7 @@
                     language: 'ru',
                     pickSeconds: false
                 });
+                {% endif %}
                 $('select.product-select option:selected').each(function() {
                     var product_id = $(this).attr('value');
                     $('.plus[data-productId="' + product_id + '"]').click();

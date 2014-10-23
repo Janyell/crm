@@ -5,9 +5,7 @@
         <a href="{% url "get_orders" %}" class="btn">Назад</a>
         <form class="form-horizontal form-add form-add-order" method="post" action="">
             <h2 class="form-add__head">{{ page_title }}</h2>
-            {% if request.GET.id %}
-                <input type="hidden" name="pk" value="{{ request.GET.id }}">
-            {% endif %}
+            <input type="hidden" name="pk" value="{{ request.GET.id }}">
             <div class="form-add">
                 <div class="control-group">
                     <label class="control-label">
@@ -24,15 +22,4 @@
             </div>
         </form>
     </div>
-    <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                $('#readyDate').datetimepicker({
-                    format: 'yyyy-MM-dd hh:mm:ss',
-                    language: 'ru',
-                    pickSeconds: false
-                });
-            });
-        })(jQuery);
-    </script>
 {%endblock%}

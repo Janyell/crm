@@ -210,15 +210,15 @@ def edit_order_for_other_managers(request):
 
 
 def get_claims(request):
-    return render_to_response('get_claims.html')
+    return render(request, 'get_claims.html')
 
 
 def add_claim(request):
-    return render(request, 'add_edit_claim.html')
+    return render(request, 'add_edit_order.html')
 
 
 def edit_claim(request):
-    return render(request, 'add_edit_claim.html')
+    return render(request, 'add_edit_order.html')
 
 
 def delete_claim(request):
