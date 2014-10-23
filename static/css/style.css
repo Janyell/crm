@@ -134,6 +134,6 @@ select.hidden, div.hidden {
 #product-table_wrapper {
     margin-bottom: 40px;
 }
-.btn_add-client, .btn_add-order {
+.btn_add-client, .btn_add-order, .btn_add-claim {
     margin-bottom: 10px;
 }

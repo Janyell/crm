@@ -1,0 +1,178 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <div class="container container_full-width">
+        <a href="{% url "get_claims" %}" class="btn">Назад</a>
+        <h2 class="center">{{ page_title }}</h2>
+        <a href="{% url "add_claim" %}" class="btn btn_add-claim">Добавить заявку</a>
+        {% if claims %}
+        <table class="table table-hover table-bordered" id="claim-table">
+            <thead>
+                <tr>
+                    <th>Менеджер</th>
+                    <th>Дата заявки</th>
+                    <th>Название организации</th>
+                    <th>Компания</th>
+                    <th>Номер счета</th>
+                    <th>Сумма счета</th>
+                    <th>Продукция</th>
+                    <th>Статус</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for claim in claims %}
+                    <tr>
+                        <td>{{ claim.role }}</td>
+                        <td>{{ claim.order_date }}</td>
+                        <td>
+                            <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
+                                <div class="get-client-info__head">
+                                    {{ claim.client.organization_or_full_name }}
+                                </div>
+                                <div class="hidden get-client-info__data">
+                                    <div class="client-data__full-name">{{ claim.client.full_name }}</div>
+                                    <div class="client-data__contact-person-phone">{{ claim.client.person_phone }}</div>
+                                    <div class="client-data__organization">{{ claim.client.organization }}</div>
+                                    <div class="client-data__organization-phone">{{ claim.client.organization_phone }}</div>
+                                    <div class="client-data__email">{{ claim.client.email }}</div>
+                                </div>
+                            </a>
+                        </td>
+                        <td>{{ claim.company.title }}</td>
+                        <td>{% if claim.account_number != None %}
+                                {{ claim.account_number }}
+                            {% endif %}
+                        </td>
+                        <td>{% if claim.bill != None %}
+                                {{ claim.bill }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if claim.products %}
+                                {% for product in claim.products %}
+                                    <div>
+                                        {{ product.product.title }} - {{ product.count_of_products }} шт.
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td>{{ claim.claim_status }}</td>
+                        <td>
+                            {% if user_role == 0 or user_role == 1 and claim.role == user.username %}
+                                <a class="btn btn-mini" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                            {% else %}
+                                <a class="btn btn-mini" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user_role == 0 or user_role == 1 and claim.role == user.username %}
+                            <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
+                                <i class="icon-remove"></i>
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <h5 class="center">Нет ни одного текущего заказа</h5>
+        {% endif %}
+    </div>
+    <div class="modal hide fade" id="client-info" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 class="center">Информация о клиенте</h3>
+        </div>
+        <div class="modal-body client-info">
+            <div class="client-info__item client-info__contact-person clearfix">
+                <div class="client-info__head">
+                    Контактное лицо
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__contact-person-phone clearfix">
+                <div class="client-info__head">
+                    Телефон контактного лица
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__organization clearfix">
+                <div class="client-info__head">
+                    Организация
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__organization-phone clearfix">
+                <div class="client-info__head">
+                    Телефон организации
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__email clearfix">
+                <div class="client-info__head">
+                    E-mail
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+    <div class="modal hide fade" id="delete-claim" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Вы уверены, что хотите удалить эту заявку?</h3>
+        </div>
+        <div class="modal-footer">
+            <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("#claim-table").dataTable({
+                    "language": {
+                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                    },
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 4, 5, 6, 8, 9 ] },
+                        { "bSearchable": false, "aTargets": [ 8, 9 ] },
+                        { "sType": "de_datetime", "aTargets": [ 1 ] }
+                    ]
+                });
+                $('.get-client-info').bind('click', function(){
+                    var $client_info__data = $('#client-info .modal-body');
+                    var full_name = $(this).find('.client-data__full-name').text();
+                    $client_info__data.find('.client-info__contact-person > .client-info__data').text(full_name);
+                    var person_phone = $(this).find('.client-data__contact-person-phone').text();
+                    $client_info__data.find('.client-info__contact-person-phone > .client-info__data').text(person_phone);
+                    var organization = $(this).find('.client-data__organization').text();
+                    $client_info__data.find('.client-info__organization > .client-info__data').text(organization);
+                    var organization_phone = $(this).find('.client-data__organization-phone').text();
+                    $client_info__data.find('.client-info__organization-phone > .client-info__data').text(organization_phone);
+                    var email = $(this).find('.client-data__email').text();
+                    $client_info__data.find('.client-info__email > .client-info__data')
+                            .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
+                });
+                $('.delete-button').bind('click', function(){
+                    var id = $(this).attr('value');
+                    $('#delete__ok').attr({'href': '{% url "delete_claim" %}?id=' + id});
+                });
+                $('.comment-button').bind('click', function(){
+                    var comment = $(this).attr('value');
+                    $('.comment__data').html(comment);
+                });
+            });
+        })(jQuery);
+    </script>
+{%endblock%}

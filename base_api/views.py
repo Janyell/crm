@@ -204,3 +204,22 @@ def delete_product(request):
 
 def add_product(request):
     return full_add_product(request)
+
+def edit_order_for_other_managers(request):
+    return render(request, 'edit_order_for_other_managers.html')
+
+
+def get_claims(request):
+    return render_to_response('get_claims.html')
+
+
+def add_claim(request):
+    return render(request, 'add_edit_claim.html')
+
+
+def edit_claim(request):
+    return render(request, 'add_edit_claim.html')
+
+
+def delete_claim(request):
+    pass
