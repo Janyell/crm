@@ -138,3 +138,27 @@ select.hidden, div.hidden {
 .btn_add-client, .btn_add-order, .btn_add-claim {
     margin-bottom: 10px;
 }
+.comment__data {
+    display: none;
+}
+
+@media print {
+    body {
+        color: #000;
+    }
+    .navbar, .btn {
+        display: none;
+    }
+    h2 {
+        page-break-after: avoid;
+    }
+    img {
+        max-width: 100% !important;
+    }
+    a[href^="#"]:after {
+    content: "";
+    }
+    .comment__data {
+        display: block;
+    }
+}

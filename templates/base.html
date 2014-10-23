@@ -44,7 +44,7 @@
                                     <a href="{% url "get_clients" %}">Клиенты</a>
                                 </li>
                             {% endif %}
-                            <li class={% navactive request 'get_orders add_order edit_order get_old_orders edit_order_for_factory' %}>
+                            <li class={% navactive request 'get_orders add_order edit_order get_old_orders edit_order_for_factory get_claims add_claim edit_claim' %}>
                                 <a href="{% url "get_orders" %}">Заказы</a>
                             </li>
                             {% if user_role != 2 %}
