@@ -17,7 +17,6 @@
                         <th>Организация</th>
                         <th>Телефон организации</th>
                         <th>E-mail</th>
-                        <th>Номер счета</th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -31,11 +30,6 @@
                             <td>{{ client.organization }}</td>
                             <td>{{ client.organization_phone }}</td>
                             <td>{{ client.email }}</td>
-                            <td>
-                                {% if client.account_number != None %}
-                                    {{ client.account_number }}
-                                {% endif %}
-                            </td>
                             <td><a class="btn" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a></td>
                             <td><a class="btn" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a></td>
                             <td><a class="btn delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
@@ -48,7 +42,6 @@
         {% else %}
             <h5 class="center">Не было добавлено ни одного клиента</h5>
         {% endif %}
-        <a href="{% url "add_client" %}" class="btn">Добавить клиента</a>
             {% url 'get_clients' as get_clients_url %}
                 {% if request.path == get_clients_url %}
                     <a href="{% url "get_interested_clients" %}" class="btn">Перейти к базе "Интересовавшиеся"</a>
@@ -72,8 +65,8 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 8, 6, 7 ] },
-                        { "bSearchable": false, "aTargets": [ 8, 6, 7 ] }
+                        { "bSortable": false, "aTargets": [ 6, 7 ] },
+                        { "bSearchable": false, "aTargets": [ 6, 7 ] }
                     ]
                 });
                  $('.delete-button').bind('click', function(){
