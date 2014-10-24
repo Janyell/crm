@@ -4,10 +4,16 @@
     <div class="container container_full-width">
         {% url 'get_interested_clients' as get_interested_clients_url %}
         {% if request.path == get_interested_clients_url %}
-            <a href="{% url 'get_clients' %}" class="btn">Назад</a>
+            <a href="{% url 'get_clients' %}" class="btn">Перейти к клиентам</a>
         {% endif %}
         <h2 class="center">{{ page_title }}</h2>
-        <a href="{% url "add_client" %}" class="btn btn_add-client">Добавить клиента</a>
+        {% if request.path == get_interested_clients_url %}
+            <a href="{% url "add_client" %}?is_interested=1" class="btn btn_add-client">Добавить клиента</a>
+        {% endif %}
+        {% url 'get_clients' as get_clients_url %}
+        {% if request.path == get_clients_url %}
+            <a href="{% url "add_client" %}" class="btn btn_add-client">Добавить клиента</a>
+        {% endif %}
         {% if clients %}
             <table class="table table-hover table-bordered" id="order-table">
                 <thead>
@@ -37,7 +43,13 @@
                                     <a class="btn" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a>
                                 {% endif %}
                             </td>
-                            <td><a class="btn" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a></td>
+                            <td>
+                                {% if request.path == get_interested_clients_url %}
+                                    <a class="btn" href="{% url "edit_client" %}?id={{ client.pk }}&is_interested=1"><i class="icon-pencil"></i></a>
+                                {% else %}
+                                    <a class="btn" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a>
+                                {% endif %}
+                            </td>
                             <td><a class="btn delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
                                 <i class="icon-remove"></i></a>
                             </td>

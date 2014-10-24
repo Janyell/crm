@@ -2,7 +2,7 @@
 
 {%block content%}
     <div class="container container_full-width">
-        <a href="{% url "get_orders" %}" class="btn">Назад</a>
+        <a href="{% url "get_orders" %}" class="btn">Перейти к заказам</a>
         <h2 class="center">{{ page_title }}</h2>
         <a href="{% url "add_claim" %}" class="btn btn_add-claim">Добавить заявку</a>
         {% if claims %}

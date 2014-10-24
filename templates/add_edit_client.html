@@ -24,6 +24,9 @@
             {% if request.GET.id %}
                 <input type="hidden" name="pk" value="{{ request.GET.id }}">
             {% endif %}
+            {% if request.GET.is_interested %}
+                <input type="hidden" name="is_interested" value=1>
+            {% endif %}
             <div class="control-group">
                 <label class="control-label" for="inputСontactPerson">
                     Контактное лицо

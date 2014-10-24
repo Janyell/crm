@@ -10,7 +10,7 @@
         {% endif %}
         {% url 'get_old_orders' as get_old_orders_url %}
         {% if request.path == get_old_orders_url %}
-        <a href="{% url "get_orders" %}" class="btn">Назад</a>
+        <a href="{% url "get_orders" %}" class="btn">Перейти к заказам</a>
         {% endif %}
         <h2 class="center">{{ page_title }}</h2>
         {% if request.path == get_orders_url %}
