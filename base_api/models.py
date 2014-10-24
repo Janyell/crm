@@ -96,7 +96,7 @@ class Orders(models.Model):
     unique_number = models.CharField(max_length=50, unique=True)
     company = models.ForeignKey(Companies, null=True, blank=True)
     bill = models.IntegerField(null=True, blank=True)
-    payment_date = UnixTimestampField(auto_created=True, blank=True, null=True)
+    payment_date = UnixTimestampField(blank=True, null=True)
     IN_PRODUCTION = 0
     SHIPPED = 1
     READY = 2
@@ -107,21 +107,22 @@ class Orders(models.Model):
     )
     order_status = models.IntegerField(null=True, choices=ORDER_STATUS_CHOICES, blank=True)
     SET = 0
-    PAID = 1
-    NEED_SURCHARGE = 2
+    PAID = 2
+    NEED_SURCHARGE = 1
     BILL_STATUS_CHOICES = (
         (SET, 'Выставлен'),
         (NEED_SURCHARGE, 'Нужна доплата'),
         (PAID, 'Оплачен'),
     )
     bill_status = models.IntegerField(null=True, choices=BILL_STATUS_CHOICES, blank=True)
-    ready_date = UnixTimestampField(auto_created=True, blank=True, null=True)
+    ready_date = UnixTimestampField(blank=True, null=True)
     comment = models.TextField(null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
     order_date = UnixTimestampField(auto_created=True)
     city = models.CharField(max_length=256, null=True, blank=True)
     in_archive = models.BooleanField(default=0)
     account_number = models.CharField(max_length=50, null=True, blank=True)
+    is_claim = models.BooleanField(default=0)
 
 
 class Products(models.Model):
