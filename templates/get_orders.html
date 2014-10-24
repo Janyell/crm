@@ -193,7 +193,7 @@
             <h3>Комментарий к заказу</h3>
         </div>
         <div class="modal-body">
-            <div class="comment__data">
+            <div class="comment__data_modal">
             </div>
         </div>
         <div class="modal-footer">
@@ -240,7 +240,7 @@
                 });
                 $('.comment-button').bind('click', function(){
                     var comment = $(this).attr('value');
-                    $('.comment__data').html(comment);
+                    $('.comment__data_modal').html(comment);
                 });
             });
         })(jQuery);
