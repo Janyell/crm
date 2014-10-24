@@ -362,9 +362,8 @@ def full_get_orders(request):
             orders_count_str = str(order.bill)
             orders_count_str_reverse = orders_count_str[::-1]
             orders_count_str_right_format = ''
-            j = 0
             for i in range(0, len(orders_count_str)/3 + 1):
-                j += 1
+                j = 3
                 if i != (len(orders_count_str)/3):
                     orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
                                                     orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
