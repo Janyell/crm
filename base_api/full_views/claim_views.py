@@ -51,7 +51,7 @@ def full_get_claims(request):
                     elif (len(orders_count_str) % 3) == 1:
                         orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
             orders_count_str = orders_count_str_right_format[::-1]
-            order.bill_right_format = orders_count_str
+            order.bill = orders_count_str
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
     out = {'user_role': user_role}

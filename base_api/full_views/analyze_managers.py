@@ -52,10 +52,8 @@ def full_analyze_managers(request):
                     period.append(31)
                     orders_count.append(0)
                     shipped_orders_count.append(0)
-            orders = Orders.objects.filter(role_id=manager.id, is_deleted=0)
-            shipped_orders1 = Orders.objects.filter(role_id=manager.id, is_deleted=0, order_status=2)
-            shipped_orders2 = Orders.objects.filter(role_id=manager.id, is_deleted=0, order_status=3)
-            shipped_orders = shipped_orders1 | shipped_orders2
+            orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
+            shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
             for order in orders:
                 data = str(order.order_date)
                 data_mounth = data[5:]
@@ -88,10 +86,8 @@ def full_analyze_managers(request):
                 period.append(i+1)
                 orders_count.append(0)
                 shipped_orders_count.append(0)
-            orders = Orders.objects.filter(role_id=manager.id, is_deleted=0)
-            shipped_orders1 = Orders.objects.filter(role_id=manager.id, is_deleted=0, order_status=2)
-            shipped_orders2 = Orders.objects.filter(role_id=manager.id, is_deleted=0, order_status=3)
-            shipped_orders = shipped_orders1 | shipped_orders2
+            orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
+            shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
             for order in orders:
                 data = str(order.order_date)
                 data_mounth = data[5:]
@@ -140,10 +136,8 @@ def full_analyze_managers(request):
                 period.append(i+1)
                 orders_count.append(0)
                 shipped_orders_count.append(0)
-            orders = Orders.objects.filter(role_id=manager.id, is_deleted=0)
-            shipped_orders1 = Orders.objects.filter(role_id=manager.id, is_deleted=0, order_status=2)
-            shipped_orders2 = Orders.objects.filter(role_id=manager.id, is_deleted=0, order_status=3)
-            shipped_orders = shipped_orders1 | shipped_orders2
+            orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
+            shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
             for order in orders:
                 data = str(order.order_date)
                 data_mounth = data[5:]
