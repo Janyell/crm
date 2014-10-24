@@ -30,7 +30,13 @@
                             <td>{{ client.organization }}</td>
                             <td>{{ client.organization_phone }}</td>
                             <td>{{ client.email }}</td>
-                            <td><a class="btn" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a></td>
+                            <td>
+                                {% if request.path == get_interested_clients_url %}
+                                    <a class="btn" href="{% url "add_claim" %}?client-id={{ client.pk }}">Добавить заявку</a>
+                                {% else %}
+                                    <a class="btn" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a>
+                                {% endif %}
+                            </td>
                             <td><a class="btn" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a></td>
                             <td><a class="btn delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
                                 <i class="icon-remove"></i></a>

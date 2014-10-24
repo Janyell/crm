@@ -176,15 +176,6 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="selectSource">
-                        Источник
-                        <span class="required-input">*</span>
-                    </label>
-                    <div class="controls">
-                        {{ order_form.source }}
-                    </div>
-                </div>
-                <div class="control-group">
                     <label class="control-label" for="inputReadyDate">
                         Дата готовности
                     </label>
@@ -197,8 +188,17 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
+                <div class="control-group">
+                    <label class="control-label" for="selectSource">
+                        Источник
+                        <span class="required-input">*</span>
+                    </label>
+                    <div class="controls">
+                        {{ order_form.source }}
+                    </div>
+                </div>
             </div>
-            {% endif %}
             <div class="form-add__tips">
                 <div class="form-add-tips__tip">
                     <span class="required-input">*</span> - поля, обязательные для заполнения
