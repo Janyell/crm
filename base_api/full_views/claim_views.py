@@ -51,7 +51,7 @@ def full_get_claims(request):
                     elif (len(orders_count_str) % 3) == 1:
                         orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
             orders_count_str = orders_count_str_right_format[::-1]
-            order.bill_right_format = orders_count_str
+            order.bill = orders_count_str
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
     out = {'user_role': user_role}
@@ -232,13 +232,13 @@ def full_add_edit_claim(request):
                         new_claim_was_not_created = False
                         new_claim = Orders.objects.create(order_date=datetime.now(), client=client, role=role,
                                               unique_number=unique_number, company=company, bill=bill,
-                                              claim_status=bill_status, is_claim=is_claim,
+                                              bill_status=bill_status, is_claim=is_claim,
                                               account_number=account_number)
                     new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products)
             if is_claim_create:
-                return HttpResponseRedirect('/orders/')
+                return HttpResponseRedirect('/claims/')
             else:
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)

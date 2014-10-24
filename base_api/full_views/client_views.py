@@ -1,13 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, render_to_response
-from datetime import datetime
-from base_api.models import *
-from base_api.forms import *
+from django.shortcuts import render
 from django.http import *
-from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
-import sys
+
+from base_api.forms import *
 
 
 def full_add_edit_client(request):
@@ -92,13 +89,15 @@ def full_add_edit_client(request):
             else:
                 if 'save-and-add-order' in form.data:
                     new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
-                                                    patronymic=patronymic, person_phone=person_phone,
-                                                    organization_phone=organization_phone, email=email)
+                                                        patronymic=patronymic, person_phone=person_phone,
+                                                        organization_phone=organization_phone, email=email,
+                                                        creation_date=datetime.now())
                     return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
                 elif 'only-save' in form.data:
                     new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
-                                                    patronymic=patronymic, person_phone=person_phone,
-                                                    organization_phone=organization_phone, email=email)
+                                                        patronymic=patronymic, person_phone=person_phone,
+                                                        organization_phone=organization_phone, email=email,
+                                                        creation_date=datetime.now())
                     return HttpResponseRedirect('/clients/')
                 return HttpResponseRedirect('/clients/')
         else:
@@ -143,14 +142,13 @@ def full_add_edit_client(request):
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
-                                                                is_interested=0)
+                                                                creation_date=datetime.now())
                             return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
                         elif 'only-save' in form.data:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
-                                                                is_interested=1)
-                            return HttpResponseRedirect('/clients/interested/')
+                                                                creation_date=datetime.now())
                         return HttpResponseRedirect('/clients/')
                     out.update({"error": 1})
                     out.update({'client_form': form})
@@ -161,14 +159,13 @@ def full_add_edit_client(request):
                         new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                             patronymic=patronymic, person_phone=person_phone,
                                                             organization_phone=organization_phone, email=email,
-                                                            is_interested=0)
+                                                            creation_date=datetime.now())
                         return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
                     elif 'only-save' in form.data:
                         new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                             patronymic=patronymic, person_phone=person_phone,
                                                             organization_phone=organization_phone, email=email,
-                                                            is_interested=1)
-                        return HttpResponseRedirect('/clients/interested/')
+                                                            creation_date=datetime.now())
                     return HttpResponseRedirect('/clients/')
             else:
                 out.update({'page_title': "Добавление клиента"})
