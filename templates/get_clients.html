@@ -23,6 +23,9 @@
                         <th>Организация</th>
                         <th>Телефон организации</th>
                         <th>E-mail</th>
+                        {% if request.path == get_clients_url %}
+                            <th></th>
+                        {% endif %}
                         <th></th>
                         <th></th>
                         <th></th>
@@ -32,10 +35,13 @@
                     {% for client in clients %}
                         <tr>
                             <td>{{ client.person_full_name }}</td>
-                            <th>{{ client.person_phone }}</th>
+                            <td>{{ client.person_phone }}</td>
                             <td>{{ client.organization }}</td>
                             <td>{{ client.organization_phone }}</td>
                             <td>{{ client.email }}</td>
+                            {% if request.path == get_clients_url %}
+                                <td><a class="btn" href="{% url "get_orders" %}?client-id={{ client.pk }}">Заказы</a></td>
+                            {% endif %}
                             <td>
                                 {% if request.path == get_interested_clients_url %}
                                     <a class="btn" href="{% url "add_claim" %}?client-id={{ client.pk }}">Добавить заявку</a>
@@ -83,8 +89,8 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 6, 7 ] },
-                        { "bSearchable": false, "aTargets": [ 6, 7 ] }
+                        { "bSortable": false, "aTargets": [ 5, 6, 7{% if request.path == get_clients_url %},8{% endif %} ] },
+                        { "bSearchable": false, "aTargets": [ 5, 6, 7{% if request.path == get_clients_url %},8{% endif %} ] }
                     ]
                 });
                  $('.delete-button').bind('click', function(){
