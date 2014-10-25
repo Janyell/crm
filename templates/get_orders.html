@@ -12,7 +12,7 @@
         {% if request.path == get_old_orders_url %}
         <a href="{% url "get_orders" %}" class="btn">Перейти к заказам</a>
         {% endif %}
-        <h2 class="center">{{ page_title }}</h2>
+        <h2 class="center">{{ page_title }}{{ organization_or_full_name }}</h2>
         {% if request.path == get_orders_url %}
             {% if user_role != 2 %}
                 <a href="{% url "add_order" %}" class="btn btn_add-order">Добавить заказ</a>
@@ -93,7 +93,7 @@
                         <td>{{ order.city }}</td>
                         <td>
                             {% if order.comment %}
-                                <a class="btn btn-mini comment-button" data-toggle="modal" href="#view-order-comment"
+                                <a class="btn comment-button" data-toggle="modal" href="#view-order-comment"
                                    value="{{ order.comment }}">
                                     <i class="icon-resize-full"></i>
                                 </a>
@@ -103,18 +103,18 @@
                         <td><a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a></td>
                         <td>
                             {% if user_role == 0 or user_role == 1 and order.role == user.username %}
-                                <a class="btn btn-mini" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                <a class="btn" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                             {% else %}
                                 {% if user_role != 2 %}
-                                    <a class="btn btn-mini" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                    <a class="btn" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                                 {% else %}
-                                    <a class="btn btn-mini" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                    <a class="btn" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                                 {% endif %}
                             {% endif %}
                         </td>
                         <td>
                             {% if user_role == 0 or user_role == 1 and order.role == user.username %}
-                            <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
+                            <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
                                 <i class="icon-remove"></i>
                             </a>
                             {% endif %}
