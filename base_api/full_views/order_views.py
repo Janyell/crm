@@ -336,7 +336,28 @@ def full_delete_order(request):
 def full_get_orders(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0)
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role != 0:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    if 'client-id' in request.GET:
+        clients_id = request.GET['client-id']
+        if Clients.objects.filter(id=clients_id, is_deleted=0).count() != 1:
+            out.update({'page_title': "Данного клиента не существует!"})
+            return render(request, 'get_orders.html', out)
+        client = Clients.objects.get(id=clients_id, is_deleted=0)
+        orders = Orders.objects.filter(is_deleted=0, client=client, is_claim=0)
+        out.update({'page_title': "История заказов "})
+        if client.organization == '':
+            client.organization_or_full_name = client.last_name + ' ' + client.name + ' ' + client.patronymic
+        else:
+            client.organization_or_full_name = client.organization
+        out.update({'organization_or_full_name': client.organization_or_full_name})
+    else:
+        orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0)
+        out.update({'page_title': "Заказы"})
     for order in orders:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
@@ -358,7 +379,7 @@ def full_get_orders(request):
             order.order_status = 'Готов'
         else:
             order.order_status = ''
-        if order.bill != None:
+        if order.bill is not None:
             orders_count_str = str(order.bill)
             orders_count_str_reverse = orders_count_str[::-1]
             orders_count_str_right_format = ''
@@ -375,10 +396,8 @@ def full_get_orders(request):
                         orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
             orders_count_str = orders_count_str_right_format[::-1]
             order.bill_right_format = orders_count_str
-    out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    out = {'user_role': user_role}
-    out.update({'page_title': "Заказы"})
+    out.update({'user_role': user_role})
     out.update({'orders': orders})
     return render(request, 'get_orders.html', out)
 
@@ -414,6 +433,24 @@ def full_get_old_orders(request):
             order.order_status = 'Готов'
         else:
             order.order_status = ''
+        if order.bill is not None:
+            orders_count_str = str(order.bill)
+            orders_count_str_reverse = orders_count_str[::-1]
+            orders_count_str_right_format = ''
+            for i in range(0, len(orders_count_str)/3 + 1):
+                j = 3
+                if i != (len(orders_count_str)/3):
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+                else:
+                    if (len(orders_count_str) % 3) == 2:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                        orders_count_str_reverse[i*j+1]
+                    elif (len(orders_count_str) % 3) == 1:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+            orders_count_str = orders_count_str_right_format[::-1]
+            order.bill_right_format = orders_count_str
+            order.bill = order.bill_right_format
     out.update({'page_title': "Архив заказов"})
     out.update({'orders': orders})
     return render(request, 'get_orders.html', out)
