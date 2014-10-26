@@ -14,6 +14,12 @@ import string
 def full_get_claims(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=1)
     for order in orders:
         if order.client.organization == '':
@@ -51,9 +57,8 @@ def full_get_claims(request):
                         orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
             orders_count_str = orders_count_str_right_format[::-1]
             order.bill = orders_count_str
-    out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    out = {'user_role': user_role}
+    out.update({'user_role': user_role})
     out.update({'page_title': "Заявки"})
     out.update({'claims': orders})
     return render(request, 'get_claims.html', out)

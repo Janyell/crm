@@ -126,7 +126,9 @@
         {% else %}
             <h5 class="center">Нет ни одного текущего заказа</h5>
         {% endif %}
-        <a href="{% url "get_claims" %}" class="btn">Перейти к заявкам</a>
+        {% if user_role != 2 %}
+            <a href="{% url "get_claims" %}" class="btn">Перейти к заявкам</a>
+        {% endif %}
     </div>
 
     {% if user_role != 2 %}

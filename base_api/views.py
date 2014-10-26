@@ -228,6 +228,38 @@ def edit_order_for_other_managers(request):
     return render(request, 'edit_order_for_other_managers.html', out)
 
 
+def edit_claim_for_other_managers(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    if request.method == 'POST':
+        if 'pk' in request.POST:
+            pk = request.POST['pk']
+            comment = request.POST['comment']
+            new_order = Orders.objects.get(id=pk, is_deleted=0, is_claim=1)
+            new_order.comment = comment
+            new_order.save(force_update=True)
+            return HttpResponseRedirect('/claims/')
+        else:
+            return HttpResponseRedirect('/claims')
+    else:
+        if 'id' in request.GET:
+            id_order = request.GET['id']
+            out.update({"error": 0})
+            order = Orders.objects.get(pk=id_order, is_deleted=0, is_claim=1)
+            form = OrdersForm({'comment': order.comment})
+            out.update({'order_form': form})
+            out.update({'page_title': "Редактирование заявки"})
+        else:
+            return HttpResponseRedirect('/claims/')
+    return render(request, 'edit_order_for_other_managers.html', out)
+
+
 def get_claims(request):
     return full_get_claims(request)
 

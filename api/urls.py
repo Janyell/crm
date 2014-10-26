@@ -45,6 +45,8 @@ urlpatterns = patterns('',
                        url(r'^claims/$', 'base_api.views.get_claims', name='get_claims'),
                        url(r'^claims/add/$', 'base_api.views.add_edit_claim', name='add_claim'),
                        url(r'^claims/edit/$', 'base_api.views.add_edit_claim', name='edit_claim'),
+                       url(r'^claims/edit/foreign/$', 'base_api.views.edit_claim_for_other_managers',
+                           name='edit_claim_for_other_managers'),
                        url(r'^claims/delete/$', 'base_api.views.delete_claim', name='delete_claim'),
                        url(r'', 'base_api.views.page_not_found', name='404'),
 )

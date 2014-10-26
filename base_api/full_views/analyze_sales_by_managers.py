@@ -140,32 +140,35 @@ def full_analyze_sales_by_managers(request):
             shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
             bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
             for order in clients_orders:
-                data = str(order.creation_date)
-                data_mounth = data[5:]
-                data_mounth = data_mounth[:2]
-                data_year = data[:4]
-                data_year_and_mounth = data[:7]
-                current_year_and_mounth = current_year + '-' + current_mounth
-                i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
-                clients_calls_count[i] += 1
+                if order.creation_date is not None:
+                    data = str(order.creation_date)
+                    data_mounth = data[5:]
+                    data_mounth = data_mounth[:2]
+                    data_year = data[:4]
+                    data_year_and_mounth = data[:7]
+                    current_year_and_mounth = current_year + '-' + current_mounth
+                    i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
+                    clients_calls_count[i] += 1
             for order in shipped_orders:
-                data = str(order.order_date)
-                data_mounth = data[5:]
-                data_mounth = data_mounth[:2]
-                data_year = data[:4]
-                data_year_and_mounth = data[:7]
-                current_year_and_mounth = current_year + '-' + current_mounth
-                i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
-                shipped_orders_count[i] += 1
+                if order.order_date is not None:
+                    data = str(order.order_date)
+                    data_mounth = data[5:]
+                    data_mounth = data_mounth[:2]
+                    data_year = data[:4]
+                    data_year_and_mounth = data[:7]
+                    current_year_and_mounth = current_year + '-' + current_mounth
+                    i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
+                    shipped_orders_count[i] += 1
             for order in bill_orders:
-                data = str(order.order_date)
-                data_mounth = data[5:]
-                data_mounth = data_mounth[:2]
-                data_year = data[:4]
-                data_year_and_mounth = data[:7]
-                current_year_and_mounth = current_year + '-' + current_mounth
-                i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
-                bill_orders_count[i] += 1
+                if order.order_date is not None:
+                    data = str(order.order_date)
+                    data_mounth = data[5:]
+                    data_mounth = data_mounth[:2]
+                    data_year = data[:4]
+                    data_year_and_mounth = data[:7]
+                    current_year_and_mounth = current_year + '-' + current_mounth
+                    i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
+                    bill_orders_count[i] += 1
             period_str = []
             for i in range(amount_of_period):
                 if ((i+int(first_data_mounth)) % 12) == 1:

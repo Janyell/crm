@@ -338,10 +338,7 @@ def full_get_orders(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role != 0:
-        return HttpResponseRedirect('/oops/')
-    else:
-        out.update({'user_role': user_role})
+    out.update({'user_role': user_role})
     if 'client-id' in request.GET:
         clients_id = request.GET['client-id']
         if Clients.objects.filter(id=clients_id, is_deleted=0).count() != 1:
