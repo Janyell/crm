@@ -156,13 +156,6 @@ def view_analyzed_product(request):
     return full_view_analyzed_product(request)
 
 
-def analyze_sale(request):
-    out = {}
-    user_role = Roles.objects.get(id=request.user.id).role
-    out.update({'user_role': user_role})
-    return render(request, 'analyze_sale.html', out)
-
-
 def analyze_managers(request):
     return full_analyze_managers(request)
 
