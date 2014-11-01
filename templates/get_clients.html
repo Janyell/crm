@@ -2,11 +2,8 @@
 
 {%block content%}
     <div class="container container_full-width">
-        {% url 'get_interested_clients' as get_interested_clients_url %}
-        {% if request.path == get_interested_clients_url %}
-            <a href="{% url 'get_clients' %}" class="btn">Перейти к клиентам</a>
-        {% endif %}
         <h2 class="center">{{ page_title }}</h2>
+        {% url 'get_interested_clients' as get_interested_clients_url %}
         {% if request.path == get_interested_clients_url %}
             <a href="{% url "add_client" %}?is_interested=1" class="btn btn_add-client">Добавить клиента</a>
         {% endif %}
@@ -66,10 +63,6 @@
         {% else %}
             <h5 class="center">Не было добавлено ни одного клиента</h5>
         {% endif %}
-            {% url 'get_clients' as get_clients_url %}
-                {% if request.path == get_clients_url %}
-                    <a href="{% url "get_interested_clients" %}" class="btn">Перейти к базе "Интересовавшиеся"</a>
-                {% endif %}
     </div>
      <div class="modal hide fade" id="delete-client" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
         <div class="modal-header">

@@ -2,7 +2,6 @@
 
 {%block content%}
     <div class="container container_full-width">
-        <a href="{% url "get_orders" %}" class="btn">Перейти к заказам</a>
         <h2 class="center">{{ page_title }}</h2>
         <a href="{% url "add_claim" %}" class="btn btn_add-claim">Добавить заявку</a>
         {% if claims %}
@@ -60,17 +59,23 @@
                         </td>
                         <td>{{ claim.claim_status }}</td>
                         <td>
-                            {% if user_role == 0 or user_role == 1 and claim.role == user.username %}
+                            {% if user_role == 0 %}
+                                <a class="btn btn-mini" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                             {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
                                 <a class="btn btn-mini" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
                             {% else %}
                                 <a class="btn btn-mini" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
                             {% endif %}
                         </td>
                         <td>
-                            {% if user_role == 0 or user_role == 1 and claim.role == user.username %}
-                            <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
-                                <i class="icon-remove"></i>
-                            </a>
+                            {% if user_role == 0 %}
+                                <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
+                                    <i class="icon-remove"></i>
+                                </a>
+                            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                                <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
+                                    <i class="icon-remove"></i>
+                                </a>
                             {% endif %}
                         </td>
                     </tr>

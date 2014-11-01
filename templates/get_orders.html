@@ -102,21 +102,25 @@
                         </td>
                         <td><a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a></td>
                         <td>
-                            {% if user_role == 0 or user_role == 1 and order.role == user.username %}
+                            {% if user_role == 0 %}
                                 <a class="btn" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                                <a class="btn" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                            {% elif user_role != 2 %}
+                                <a class="btn" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                             {% else %}
-                                {% if user_role != 2 %}
-                                    <a class="btn" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
-                                {% else %}
-                                    <a class="btn" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
-                                {% endif %}
+                                <a class="btn" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                             {% endif %}
                         </td>
                         <td>
-                            {% if user_role == 0 or user_role == 1 and order.role == user.username %}
-                            <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
-                                <i class="icon-remove"></i>
-                            </a>
+                            {% if user_role == 0 %}
+                                <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
+                                    <i class="icon-remove"></i>
+                                </a>
+                            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                                <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
+                                    <i class="icon-remove"></i>
+                                </a>
                             {% endif %}
                         </td>
                     </tr>
@@ -125,9 +129,6 @@
         </table>
         {% else %}
             <h5 class="center">Нет ни одного текущего заказа</h5>
-        {% endif %}
-        {% if user_role != 2 %}
-            <a href="{% url "get_claims" %}" class="btn">Перейти к заявкам</a>
         {% endif %}
     </div>
 

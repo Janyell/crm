@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import *
 from django.core.exceptions import ObjectDoesNotExist
 
-from base_api.forms import *
+from base_api.form import *
 
 
 def full_add_edit_client(request):
