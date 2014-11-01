@@ -131,6 +131,7 @@ def full_add_edit_client(request):
                     out.update({"error": 3})
                     out.update({'client_form': form})
                     out.update({'page_title': "Добавление клиента"})
+                    out.update({'is_interested': 1})
                     return render(request, 'add_edit_client.html', out)
                 if person_phone == '' and organization_phone == '' and email == '':
                     out.update({"error": 2})

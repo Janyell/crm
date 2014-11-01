@@ -140,6 +140,10 @@ def full_add_edit_claim(request):
                 new_claim.is_claim = 0
             new_claim.account_number = account_number
             new_claim.save(force_update=True)
+            old_products = Order_Product.objects.filter(order_id=pk)
+            for old_product in old_products:
+                old_product.is_deleted = 1
+                old_product.save(update_fields=["is_deleted"])
             products_list = request.POST.getlist('products[]')
             for id_of_pr in products_list:
                 if int(id_of_pr) < 0:

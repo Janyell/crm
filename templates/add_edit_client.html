@@ -3,7 +3,21 @@
 {%block content%}
     <div class="container">
     <a href="{% url "get_clients" %}" class="btn">Назад</a>
-        <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}">
+        {% block request.GET.is_interested %}
+            {% if request.GET.is_interested %}
+                {% if request.GET.id %}
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?is_interested=1&id={{ request.GET.id }}">
+                {% else %}
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?is_interested=1">
+                {% endif %}
+            {% else %}
+                {% if request.GET.id %}
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?id={{ request.GET.id }}">
+                {% else %}
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}">
+                {% endif %}
+            {% endif %}
+        {% endblock %}
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
             {% if error == 1 %}
@@ -123,7 +137,12 @@
                 </div>
             </div>
             <div class="form-add__submits">
-                <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заказа</button>
+                {% if not request.GET.is_interested %}
+                    <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заказа</button>
+                {% endif %}
+                {% if request.GET.is_interested %}
+                    <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заявки</button>
+                {% endif %}
                 <button type="submit" class="btn" name="only-save" value="only-save">Сохранить</button>
                 <button type="reset" class="btn">Очистить</button>
             </div>

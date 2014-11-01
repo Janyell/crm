@@ -112,6 +112,10 @@ def full_add_edit_order(request):
             new_order.city = city
             new_order.account_number = account_number
             new_order.save(force_update=True)
+            old_products = Order_Product.objects.filter(order_id=pk)
+            for old_product in old_products:
+                old_product.is_deleted = 1
+                old_product.save(update_fields=["is_deleted"])
             products_list = request.POST.getlist('products[]')
             for id_of_pr in products_list:
                 if int(id_of_pr) < 0:
@@ -369,10 +373,8 @@ def full_get_orders(request):
         if order.order_status == 0:
             order.order_status = 'В производстве'
         elif order.order_status == 1:
-            order.order_status = 'Нужна доплата'
-        elif order.order_status == 2:
             order.order_status = 'Отгружен'
-        elif order.order_status == 3:
+        elif order.order_status == 2:
             order.order_status = 'Готов'
         else:
             order.order_status = ''

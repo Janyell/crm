@@ -3,7 +3,13 @@
 {%block content%}
     <div class="container">
         <a href="{% url "get_companies" %}" class="btn">Назад</a>
-        <form class="form-horizontal form-add form-add-company" method="post" action="">
+        {% block request.GET.id %}
+            {% if request.GET.id %}
+                <form class="form-horizontal form-add form-add-company" method="POST" action="{{ request.path }}?id={{ request.GET.id }}">
+            {% else %}
+                <form class="form-horizontal form-add form-add-company" method="POST" action="{{ request.path }}">
+            {% endif %}
+        {% endblock %}
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
             {% if error == 1 %}
