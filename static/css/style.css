@@ -135,7 +135,7 @@ select.hidden, div.hidden {
 #product-table_wrapper {
     margin-bottom: 40px;
 }
-.btn_add-client, .btn_add-order, .btn_add-claim {
+.btn_add-client, .btn_add-order, .btn_add-claim, .btn_add-company, .btn_add-role{
     margin-bottom: 10px;
 }
 .comment__data {
