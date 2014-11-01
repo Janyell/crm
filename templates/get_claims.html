@@ -61,7 +61,7 @@
                         <td>
                             {% if user_role == 0 %}
                                 <a class="btn btn-mini" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
-                             {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                             {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
                                 <a class="btn btn-mini" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
                             {% else %}
                                 <a class="btn btn-mini" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
@@ -72,7 +72,7 @@
                                 <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
                                     <i class="icon-remove"></i>
                                 </a>
-                            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                            {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
                                 <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
                                     <i class="icon-remove"></i>
                                 </a>
