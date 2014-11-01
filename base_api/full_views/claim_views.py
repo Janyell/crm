@@ -94,8 +94,8 @@ def full_add_edit_claim(request):
                 out.update({"error": 1})
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(
                     queryset=Companies.objects.filter(is_deleted=0), required=False)
-                OrdersForm.base_fields['client'] = ClientModelChoiceField(
-                    queryset=Clients.objects.filter(is_deleted=0))
+                OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
+                                                                                                      is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 form = OrdersForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'bill_status': bill_status, 'account_number': account_number})
                 form.products = Products.objects.filter(is_deleted=0)
@@ -115,8 +115,8 @@ def full_add_edit_claim(request):
                     out.update({"error": 1})
                     OrdersForm.base_fields['company'] = CompanyModelChoiceField(
                         queryset=Companies.objects.filter(is_deleted=0), required=False)
-                    OrdersForm.base_fields['client'] = ClientModelChoiceField(
-                        queryset=Clients.objects.filter(is_deleted=0))
+                    OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
+                                                                                                      is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                     form = OrdersForm({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'bill_status': bill_status, 'account_number': account_number})
                     form.products = Products.objects.filter(is_deleted=0)
@@ -153,8 +153,8 @@ def full_add_edit_claim(request):
                         out.update({"error": 2})
                         OrdersForm.base_fields['company'] = CompanyModelChoiceField(
                             queryset=Companies.objects.filter(is_deleted=0), required=False)
-                        OrdersForm.base_fields['client'] = ClientModelChoiceField(
-                            queryset=Clients.objects.filter(is_deleted=0))
+                        OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
+                                                                                                      is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                            'bill_status': bill_status, 'account_number': account_number})
                         form.products = Products.objects.filter(is_deleted=0)
@@ -212,7 +212,8 @@ def full_add_edit_claim(request):
                         out.update({"error": 2})
                         OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                                     required=False)
-                        OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0))
+                        OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
+                                                                                                      is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                            'bill_status': bill_status, 'account_number': account_number})
                         form.products = Products.objects.filter(is_deleted=0)
@@ -250,7 +251,8 @@ def full_add_edit_claim(request):
             else:
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)
-                OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0))
+                OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
+                                                                                                      is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                    'bill_status': bill_status, 'account_number': account_number})
                 form.products = Products.objects.filter(is_deleted=0)
@@ -272,7 +274,8 @@ def full_add_edit_claim(request):
             account_number = request.POST['account_number']
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
-            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0))
+            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
+                                                                                                      is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                'bill_status': bill_status, 'account_number': account_number})
             form.products = Products.objects.filter(is_deleted=0)
@@ -290,7 +293,7 @@ def full_add_edit_claim(request):
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
-                                                                                                      is_interested=1))
+                                                                                                      is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_id = request.GET['client-id']
             client = Clients.objects.get(id=client_id, is_deleted=0, is_interested=1)
             form = OrdersForm({'client': client})
@@ -304,7 +307,7 @@ def full_add_edit_claim(request):
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
-                                                                                                      is_interested=1))
+                                                                                                      is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = OrdersForm({'client': claim.client, 'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number})
             form.products = Products.objects.filter(is_deleted=0)
@@ -322,7 +325,7 @@ def full_add_edit_claim(request):
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
-                                                                                                      is_interested=1))
+                                                                                                      is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = OrdersForm()
             form.products = Products.objects.filter(is_deleted=0)
             out.update({'order_form': form})
