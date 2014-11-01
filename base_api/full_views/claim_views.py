@@ -340,7 +340,7 @@ def full_delete_claim(request):
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     order = Orders.objects.get(pk=id, is_deleted=0)
-    if str(request.user.username) != str(order.role):
+    if str(request.user.username) != str(order.role) and Roles.objects.get(id=request.user.id).role != 0:
         return HttpResponseRedirect('/oops/')
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
