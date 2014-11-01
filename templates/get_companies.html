@@ -3,6 +3,7 @@
 {%block content%}
     <div class="container">
         <h2 class="center">{{ page_title }}</h2>
+        <a href="{% url "add_company" %}" class="btn btn_add-company">Добавить компанию</a>
         {% if companies %}
             <table class="table table-hover table-bordered" id="order-table">
                 <thead>
@@ -29,7 +30,6 @@
         {% else %}
            <h5 class="center">Не было добавлено ни одной компании</h5>
         {% endif %}
-        <a href="{% url "add_company" %}" class="btn">Добавить компанию</a>
     </div>
     <div class="modal hide fade" id="delete-company" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
         <div class="modal-header">
