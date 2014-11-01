@@ -275,6 +275,6 @@ def full_get_interested_clients(request):
     clients = Clients.objects.filter(is_interested=1, is_deleted=0)
     for c in clients:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
-    out.update({'page_title': "Интересовавшиеся клиенты"})
+    out.update({'page_title': "Люди"})
     out.update({'clients': clients})
     return render(request, 'get_clients.html', out)

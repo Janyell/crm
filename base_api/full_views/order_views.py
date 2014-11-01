@@ -290,8 +290,6 @@ def full_add_edit_order(request):
             id_order = request.GET['id']
             out.update({"error": 0})
             order = Orders.objects.get(pk=id_order, is_deleted=0)
-            if str(order.role) != str(request.user.username):
-                return HttpResponseRedirect('/orders/edit/foreign/?id=1')
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
@@ -315,7 +313,9 @@ def full_add_edit_order(request):
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
-                                                                                                      is_interested=0))
+                                                                                                      is_interested=0).extra(select={"organization_or_full_name": "COALESCE(organization, last_name)"}, order_by=["organization_or_full_name"]))
+            # OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
+            #                                                                                           is_interested=0).extra(select={"organization_or_full_name": "COALESCE(last_name, organization)"}, order_by=["organization_or_full_name"]))
             form = OrdersForm()
             form.products = Products.objects.filter(is_deleted=0)
             out.update({'order_form': form})

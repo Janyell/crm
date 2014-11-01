@@ -50,7 +50,7 @@ def full_analyze_total_sales(request):
                     shipped_orders_count.append(0)
                     bill_orders_count.append(0)
             orders = Orders.objects.filter(is_deleted=0)
-            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
+            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
             bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
             for order in orders:
                 data = str(order.order_date)
@@ -90,7 +90,7 @@ def full_analyze_total_sales(request):
                 shipped_orders_count.append(0)
                 bill_orders_count.append(0)
             orders = Orders.objects.filter(is_deleted=0)
-            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
+            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
             bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
             for order in orders:
                 data = str(order.order_date)
@@ -143,7 +143,7 @@ def full_analyze_total_sales(request):
                 shipped_orders_count.append(0)
                 bill_orders_count.append(0)
             orders = Orders.objects.filter(is_deleted=0)
-            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
+            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
             bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
             for order in orders:
                 data = str(order.order_date)
@@ -177,29 +177,29 @@ def full_analyze_total_sales(request):
                         bill_orders_count[i] += int(order.bill)
             period_str = []
             for i in range(amount_of_period):
-                if ((i+int(first_data_mounth)) % 12) == 1:
+                if ((i+int(first_data_mounth)-1) % 12) == 1:
                     period_str.append('Январь')
-                elif ((i+int(first_data_mounth)) % 12) == 2:
+                elif ((i+int(first_data_mounth)-1) % 12) == 2:
                     period_str.append('Февраль')
-                elif ((i+int(first_data_mounth)) % 12) == 3:
+                elif ((i+int(first_data_mounth)-1) % 12) == 3:
                     period_str.append('Март')
-                elif ((i+int(first_data_mounth)) % 12) == 4:
+                elif ((i+int(first_data_mounth)-1) % 12) == 4:
                     period_str.append('Апрель')
-                elif ((i+int(first_data_mounth)) % 12) == 5:
+                elif ((i+int(first_data_mounth)-1) % 12) == 5:
                     period_str.append('Май')
-                elif ((i+int(first_data_mounth)) % 12) == 6:
+                elif ((i+int(first_data_mounth)-1) % 12) == 6:
                     period_str.append('Июнь')
-                elif ((i+int(first_data_mounth)) % 12) == 7:
+                elif ((i+int(first_data_mounth)-1) % 12) == 7:
                     period_str.append('Июль')
-                elif ((i+int(first_data_mounth)) % 12) == 8:
+                elif ((i+int(first_data_mounth)-1) % 12) == 8:
                     period_str.append('Август')
-                elif ((i+int(first_data_mounth)) % 12) == 9:
+                elif ((i+int(first_data_mounth)-1) % 12) == 9:
                     period_str.append('Сентябрь')
-                elif ((i+int(first_data_mounth)) % 12) == 10:
+                elif ((i+int(first_data_mounth)-1) % 12) == 10:
                     period_str.append('Октябрь')
-                elif ((i+int(first_data_mounth)) % 12) == 11:
+                elif ((i+int(first_data_mounth)-1) % 12) == 11:
                     period_str.append('Ноябрь')
-                elif ((i+int(first_data_mounth)) % 12) == 0:
+                elif ((i+int(first_data_mounth)-1) % 12) == 0:
                     period_str.append('Декабрь')
             orders_count = orders_count[::-1]
             shipped_orders_count = shipped_orders_count[::-1]
