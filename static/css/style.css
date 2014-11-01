@@ -53,7 +53,8 @@ body {
 }
 .container_full-width {
     width: 95%;
-    padding: 0 20px; 
+    padding: 0 20px;
+    min-width: 1268px;
 }
 .dataTables_filter input[type="search"] {
     margin-left: 10px; 
@@ -74,7 +75,7 @@ body {
     margin: 5px 0;
 }
 #add-product-table_wrapper, .select-product-table_wrapper {
-    width: 450px;
+    width: 500px;
     padding: 10px;
     display: -moz-inline-stack;
     display: inline-block;
@@ -141,7 +142,9 @@ select.hidden, div.hidden {
 .comment__data {
     display: none;
 }
-
+.container_fixed_width {
+    width: 1040px;
+}
 @media print {
     body {
         color: #000;

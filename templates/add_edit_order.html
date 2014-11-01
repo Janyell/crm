@@ -1,7 +1,7 @@
 {%extends "base.html"%}
 
 {%block content%}
-    <div class="container">
+    <div class="container container_fixed_width">
         {% url 'add_claim' as add_claim_url %}
         {% url 'edit_claim' as edit_claim_url %}
         <a href="
@@ -238,6 +238,18 @@
                     var product_id = $(this).attr('value');
                     $('.plus[data-productId="' + product_id + '"]').click();
                 });
+                var $select_client = $('#id_client');
+                $select_client.attr({
+                    'data-live-search': "true",
+                    'data-size': "10"
+                });
+                $select_client.selectpicker();
+                var $select_company = $('#id_company');
+                $select_company.attr({
+                    'data-live-search': "true",
+                    'data-size': "10"
+                });
+                $select_company.selectpicker();
             });
             $(window).load(function () {
                 $("#add-product-table_filter input[type='search']").attr("placeholder", "Поиск");
