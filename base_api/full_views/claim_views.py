@@ -136,8 +136,10 @@ def full_add_edit_claim(request):
             new_claim.company = company
             new_claim.bill = bill
             new_claim.bill_status = bill_status
-            if bill_status == 2:
+            if bill_status != 0:
                 new_claim.is_claim = 0
+                client.is_interested = 0
+                client.save(update_fields=["is_interested"])
             new_claim.account_number = account_number
             new_claim.save(force_update=True)
             old_products = Order_Product.objects.filter(order_id=pk)

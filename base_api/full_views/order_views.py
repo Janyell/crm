@@ -506,6 +506,8 @@ def full_add_in_archive(request):
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     order = Orders.objects.get(pk=id, is_deleted=0)
+    if str(request.user.username) != str(order.role) and Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
     order.in_archive = 1
     order.save(update_fields=["in_archive"])
     return HttpResponseRedirect('/orders/')

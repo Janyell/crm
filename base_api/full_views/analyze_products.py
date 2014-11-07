@@ -61,14 +61,15 @@ def full_view_analyzed_product(request):
                 amount.append(0)
         for pr in product_in_orders:
             order = Orders.objects.get(id=pr.order_id)
-            data = str(order.order_date)
-            data_mounth = data[5:]
-            data_mounth = data_mounth[:2]
-            data_day = data[8:]
-            data_day = data_day[:2]
-            data_year = data[:4]
-            if data_year == current_year and data_mounth == current_mounth:
-                amount[int(data_day) - 1] = int(amount[int(data_day) - 1] + pr.count_of_products)
+            if order.bill_status == 2:
+                data = str(order.order_date)
+                data_mounth = data[5:]
+                data_mounth = data_mounth[:2]
+                data_day = data[8:]
+                data_day = data_day[:2]
+                data_year = data[:4]
+                if data_year == current_year and data_mounth == current_mounth:
+                    amount[int(data_day) - 1] = int(amount[int(data_day) - 1] + pr.count_of_products)
         # period_str = str(period)[1:-1]
         period_str = period
     elif type_of_period == 'year':
@@ -77,12 +78,13 @@ def full_view_analyzed_product(request):
             amount.append(0)
         for pr in product_in_orders:
             order = Orders.objects.get(id=pr.order_id)
-            data = str(order.order_date)
-            data_mounth = data[5:]
-            data_mounth = data_mounth[:2]
-            data_year = data[:4]
-            if data_year == current_year:
-                amount[int(data_mounth) - 1] = int(amount[int(data_mounth) - 1] + pr.count_of_products)
+            if order.bill_status == 2:
+                data = str(order.order_date)
+                data_mounth = data[5:]
+                data_mounth = data_mounth[:2]
+                data_year = data[:4]
+                if data_year == current_year:
+                    amount[int(data_mounth) - 1] = int(amount[int(data_mounth) - 1] + pr.count_of_products)
         period_str = []
         period_str.append('Январь')
         period_str.append('Февраль')
@@ -109,14 +111,15 @@ def full_view_analyzed_product(request):
             amount.append(0)
         for pr in product_in_orders:
             order = Orders.objects.get(id=pr.order_id)
-            data = str(order.order_date)
-            data_mounth = data[5:]
-            data_mounth = data_mounth[:2]
-            data_year = data[:4]
-            data_year_and_mounth = data[:7]
-            current_year_and_mounth = current_year + '-' + current_mounth
-            i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
-            amount[i] = int(amount[i] + pr.count_of_products)
+            if order.bill_status == 2:
+                data = str(order.order_date)
+                data_mounth = data[5:]
+                data_mounth = data_mounth[:2]
+                data_year = data[:4]
+                data_year_and_mounth = data[:7]
+                current_year_and_mounth = current_year + '-' + current_mounth
+                i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
+                amount[i] = int(amount[i] + pr.count_of_products)
         period_str = []
         for i in range(amount_of_period):
             if ((i+int(first_data_mounth)) % 12) == 1:
