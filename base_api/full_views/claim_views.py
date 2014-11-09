@@ -311,7 +311,8 @@ def full_add_edit_claim(request):
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
                                                                                                       is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = OrdersForm({'client': claim.client, 'company': claim.company, 'bill': claim.bill,
-                               'bill_status': claim.bill_status, 'account_number': claim.account_number})
+                               'bill_status': claim.bill_status, 'account_number': claim.account_number,
+                               'comment': claim.comment})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
