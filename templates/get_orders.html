@@ -90,7 +90,11 @@
                                 {{ order.ready_date }}
                             {% endif %}
                         </td>
-                        <td>{{ order.city }}</td>
+                        <td>
+                            {% if order.city != None %}
+                                {{ order.city }}
+                            {% endif %}
+                        </td>
                         <td>
                             {% if order.comment %}
                                 <a class="btn comment-button" data-toggle="modal" href="#view-order-comment"

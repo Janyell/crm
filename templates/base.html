@@ -36,6 +36,14 @@
                             <a href="{% url "logout" %}" class="navbar-link navbar-link_logout">Выйти</a>
                         </p>
                         <ul class="nav">
+                             <li class={% navactive request 'get_orders add_order edit_order get_old_orders edit_order_for_factory' %}>
+                                <a href="{% url "get_orders" %}">Заказы</a>
+                            </li>
+                            {% if user_role != 2 %}
+                                <li class={% navactive request 'get_claims add_claim edit_claim' %}>
+                                    <a href="{% url "get_claims" %}">Заявки</a>
+                                </li>
+                            {% endif %}
                             {% if user_role == 0 %}
                                 <li class={% navactive request 'index analyst analyze_products view_analyzed_product analyze_managers analyze_total_sales analyze_sales_by_managers analyze_period' %}>
                                     <a href="{% url "analyst" %}">Аналитика</a>
@@ -49,13 +57,7 @@
                                     <a href="{% url "get_interested_clients" %}">Люди</a>
                                 </li>
                             {% endif %}
-                            <li class={% navactive request 'get_orders add_order edit_order get_old_orders edit_order_for_factory' %}>
-                                <a href="{% url "get_orders" %}">Заказы</a>
-                            </li>
                             {% if user_role != 2 %}
-                                <li class={% navactive request 'get_claims add_claim edit_claim' %}>
-                                    <a href="{% url "get_claims" %}">Заявки</a>
-                                </li>
                                 <li class={% navactive request 'get_products' %}>
                                     <a href="{% url "get_products" %}">Продукты</a>
                                 </li>

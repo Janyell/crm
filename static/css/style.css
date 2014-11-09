@@ -145,6 +145,9 @@ select.hidden, div.hidden {
 .container_fixed_width {
     width: 1040px;
 }
+.nav>li:nth-of-type(3) {
+    border-left:2px solid #777;
+}
 @media print {
     body {
         color: #000;

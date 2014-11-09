@@ -16,6 +16,7 @@
                     <th>Сумма счета</th>
                     <th>Продукция</th>
                     <th>Статус</th>
+                    <th>Комментарии</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -58,6 +59,11 @@
                             {% endif %}
                         </td>
                         <td>{{ claim.claim_status }}</td>
+                        <td>
+                            {% if claim.comment != None %}
+                                {{ claim.comment }}
+                            {% endif %}
+                        </td>
                         <td>
                             {% if user_role == 0 %}
                                 <a class="btn btn-mini" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
@@ -150,8 +156,8 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 4, 5, 6, 8, 9 ] },
-                        { "bSearchable": false, "aTargets": [ 8, 9 ] },
+                        { "bSortable": false, "aTargets": [ 4, 5, 6, 8, 9, 10 ] },
+                        { "bSearchable": false, "aTargets": [ 8, 9, 10 ] },
                         { "sType": "de_datetime", "aTargets": [ 1 ] }
                     ]
                 });
