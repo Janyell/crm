@@ -273,4 +273,4 @@ def delete_claim(request):
 
 
 def delete_from_archive(request):
-    pass
+    return full_delete_from_archive(request)
