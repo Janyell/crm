@@ -15,10 +15,10 @@
             <table class="table table-hover table-bordered" id="order-table">
                 <thead>
                     <tr>
-                        <th>Контактное лицо</th>
-                        <th>Телефон контактного лица</th>
                         <th>Организация</th>
                         <th>Телефон организации</th>
+                        <th>Контактное лицо</th>
+                        <th>Телефон контактного лица</th>
                         <th>E-mail</th>
                         {% if request.path == get_clients_url %}
                             <th></th>
@@ -31,10 +31,10 @@
                 <tbody>
                     {% for client in clients %}
                         <tr>
-                            <td>{{ client.person_full_name }}</td>
-                            <td>{{ client.person_phone }}</td>
                             <td>{{ client.organization }}</td>
                             <td>{{ client.organization_phone }}</td>
+                            <td>{{ client.person_full_name }}</td>
+                            <td>{{ client.person_phone }}</td>
                             <td>{{ client.email }}</td>
                             {% if request.path == get_clients_url %}
                                 <td><a class="btn" href="{% url "get_orders" %}?client-id={{ client.pk }}">Заказы</a></td>

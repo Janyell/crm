@@ -65,7 +65,9 @@
                         </td>
                         <td>
                             {% if claim.comment != None %}
-                                {{ claim.comment }}
+                                <span class="claim-comment">{{ claim.comment }}</span>
+                                <a class="comment-button" data-toggle="modal" href="#view-claim-comment"
+                                    value="{{ claim.comment }}">...</a>
                             {% endif %}
                         </td>
                         <td>
@@ -102,20 +104,6 @@
             <h3 class="center">Информация о клиенте</h3>
         </div>
         <div class="modal-body client-info">
-            <div class="client-info__item client-info__contact-person clearfix">
-                <div class="client-info__head">
-                    Контактное лицо
-                </div>
-                <div class="client-info__data">
-                </div>
-            </div>
-            <div class="client-info__item client-info__contact-person-phone clearfix">
-                <div class="client-info__head">
-                    Телефон контактного лица
-                </div>
-                <div class="client-info__data">
-                </div>
-            </div>
             <div class="client-info__item client-info__organization clearfix">
                 <div class="client-info__head">
                     Организация
@@ -126,6 +114,20 @@
             <div class="client-info__item client-info__organization-phone clearfix">
                 <div class="client-info__head">
                     Телефон организации
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__contact-person clearfix">
+                <div class="client-info__head">
+                    Контактное лицо
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__contact-person-phone clearfix">
+                <div class="client-info__head">
+                    Телефон контактного лица
                 </div>
                 <div class="client-info__data">
                 </div>
@@ -152,6 +154,29 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    <div class="modal hide fade" id="view-claim-comment" tabindex="-1" role="dialog" aria-labelledby="CommentLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Комментарий к заявке</h3>
+        </div>
+        <div class="modal-body">
+            <div class="comment__data_modal">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+        <div class="modal hide fade" id="delete-claim" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Вы уверены, что хотите удалить эту заявку?</h3>
+        </div>
+        <div class="modal-footer">
+            <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -163,6 +188,9 @@
                         { "bSortable": false, "aTargets": [ 4, 5, 6, 7, 8, 9, 10 ] },
                         { "bSearchable": false, "aTargets": [ 9, 10 ] },
                         { "sType": "de_datetime", "aTargets": [ 1 ] }
+                    ],
+                    "order": [
+                        [ 1, "desc" ]
                     ]
                 });
                 $('.get-client-info').bind('click', function(){
@@ -185,7 +213,20 @@
                 });
                 $('.comment-button').bind('click', function(){
                     var comment = $(this).attr('value');
-                    $('.comment__data').html(comment);
+                    $('.comment__data_modal').html(comment);
+                });
+                $('.claim-comment').each(function() {
+                    var comment = $(this).text();
+                    var MAX_LENGTH = 30;
+                    if (comment.length < MAX_LENGTH) {
+                        return;
+                    }
+                    comment = comment.substring(0, MAX_LENGTH);
+                    var last_space = comment.regexLastIndexOf(/\s/m);
+                    if (last_space != -1) {
+                        comment = comment.substring(0, last_space);
+                    }
+                    $(this).text(comment);
                 });
             });
         })(jQuery);

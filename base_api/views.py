@@ -270,3 +270,7 @@ def add_edit_claim(request):
 
 def delete_claim(request):
     return full_delete_claim(request)
+
+
+def delete_from_archive(request):
+    pass
