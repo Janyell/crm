@@ -77,6 +77,7 @@ def full_add_edit_claim(request):
         form = OrdersForm(request.POST)
         if 'pk' in request.POST:
             pk = request.POST['pk']
+            comment = request.POST['comment']
             if request.POST['company'] != '':
                 id_company = int(request.POST['company'])
                 company = Companies.objects.get(id=id_company, is_deleted=0)
@@ -97,7 +98,8 @@ def full_add_edit_claim(request):
                 OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
                                                                                                       is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 form = OrdersForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
-                                   'bill_status': bill_status, 'account_number': account_number})
+                                   'bill_status': bill_status, 'account_number': account_number,
+                                   'comment': comment})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -118,7 +120,8 @@ def full_add_edit_claim(request):
                     OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
                                                                                                       is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                     form = OrdersForm({'client': client, 'company': company, 'bill': request.POST['bill'],
-                                       'bill_status': bill_status, 'account_number': account_number})
+                                       'bill_status': bill_status, 'account_number': account_number,
+                                       'comment': comment})
                     form.products = Products.objects.filter(is_deleted=0)
                     products_list = request.POST.getlist('products[]')
                     for product in form.products:
@@ -134,6 +137,7 @@ def full_add_edit_claim(request):
             new_claim = Orders.objects.get(id=pk, is_deleted=0, is_claim=1)
             new_claim.client = client
             new_claim.company = company
+            new_claim.comment = comment
             new_claim.bill = bill
             new_claim.bill_status = bill_status
             if bill_status == 1 or bill_status == 2:
@@ -158,7 +162,8 @@ def full_add_edit_claim(request):
                         OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
                                                                                                       is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         form = OrdersForm({'client': client, 'company': company, 'bill': bill,
-                                           'bill_status': bill_status, 'account_number': account_number})
+                                           'bill_status': bill_status, 'account_number': account_number,
+                                           'comment': comment})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -196,6 +201,7 @@ def full_add_edit_claim(request):
             role = Roles.objects.get(id=request.user.id, is_deleted=0)
             unique_number = id_generator()
             company = form.cleaned_data['company']
+            comment = form.cleaned_data['comment']
             bill = form.cleaned_data['bill']
             bill_status = form.cleaned_data['bill_status']
             if bill_status == 2:
@@ -217,7 +223,8 @@ def full_add_edit_claim(request):
                         OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
                                                                                                       is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         form = OrdersForm({'client': client, 'company': company, 'bill': bill,
-                                           'bill_status': bill_status, 'account_number': account_number})
+                                           'bill_status': bill_status, 'account_number': account_number,
+                                           'comment': comment})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -256,7 +263,8 @@ def full_add_edit_claim(request):
                 OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
                                                                                                       is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 form = OrdersForm({'client': client, 'company': company, 'bill': bill,
-                                   'bill_status': bill_status, 'account_number': account_number})
+                                   'bill_status': bill_status, 'account_number': account_number,
+                                   'comment': comment})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -271,6 +279,7 @@ def full_add_edit_claim(request):
             print(form.errors)
             client = request.POST['client']
             company = request.POST['company']
+            comment = request.POST['comment']
             bill = request.POST['bill']
             bill_status = request.POST['bill_status']
             account_number = request.POST['account_number']
@@ -279,7 +288,8 @@ def full_add_edit_claim(request):
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0,
                                                                                                       is_interested=1).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = OrdersForm({'client': client, 'company': company, 'bill': bill,
-                               'bill_status': bill_status, 'account_number': account_number})
+                               'bill_status': bill_status, 'account_number': account_number,
+                               'comment': comment})
             form.products = Products.objects.filter(is_deleted=0)
             products_list = request.POST.getlist('products[]')
             for product in form.products:
