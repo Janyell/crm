@@ -136,7 +136,7 @@ def full_add_edit_claim(request):
             new_claim.company = company
             new_claim.bill = bill
             new_claim.bill_status = bill_status
-            if bill_status != 0:
+            if bill_status == 1 or bill_status == 2:
                 new_claim.is_claim = 0
                 client.is_interested = 0
                 client.save(update_fields=["is_interested"])
