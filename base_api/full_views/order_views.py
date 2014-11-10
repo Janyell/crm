@@ -162,6 +162,8 @@ def full_add_edit_order(request):
                                                                               product=product,
                                                                               order_date=datetime.now(),
                                                                               count_of_products=count_of_products)
+            if new_order.in_archive == 1:
+                return HttpResponseRedirect('/orders/archive/')
             return HttpResponseRedirect('/orders/')
         if form.is_valid():
             client = form.cleaned_data['client']
@@ -511,6 +513,18 @@ def full_add_in_archive(request):
     order.in_archive = 1
     order.save(update_fields=["in_archive"])
     return HttpResponseRedirect('/orders/')
+
+
+def full_delete_from_archive(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    id = request.GET['id']
+    order = Orders.objects.get(pk=id, is_deleted=0)
+    order.in_archive = 0
+    order.save(update_fields=["in_archive"])
+    return HttpResponseRedirect('/orders/archive/')
 
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
