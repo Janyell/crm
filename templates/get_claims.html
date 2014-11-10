@@ -167,7 +167,7 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
-    <div class="modal hide fade" id="displacement" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
+    <div class="modal show" id="displacement" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">×</a>
             <h3>Заявка успешно перемещена в заказы</h3>
@@ -226,6 +226,10 @@
                         comment = comment.substring(0, last_space);
                     }
                     $(this).text(comment);
+                });
+                $('#modalToggle').on('click',function(e){
+                    e.preventDefault();
+                    $('#registration').modal('toggle');
                 });
             });
         })(jQuery);
