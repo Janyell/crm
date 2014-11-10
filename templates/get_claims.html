@@ -3,6 +3,12 @@
 {%block content%}
     <div class="container container_full-width">
         <h2 class="center">{{ page_title }}</h2>
+        {% if request.GET.displacement %}
+            <div class="alert alert-success fade in displacement">
+                Заявка успешно перемещена в заказы
+                <a class="close" data-dismiss="alert">×</a>
+            </div>
+        {% endif %}
         <a href="{% url "add_claim" %}" class="btn btn_add-claim">Добавить заявку</a>
         {% if claims %}
         <table class="table table-hover table-bordered" id="claim-table">
@@ -162,15 +168,6 @@
         <div class="modal-body">
             <div class="comment__data_modal">
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-        </div>
-    </div>
-    <div class="modal show" id="displacement" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-            <h3>Заявка успешно перемещена в заказы</h3>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>

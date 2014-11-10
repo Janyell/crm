@@ -1,0 +1,129 @@
+<h2 class="form-add__head">{{ page_title }}</h2>
+    <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
+    {% if error == 1 %}
+        <div class="text-error">
+            Такое контактное лицо или организация уже существует!
+        </div>
+    {% endif %}
+    {% if error == 2 %}
+        <div class="text-error">
+            Хотя бы одно из полей "Телефон" и "E-mail" обязательно для заполнения.
+        </div>
+    {% endif %}
+    {% if error == 3 %}
+        <div class="text-error">
+            Хотя бы одно из полей "Контактное лицо" и "Организация" обязательно для заполнения.
+        </div>
+    {% endif %}
+    {% if request.GET.id %}
+        <input type="hidden" name="pk" value="{{ request.GET.id }}">
+    {% endif %}
+    {% if request.GET.is_interested %}
+        <input type="hidden" name="is_interested" value=1>
+    {% endif %}
+    <div class="control-group">
+        <label class="control-label" for="inputСontactPerson">
+            Контактное лицо
+            <span class="required-input">*</span>
+        </label>
+        <div class="controls">
+            <div class="form-add__input">
+                {{ client_form.last_name }}
+            </div>
+            <div class="form-add__input">
+                {{ client_form.name }}
+            </div>
+            <div class="form-add__input_last">
+                {{ client_form.patronymic }}
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputOrganization">
+            Организация
+            <span class="required-input">*</span>
+        </label>
+        <div class="controls">
+            <div class="form-add-client__organization-type">
+                <label class="radio">
+                    <input type="radio" name="organization-type" value="ip"/>
+                    <abbr title="Индивидуальный предприниматель">ИП</abbr>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="organization-type" value="ooo">
+                    <abbr title="Общество с ограниченной ответственностью">ООО</abbr>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="organization-type" value="zao">
+                    <abbr title="Закрытое акционерное общество">ЗАО</abbr>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="organization-type" value="oao">
+                    <abbr title="Открытое акционерное общество">ОАО</abbr>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="organization-type" value="nko">
+                    <abbr title="Некоммерческая организация">НКО</abbr>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="organization-type" value="tszh">
+                    <abbr title="Товарищество собственников жилья">ТСЖ</abbr>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="organization-type" value="op">
+                    <abbr title="Обособленное подразделение">ОП</abbr>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="organization-type" value="other" checked />
+                    Другое
+                </label>
+            </div><!--
+            -->{{ client_form.organization }}
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputPersonPhone">
+            Телефон контактного лица
+            <span class="required-input_second">*</span>
+        </label>
+        <div class="controls">
+            {{ client_form.person_phone }}
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputOrganizationPhone">
+            Телефон организации
+            <span class="required-input_second">*</span>
+        </label>
+        <div class="controls">
+            {{ client_form.organization_phone }}
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">
+            E-mail
+            <span class="required-input_second">*</span>
+        </label>
+        <div class="controls">
+            {{ client_form.email }}
+        </div>
+    </div>
+    <div class="form-add__tips">
+        <div class="form-add-tips__tip">
+            <span class="required-input">*</span> - хотя бы одно из полей "Контактное лицо" и "Организация" обязательно для заполнения
+        </div>
+        <div class="form-add-tips__tip">
+            <span class="required-input_second">*</span> - хотя бы одно из полей "Телефон" и "E-mail" обязательно для заполнения
+        </div>
+    </div>
+    <div class="form-add__submits">
+        {% if not request.GET.is_interested %}
+            <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заказа</button>
+        {% endif %}
+        {% if request.GET.is_interested %}
+            <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заявки</button>
+        {% endif %}
+        <button type="submit" class="btn" name="only-save" value="only-save">Сохранить</button>
+        <button type="reset" class="btn">Очистить</button>
+    </div>
+</form>
