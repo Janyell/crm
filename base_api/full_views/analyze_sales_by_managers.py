@@ -25,30 +25,30 @@ def full_analyze_sales_by_managers(request):
     if 'period' in request.GET:
         type_of_period = request.GET['period']
         period = []
-        clients_calls_count = []
-        shipped_orders_count = []
-        bill_orders_count = []
+        number_call_data_count = []
+        number_shipped_data_count = []
+        number_bill_data_count = []
         if type_of_period == 'month':
             long_mounths = ['01', '03', '05', '07', '08', '10', '12']
             for i in range(28):
                 period.append(i+1)
-                clients_calls_count.append(0)
-                shipped_orders_count.append(0)
-                bill_orders_count.append(0)
+                number_call_data_count.append(0)
+                number_shipped_data_count.append(0)
+                number_bill_data_count.append(0)
             if current_mounth != 02:
                 period.append(29)
                 period.append(30)
-                clients_calls_count.append(0)
-                clients_calls_count.append(0)
-                shipped_orders_count.append(0)
-                shipped_orders_count.append(0)
-                bill_orders_count.append(0)
-                bill_orders_count.append(0)
+                number_call_data_count.append(0)
+                number_call_data_count.append(0)
+                number_shipped_data_count.append(0)
+                number_shipped_data_count.append(0)
+                number_bill_data_count.append(0)
+                number_bill_data_count.append(0)
                 if current_mounth in long_mounths:
                     period.append(31)
-                    clients_calls_count.append(0)
-                    shipped_orders_count.append(0)
-                    bill_orders_count.append(0)
+                    number_call_data_count.append(0)
+                    number_shipped_data_count.append(0)
+                    number_bill_data_count.append(0)
             clients_orders = Clients.objects.filter(is_deleted=0, is_interested=1)
             calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
             shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
@@ -61,7 +61,7 @@ def full_analyze_sales_by_managers(request):
                 data_day = data_day[:2]
                 data_year = data[:4]
                 if data_year == current_year and data_mounth == current_mounth:
-                    clients_calls_count[int(data_day) - 1] += 1
+                    number_call_data_count[int(data_day) - 1] += 1
             for order in calls_orders:
                 data = str(order.order_date)
                 data_mounth = data[5:]
@@ -70,7 +70,7 @@ def full_analyze_sales_by_managers(request):
                 data_day = data_day[:2]
                 data_year = data[:4]
                 if data_year == current_year and data_mounth == current_mounth:
-                    clients_calls_count[int(data_day) - 1] += 1
+                    number_call_data_count[int(data_day) - 1] += 1
             for order in shipped_orders:
                 data = str(order.order_date)
                 data_mounth = data[5:]
@@ -79,7 +79,7 @@ def full_analyze_sales_by_managers(request):
                 data_day = data_day[:2]
                 data_year = data[:4]
                 if data_year == current_year and data_mounth == current_mounth:
-                    shipped_orders_count[int(data_day) - 1] += 1
+                    number_shipped_data_count[int(data_day) - 1] += 1
             for order in bill_orders:
                 data = str(order.order_date)
                 data_mounth = data[5:]
@@ -88,14 +88,14 @@ def full_analyze_sales_by_managers(request):
                 data_day = data_day[:2]
                 data_year = data[:4]
                 if data_year == current_year and data_mounth == current_mounth:
-                    bill_orders_count[int(data_day) - 1] += 1
+                    number_bill_data_count[int(data_day) - 1] += 1
             period_str = period
         elif type_of_period == 'year':
             for i in range(12):
                 period.append(i+1)
-                clients_calls_count.append(0)
-                shipped_orders_count.append(0)
-                bill_orders_count.append(0)
+                number_call_data_count.append(0)
+                number_shipped_data_count.append(0)
+                number_bill_data_count.append(0)
             clients_orders = Clients.objects.filter(is_deleted=0, is_interested=1)
             calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
             shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
@@ -106,28 +106,28 @@ def full_analyze_sales_by_managers(request):
                 data_mounth = data_mounth[:2]
                 data_year = data[:4]
                 if data_year == current_year:
-                    clients_calls_count[int(data_mounth) - 1] += 1
+                    number_call_data_count[int(data_mounth) - 1] += 1
             for order in calls_orders:
                 data = str(order.order_date)
                 data_mounth = data[5:]
                 data_mounth = data_mounth[:2]
                 data_year = data[:4]
                 if data_year == current_year:
-                    clients_calls_count[int(data_mounth) - 1] += 1
+                    number_call_data_count[int(data_mounth) - 1] += 1
             for order in shipped_orders:
                 data = str(order.order_date)
                 data_mounth = data[5:]
                 data_mounth = data_mounth[:2]
                 data_year = data[:4]
                 if data_year == current_year:
-                    shipped_orders_count[int(data_mounth) - 1] += 1
+                    number_shipped_data_count[int(data_mounth) - 1] += 1
             for order in bill_orders:
                 data = str(order.order_date)
                 data_mounth = data[5:]
                 data_mounth = data_mounth[:2]
                 data_year = data[:4]
                 if data_year == current_year:
-                    bill_orders_count[int(data_mounth) - 1] += 1
+                    number_bill_data_count[int(data_mounth) - 1] += 1
             period_str = []
             period_str.append('Январь')
             period_str.append('Февраль')
@@ -151,9 +151,9 @@ def full_analyze_sales_by_managers(request):
                                - int(first_data_mounth) + 2
             for i in range(amount_of_period):
                 period.append(i+1)
-                clients_calls_count.append(0)
-                shipped_orders_count.append(0)
-                bill_orders_count.append(0)
+                number_call_data_count.append(0)
+                number_shipped_data_count.append(0)
+                number_bill_data_count.append(0)
             clients_orders = Clients.objects.filter(is_deleted=0, is_interested=1)
             calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
             shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
@@ -167,7 +167,7 @@ def full_analyze_sales_by_managers(request):
                     data_year_and_mounth = data[:7]
                     current_year_and_mounth = current_year + '-' + current_mounth
                     i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
-                    clients_calls_count[i] += 1
+                    number_call_data_count[i] += 1
             for order in calls_orders:
                 if order.order_date is not None:
                     data = str(order.order_date)
@@ -177,7 +177,7 @@ def full_analyze_sales_by_managers(request):
                     data_year_and_mounth = data[:7]
                     current_year_and_mounth = current_year + '-' + current_mounth
                     i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
-                    clients_calls_count[i] += 1
+                    number_call_data_count[i] += 1
             for order in shipped_orders:
                 if order.order_date is not None:
                     data = str(order.order_date)
@@ -187,7 +187,7 @@ def full_analyze_sales_by_managers(request):
                     data_year_and_mounth = data[:7]
                     current_year_and_mounth = current_year + '-' + current_mounth
                     i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
-                    shipped_orders_count[i] += 1
+                    number_shipped_data_count[i] += 1
             for order in bill_orders:
                 if order.order_date is not None:
                     data = str(order.order_date)
@@ -197,7 +197,7 @@ def full_analyze_sales_by_managers(request):
                     data_year_and_mounth = data[:7]
                     current_year_and_mounth = current_year + '-' + current_mounth
                     i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
-                    bill_orders_count[i] += 1
+                    number_bill_data_count[i] += 1
             period_str = []
             for i in range(amount_of_period):
                 if ((i+int(first_data_mounth)-1) % 12) == 1:
@@ -224,12 +224,12 @@ def full_analyze_sales_by_managers(request):
                     period_str.append('Ноябрь')
                 elif ((i+int(first_data_mounth)-1) % 12) == 0:
                     period_str.append('Декабрь')
-            clients_calls_count = clients_calls_count[::-1]
-            shipped_orders_count = shipped_orders_count[::-1]
-            bill_orders_count = bill_orders_count[::-1]
-        orders_count_str = str(clients_calls_count)[1:-1]
-        shipped_orders_count_str = str(shipped_orders_count)[1:-1]
-        bill_orders_count_str = str(bill_orders_count)[1:-1]
+            number_call_data_count = number_call_data_count[::-1]
+            number_shipped_data_count = number_shipped_data_count[::-1]
+            number_bill_data_count = number_bill_data_count[::-1]
+        orders_count_str = str(number_call_data_count)[1:-1]
+        shipped_orders_count_str = str(number_shipped_data_count)[1:-1]
+        bill_orders_count_str = str(number_bill_data_count)[1:-1]
         out.update({'select_period': period_str})
         out.update({'call_data': orders_count_str})
         out.update({'shipped_data': shipped_orders_count_str})
