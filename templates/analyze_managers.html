@@ -14,13 +14,13 @@
                 <div class="analyze-managers__input">
                     <label class="checkbox bold">
                         <input type="checkbox" name="id[]" value="all"
-                            {% if "all" in request.GET.id %} checked="checked"{% endif %} />
+                            {% if "all" in id %} checked="checked"{% endif %} />
                         Все
                     </label>
                     {% for manager in managers %}
                         <label class="checkbox">
                             <input type="checkbox" name="id[]" value="{{ manager.pk }}"
-                                {% if manager.pk|upper in request.GET.id %} checked="checked"{% endif %} />
+                                {% if manager.pk|upper in id %} checked="checked"{% endif %} />
                             {{ manager.full_name }}
                         </label>
                     {% endfor %}
@@ -33,27 +33,27 @@
                 <div class="analyze-managers__input">
                     <label class="checkbox">
                         <input type="checkbox" name="graphic[]" value="sum-bill"
-                            {% if "sum-bill" in request.GET.graphic %} checked="checked"{% endif %} />
+                            {% if "sum-bill" in graphic %} checked="checked"{% endif %} />
                         Cумма выставленных счетов
                     </label>
                     <label class="checkbox">
                         <input type="checkbox" name="graphic[]" value="number-bill"
-                            {% if "number-bill" in request.GET.graphic %} checked="checked"{% endif %} />
+                            {% if "number-bill" in graphic %} checked="checked"{% endif %} />
                         Количество выставленных счетов
                     </label>
                     <label class="checkbox">
                         <input type="checkbox" name="graphic[]" value="sum-shipped"
-                            {% if "sum-shipped" in request.GET.graphic %} checked="checked"{% endif %} />
+                            {% if "sum-shipped" in graphic %} checked="checked"{% endif %} />
                         Cумма отгрузок
                     </label>
                     <label class="checkbox">
                         <input type="checkbox" name="graphic[]" value="number-shipped"
-                            {% if "number-shipped" in request.GET.graphic %} checked="checked"{% endif %} />
+                            {% if "number-shipped" in graphic %} checked="checked"{% endif %} />
                         Количество отгрузок
                     </label>
                     <label class="checkbox">
                         <input type="checkbox" name="graphic[]" value="number-call"
-                            {% if "number-call" in request.GET.graphic %} checked="checked"{% endif %} />
+                            {% if "number-call" in graphic %} checked="checked"{% endif %} />
                         Количество звонков
                     </label>
                 </div>
