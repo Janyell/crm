@@ -215,7 +215,7 @@ def full_analyze_managers(request):
                     shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
                 else:
-                    clients_orders = Clients.objects.filter(is_deleted=0, is_interested=1)
+                    clients_orders = Clients.objects.filter(role_id=manager.id, is_deleted=0, is_interested=1)
                     calls_orders = Orders.objects.filter(role_id=manager.id, client__is_interested=0, is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)

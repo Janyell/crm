@@ -71,6 +71,7 @@ class Clients(models.Model):
     is_deleted = models.BooleanField(default=0)
     creation_date = UnixTimestampField(auto_created=True)
     is_interested = models.BooleanField(default=0)
+    role = models.ForeignKey(Roles, null=True, blank=True)
 
 
 class Companies(models.Model):
