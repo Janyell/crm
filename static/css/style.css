@@ -31,7 +31,7 @@ body {
 .form-add-client__organization-name {
     width: 146px;
 }
-.form-add, .container_mini-width, form.analyzed-product, form.analyze-sales-by-managers, form.analyze-managers, form.analyze-total-sales {
+.form-add, .container_mini-width, form.analyzed-product, form.analyze-sales-by-managers, form.analyze-total-sales {
     margin: 0 auto;
     width: 550px;
     padding: 0 20px; 
@@ -130,6 +130,12 @@ select.hidden, div.hidden {
 .chart-caption__color_third {
     background-color: rgb(148,204,167);
 }
+.chart-caption__color_fourth {
+    background-color: rgb(238,221,130);
+}
+.chart-caption__color_fifth {
+    background-color: rgb(233,150,122);
+}
 .analyze-period__wrap {
     height: 230px;
 }
@@ -147,6 +153,27 @@ select.hidden, div.hidden {
 }
 .nav>li:nth-of-type(3) {
     border-left:2px solid #777;
+}
+.control-group_inline {
+    width: 300px;
+    padding-right: 10px;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    *display: inline;
+}
+.control-group_inline:first-of-type {
+    padding-left: 10px;
+}
+.analyze-managers {
+    margin-bottom: 50px;
+}
+.analyze-managers__head {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.bold {
+    font-weight: bold;
 }
 @media print {
     body {

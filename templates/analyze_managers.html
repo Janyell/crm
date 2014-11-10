@@ -6,35 +6,63 @@
     <div class="container">
     <a href="{% url "analyst" %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }}</h2>
-        <form method="get" action="{% url "analyze_managers" %}" class="analyze-managers form-horizontal">
-            <div class="control-group">
-                <label class="control-label" for="selectGraphic">
+        <form method="get" action="{% url "analyze_managers" %}" class="analyze-managers">
+            <div class="control-group control-group_inline">
+                <div class="analyze-managers__head">
+                    Менеджеры
+                </div>
+                <div class="analyze-managers__input">
+                    <label class="checkbox bold">
+                        <input type="checkbox" name="id[]" value="all"
+                            {% if "all" in request.GET.id %} checked="checked"{% endif %} />
+                        Все
+                    </label>
+                    {% for manager in managers %}
+                        <label class="checkbox">
+                            <input type="checkbox" name="id[]" value="{{ manager.pk }}"
+                                {% if manager.pk|upper in request.GET.id %} checked="checked"{% endif %} />
+                            {{ manager.full_name }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div><!--
+            --><div class="control-group control-group_inline">
+                <div class="analyze-managers__head">
                     Графики
-                </label>
-                <div class="controls">
-                    <select name="graphic" id="selectGraphic">
-                        <option value="sum"{% if request.GET.graphic == "sum" %} selected="selected"{% endif %}>Cумма выставленных счетов / сумма отгрузок</option>
-                        <option value="number"{% if request.GET.graphic == "number" %} selected="selected"{% endif %}>Количество выставленных счетов / количество отгрузок</option>
-                    </select>
                 </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="selectManager">
-                    Менеджер
-                </label>
-                <div class="controls">
-                    <select name="id" id="selectManager">
-                        {% for manager in managers %}
-                            <option value="{{ manager.pk }}"{% if request.GET.id == manager.pk|upper %} selected="selected"{% endif %}>{{ manager.full_name }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="analyze-managers__input">
+                    <label class="checkbox">
+                        <input type="checkbox" name="graphic[]" value="sum-bill"
+                            {% if "sum-bill" in request.GET.graphic %} checked="checked"{% endif %} />
+                        Cумма выставленных счетов
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="graphic[]" value="number-bill"
+                            {% if "number-bill" in request.GET.graphic %} checked="checked"{% endif %} />
+                        Количество выставленных счетов
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="graphic[]" value="sum-shipped"
+                            {% if "sum-shipped" in request.GET.graphic %} checked="checked"{% endif %} />
+                        Cумма отгрузок
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="graphic[]" value="number-shipped"
+                            {% if "number-shipped" in request.GET.graphic %} checked="checked"{% endif %} />
+                        Количество отгрузок
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="graphic[]" value="number-call"
+                            {% if "number-call" in request.GET.graphic %} checked="checked"{% endif %} />
+                        Количество звонков
+                    </label>
                 </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="selectPeriod">
+            </div><!--
+            --><div class="control-group control-group_inline">
+                <label class="analyze-managers__head" for="selectPeriod">
                     Период
                 </label>
-                <div class="controls">
+                <div class="analyze-managers__input">
                     <select name="period" id="selectPeriod">
                         <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>Последний месяц</option>
                         <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>Последний год</option>
@@ -45,61 +73,118 @@
             <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
         </form>
         {% if select_period %}
-            <canvas id="analyzed-managers-chart" width="940" height="400"></canvas>
-            <div class="chart-caption">
-                <div class="chart-caption__color chart-caption__color_first"></div>
-                {% if request.GET.graphic == "sum" %}
-                    Cумма выставленных счетов
-                {% else %}
-                    Количество выставленных счетов
+            {% for manager in analyzed_managers %}
+                <h3 class="center">Информация о {{ manager.full_name }}</h3>
+                <canvas id="analyzed-managers-chart_{{ manager.pk }}" width="940" height="400"></canvas>
+                {% if manager.sum_bill_data %}
+                    <div class="chart-caption">
+                        <div class="chart-caption__color chart-caption__color_first"></div>
+                        Cумма выставленных счетов
+                    </div>
                 {% endif %}
-            </div>
-            <div class="chart-caption">
-                <div class="chart-caption__color chart-caption__color_second"></div>
-                {% if request.GET.graphic == "sum" %}
-                    Cумма отгрузок
-                {% else %}
-                    Количество отгрузок
+                {% if manager.number_bill_data %}
+                    <div class="chart-caption">
+                        <div class="chart-caption__color chart-caption__color_second"></div>
+                        Количество выставленных счетов
+                    </div>
                 {% endif %}
-            </div>
-            <script type="text/javascript">
-                (function($){
-                    $(document).ready(function(){
-                        var ctx = document.getElementById("analyzed-managers-chart").getContext("2d");
-                        var data = {
-                            labels: [
-                                {% if select_period %}
-                                    {% for select_period__title in select_period %}
-                                        '{{ select_period__title }}',
-                                    {% endfor %}
-                                {% endif %}],
-                            datasets: [
-                                {
-                                    label: "Cумма / количество выставленных счетов",
-                                    fillColor: "rgba(220,220,220,0.2)",
-                                    strokeColor: "rgba(220,220,220,1)",
-                                    pointColor: "rgba(220,220,220,1)",
-                                    pointStrokeColor: "#fff",
-                                    pointHighlightFill: "#fff",
-                                    pointHighlightStroke: "rgba(220,220,220,1)",
-                                    data: [{{ bill_data }}]
-                                },
-                                {
-                                    label: "Сумма / количество отгрузок",
-                                    fillColor: "rgba(151,187,205,0.2)",
-                                    strokeColor: "rgba(151,187,205,1)",
-                                    pointColor: "rgba(151,187,205,1)",
-                                    pointStrokeColor: "#fff",
-                                    pointHighlightFill: "#fff",
-                                    pointHighlightStroke: "rgba(151,187,205,1)",
-                                    data: [{{ shipped_data }}]
-                                }
-                            ]
-                        };
-                        var analyzedManagersChart = new Chart(ctx).Line(data);
-                    });
-                })(jQuery);
-            </script>
-    {% endif %}
+                {% if manager.sum_shipped_data %}
+                    <div class="chart-caption">
+                        <div class="chart-caption__color chart-caption__color_third"></div>
+                        Cумма отгрузок
+                    </div>
+                {% endif %}
+                {% if manager.number_shipped_data %}
+                    <div class="chart-caption">
+                        <div class="chart-caption__color chart-caption__color_fourth"></div>
+                        Количество отгрузок
+                    </div>
+                {% endif %}
+                {% if manager.number_call_data %}
+                    <div class="chart-caption">
+                        <div class="chart-caption__color chart-caption__color_fifth"></div>
+                        Количество звонков
+                    </div>
+                {% endif %}
+                <script type="text/javascript">
+                    (function($){
+                        $(document).ready(function(){
+                            var ctx = document.getElementById("analyzed-managers-chart_{{ manager.pk }}").getContext("2d");
+                            var data = {
+                                labels: [
+                                    {% if select_period %}
+                                        {% for select_period__title in select_period %}
+                                            '{{ select_period__title }}',
+                                        {% endfor %}
+                                    {% endif %}],
+                                datasets: [
+                                    {% if manager.sum_bill_data %}
+                                        {
+                                            label: "Cумма выставленных счетов",
+                                            fillColor: "rgba(220,220,220,0.2)",
+                                            strokeColor: "rgba(220,220,220,1)",
+                                            pointColor: "rgba(220,220,220,1)",
+                                            pointStrokeColor: "#fff",
+                                            pointHighlightFill: "#fff",
+                                            pointHighlightStroke: "rgba(220,220,220,1)",
+                                            data: [{{ manager.sum_bill_data }}]
+                                        },
+                                    {% endif %}
+                                    {% if manager.number_bill_data %}
+                                        {
+                                            label: "Количество выставленных счетов",
+                                            fillColor: "rgba(151,187,205,0.2)",
+                                            strokeColor: "rgba(151,187,205,1)",
+                                            pointColor: "rgba(151,187,205,1)",
+                                            pointStrokeColor: "#fff",
+                                            pointHighlightFill: "#fff",
+                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                            data: [{{ manager.number_bill_data }}]
+                                        },
+                                    {% endif %}
+                                    {% if manager.sum_shipped_data %}
+                                        {
+                                            label: "Cумма отгрузок",
+                                            fillColor: "rgba(148,204,167,0.2)",
+                                            strokeColor: "rgba(148,204,167,1)",
+                                            pointColor: "rgba(148,204,167,1)",
+                                            pointStrokeColor: "#fff",
+                                            pointHighlightFill: "#fff",
+                                            pointHighlightStroke: "rgba(148,204,167,1)",
+                                            data: [{{ manager.sum_shipped_data }}]
+                                        },
+                                    {% endif %}
+                                    {% if manager.number_shipped_data %}
+                                        {
+                                            label: "Количество отгрузок",
+                                            fillColor: "rgba(238,221,130,0.2)",
+                                            strokeColor: "rgba(238,221,130,1)",
+                                            pointColor: "rgba(238,221,130,1)",
+                                            pointStrokeColor: "#fff",
+                                            pointHighlightFill: "#fff",
+                                            pointHighlightStroke: "rgba(238,221,130,1)",
+                                            data: [{{ manager.number_shipped_data }}]
+                                        },
+                                    {% endif %}
+                                    {% if manager.number_call_data %}
+                                        {
+                                            label: "Количество звонков",
+                                            fillColor: "rgba(233,150,122,0.2)",
+                                            strokeColor: "rgba(233,150,122,1)",
+                                            pointColor: "rgba(233,150,122,1)",
+                                            pointStrokeColor: "#fff",
+                                            pointHighlightFill: "#fff",
+                                            pointHighlightStroke: "rgba(233,150,122,1)",
+                                            data: [{{ manager.number_call_data }}]
+                                        }
+                                    {% endif %}
+                                ]
+                            };
+                            var analyzedManagersChart{{ manager.pk }} = new Chart(ctx).Line(data);
+                        });
+                    })(jQuery);
+                </script>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}
