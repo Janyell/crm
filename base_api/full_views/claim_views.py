@@ -142,6 +142,7 @@ def full_add_edit_claim(request):
             new_claim.bill_status = bill_status
             if bill_status == 1 or bill_status == 2:
                 new_claim.is_claim = 0
+                out.update({'displacement': 1})
                 client.is_interested = 0
                 client.save(update_fields=["is_interested"])
             new_claim.account_number = account_number
@@ -204,8 +205,11 @@ def full_add_edit_claim(request):
             comment = form.cleaned_data['comment']
             bill = form.cleaned_data['bill']
             bill_status = form.cleaned_data['bill_status']
-            if bill_status == 2:
+            if bill_status == 1 or bill_status == 2:
                 is_claim = 0
+                out.update({'displacement': 1})
+                client.is_interested = 0
+                client.save(update_fields=["is_interested"])
             else:
                 is_claim = 1
             account_number = form.cleaned_data['account_number']
