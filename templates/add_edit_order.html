@@ -284,7 +284,7 @@
                 $("#add-client").find(".modal-body").load(url+' .in-modal', function() {
                     $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                     $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
-                    $('.form-add-client').bind('submit', function(e) {
+                    $('.form-add-client').on('submit', function(e) {
                         e.preventDefault();
                         $.ajax({
                             type: $(this).attr('method'),
@@ -292,11 +292,13 @@
                             data: $(this).serialize(),
                             context: this,
                             success: function(data, status) {
-                                $(".form-add-client .modal-body").html(data);
-{#                                $(".form-add-client .modal-body").html($(data).find(".in-modal"));#}
+{#                                $(".form-add-client .modal-body").html(data);#}
+                                $(".form-add-client .modal-body").html($(data).find(".in-modal").children());
+                                $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                                $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                             }
                         });
-                        return false;
+{#                        return false;#}
                     });
                 });
             });
