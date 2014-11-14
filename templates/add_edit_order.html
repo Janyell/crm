@@ -280,8 +280,14 @@
                 });
                 $select_company.selectpicker();
 
-                var url = "{% url "add_client" %}";
-                $("#add-client").find(".modal-body").load(url+' .in-modal', function() {
+                var url;
+                {% if request.path == add_claim_url %}
+                    url = "{% url "add_client" %}?is_interested=1";
+                {% else %}
+                    url = "{% url "add_client" %}";
+                {% endif %}
+                var $add_client = $('#add-client');
+                $add_client.find(".modal-body").load(url + ' .in-modal', function() {
                     $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                     $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                     $('.form-add-client').on('submit', function(e) {
@@ -292,13 +298,24 @@
                             data: $(this).serialize(),
                             context: this,
                             success: function(data, status) {
-{#                                $(".form-add-client .modal-body").html(data);#}
-                                $(".form-add-client .modal-body").html($(data).find(".in-modal").children());
-                                $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
-                                $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                                var $in_modal = $(data).find(".in-modal").children();
+                                console.log($in_modal.length);
+                                if ($in_modal.length == 0) {
+                                    $add_client.modal("hide");
+                                    $add_client.find(".modal-body").load(url + ' .in-modal', function() {
+                                        $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                                        $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                                    });
+                                    $('#id_client').load($(data).find("#id_client").children());
+                                }
+                                else {
+                                    $(".form-add-client .modal-body").html($in_modal);
+                                    $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                                    $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                                }
                             }
                         });
-{#                        return false;#}
+                        return false;
                     });
                 });
             });
