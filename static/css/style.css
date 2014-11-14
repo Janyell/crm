@@ -175,6 +175,9 @@ select.hidden, div.hidden {
 .bold {
     font-weight: bold;
 }
+.form-add_modal {
+    margin: 0;
+}
 @media print {
     body {
         color: #000;

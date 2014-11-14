@@ -3,6 +3,7 @@
 {%block content%}
     <div class="container">
     <a href="{% url "get_clients" %}" class="btn">Назад</a>
+    <h2 class="form-add__head">{{ page_title }}</h2>
         {% block request.GET.is_interested %}
             {% if request.GET.is_interested %}
                 {% if request.GET.id %}
@@ -18,7 +19,7 @@
                 {% endif %}
             {% endif %}
         {% endblock %}
-            <h2 class="form-add__head">{{ page_title }}</h2>
+            <div class="in-modal">
             <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
             {% if error == 1 %}
                 <div class="text-error">
@@ -136,6 +137,7 @@
                     <span class="required-input_second">*</span> - хотя бы одно из полей "Телефон" и "E-mail" обязательно для заполнения
                 </div>
             </div>
+            </div>
             <div class="form-add__submits">
                 {% if not request.GET.is_interested %}
                     <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заказа</button>
@@ -148,4 +150,12 @@
             </div>
         </form>
     </div>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+            });
+        })(jQuery);
+    </script>
 {%endblock%}

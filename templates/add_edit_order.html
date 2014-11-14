@@ -40,7 +40,10 @@
                     </label>
                     <div class="controls">
                         {{ order_form.client }}
-                        <a class="btn btn-success plus_client">+</a>
+                        {% url 'edit_order' as edit_order_url %}
+                        {% if not request.GET.id %}
+                            <a class="btn btn-success plus_client" data-toggle="modal" href="#add-client">+</a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="control-group">
@@ -211,6 +214,30 @@
             </div>
         </form>
     </div>
+    {% if not request.GET.id %}
+        <div class="modal hide fade" id="add-client" tabindex="-1" role="dialog" aria-labelledby="ClientLabel" aria-hidden="true">
+        {% url 'add_claim' as add_claim_url %}
+        {% if request.path == add_claim_url %}
+            <form class="form-horizontal form-add_modal form-add-client" method="post" action="{% url "add_client" %}?is_interested=1">
+        {% else %}
+            <form class="form-horizontal form-add_modal form-add-client" method="post" action="{% url "add_client" %}">
+        {% endif %}
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3 class="form-add__head">Modal{{ modal_title }}</h3>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <div class="form-add__submits">
+                        <button type="submit" class="btn btn-primary" name="only-save" value="only-save">Сохранить</button>
+                        <button type="reset" class="btn">Очистить</button>
+                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    {% endif %}
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -239,6 +266,7 @@
                     var product_id = $(this).attr('value');
                     $('.plus[data-productId="' + product_id + '"]').click();
                 });
+
                 var $select_client = $('#id_client');
                 $select_client.attr({
                     'data-live-search': "true",
@@ -251,9 +279,29 @@
                     'data-size': "10"
                 });
                 $select_company.selectpicker();
+
+                var url = "{% url "add_client" %}";
+                $("#add-client").find(".modal-body").load(url+' .in-modal', function() {
+                    $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                    $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                    $('.form-add-client').bind('submit', function(e) {
+                        e.preventDefault();
+                        $.ajax({
+                            type: $(this).attr('method'),
+                            url: this.action,
+                            data: $(this).serialize(),
+                            context: this,
+                            success: function(data, status) {
+                                $(".form-add-client .modal-body").html(data);
+{#                                $(".form-add-client .modal-body").html($(data).find(".in-modal"));#}
+                            }
+                        });
+                        return false;
+                    });
+                });
             });
             $(window).load(function () {
-                $("#add-product-table_filter input[type='search']").attr("placeholder", "Поиск");
+                $("#add-product-table_filter").find("input[type='search']").attr("placeholder", "Поиск");
             });
         })(jQuery);
     </script>
