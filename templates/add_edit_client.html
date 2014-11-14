@@ -36,6 +36,11 @@
                     Хотя бы одно из полей "Контактное лицо" и "Организация" обязательно для заполнения.
                 </div>
             {% endif %}
+            {% if error == 4 %}
+                <div class="text-error">
+                    Ошибка в заполнении формы.
+                </div>
+            {% endif %}
             {% if request.GET.id %}
                 <input type="hidden" name="pk" value="{{ request.GET.id }}">
             {% endif %}

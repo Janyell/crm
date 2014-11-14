@@ -30,6 +30,11 @@ def full_add_edit_client(request):
             patronymic = request.POST['patronymic']
             person_phone = request.POST['person_phone']
             organization_phone = request.POST['organization_phone']
+            if '_' in person_phone or '_' in organization_phone:
+                out.update({"error": 4})
+                out.update({'client_form': form})
+                out.update({'page_title': "Редактирование клиента"})
+                return render(request, 'add_edit_client.html', out)
             email = request.POST['email']
             if organization == '' and last_name == '' and name == '' and patronymic == '':
                 out.update({"error": 3})
@@ -62,7 +67,8 @@ def full_add_edit_client(request):
                         new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                          patronymic=patronymic, person_phone=person_phone,
                                          organization_phone=organization_phone, email=email, is_interested=is_interested)
-                        new_client.save(force_update=True)
+                        new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
+                                                       "person_phone", "organization_phone", "email", "is_interested"])
                         if is_interested == 1:
                             return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                         return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
@@ -70,7 +76,8 @@ def full_add_edit_client(request):
                         new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                          patronymic=patronymic, person_phone=person_phone,
                                          organization_phone=organization_phone, email=email, is_interested=is_interested)
-                        new_client.save(force_update=True)
+                        new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
+                                                       "person_phone", "organization_phone", "email", "is_interested"])
                         if is_interested == 1:
                             return HttpResponseRedirect('/clients/interested/')
                     return HttpResponseRedirect('/clients/')
@@ -81,7 +88,8 @@ def full_add_edit_client(request):
                             new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                              patronymic=patronymic, person_phone=person_phone,
                                              organization_phone=organization_phone, email=email, is_interested=is_interested)
-                            new_client.save(force_update=True)
+                            new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
+                                                       "person_phone", "organization_phone", "email", "is_interested"])
                             if is_interested == 1:
                                 return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                             return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
@@ -89,7 +97,8 @@ def full_add_edit_client(request):
                             new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                              patronymic=patronymic, person_phone=person_phone,
                                              organization_phone=organization_phone, email=email, is_interested=is_interested)
-                            new_client.save(force_update=True)
+                            new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
+                                                       "person_phone", "organization_phone", "email", "is_interested"])
                             if is_interested == 1:
                                 return HttpResponseRedirect('/clients/interested/')
                             return HttpResponseRedirect('/clients/')
@@ -102,7 +111,8 @@ def full_add_edit_client(request):
                     new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                              patronymic=patronymic, person_phone=person_phone,
                                              organization_phone=organization_phone, email=email, is_interested=is_interested)
-                    new_client.save(force_update=True)
+                    new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
+                                                       "person_phone", "organization_phone", "email", "is_interested"])
                     if is_interested == 1:
                             return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                     return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
@@ -110,7 +120,8 @@ def full_add_edit_client(request):
                     new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                              patronymic=patronymic, person_phone=person_phone,
                                              organization_phone=organization_phone, email=email, is_interested=is_interested)
-                    new_client.save(force_update=True)
+                    new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
+                                                       "person_phone", "organization_phone", "email", "is_interested"])
                     if is_interested == 1:
                         return HttpResponseRedirect('/clients/interested/')
                     return HttpResponseRedirect('/clients/')
@@ -128,6 +139,11 @@ def full_add_edit_client(request):
                 is_interested = 0
                 if 'is_interested' in request.POST:
                     is_interested = 1
+                if '_' in person_phone or '_' in organization_phone:
+                    out.update({"error": 4})
+                    out.update({'client_form': form})
+                    out.update({'page_title': "Добавление клиента"})
+                    return render(request, 'add_edit_client.html', out)
                 if organization == '' and last_name == '' and name == '' and patronymic == '':
                     out.update({"error": 3})
                     out.update({'client_form': form})
@@ -172,7 +188,7 @@ def full_add_edit_client(request):
                                                                     organization_phone=organization_phone, email=email,
                                                                     creation_date=datetime.now(), role=role)
                                 return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
-                        elif 'only-save' in form.data:
+                        else:
                             if is_interested == 1:
                                 new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                     patronymic=patronymic, person_phone=person_phone,
@@ -205,7 +221,7 @@ def full_add_edit_client(request):
                                                                 organization_phone=organization_phone, email=email,
                                                                 creation_date=datetime.now(), role=role)
                             return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
-                    elif 'only-save' in form.data:
+                    else:
                         if is_interested == 1:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
