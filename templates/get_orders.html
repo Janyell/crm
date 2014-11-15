@@ -15,7 +15,11 @@
         <h2 class="center">{{ page_title }}{{ organization_or_full_name }}</h2>
         {% if request.path == get_orders_url %}
             {% if user_role != 2 %}
-                <a href="{% url "add_order" %}" class="btn btn_add-order">Добавить заказ</a>
+                {% if client_id %}
+                    <a href="{% url "add_order" %}?client-id={{ client_id }}" class="btn btn_add-order">Добавить заказ</a>
+                {% else %}
+                    <a href="{% url "add_order" %}" class="btn btn_add-order">Добавить заказ</a>
+                {% endif %}
             {% endif %}
         {% endif %}
         {% if orders %}

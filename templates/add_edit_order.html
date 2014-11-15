@@ -33,7 +33,7 @@
                 <input type="hidden" name="pk" value="{{ request.GET.id }}">
             {% endif %}
             <div class="form-add">
-                <div class="control-group">
+                <div class="control-group form-add__client">
                     <label class="control-label" for="selectClient">
                         Клиент
                         <span class="required-input">*</span>
@@ -224,13 +224,13 @@
         {% endif %}
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
-                    <h3 class="form-add__head">Modal{{ modal_title }}</h3>
+                    <h3 class="form-add__head">{{ modal_title }}</h3>
                 </div>
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
                     <div class="form-add__submits">
-                        <button type="submit" class="btn btn-primary" name="only-save" value="only-save">Сохранить</button>
+                        <button type="submit" class="btn btn-primary" name="save-and-add-order" value="save-and-add-order">Сохранить</button>
                         <button type="reset" class="btn">Очистить</button>
                         <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                     </div>
@@ -299,14 +299,19 @@
                             context: this,
                             success: function(data, status) {
                                 var $in_modal = $(data).find(".in-modal").children();
-                                console.log($in_modal.length);
                                 if ($in_modal.length == 0) {
                                     $add_client.modal("hide");
                                     $add_client.find(".modal-body").load(url + ' .in-modal', function() {
                                         $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                                         $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                                     });
-                                    $('#id_client').load($(data).find("#id_client").children());
+                                    $('.form-add__client').html($(data).find(".form-add__client").children());
+                                    var $select_client = $('#id_client');
+                                    $select_client.attr({
+                                        'data-live-search': "true",
+                                        'data-size': "10"
+                                    });
+                                    $select_client.selectpicker();
                                 }
                                 else {
                                     $(".form-add-client .modal-body").html($in_modal);
