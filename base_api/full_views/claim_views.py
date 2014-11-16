@@ -73,6 +73,7 @@ def full_add_edit_claim(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    out.update({'modal_title': 'Добавление человека'})
     if request.method == 'POST':
         form = OrdersForm(request.POST)
         if 'pk' in request.POST:
@@ -260,7 +261,7 @@ def full_add_edit_claim(request):
                         new_claim = Orders.objects.create(order_date=datetime.now(), client=client, role=role,
                                               unique_number=unique_number, company=company, bill=bill,
                                               bill_status=bill_status, is_claim=is_claim,
-                                              account_number=account_number)
+                                              account_number=account_number, comment=comment)
                     new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products)
