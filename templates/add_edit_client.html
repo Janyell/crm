@@ -160,6 +160,16 @@
             $(document).ready(function(){
                 $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                 $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                var $select_organization = $('.organization');
+                $select_organization.attr({
+                    'data-live-search': "true",
+                    'data-size': "10"
+                });
+                $("#inputOrganization").attr({
+                    'data-provide': "typeahead",
+                    'data-items': "10",
+                    'data-source': '[{% for organization in organizations %}"{{ organization }}",{% endfor %}]'
+                });
             });
         })(jQuery);
     </script>

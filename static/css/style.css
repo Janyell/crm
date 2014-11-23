@@ -178,6 +178,9 @@ select.hidden, div.hidden {
 .form-add_modal {
     margin: 0;
 }
+.organization-alert {
+    width: 169px;
+}
 @media print {
     body {
         color: #000;
