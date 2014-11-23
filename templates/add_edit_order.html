@@ -290,6 +290,11 @@
                 $add_client.find(".modal-body").load(url + ' .in-modal', function() {
                     $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                     $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                    $("#inputOrganization").attr({
+                        'data-provide': "typeahead",
+                        'data-items': "10",
+                        'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
+                    });
                     $('.form-add-client').on('submit', function(e) {
                         e.preventDefault();
                         $.ajax({
@@ -304,6 +309,11 @@
                                     $add_client.find(".modal-body").load(url + ' .in-modal', function() {
                                         $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                                         $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                                        $("#inputOrganization").attr({
+                                            'data-provide': "typeahead",
+                                            'data-items': "10",
+                                            'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
+                                        });
                                     });
                                     $('.form-add__client').html($(data).find(".form-add__client").children());
                                     var $select_client = $('#id_client');
@@ -317,6 +327,11 @@
                                     $(".form-add-client .modal-body").html($in_modal);
                                     $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                                     $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                                    $("#inputOrganization").attr({
+                                        'data-provide': "typeahead",
+                                        'data-items': "10",
+                                        'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
+                                    });
                                 }
                             }
                         });
