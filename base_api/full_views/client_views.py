@@ -253,7 +253,9 @@ def full_add_edit_client(request):
             out.update({'page_title': "Добавление клиента"})
     organizations = []
     for organization in Clients.objects.all():
-        organizations.append(organization.organization)
+        if organization.organization != "":
+            print(organization.organization)
+            organizations.append(organization.organization)
     out.update({'client_form': form})
     out.update({'organizations': organizations})
     return render(request, 'add_edit_client.html', out)
