@@ -20,6 +20,7 @@ def full_add_edit_order(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    out.update({'modal_title': 'Добавление клиента'})
     if request.method == 'POST':
         form = OrdersForm(request.POST)
         if 'pk' in request.POST:
@@ -359,6 +360,7 @@ def full_get_orders(request):
         else:
             client.organization_or_full_name = client.organization
         out.update({'organization_or_full_name': client.organization_or_full_name})
+        out.update({'client_id': client.id})
     else:
         orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0)
         out.update({'page_title': "Заказы"})
