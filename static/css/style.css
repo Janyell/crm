@@ -181,6 +181,9 @@ select.hidden, div.hidden {
 .organization-alert {
     width: 169px;
 }
+.navbar-fixed-top {
+    z-index: 1060;
+}
 @media print {
     body {
         color: #000;
