@@ -2,6 +2,11 @@
 
 {%block content%}
     <div class="container container_fixed_width">
+        <style scoped="">
+            .typeahead {
+                top: 300px !important;
+            }
+        </style>
         {% url 'add_claim' as add_claim_url %}
         {% url 'edit_claim' as edit_claim_url %}
         <a href="
@@ -287,6 +292,7 @@
                     url = "{% url "add_client" %}";
                 {% endif %}
                 var $add_client = $('#add-client');
+                var $style = $('style');
                 $add_client.find(".modal-body").load(url + ' .in-modal', function() {
                     $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
                     $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
@@ -314,6 +320,7 @@
                                             'data-items': "10",
                                             'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
                                         });
+                                        $style.html(".typeahead { top: 300px !important; }");
                                     });
                                     $('.form-add__client').html($(data).find(".form-add__client").children());
                                     var $select_client = $('#id_client');
@@ -332,6 +339,14 @@
                                         'data-items': "10",
                                         'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
                                     });
+                                    if ($(".text-error_one").size()) {
+                                        $style.html(".typeahead { top: 330px !important; }");
+                                    }
+                                    else {
+                                        if ($(".text-error_two").size()) {
+                                            $style.html(".typeahead { top: 350px !important; }");
+                                        }
+                                    }
                                 }
                             }
                         });

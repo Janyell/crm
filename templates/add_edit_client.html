@@ -22,22 +22,22 @@
             <div class="in-modal">
             <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
             {% if error == 1 %}
-                <div class="text-error">
+                <div class="text-error text-error_one">
                     Такое контактное лицо или организация уже существует!
                 </div>
             {% endif %}
             {% if error == 2 %}
-                <div class="text-error">
+                <div class="text-error text-error_two">
                     Хотя бы одно из полей "Телефон" и "E-mail" обязательно для заполнения.
                 </div>
             {% endif %}
             {% if error == 3 %}
-                <div class="text-error">
+                <div class="text-error text-error_two">
                     Хотя бы одно из полей "Контактное лицо" и "Организация" обязательно для заполнения.
                 </div>
             {% endif %}
             {% if error == 4 %}
-                <div class="text-error">
+                <div class="text-error text-error_one">
                     Ошибка в заполнении формы.
                 </div>
             {% endif %}
