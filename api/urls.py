@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.http import HttpResponse
 
 urlpatterns = patterns('',
                        url(r'^$', 'base_api.views.analyst', name='index'),
@@ -13,6 +14,7 @@ urlpatterns = patterns('',
                        url(r'^login/$', 'base_api.views.log_in', name='login'),
                        url(r'^logout/$', 'base_api.views.log_out', name='logout'),
                        url(r'^orders/$', 'base_api.views.get_orders', name='get_orders'),
+                       url(r'^orders/status/$', 'base_api.views.give_order_status', name='give_order_status'),
                        url(r'^orders/archive/add/$', 'base_api.views.add_in_archive', name='add_in_archive'),
                        url(r'^orders/archive/$', 'base_api.views.get_old_orders', name='get_old_orders'),
                        url(r'^orders/archive/delete/$', 'base_api.views.delete_from_archive', name='delete_from_archive'),
@@ -45,5 +47,6 @@ urlpatterns = patterns('',
                        url(r'^claims/edit/foreign/$', 'base_api.views.edit_claim_for_other_managers',
                            name='edit_claim_for_other_managers'),
                        url(r'^claims/delete/$', 'base_api.views.delete_claim', name='delete_claim'),
+                       url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", mimetype="text/plain")),
                        url(r'', 'base_api.views.page_not_found', name='404'),
 )

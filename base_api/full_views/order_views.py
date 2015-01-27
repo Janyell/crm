@@ -327,7 +327,6 @@ def full_add_edit_order(request):
     organizations = []
     for organization in Clients.objects.all().order_by('organization'):
         if organization.organization != "":
-            print(organization.organization)
             organizations.append(organization.organization)
     out.update({'organizations': organizations})
     return render(request, 'add_edit_order.html', out)
