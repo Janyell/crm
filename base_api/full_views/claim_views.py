@@ -136,6 +136,10 @@ def full_add_edit_claim(request):
             else:
                 bill = None
             new_claim = Orders.objects.get(id=pk, is_deleted=0, is_claim=1)
+            is_comment_my = False
+            if new_claim.role_id == request.user.id:
+                is_comment_my = True
+            new_claim.is_comment_my = is_comment_my
             new_claim.client = client
             new_claim.company = company
             new_claim.comment = comment

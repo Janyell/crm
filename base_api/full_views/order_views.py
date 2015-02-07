@@ -99,6 +99,10 @@ def full_add_edit_order(request):
             else:
                 bill = None
             new_order = Orders.objects.get(id=pk, is_deleted=0)
+            is_comment_my = False
+            if new_order.role_id == request.user.id:
+                is_comment_my = True
+            new_order.is_comment_my = is_comment_my
             new_order.client = client
             new_order.source = source
             new_order.company = company
