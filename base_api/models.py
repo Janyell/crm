@@ -136,7 +136,7 @@ class Orders(models.Model):
     in_archive = models.BooleanField(default=0)
     account_number = models.CharField(max_length=50, null=True, blank=True)
     is_claim = models.BooleanField(default=0)
-    is_order_my = models.BooleanField(default=1)
+    is_comment_my = models.BooleanField(default=1)
 
 
 class Products(models.Model):
