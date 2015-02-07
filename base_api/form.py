@@ -5,6 +5,13 @@ from django import forms
 from base_api.models import *
 from django.forms import ModelChoiceField
 
+BILL_STATUS_CHOICES_FOR_CLAIM = (('0', 'Выставлен'),
+                                ('1', 'Нужна доплата'),
+                                ('2', 'Оплачен'))
+BILL_STATUS_CHOICES_FOR_ORDER = (('1', 'Нужна доплата'),
+                                ('3', 'Отсрочка платежа'),
+                                ('2', 'Оплачен'))
+
 
 class CompanyModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
@@ -103,7 +110,31 @@ class OrdersForm(forms.ModelForm):
                                              'class': "datetime",
                                              'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
             'order_status': Select(attrs={'id': "selectStatus"}),
-            'bill_status': Select(attrs={'id': "selectBillStatus"}),
+            'bill_status': Select(attrs={'id': "selectBillStatus"}, choices=BILL_STATUS_CHOICES_FOR_ORDER),
+            'city': TextInput(attrs={'id': "inputCity",
+                                     'placeholder': "Город"}),
+            'comment': Textarea(attrs={'id': "inputComment",
+                                       'placeholder': "Комментарии"}),
+            'source': Select(attrs={'id': "selectSource", 'required': 1}),
+            'ready_date': TextInput(attrs={'id': "inputReadyDate",
+                                           'class': "datetime",
+                                           'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"})
+        }
+
+
+class ClaimsForm(forms.ModelForm):
+    class Meta:
+        model = Orders
+        exclude = ['is_deleted', 'role', 'in_archive', 'order_date', 'unique_number']
+        widgets = {
+            'client': Select(attrs={'id': "selectClient", 'required': 1, 'class': 'selectpicker'}),
+            'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker'}),
+            'bill': TextInput(attrs={'id': "inputBill"}),
+            'payment_date': TextInput(attrs={'id': "inputPaymentDate",
+                                             'class': "datetime",
+                                             'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
+            'order_status': Select(attrs={'id': "selectStatus"}),
+            'bill_status': Select(attrs={'id': "selectBillStatus"}, choices=BILL_STATUS_CHOICES_FOR_CLAIM),
             'city': TextInput(attrs={'id': "inputCity",
                                      'placeholder': "Город"}),
             'comment': Textarea(attrs={'id': "inputComment",
