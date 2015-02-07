@@ -21,22 +21,30 @@ def full_analyze_period(request):
     if 'since-date' and 'until-date' in request.GET:
         since_date = request.GET['since-date']
         until_date = request.GET['until-date']
-        orders = Order_Product.objects.filter(order_date__gte=since_date).filter(order_date__lte=until_date)
+        orders = Order_Product.objects.filter(order_date__gte=since_date).filter(order_date__lte=until_date).filter(is_deleted=0)
         data_object = []
         products = []
         data = []
         i = 0
         for order in orders:
-            if order.product_id not in products:
+            order_from_table_order = Orders.objects.get(id=order.order_id)
+            is_sell = False
+            if order_from_table_order.order_status == 1 or order_from_table_order.order_status == 2:
+                is_sell = True
+            if is_sell and order.product_id not in products:
                 products.append(order.product_id)
                 data.append(data_object)
                 data[i] = Products.objects.get(id=order.product_id)
-                data[i].number = i
-                i = i + 1
+                data[i].number = 0
+                i += 1
         i = 0
         for product in products:
             for order in orders:
-                if order.product_id == product:
+                order_from_table_order = Orders.objects.get(id=order.order_id)
+                is_sell = False
+                if order_from_table_order.is_deleted == 0 and (order_from_table_order.order_status == 1 or order_from_table_order.order_status == 2):
+                    is_sell = True
+                if is_sell and order.product_id == product:
                     data[i].number += order.count_of_products
             i += 1
         out.update({'analysed_data': data})

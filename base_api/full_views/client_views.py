@@ -172,7 +172,7 @@ def full_add_edit_client(request):
                             organization = u'ТСЖ' + ' ' + organization
                         elif 'op' == type:
                             organization = u'ОП' + ' ' + organization
-                        is_org_exist = Clients.objects.get(organization=organization)
+                        is_org_exist = Clients.objects.get(organization=organization, is_deleted=0)
                     except ObjectDoesNotExist:
                         if 'only-save' in form.data:
                             if is_interested == 1:

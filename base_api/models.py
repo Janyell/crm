@@ -87,12 +87,22 @@ class Orders(models.Model):
     EMAIL = 0
     CALL = 1
     SITE = 2
+    ZT = 3
+    AQB = 4
+    HAH = 5
+    LAND = 6
+    TEND = 7
     ORDER_SOURCE_CHOICES = (
+        (ZT, 'ЗТ'),
+        (AQB, 'AQB'),
+        (HAH, 'H-A-H'),
+        (LAND, 'Landing'),
+        (TEND, 'Тендер'),
         (EMAIL, 'Электронная почта'),
         (CALL, 'Звонок'),
         (SITE, 'Заявка с сайта'),
     )
-    source = models.IntegerField(choices=ORDER_SOURCE_CHOICES, default=EMAIL)
+    source = models.IntegerField(choices=ORDER_SOURCE_CHOICES, default=ZT)
     client = models.ForeignKey(Clients)
     unique_number = models.CharField(max_length=50, unique=True)
     company = models.ForeignKey(Companies, null=True, blank=True)
