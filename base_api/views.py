@@ -213,6 +213,10 @@ def edit_order_for_other_managers(request):
             pk = request.POST['pk']
             comment = request.POST['comment']
             new_order = Orders.objects.get(id=pk, is_deleted=0)
+            is_comment_my = False
+            if new_order.role_id == request.user.id:
+                is_comment_my = True
+            new_order.is_comment_my = is_comment_my
             new_order.comment = comment
             new_order.save(force_update=True)
             return HttpResponseRedirect('/orders/')
@@ -246,6 +250,10 @@ def edit_claim_for_other_managers(request):
             comment = request.POST['comment']
             new_order = Orders.objects.get(id=pk, is_deleted=0, is_claim=1)
             new_order.comment = comment
+            is_comment_my = False
+            if new_order.role_id == request.user.id:
+                is_comment_my = True
+            new_order.is_comment_my = is_comment_my
             new_order.save(force_update=True)
             return HttpResponseRedirect('/claims/')
         else:
