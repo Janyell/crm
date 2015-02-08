@@ -102,7 +102,9 @@
                         </td>
                         <td>
                             {% if order.comment %}
-                                <span class="order-comment">{{ order.comment }}</span>
+                                <span class="order-comment {% if order.role|urlencode:"" == user.username|urlencode:"" and order.is_comment_my %}
+                                    order-comment_highlighted
+                                {% endif %}">{{ order.comment }}</span>
                                 <a class="comment-button" data-toggle="modal" href="#view-order-comment"
                                     value="{{ order.comment }}">...</a>
                             {% endif %}

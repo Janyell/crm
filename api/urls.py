@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.http import HttpResponse
 
 urlpatterns = patterns('',
-                       url(r'^$', 'base_api.views.analyst', name='index'),
+                       url(r'^$', 'base_api.views.get_orders', name='index'),
                        url(r'^analyst/$', 'base_api.views.analyst', name='analyst'),
                        url(r'^analyst/products/$', 'base_api.views.analyze_products', name='analyze_products'),
                        url(r'^analyst/products/view/$', 'base_api.views.view_analyzed_product',
