@@ -259,12 +259,14 @@
                 $('#paymentDate').datetimepicker({
                     format: 'yyyy-MM-dd hh:mm:ss',
                     language: 'ru',
-                    pickSeconds: false
+                    pickSeconds: false,
+                    weekStart: 1
                 });
                 $('#readyDate').datetimepicker({
                     format: 'yyyy-MM-dd hh:mm:ss',
                     language: 'ru',
-                    pickSeconds: false
+                    pickSeconds: false,
+                    weekStart: 1
                 });
                 {% endif %}
                 $('select.product-select option:selected').each(function() {

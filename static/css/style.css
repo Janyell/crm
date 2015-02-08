@@ -25,7 +25,8 @@ body {
     width: 60px;
     display: -moz-inline-stack;
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: top;
+    zoom: 1;
     *display: inline;
 }
 .form-add-client__organization-name {
@@ -80,6 +81,7 @@ body {
     display: -moz-inline-stack;
     display: inline-block;
     vertical-align: top;
+    zoom: 1;
     *display: inline;
 }
 #add-product-table th:last-child, .select-product-table th:last-child {
@@ -160,6 +162,7 @@ select.hidden, div.hidden {
     display: -moz-inline-stack;
     display: inline-block;
     vertical-align: top;
+    zoom: 1;
     *display: inline;
 }
 .control-group_inline:first-of-type {
@@ -203,4 +206,12 @@ select.hidden, div.hidden {
     .comment__data {
         display: block;
     }
+}
+.radio_one-string {
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    zoom: 1;
+    *display: inline;
+    margin-left: 10px;
 }

@@ -113,6 +113,21 @@
                     <span class="required-input_second">*</span>
                 </label>
                 <div class="controls">
+                    <div class="form-add-client__phone-code">
+                        Код города
+                        <label class="radio radio_one-string">
+                            <input type="radio" name="person-phone-code" class="person-phone-code" value="3" checked/>
+                            3-х
+                        </label>
+                        <label class="radio radio_one-string">
+                            <input type="radio" name="person-phone-code" class="person-phone-code" value="4">
+                            4-х
+                        </label>
+                        <label class="radio radio_one-string">
+                            <input type="radio" name="person-phone-code" class="person-phone-code" value="5">
+                            5-ти значный
+                        </label>
+                    </div>
                     {{ client_form.person_phone }}
                 </div>
             </div>
@@ -122,6 +137,21 @@
                     <span class="required-input_second">*</span>
                 </label>
                 <div class="controls">
+                    <div class="form-add-client__phone-code">
+                        Код города
+                        <label class="radio radio_one-string">
+                            <input type="radio" name="organization-phone-code" class="organization-phone-code" value="3" checked/>
+                            3-х
+                        </label>
+                        <label class="radio radio_one-string">
+                            <input type="radio" name="organization-phone-code" class="organization-phone-code" value="4">
+                            4-х
+                        </label>
+                        <label class="radio radio_one-string">
+                            <input type="radio" name="organization-phone-code" class="organization-phone-code" value="5">
+                            5-ти значный
+                        </label>
+                    </div>
                     {{ client_form.organization_phone }}
                 </div>
             </div>
@@ -157,9 +187,11 @@
     </div>
     <script type="text/javascript">
         (function($){
+            var $input_person_phone = $('#inputPersonPhone'),
+                $input_organization_phone = $('#inputOrganizationPhone');
             $(document).ready(function(){
-                $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
-                $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
                 var $select_organization = $('.organization');
                 $select_organization.attr({
                     'data-live-search': "true",
@@ -170,6 +202,47 @@
                     'data-items': "10",
                     'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
                 });
+            });
+
+            $(".person-phone-code").click(function(){
+                if( $(this).is(':checked') ) {
+                    var person_phone_code = $(this).val();
+                    if (person_phone_code == 3) {
+                        $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                    }
+                    else {
+                        var input_person_phone_val = $input_person_phone.val(),
+                            person_phone = parseInt(input_person_phone_val.replace(/\D+/g,""));
+                        if (person_phone_code == 4) {
+                            $input_person_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
+                            $input_person_phone.val(person_phone);
+                        }
+                        else {
+                            $input_person_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
+                            $input_person_phone.val(person_phone);
+                        }
+                    }
+                }
+            });
+            $(".organization-phone-code").click(function(){
+                if( $(this).is(':checked') ) {
+                    var organization_phone_code = $(this).val();
+                    if (organization_phone_code == 3) {
+                        $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                    }
+                    else {
+                        var input_organization_phone_val = $input_organization_phone.val(),
+                            organization_phone = parseInt(input_organization_phone_val.replace(/\D+/g,""));
+                        if (organization_phone_code == 4) {
+                            $input_organization_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
+                            $input_organization_phone.val(organization_phone);
+                        }
+                        else {
+                            $input_organization_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
+                            $input_organization_phone.val(organization_phone);
+                        }
+                    }
+                }
             });
         })(jQuery);
     </script>
