@@ -37,7 +37,7 @@
                             <a href="{% url "logout" %}" class="navbar-link navbar-link_logout">Выйти</a>
                         </p>
                         <ul class="nav">
-                             <li class={% navactive request 'get_orders add_order edit_order get_old_orders edit_order_for_factory' %}>
+                             <li class={% navactive request 'index get_orders add_order edit_order get_old_orders edit_order_for_factory' %}>
                                 <a href="{% url "get_orders" %}">Заказы</a>
                             </li>
                             {% if user_role != 2 %}
@@ -46,7 +46,7 @@
                                 </li>
                             {% endif %}
                             {% if user_role == 0 %}
-                                <li class={% navactive request 'index analyst analyze_products view_analyzed_product analyze_managers analyze_period' %}>
+                                <li class={% navactive request 'analyst analyze_products view_analyzed_product analyze_managers analyze_period' %}>
                                     <a href="{% url "analyst" %}">Аналитика</a>
                                 </li>
                             {% endif %}

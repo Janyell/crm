@@ -56,6 +56,16 @@
                             {% if "number-call" in graphic %} checked="checked"{% endif %} />
                         Количество звонков
                     </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="graphic[]" value="sources-orders"
+                            {% if "sources-orders" in graphic %} checked="checked"{% endif %} />
+                        Источники Заказы
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="graphic[]" value="sources-claims"
+                            {% if "sources-claims" in graphic %} checked="checked"{% endif %} />
+                        Источники Заказы
+                    </label>
                 </div>
             </div><!--
             --><div class="control-group control-group_inline">
@@ -75,112 +85,164 @@
         {% if select_period %}
             {% for manager in analyzed_managers %}
                 <h3 class="center">Информация о {{ manager.full_name }}</h3>
-                <canvas id="analyzed-managers-chart_{{ manager.pk }}" width="940" height="400"></canvas>
-                {% if manager.sum_bill_data %}
-                    <div class="chart-caption">
-                        <div class="chart-caption__color chart-caption__color_first"></div>
-                        Cумма выставленных счетов
+                {% if manager.sum_bill_data or manager.number_bill_data or manager.sum_shipped_data or manager.number_shipped_data or manager.number_call_data %}
+                    <div class="line-chart">
+                        <canvas id="analyzed-managers-line-chart_{{ manager.pk }}" width="940" height="400"></canvas>
+                        {% if manager.sum_bill_data %}
+                            <div class="chart-caption">
+                                <div class="chart-caption__color chart-caption__color_first"></div>
+                                Cумма выставленных счетов
+                            </div>
+                        {% endif %}
+                        {% if manager.number_bill_data %}
+                            <div class="chart-caption">
+                                <div class="chart-caption__color chart-caption__color_second"></div>
+                                Количество выставленных счетов
+                            </div>
+                        {% endif %}
+                        {% if manager.sum_shipped_data %}
+                            <div class="chart-caption">
+                                <div class="chart-caption__color chart-caption__color_third"></div>
+                                Cумма отгрузок
+                            </div>
+                        {% endif %}
+                        {% if manager.number_shipped_data %}
+                            <div class="chart-caption">
+                                <div class="chart-caption__color chart-caption__color_fourth"></div>
+                                Количество отгрузок
+                            </div>
+                        {% endif %}
+                        {% if manager.number_call_data %}
+                            <div class="chart-caption">
+                                <div class="chart-caption__color chart-caption__color_fifth"></div>
+                                Количество звонков
+                            </div>
+                        {% endif %}
                     </div>
                 {% endif %}
-                {% if manager.number_bill_data %}
-                    <div class="chart-caption">
-                        <div class="chart-caption__color chart-caption__color_second"></div>
-                        Количество выставленных счетов
-                    </div>
-                {% endif %}
-                {% if manager.sum_shipped_data %}
-                    <div class="chart-caption">
-                        <div class="chart-caption__color chart-caption__color_third"></div>
-                        Cумма отгрузок
-                    </div>
-                {% endif %}
-                {% if manager.number_shipped_data %}
-                    <div class="chart-caption">
-                        <div class="chart-caption__color chart-caption__color_fourth"></div>
-                        Количество отгрузок
-                    </div>
-                {% endif %}
-                {% if manager.number_call_data %}
-                    <div class="chart-caption">
-                        <div class="chart-caption__color chart-caption__color_fifth"></div>
-                        Количество звонков
+                {% if manager.sources_orders_data or manager.sources_claims_data %}
+                    <div class="bar-chart">
+                        <canvas id="analyzed-managers-bar-chart_{{ manager.pk }}" width="940" height="400"></canvas>
+                        {% if manager.sources_orders_data %}
+                            <div class="chart-caption">
+                                <div class="chart-caption__color chart-caption__color_first"></div>
+                                Источники Заказы
+                            </div>
+                        {% endif %}
+                        {% if manager.sources_claims_data %}
+                            <div class="chart-caption">
+                                <div class="chart-caption__color chart-caption__color_second"></div>
+                                Источники Заявки
+                            </div>
+                        {% endif %}
                     </div>
                 {% endif %}
                 <script type="text/javascript">
                     (function($){
                         $(document).ready(function(){
-                            var ctx = document.getElementById("analyzed-managers-chart_{{ manager.pk }}").getContext("2d");
-                            var data = {
-                                labels: [
-                                    {% if select_period %}
-                                        {% for select_period__title in select_period %}
-                                            '{{ select_period__title }}',
-                                        {% endfor %}
-                                    {% endif %}],
-                                datasets: [
-                                    {% if manager.sum_bill_data %}
-                                        {
-                                            label: "Cумма выставленных счетов",
-                                            fillColor: "rgba(220,220,220,0.2)",
-                                            strokeColor: "rgba(220,220,220,1)",
-                                            pointColor: "rgba(220,220,220,1)",
-                                            pointStrokeColor: "#fff",
-                                            pointHighlightFill: "#fff",
-                                            pointHighlightStroke: "rgba(220,220,220,1)",
-                                            data: [{{ manager.sum_bill_data }}]
-                                        },
-                                    {% endif %}
-                                    {% if manager.number_bill_data %}
-                                        {
-                                            label: "Количество выставленных счетов",
-                                            fillColor: "rgba(151,187,205,0.2)",
-                                            strokeColor: "rgba(151,187,205,1)",
-                                            pointColor: "rgba(151,187,205,1)",
-                                            pointStrokeColor: "#fff",
-                                            pointHighlightFill: "#fff",
-                                            pointHighlightStroke: "rgba(151,187,205,1)",
-                                            data: [{{ manager.number_bill_data }}]
-                                        },
-                                    {% endif %}
-                                    {% if manager.sum_shipped_data %}
-                                        {
-                                            label: "Cумма отгрузок",
-                                            fillColor: "rgba(148,204,167,0.2)",
-                                            strokeColor: "rgba(148,204,167,1)",
-                                            pointColor: "rgba(148,204,167,1)",
-                                            pointStrokeColor: "#fff",
-                                            pointHighlightFill: "#fff",
-                                            pointHighlightStroke: "rgba(148,204,167,1)",
-                                            data: [{{ manager.sum_shipped_data }}]
-                                        },
-                                    {% endif %}
-                                    {% if manager.number_shipped_data %}
-                                        {
-                                            label: "Количество отгрузок",
-                                            fillColor: "rgba(238,221,130,0.2)",
-                                            strokeColor: "rgba(238,221,130,1)",
-                                            pointColor: "rgba(238,221,130,1)",
-                                            pointStrokeColor: "#fff",
-                                            pointHighlightFill: "#fff",
-                                            pointHighlightStroke: "rgba(238,221,130,1)",
-                                            data: [{{ manager.number_shipped_data }}]
-                                        },
-                                    {% endif %}
-                                    {% if manager.number_call_data %}
-                                        {
-                                            label: "Количество звонков",
-                                            fillColor: "rgba(233,150,122,0.2)",
-                                            strokeColor: "rgba(233,150,122,1)",
-                                            pointColor: "rgba(233,150,122,1)",
-                                            pointStrokeColor: "#fff",
-                                            pointHighlightFill: "#fff",
-                                            pointHighlightStroke: "rgba(233,150,122,1)",
-                                            data: [{{ manager.number_call_data }}]
-                                        }
-                                    {% endif %}
-                                ]
-                            };
-                            var analyzedManagersChart{{ manager.pk }} = new Chart(ctx).Line(data);
+                            {% if manager.sum_bill_data or manager.number_bill_data or manager.sum_shipped_data or manager.number_shipped_data or manager.number_call_data %}
+                                var line_ctx = document.getElementById("analyzed-managers-line-chart_{{ manager.pk }}").getContext("2d");
+                                var line_data = {
+                                    labels: [
+                                        {% if select_period %}
+                                            {% for select_period__title in select_period %}
+                                                '{{ select_period__title }}',
+                                            {% endfor %}
+                                        {% endif %}],
+                                    datasets: [
+                                        {% if manager.sum_bill_data %}
+                                            {
+                                                label: "Cумма выставленных счетов",
+                                                fillColor: "rgba(220,220,220,0.2)",
+                                                strokeColor: "rgba(220,220,220,1)",
+                                                pointColor: "rgba(220,220,220,1)",
+                                                pointStrokeColor: "#fff",
+                                                pointHighlightFill: "#fff",
+                                                pointHighlightStroke: "rgba(220,220,220,1)",
+                                                data: [{{ manager.sum_bill_data }}]
+                                            },
+                                        {% endif %}
+                                        {% if manager.number_bill_data %}
+                                            {
+                                                label: "Количество выставленных счетов",
+                                                fillColor: "rgba(151,187,205,0.2)",
+                                                strokeColor: "rgba(151,187,205,1)",
+                                                pointColor: "rgba(151,187,205,1)",
+                                                pointStrokeColor: "#fff",
+                                                pointHighlightFill: "#fff",
+                                                pointHighlightStroke: "rgba(151,187,205,1)",
+                                                data: [{{ manager.number_bill_data }}]
+                                            },
+                                        {% endif %}
+                                        {% if manager.sum_shipped_data %}
+                                            {
+                                                label: "Cумма отгрузок",
+                                                fillColor: "rgba(148,204,167,0.2)",
+                                                strokeColor: "rgba(148,204,167,1)",
+                                                pointColor: "rgba(148,204,167,1)",
+                                                pointStrokeColor: "#fff",
+                                                pointHighlightFill: "#fff",
+                                                pointHighlightStroke: "rgba(148,204,167,1)",
+                                                data: [{{ manager.sum_shipped_data }}]
+                                            },
+                                        {% endif %}
+                                        {% if manager.number_shipped_data %}
+                                            {
+                                                label: "Количество отгрузок",
+                                                fillColor: "rgba(238,221,130,0.2)",
+                                                strokeColor: "rgba(238,221,130,1)",
+                                                pointColor: "rgba(238,221,130,1)",
+                                                pointStrokeColor: "#fff",
+                                                pointHighlightFill: "#fff",
+                                                pointHighlightStroke: "rgba(238,221,130,1)",
+                                                data: [{{ manager.number_shipped_data }}]
+                                            },
+                                        {% endif %}
+                                        {% if manager.number_call_data %}
+                                            {
+                                                label: "Количество звонков",
+                                                fillColor: "rgba(233,150,122,0.2)",
+                                                strokeColor: "rgba(233,150,122,1)",
+                                                pointColor: "rgba(233,150,122,1)",
+                                                pointStrokeColor: "#fff",
+                                                pointHighlightFill: "#fff",
+                                                pointHighlightStroke: "rgba(233,150,122,1)",
+                                                data: [{{ manager.number_call_data }}]
+                                            }
+                                        {% endif %}
+                                    ]
+                                };
+                                var analyzedManagersLineChart{{ manager.pk }} = new Chart(line_ctx).Line(line_data);
+                            {% endif %}
+                            {% if manager.sources_orders_data or manager.sources_claims_data %}
+                                var bar_ctx = document.getElementById("analyzed-managers-bar-chart_{{ manager.pk }}").getContext("2d");
+                                var bar_data = {
+                                    labels: ["ЗТ", "AQB", "H-A-H", "Landing", "Тендер"],
+                                    datasets: [
+                                        {% if manager.sources_orders_data %}
+                                            {
+                                                label: "Исходники Заказы",
+                                                fillColor: "rgba(220,220,220,0.5)",
+                                                strokeColor: "rgba(220,220,220,0.8)",
+                                                highlightFill: "rgba(220,220,220,0.75)",
+                                                highlightStroke: "rgba(220,220,220,1)",
+                                                data: [{{ manager.sources_orders_data }}]
+                                            },
+                                        {% endif %}
+                                        {% if manager.sources_claims_data %}
+                                            {
+                                                label: "Исходники Заявки",
+                                                fillColor: "rgba(151,187,205,0.5)",
+                                                strokeColor: "rgba(151,187,205,0.8)",
+                                                highlightFill: "rgba(151,187,205,0.75)",
+                                                highlightStroke: "rgba(151,187,205,1)",
+                                                data: [{{ manager.sources_claims_data }}]
+                                            }
+                                        {% endif %}
+                                    ]
+                                };
+                                var analyzedManagersBarChart{{ manager.pk }} = new Chart(bar_ctx).Bar(bar_data);
+                            {% endif %}
                         });
                     })(jQuery);
                 </script>
