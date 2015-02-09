@@ -85,13 +85,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'assets', 'media')
+MEDIA_URL = '/media/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets', 'static')
 STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, "templates"),
+    os.path.join(BASE_DIR, 'templates'),
 )
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, 'static'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
@@ -103,10 +107,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-# AUTHOR_MODEL = 'ask.Roles'
-#
-# AUTH_USER_MODULE = 'ask.Roles'
-
 DATETIME_FORMAT = (
     'd.m.Y H:i'
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )

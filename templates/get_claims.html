@@ -70,8 +70,8 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if claim.comment != None %}
-                                <span class="claim-comment">{{ claim.comment }}</span>
+                            {% if claim.comment %}
+                                <span class="claim-comment{% if claim.role|urlencode:"" == user.username|urlencode:"" and not claim.is_comment_my %} comment_highlighted{% endif %}">{{ claim.comment }}</span>
                                 <a class="comment-button" data-toggle="modal" href="#view-claim-comment"
                                     value="{{ claim.comment }}">...</a>
                             {% endif %}

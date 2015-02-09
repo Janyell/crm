@@ -215,9 +215,12 @@ select.hidden, div.hidden {
     *display: inline;
     margin-left: 10px;
 }
-.order-comment_highlighted {
+.comment_highlighted {
     color: green;
 }
 .bar-chart {
     margin-top: 10px;
+}
+.file__link > .icon-file {
+    margin-right: 5px;
 }

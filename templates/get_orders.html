@@ -42,6 +42,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -102,7 +103,7 @@
                         </td>
                         <td>
                             {% if order.comment %}
-                                <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} order-comment_highlighted{% endif %}">{{ order.comment }}</span>
+                                <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
                                 <a class="comment-button" data-toggle="modal" href="#view-order-comment"
                                     value="{{ order.comment }}">...</a>
                             {% endif %}
@@ -118,6 +119,19 @@
                         {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
                             <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
                         {% endif %}
+                        </td>
+                        <td>
+                            <a class="btn files-button" data-toggle="modal" href="#view-order-files" value="
+                            {% if order.files %}
+                                {% for file in order.files %}
+                                    <div class=&quot;file&quot;>
+                                        <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot;>
+                                            <i class=&quot;icon-file&quot;></i>{{ file.name }}
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            "><i class="icon-file"></i></a>
                         </td>
                         <td>
                             {% if user_role == 0 %}
@@ -223,6 +237,19 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    <div class="modal hide fade" id="view-order-files" tabindex="-1" role="dialog" aria-labelledby="FilesLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Прикрепленные к заказу файлы</h3>
+        </div>
+        <div class="modal-body">
+            <div class="files__data_modal">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -231,16 +258,16 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15 ] },
-                        { "bSearchable": false, "aTargets": [ 11, 12, 13, 14 ] },
-                        { "sType": "de_datetime", "aTargets": [ 6, 9, 15 ] },
+                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16 ] },
+                        { "bSearchable": false, "aTargets": [ 11, 12, 13, 14, 15 ] },
+                        { "sType": "de_datetime", "aTargets": [ 6, 9, 16 ] },
                         {% if user_role == 2 %}
-                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 14 ]},
+                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 15 ]},
                         {% endif %}
-                        { "bVisible": false,  "aTargets": [ 15 ]}
+                        { "bVisible": false,  "aTargets": [ 16 ]}
                     ],
                     "order": [
-                        [ 15, "desc" ]
+                        [ 16, "desc" ]
                     ]
                 });
                 $('.get-client-info').bind('click', function(){
@@ -264,6 +291,10 @@
                 $('.comment-button').bind('click', function(){
                     var comment = $(this).attr('value');
                     $('.comment__data_modal').html(comment);
+                });
+                $('.files-button').bind('click', function(){
+                    var files = $(this).attr('value');
+                    $('.files__data_modal').html(files);
                 });
                 $('.order-comment').each(function() {
                     var comment = $(this).text();
