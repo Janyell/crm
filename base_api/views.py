@@ -83,6 +83,7 @@ def analyst(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+        out.update({'page_title': "Аналитика"})
     return render(request, 'index.html', out)
 
 
@@ -177,6 +178,29 @@ def analyze_period(request):
     return full_analyze_period(request)
 
 
+def json_response(func):
+    """
+    A decorator thats takes a view response and turns it
+    into json. If a callback is added through GET or POST
+    the response is JSONP.
+    """
+    def decorator(request, *args, **kwargs):
+        objects = func(request, *args, **kwargs)
+        if isinstance(objects, HttpResponse):
+            return objects
+        try:
+            data = json.dumps(objects)
+            if 'callback' in request.REQUEST:
+                # a jsonp response!
+                data = '%s(%s);' % ('func', data)
+                return HttpResponse(data, "text/javascript")
+        except:
+            data = json.dumps(str(objects))
+        return HttpResponse(data, "application/json")
+    return decorator
+
+
+@json_response
 def give_order_status(request):
     order_unic = request.GET['id']
     result = {}
@@ -189,7 +213,7 @@ def give_order_status(request):
         result['ready_date'] = str(order.ready_date)
     except ObjectDoesNotExist:
         result['error'] = u'order_is_not_exist'
-    return HttpResponse(json.dumps(result), content_type='application/json')
+    return result
 
 
 def get_products(request):
