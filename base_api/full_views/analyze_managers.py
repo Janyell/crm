@@ -47,6 +47,8 @@ def full_analyze_managers(request):
             number_call_data_count = []
             number_shipped_data_count = []
             number_bill_data_count = []
+            sources_orders_count = [0, 0, 0, 0, 0]
+            sources_claims_count = [0, 0, 0, 0, 0]
             if type_of_period == 'month':
                 long_mounths = ['01', '03', '05', '07', '08', '10', '12']
                 for i in range(28):
@@ -81,11 +83,15 @@ def full_analyze_managers(request):
                     calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
+                    sources_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
+                    sources_claims = Orders.objects.filter(is_deleted=0, is_claim=1)
                 else:
                     clients_orders = Clients.objects.filter(is_deleted=0, is_interested=1)
                     calls_orders = Orders.objects.filter(role_id=manager.id, client__is_interested=0, is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
+                    sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
+                    sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
                 for order in clients_orders:
                     data = str(order.creation_date)
                     data_mounth = data[5:]
@@ -127,6 +133,20 @@ def full_analyze_managers(request):
                         if order.bill is not None:
                             sum_shipped_data_count[int(data_day) - 1] += int(order.bill)
                 period_str = period
+                for order in sources_orders:
+                    data = str(order.order_date)
+                    data_mounth = data[5:]
+                    data_mounth = data_mounth[:2]
+                    data_year = data[:4]
+                    if data_year == current_year and data_mounth == current_mounth and (order.source - 3) >= 0:
+                        sources_orders_count[order.source - 3] += 1
+                for order in sources_claims:
+                    data = str(order.order_date)
+                    data_mounth = data[5:]
+                    data_mounth = data_mounth[:2]
+                    data_year = data[:4]
+                    if data_year == current_year and data_mounth == current_mounth and (order.source - 3) >= 0:
+                        sources_claims_count[order.source - 3] += 1
             elif type_of_period == 'year':
                 for i in range(12):
                     period.append(i+1)
@@ -140,11 +160,15 @@ def full_analyze_managers(request):
                     calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
+                    sources_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
+                    sources_claims = Orders.objects.filter(is_deleted=0, is_claim=1)
                 else:
                     clients_orders = Clients.objects.filter(is_deleted=0, is_interested=1)
                     calls_orders = Orders.objects.filter(role_id=manager.id, client__is_interested=0, is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
+                    sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
+                    sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
                 for order in clients_orders:
                     data = str(order.creation_date)
                     data_mounth = data[5:]
@@ -190,6 +214,20 @@ def full_analyze_managers(request):
                 period_str.append('Октябрь')
                 period_str.append('Ноябрь')
                 period_str.append('Декабрь')
+                for order in sources_orders:
+                    data = str(order.order_date)
+                    data_mounth = data[5:]
+                    data_mounth = data_mounth[:2]
+                    data_year = data[:4]
+                    if data_year == current_year and (order.source - 3) >= 0:
+                        sources_orders_count[order.source - 3] += 1
+                for order in sources_claims:
+                    data = str(order.order_date)
+                    data_mounth = data[5:]
+                    data_mounth = data_mounth[:2]
+                    data_year = data[:4]
+                    if data_year == current_year and (order.source - 3) >= 0:
+                        sources_claims_count[order.source - 3] += 1
             elif type_of_period == 'all':
                 # if manager_id == 'all':
                 #     first_manager_id = Roles.objects.all().filter(role=1)
@@ -214,11 +252,15 @@ def full_analyze_managers(request):
                     calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
+                    sources_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
+                    sources_claims = Orders.objects.filter(is_deleted=0, is_claim=1)
                 else:
                     clients_orders = Clients.objects.filter(role_id=manager.id, is_deleted=0, is_interested=1)
                     calls_orders = Orders.objects.filter(role_id=manager.id, client__is_interested=0, is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
+                    sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
+                    sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
                 for order in clients_orders:
                     if order.creation_date is not None:
                         data = str(order.creation_date)
@@ -287,6 +329,12 @@ def full_analyze_managers(request):
                         period_str.append('Ноябрь')
                     elif ((i+int(first_data_mounth)-1) % 12) == 0:
                         period_str.append('Декабрь')
+                for order in sources_orders:
+                    if (order.source - 3) >= 0:
+                        sources_orders_count[order.source - 3] += 1
+                for order in sources_claims:
+                    if (order.source - 3) >= 0:
+                        sources_claims_count[order.source - 3] += 1
                 sum_bill_data_count = sum_bill_data_count[::-1]
                 sum_shipped_data_count = sum_shipped_data_count[::-1]
                 number_call_data_count = number_call_data_count[::-1]
@@ -297,6 +345,8 @@ def full_analyze_managers(request):
             number_call_data_count_str = str(number_call_data_count)[1:-1]
             number_shipped_data_count_str = str(number_shipped_data_count)[1:-1]
             number_bill_data_count_str = str(number_bill_data_count)[1:-1]
+            sources_orders_count_str = str(sources_orders_count)[1:-1]
+            sources_claims_count_str = str(sources_claims_count)[1:-1]
             if 'sum-bill' in type_of_graphic:
                 manager.sum_bill_data = sum_bill_data_count_str
             if 'number-bill' in type_of_graphic:
@@ -307,6 +357,10 @@ def full_analyze_managers(request):
                 manager.number_shipped_data = number_shipped_data_count_str
             if 'number-call' in type_of_graphic:
                 manager.number_call_data = number_call_data_count_str
+            if 'sources-orders' in type_of_graphic:
+                manager.sources_orders_data = sources_orders_count_str
+            if 'sources-claims' in type_of_graphic:
+                manager.sources_claims_data = sources_claims_count_str
             analyzed_managers.append(manager)
             out.update({'select_period': period_str})
         out.update({'period': type_of_period})

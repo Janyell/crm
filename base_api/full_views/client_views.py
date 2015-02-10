@@ -302,7 +302,7 @@ def full_get_interested_clients(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    clients = Clients.objects.filter(is_interested=1, is_deleted=0)
+    clients = Clients.objects.filter(is_deleted=0)
     for c in clients:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
     out.update({'page_title': "Люди"})

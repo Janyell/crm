@@ -100,14 +100,14 @@ def full_delete_roles(request):
 
 
 def full_get_roles(request):
-    # if not request.user.is_active:
-    #     return HttpResponseRedirect('/login/')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
     out = {}
-    # user_role = Roles.objects.get(id=request.user.id).role
-    # if user_role != 0:
-    #     return HttpResponseRedirect('/oops/')
-    # else:
-    #     out.update({'user_role': user_role})
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role != 0:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
     roles = Roles.objects.filter(is_deleted=0)
     for r in roles:
         r.full_name = r.surname + ' ' + r.name + ' ' + r.patronymic
