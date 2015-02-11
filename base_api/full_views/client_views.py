@@ -48,36 +48,40 @@ def full_add_edit_client(request):
                 return render(request, 'add_edit_client.html', out)
             type = request.POST['organization-type']
             if 'ip' == type:
-                organization = u'ИП' + ' ' + organization
+                organization_type = u'ИП'
             elif 'ooo' == type:
-                organization = u'ООО' + ' ' + organization
+                organization_type = u'ООО'
             elif 'zao' == type:
-                organization = u'ЗАО' + ' ' + organization
+                organization_type = u'ЗАО'
             elif 'oao' == type:
-                organization = u'ОАО' + ' ' + organization
+                organization_type = u'ОАО'
             elif 'nko' == type:
-                organization = u'НКО' + ' ' + organization
+                organization_type = u'НКО'
             elif 'tszh' == type:
-                organization = u'ТСЖ' + ' ' + organization
+                organization_type = u'ТСЖ'
             elif 'op' == type:
-                organization = u'ОП' + ' ' + organization
+                organization_type = u'ОП'
             if organization != '':
                 if Clients.objects.filter(organization=organization).count() == 0:
                     if 'save-and-add-order' in form.data:
                         new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
-                                         patronymic=patronymic, person_phone=person_phone,
-                                         organization_phone=organization_phone, email=email, is_interested=is_interested)
+                                             patronymic=patronymic, person_phone=person_phone,
+                                             organization_phone=organization_phone, email=email,
+                                             organization_type=organization_type, is_interested=is_interested)
                         new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
-                                                       "person_phone", "organization_phone", "email", "is_interested"])
+                                                       "person_phone", "organization_phone", "email", "is_interested",
+                                                       "organization_type"])
                         if is_interested == 1:
                             return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                         return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
                     elif 'only-save' in form.data:
                         new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
-                                         patronymic=patronymic, person_phone=person_phone,
-                                         organization_phone=organization_phone, email=email, is_interested=is_interested)
+                                             patronymic=patronymic, person_phone=person_phone,
+                                             organization_phone=organization_phone, email=email,
+                                             organization_type=organization_type, is_interested=is_interested)
                         new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
-                                                       "person_phone", "organization_phone", "email", "is_interested"])
+                                                       "person_phone", "organization_phone", "email", "is_interested",
+                                                       "organization_type"])
                         if is_interested == 1:
                             return HttpResponseRedirect('/clients/interested/')
                     return HttpResponseRedirect('/clients/')
@@ -86,19 +90,23 @@ def full_add_edit_client(request):
                     if str(exist_org.id) == id_client:
                         if 'save-and-add-order' in form.data:
                             new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
-                                             patronymic=patronymic, person_phone=person_phone,
-                                             organization_phone=organization_phone, email=email, is_interested=is_interested)
+                                                 patronymic=patronymic, person_phone=person_phone,
+                                                 organization_phone=organization_phone, email=email,
+                                                 organization_type=organization_type, is_interested=is_interested)
                             new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
-                                                       "person_phone", "organization_phone", "email", "is_interested"])
+                                                           "person_phone", "organization_phone", "email",
+                                                           "organization_type", "is_interested"])
                             if is_interested == 1:
                                 return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                             return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
                         elif 'only-save' in form.data:
                             new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
-                                             patronymic=patronymic, person_phone=person_phone,
-                                             organization_phone=organization_phone, email=email, is_interested=is_interested)
+                                                 patronymic=patronymic, person_phone=person_phone,
+                                                 organization_phone=organization_phone, email=email,
+                                                 organization_type=organization_type, is_interested=is_interested)
                             new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
-                                                       "person_phone", "organization_phone", "email", "is_interested"])
+                                                       "person_phone", "organization_phone", "email", "is_interested",
+                                                       "organization_type"])
                             if is_interested == 1:
                                 return HttpResponseRedirect('/clients/interested/')
                             return HttpResponseRedirect('/clients/')
@@ -110,18 +118,22 @@ def full_add_edit_client(request):
                 if 'save-and-add-order' in form.data:
                     new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                              patronymic=patronymic, person_phone=person_phone,
-                                             organization_phone=organization_phone, email=email, is_interested=is_interested)
+                                             organization_phone=organization_phone, email=email,
+                                             organization_type=organization_type, is_interested=is_interested)
                     new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
-                                                       "person_phone", "organization_phone", "email", "is_interested"])
+                                                       "person_phone", "organization_phone", "email", "is_interested",
+                                                       "organization_type"])
                     if is_interested == 1:
                             return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                     return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
                 elif 'only-save' in form.data:
                     new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                              patronymic=patronymic, person_phone=person_phone,
-                                             organization_phone=organization_phone, email=email, is_interested=is_interested)
+                                             organization_phone=organization_phone, email=email,
+                                             organization_type=organization_type, is_interested=is_interested)
                     new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
-                                                       "person_phone", "organization_phone", "email", "is_interested"])
+                                                       "person_phone", "organization_phone", "email", "is_interested",
+                                                       "organization_type"])
                     if is_interested == 1:
                         return HttpResponseRedirect('/clients/interested/')
                     return HttpResponseRedirect('/clients/')
@@ -135,6 +147,21 @@ def full_add_edit_client(request):
                 person_phone = form.cleaned_data['person_phone']
                 organization_phone = form.cleaned_data['organization_phone']
                 email = form.cleaned_data['email']
+                type = request.POST['organization-type']
+                if 'ip' == type:
+                    organization_type = u'ИП'
+                elif 'ooo' == type:
+                    organization_type = u'ООО'
+                elif 'zao' == type:
+                    organization_type = u'ЗАО'
+                elif 'oao' == type:
+                    organization_type = u'ОАО'
+                elif 'nko' == type:
+                    organization_type = u'НКО'
+                elif 'tszh' == type:
+                    organization_type = u'ТСЖ'
+                elif 'op' == type:
+                    organization_type = u'ОП'
                 role = Roles.objects.get(id=request.user.id, is_deleted=0)
                 is_interested = 0
                 if 'is_interested' in request.POST:
@@ -157,22 +184,8 @@ def full_add_edit_client(request):
                     return render(request, 'add_edit_client.html', out)
                 if organization != '':
                     try:
-                        type = request.POST['organization-type']
-                        if 'ip' == type:
-                            organization = u'ИП' + ' ' + organization
-                        elif 'ooo' == type:
-                            organization = u'ООО' + ' ' + organization
-                        elif 'zao' == type:
-                            organization = u'ЗАО' + ' ' + organization
-                        elif 'oao' == type:
-                            organization = u'ОАО' + ' ' + organization
-                        elif 'nko' == type:
-                            organization = u'НКО' + ' ' + organization
-                        elif 'tszh' == type:
-                            organization = u'ТСЖ' + ' ' + organization
-                        elif 'op' == type:
-                            organization = u'ОП' + ' ' + organization
-                        is_org_exist = Clients.objects.get(organization=organization, is_deleted=0)
+                        is_org_exist = Clients.objects.get(organization_type=organization_type,
+                                                           organization=organization, is_deleted=0)
                     except ObjectDoesNotExist:
                         if 'only-save' in form.data:
                             if is_interested == 1:
@@ -180,13 +193,14 @@ def full_add_edit_client(request):
                                                                     patronymic=patronymic, person_phone=person_phone,
                                                                     organization_phone=organization_phone, email=email,
                                                                     creation_date=datetime.now(), is_interested=is_interested,
-                                                                    role=role)
+                                                                    role=role, organization_type=organization_type)
                                 return HttpResponseRedirect('/clients/interested/')
                             else:
                                 new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                     patronymic=patronymic, person_phone=person_phone,
                                                                     organization_phone=organization_phone, email=email,
-                                                                    creation_date=datetime.now(), role=role)
+                                                                    creation_date=datetime.now(), role=role,
+                                                                    organization_type=organization_type)
                                 return HttpResponseRedirect('/clients/')
                         else:
                             if is_interested == 1:
@@ -194,13 +208,14 @@ def full_add_edit_client(request):
                                                                     patronymic=patronymic, person_phone=person_phone,
                                                                     organization_phone=organization_phone, email=email,
                                                                     creation_date=datetime.now(), is_interested=is_interested,
-                                                                    role=role)
+                                                                    role=role, organization_type=organization_type)
                                 return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                             else:
                                 new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                     patronymic=patronymic, person_phone=person_phone,
                                                                     organization_phone=organization_phone, email=email,
-                                                                    creation_date=datetime.now(), role=role)
+                                                                    creation_date=datetime.now(), role=role,
+                                                                    organization_type=organization_type)
                                 return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
                         return HttpResponseRedirect('/clients/')
                     out.update({"error": 1})
@@ -214,26 +229,30 @@ def full_add_edit_client(request):
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
                                                                 creation_date=datetime.now(), is_interested=is_interested,
-                                                                role=role)
+                                                                role=role, organization_type=organization_type)
                             return HttpResponseRedirect('/clients/interested/')
                         else:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
-                                                                creation_date=datetime.now(), role=role)
+                                                                creation_date=datetime.now(), role=role,
+                                                                organization_type=organization_type)
                             return HttpResponseRedirect('/clients/')
                     else:
                         if is_interested == 1:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
-                                                                creation_date=datetime.now(), is_interested=is_interested, role=role)
+                                                                creation_date=datetime.now(),
+                                                                is_interested=is_interested, role=role,
+                                                                organization_type=organization_type)
                             return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                         else:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
-                                                                creation_date=datetime.now(), role=role)
+                                                                creation_date=datetime.now(), role=role,
+                                                                organization_type=organization_type)
                             return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
                     return HttpResponseRedirect('/clients/')
             else:
@@ -246,7 +265,8 @@ def full_add_edit_client(request):
             client = Clients.objects.get(pk=id_client)
             form = ClientForm({'last_name': client.last_name, 'name': client.name, 'patronymic': client.patronymic,
                                'organization': client.organization, 'person_phone': client.person_phone, 'pk': id_client,
-                               'organization_phone': client.organization_phone, 'email': client.email})
+                               'organization_phone': client.organization_phone, 'email': client.email,
+                               'organization_type': client.organization_type})
             out.update({'page_title': "Редактирование клиента"})
         else:
             form = ClientForm()

@@ -54,6 +54,8 @@ class ClientForm(ModelForm):
         model = Clients
         exclude = ['is_deleted', 'creation_date', 'is_interested']
         widgets = {
+            'organization_type': RadioSelect(attrs={'id': "inputOrganizationType",
+                                                    'placeholder': "Тип организации"}),
             'last_name': TextInput(attrs={'id': "inputСontactPerson",
                                           'placeholder': "Фамилия"}),
             'name': TextInput(attrs={'placeholder': "Имя"}),
