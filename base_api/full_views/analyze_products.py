@@ -51,7 +51,7 @@ def full_view_analyzed_product(request):
         for i in range(28):
             period.append(i+1)
             amount.append(0)
-        if current_mounth != 02:
+        if current_mounth != '02':
             period.append(29)
             period.append(30)
             amount.append(0)
@@ -60,15 +60,18 @@ def full_view_analyzed_product(request):
                 period.append(31)
                 amount.append(0)
         for pr in product_in_orders:
-            order = Orders.objects.get(id=pr.order_id)
-            if order.bill_status == 2:
+            order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
+            if order and order.bill_status == 2:
                 data = str(order.order_date)
                 data_mounth = data[5:]
                 data_mounth = data_mounth[:2]
                 data_day = data[8:]
                 data_day = data_day[:2]
                 data_year = data[:4]
+                print(current_mounth, data_mounth)
+                print(current_year, data_year)
                 if data_year == current_year and data_mounth == current_mounth:
+                    print(int(data_day) - 1)
                     amount[int(data_day) - 1] = int(amount[int(data_day) - 1] + pr.count_of_products)
         # period_str = str(period)[1:-1]
         period_str = period
@@ -77,8 +80,8 @@ def full_view_analyzed_product(request):
             period.append(i+1)
             amount.append(0)
         for pr in product_in_orders:
-            order = Orders.objects.get(id=pr.order_id)
-            if order.bill_status == 2:
+            order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
+            if order and order.bill_status == 2:
                 data = str(order.order_date)
                 data_mounth = data[5:]
                 data_mounth = data_mounth[:2]
@@ -110,8 +113,8 @@ def full_view_analyzed_product(request):
             period.append(i+1)
             amount.append(0)
         for pr in product_in_orders:
-            order = Orders.objects.get(id=pr.order_id)
-            if order.bill_status == 2:
+            order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
+            if order and order.bill_status == 2:
                 data = str(order.order_date)
                 data_mounth = data[5:]
                 data_mounth = data_mounth[:2]
@@ -122,29 +125,29 @@ def full_view_analyzed_product(request):
                 amount[i] = int(amount[i] + pr.count_of_products)
         period_str = []
         for i in range(amount_of_period):
-            if ((i+int(first_data_mounth)) % 12) == 1:
+            if ((i+int(first_data_mounth)-1) % 12) == 1:
                 period_str.append('Январь')
-            elif ((i+int(first_data_mounth)) % 12) == 2:
+            elif ((i+int(first_data_mounth)-1) % 12) == 2:
                 period_str.append('Февраль')
-            elif ((i+int(first_data_mounth)) % 12) == 3:
+            elif ((i+int(first_data_mounth)-1) % 12) == 3:
                 period_str.append('Март')
-            elif ((i+int(first_data_mounth)) % 12) == 4:
+            elif ((i+int(first_data_mounth)-1) % 12) == 4:
                 period_str.append('Апрель')
-            elif ((i+int(first_data_mounth)) % 12) == 5:
+            elif ((i+int(first_data_mounth)-1) % 12) == 5:
                 period_str.append('Май')
-            elif ((i+int(first_data_mounth)) % 12) == 6:
+            elif ((i+int(first_data_mounth)-1) % 12) == 6:
                 period_str.append('Июнь')
-            elif ((i+int(first_data_mounth)) % 12) == 7:
+            elif ((i+int(first_data_mounth)-1) % 12) == 7:
                 period_str.append('Июль')
-            elif ((i+int(first_data_mounth)) % 12) == 8:
+            elif ((i+int(first_data_mounth)-1) % 12) == 8:
                 period_str.append('Август')
-            elif ((i+int(first_data_mounth)) % 12) == 9:
+            elif ((i+int(first_data_mounth)-1) % 12) == 9:
                 period_str.append('Сентябрь')
-            elif ((i+int(first_data_mounth)) % 12) == 10:
+            elif ((i+int(first_data_mounth)-1) % 12) == 10:
                 period_str.append('Октябрь')
-            elif ((i+int(first_data_mounth)) % 12) == 11:
+            elif ((i+int(first_data_mounth)-1) % 12) == 11:
                 period_str.append('Ноябрь')
-            elif ((i+int(first_data_mounth)) % 12) == 0:
+            elif ((i+int(first_data_mounth)-1) % 12) == 0:
                 period_str.append('Декабрь')
         amount = amount[::-1]
     amount_str = str(amount)[1:-1]

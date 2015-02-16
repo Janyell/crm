@@ -72,6 +72,7 @@ class Clients(models.Model):
     creation_date = UnixTimestampField(auto_created=True)
     is_interested = models.BooleanField(default=0)
     role = models.ForeignKey(Roles, null=True, blank=True)
+    organization_type = models.CharField(max_length=255, blank=True, default='')
 
 
 class Companies(models.Model):

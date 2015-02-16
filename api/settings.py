@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base_api',
+    'multiuploader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -100,6 +101,7 @@ STATICFILES_DIRS = (
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
+    'multiuploader.context_processors.booleans',
     # 'api.role_backends.AuthorModelBackend',
 )
 

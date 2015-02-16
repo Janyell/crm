@@ -4,6 +4,8 @@ from django.forms import *
 from django import forms
 from base_api.models import *
 from django.forms import ModelChoiceField
+from multiuploader.forms import MultiuploaderField
+
 
 BILL_STATUS_CHOICES_FOR_CLAIM = (('0', 'Выставлен'),
                                 ('1', 'Нужна доплата'),
@@ -52,6 +54,8 @@ class ClientForm(ModelForm):
         model = Clients
         exclude = ['is_deleted', 'creation_date', 'is_interested']
         widgets = {
+            'organization_type': RadioSelect(attrs={'id': "inputOrganizationType",
+                                                    'placeholder': "Тип организации"}),
             'last_name': TextInput(attrs={'id': "inputСontactPerson",
                                           'placeholder': "Фамилия"}),
             'name': TextInput(attrs={'placeholder': "Имя"}),
@@ -154,3 +158,7 @@ class ProductForm(ModelForm):
             'title': TextInput(attrs={'id': "inputTitle",
                                       'required': 1}),
         }
+
+
+class FileForm(forms.Form):
+    uploadedFiles = MultiuploaderField(required=False)
