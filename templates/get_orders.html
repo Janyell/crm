@@ -43,11 +43,12 @@
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for order in orders %}
-                    <tr>
+                    <tr{% if order.order_status|title == "Готов" %} class="tr_green"{% endif %}>
                         <td>{{ order.role }}</td>
                         <td>
                             {% if user_role != 2 %}
@@ -157,6 +158,9 @@
                         </td>
                         <td> {{ order.order_date }}
                         </td>
+                        <td>
+                            {% if order.order_status|title == "Готов" %}1{% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -258,20 +262,21 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16 ] },
-                        { "bSearchable": false, "aTargets": [ 11, 12, 13, 14, 15 ] },
+                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17 ] },
+                        { "bSearchable": false, "aTargets": [ 11, 12, 13, 14, 15, 17 ] },
                         { "sType": "de_datetime", "aTargets": [ 6, 9, 16 ] },
                         {% if user_role == 2 %}
-                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 15 ]},
+                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 15, 16, 17]},
                         {% endif %}
-                        { "bVisible": false,  "aTargets": [ 16 ]}
+                        { "bVisible": false,  "aTargets": [ 16, 17 ]}
                     ],
                     "order": [
-                        [ 16, "desc" ]
+                        [ 17, 'desc' ],
+                        [ 9, 'desc' ]
                     ]
                 });
                 $('.get-client-info').bind('click', function(){
-                    var $client_info__data = $('#client-info .modal-body');
+                    var $client_info__data = $('#client-info').find('.modal-body');
                     var full_name = $(this).find('.client-data__full-name').text();
                     $client_info__data.find('.client-info__contact-person > .client-info__data').text(full_name);
                     var person_phone = $(this).find('.client-data__contact-person-phone').text();
