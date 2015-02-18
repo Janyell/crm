@@ -15,6 +15,9 @@
         {% else %}
             {% url "get_orders" %}
         {% endif %}
+        {% if page and length %}
+            ?page={{ page }}&length={{ length }}
+        {% endif %}
         " class="btn">Назад</a>
         <form class="form-horizontal form-add form-add-order" method="post" action="">
             <h2 class="form-add__head">{{ page_title }}</h2>
