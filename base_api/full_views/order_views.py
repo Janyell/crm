@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, render_to_response
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, render_to_response, redirect
 from datetime import datetime
 from base_api.models import *
 from base_api.form import *
@@ -21,6 +22,11 @@ def full_add_edit_order(request):
     else:
         out.update({'user_role': user_role})
     out.update({'modal_title': 'Добавление клиента'})
+    page = int(request.GET['page'])
+    length = int(request.GET['length'])
+    start = (page - 1) * length
+    out.update({'page': page})
+    out.update({'length': length})
     if request.method == 'POST':
         form = OrdersForm(request.POST)
         if 'pk' in request.POST:
@@ -345,6 +351,13 @@ def full_get_orders(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+        out.update({'page': page})
+        out.update({'length': length})
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     if 'client-id' in request.GET:
@@ -403,6 +416,7 @@ def full_get_orders(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'orders': orders})
+    print(out)
     return render(request, 'get_orders.html', out)
 
 
