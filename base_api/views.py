@@ -20,6 +20,8 @@ from base_api.full_views.analyze_total_sales import *
 from base_api.full_views.analyze_period import *
 from base_api.full_views.product_views import *
 from base_api.full_views.claim_views import *
+# for excel
+import openpyxl
 
 
 def add_edit_role(request):
@@ -314,3 +316,58 @@ def delete_from_archive(request):
 
 def my_view(request):
     return my_view_up(request)
+
+
+def fix_bd_org_type(request):
+    clients = Clients.objects.all()
+    for client in clients:
+        print(client.organization)
+        if u'ИП' in client.organization:
+            client.organization_type = u'ИП'
+            client.organization = client.organization[3:]
+        elif u'ООО' in client.organization:
+            client.organization_type = u'ООО'
+            client.organization = client.organization[4:]
+        elif u'ЗАО' in client.organization:
+            client.organization_type = u'ЗАО'
+            client.organization = client.organization[4:]
+        elif u'ОАО' in client.organization:
+            client.organization_type = u'ОАО'
+            client.organization = client.organization[4:]
+        elif u'НКО' in client.organization:
+            client.organization_type = u'НКО'
+            client.organization = client.organization[4:]
+        elif u'ТСЖ' in client.organization:
+            client.organization_type = u'ТСЖ'
+            client.organization = client.organization[4:]
+        elif u'ОП' in client.organization:
+            client.organization_type = u'ОП'
+            client.organization = client.organization[3:]
+        client.save(update_fields=["organization", "organization_type"])
+    return HttpResponseRedirect('/clients/interested/')
+
+
+def made_excel(request):
+    wb = openpyxl.load_workbook(filename='/Users/megge/Documents/crm/info.xlsx')
+    sheet = wb['test']
+    clients = Clients.objects.filter(is_deleted=0).all()
+    row_index = 1
+    sheet.cell(row=row_index, column=1).value = "Email"
+    sheet.cell(row=row_index, column=2).value = "Организация"
+    sheet.cell(row=row_index, column=3).value = "Контактное лицо"
+    for client in clients:
+        row_index += 1
+        column_index = 1
+        sheet.cell(row=row_index, column=column_index).value = client.email
+        column_index += 1
+        if client.organization_type == "" or client.organization_type is None:
+            sheet.cell(row=row_index, column=column_index).value = client.organization
+        else:
+            sheet.cell(row=row_index, column=column_index).value = client.organization + ', ' + client.organization_type
+        column_index += 1
+        sheet.cell(row=row_index, column=column_index).value = client.last_name + ' ' + \
+                                                                client.name + ' ' + client.patronymic
+
+    # сохраняем данные
+    wb.save('/Users/megge/Documents/crm/info.xlsx')
+    return HttpResponseRedirect('/clients/interested/')

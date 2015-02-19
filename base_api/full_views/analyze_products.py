@@ -68,10 +68,7 @@ def full_view_analyzed_product(request):
                 data_day = data[8:]
                 data_day = data_day[:2]
                 data_year = data[:4]
-                print(current_mounth, data_mounth)
-                print(current_year, data_year)
                 if data_year == current_year and data_mounth == current_mounth:
-                    print(int(data_day) - 1)
                     amount[int(data_day) - 1] = int(amount[int(data_day) - 1] + pr.count_of_products)
         # period_str = str(period)[1:-1]
         period_str = period
