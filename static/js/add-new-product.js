@@ -24,7 +24,6 @@
 			product_title = $this.parent().prev().text();
 			select_product_select_option(product_id);
 			number = $('select.product-select option[value="' + product_id + '"]').attr('data-number');
-			console.log(number);
             if (!number) {
                 number = 1;
             }
@@ -34,7 +33,6 @@
 			product_title = '<input type="text" class="select-product__title" name="select-product__title_' + product_id + '" placeholder="Другое">'
             add_product_select_selected_option(product_id);
 		}
-        console.log(number);
 		$('.select-product-table__plus').before('<tr class="select-product_' + product_id + '">' +
 			'<td>' + product_title + '</td>' +
 			'<td><input type="number" min="0" value="'+ number +'" step="1" class="select-product__number" name="select-product__number_' + product_id + '" />' +

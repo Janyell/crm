@@ -224,3 +224,6 @@ select.hidden, div.hidden {
 .file__link > .icon-file {
     margin-right: 5px;
 }
+.tr_green {
+    background-color: #E7FFE7;
+}

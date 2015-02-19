@@ -18,7 +18,7 @@
                 {% if client_id %}
                     <a href="{% url "add_order" %}?client-id={{ client_id }}" class="btn btn_add-order">Добавить заказ</a>
                 {% else %}
-                    <a href="{% url "add_order" %}" class="btn btn_add-order">Добавить заказ</a>
+                    <a href="{% url "add_order" %}" class="btn btn_add-order add-button">Добавить заказ</a>
                 {% endif %}
             {% endif %}
         {% endif %}
@@ -43,11 +43,12 @@
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th class="sorting_desc"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for order in orders %}
-                    <tr>
+                    <tr{% if order.order_status|title == "Готов" %} class="tr_green"{% endif %}>
                         <td>{{ order.role }}</td>
                         <td>
                             {% if user_role != 2 %}
@@ -135,13 +136,13 @@
                         </td>
                         <td>
                             {% if user_role == 0 %}
-                                <a class="btn" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                             {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
-                                <a class="btn" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                             {% elif user_role != 2 %}
-                                <a class="btn" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                <a class="btn edit-button" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                             {% else %}
-                                <a class="btn" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                <a class="btn edit-button" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                             {% endif %}
                         </td>
                         <td>
@@ -156,6 +157,13 @@
                             {% endif %}
                         </td>
                         <td> {{ order.order_date }}
+                        </td>
+                        <td>
+                            {% if order.order_status|title == "Готов" %}
+                                2
+{#                            {% elif order.ready_date == None %}#}
+{#                                1#}
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -253,25 +261,35 @@
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
-                $("#order-table").dataTable({
+                var $order_table = $("#order-table");
+                $order_table.dataTable({
                     "language": {
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
                         { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16 ] },
-                        { "bSearchable": false, "aTargets": [ 11, 12, 13, 14, 15 ] },
+                        { "bSearchable": false, "aTargets": [ 11, 12, 13, 14, 15, 17 ] },
                         { "sType": "de_datetime", "aTargets": [ 6, 9, 16 ] },
                         {% if user_role == 2 %}
-                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 15 ]},
+                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 15, 16, 17]},
                         {% endif %}
-                        { "bVisible": false,  "aTargets": [ 16 ]}
+                        { "bVisible": false,  "aTargets": [ 16, 17 ]}
                     ],
                     "order": [
-                        [ 16, "desc" ]
-                    ]
+                        [ 17, 'desc' ],
+                        [ 9, 'asc' ]
+                    ],
+                    "aaSortingFixed": [
+                        [17, 'desc']
+                    ],
+                    {% if length and start %}
+                        "iDisplayLength": {{ length }},
+                        "iDisplayStart": {{ start }}
+                    {% endif %}
                 });
+                var table = $order_table.DataTable();
                 $('.get-client-info').bind('click', function(){
-                    var $client_info__data = $('#client-info .modal-body');
+                    var $client_info__data = $('#client-info').find('.modal-body');
                     var full_name = $(this).find('.client-data__full-name').text();
                     $client_info__data.find('.client-info__contact-person > .client-info__data').text(full_name);
                     var person_phone = $(this).find('.client-data__contact-person-phone').text();
@@ -308,6 +326,14 @@
                         comment = comment.substring(0, last_space);
                     }
                     $(this).text(comment);
+                });
+                $(".edit-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                $(".add-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "?page=" + (info.page + 1) + "&length=" + info.length);
                 });
             });
         })(jQuery);
