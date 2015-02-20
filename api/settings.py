@@ -23,8 +23,8 @@ SECRET_KEY = 'bu6^b)ie@)t%#sjo14k50_%7$rk$@(k*jg+d71ru25l+8!wrgj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG=True
+# TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 

@@ -22,11 +22,12 @@ def full_add_edit_order(request):
     else:
         out.update({'user_role': user_role})
     out.update({'modal_title': 'Добавление клиента'})
-    page = int(request.GET['page'])
-    length = int(request.GET['length'])
-    start = (page - 1) * length
-    out.update({'page': page})
-    out.update({'length': length})
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'page': page})
+        out.update({'length': length})
     if request.method == 'POST':
         form = OrdersForm(request.POST)
         if 'pk' in request.POST:
@@ -294,6 +295,7 @@ def full_add_edit_order(request):
             form = OrdersForm({'client': client})
             form.products = Products.objects.filter(is_deleted=0)
             out.update({'order_form': form})
+            out.update({'client_id': client_id})
             out.update({'page_title': "Добавление заказа"})
         elif 'id' in request.GET:
             id_order = request.GET['id']
@@ -368,6 +370,7 @@ def full_get_orders(request):
         client = Clients.objects.get(id=clients_id, is_deleted=0)
         orders = Orders.objects.filter(is_deleted=0, client=client, is_claim=0)
         out.update({'page_title': "История заказов "})
+        out.update({'client_id': clients_id})
         if client.organization == '':
             client.organization_or_full_name = client.last_name + ' ' + client.name + ' ' + client.patronymic
         else:
@@ -424,6 +427,11 @@ def full_get_old_orders(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
     user_role = Roles.objects.get(id=request.user.id).role
     if user_role != 0:
         return HttpResponseRedirect('/oops/')
