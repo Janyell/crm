@@ -8,11 +8,11 @@ from multiuploader.forms import MultiuploaderField
 
 
 BILL_STATUS_CHOICES_FOR_CLAIM = (('0', 'Выставлен'),
-                                ('1', 'Нужна доплата'),
-                                ('2', 'Оплачен'))
+                                 ('1', 'Нужна доплата'),
+                                 ('2', 'Оплачен'))
 BILL_STATUS_CHOICES_FOR_ORDER = (('1', 'Нужна доплата'),
-                                ('3', 'Отсрочка платежа'),
-                                ('2', 'Оплачен'))
+                                 ('3', 'Отсрочка платежа'),
+                                 ('2', 'Оплачен'))
 
 
 class CompanyModelChoiceField(ModelChoiceField):
@@ -94,8 +94,8 @@ class LoginForm(ModelForm):
         fields = ['username', 'password']
         widgets = {
             'username': TextInput(attrs={'class': "input-block-level",
-                                      'placeholder': "Логин",
-                                      'required': 1}),
+                                         'placeholder': "Логин",
+                                         'required': 1}),
             'password': PasswordInput(attrs={'class': "input-block-level",
                                              'placeholder': "Пароль",
                                              'required': 1})
@@ -162,3 +162,15 @@ class ProductForm(ModelForm):
 
 class FileForm(forms.Form):
     uploadedFiles = MultiuploaderField(required=False)
+
+
+class UploadFileForm(ModelForm):
+
+    class Meta:
+        model = Order_Files
+        exclude = ['order']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputTitle",
+                                     'placeholder': "Название"}),
+            # 'file': FileInput(),
+        }

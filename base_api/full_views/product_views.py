@@ -25,6 +25,11 @@ def full_get_products(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
     user_role = Roles.objects.get(id=request.user.id).role
     if user_role == 2:
         return HttpResponseRedirect('/oops/')

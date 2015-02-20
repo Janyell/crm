@@ -15,6 +15,11 @@ def full_get_claims(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
     user_id = request.user.id
     out.update({'user_id': user_id})
     user_role = Roles.objects.get(id=request.user.id).role
@@ -326,10 +331,11 @@ def full_add_edit_claim(request):
                                                                         required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_id = request.GET['client-id']
-            client = Clients.objects.get(id=client_id, is_deleted=0, is_interested=1)
+            client = Clients.objects.get(id=client_id, is_deleted=0)
             form = ClaimsForm({'client': client})
             form.products = Products.objects.filter(is_deleted=0)
             out.update({'order_form': form})
+            out.update({'client_id': client_id})
             out.update({'page_title': "Добавление заявки"})
         elif 'id' in request.GET:
             id_order = request.GET['id']

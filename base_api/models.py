@@ -153,4 +153,8 @@ class Order_Product(models.Model):
     count_of_products = models.IntegerField(default=0)
 
 
+class Order_Files(models.Model):
+    order = models.ForeignKey(Orders)
+    title = models.CharField(max_length=50, null=False, blank=False)
+    file = models.FileField(upload_to="uploads/", null=True)
 # Create your models here.
