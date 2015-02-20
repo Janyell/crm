@@ -1,5 +1,4 @@
-from django.shortcuts import render_to_response, render
-from multiuploader.forms import MultiUploadForm
+from django.shortcuts import render
 from base_api.form import FileForm
 
 

@@ -5,14 +5,14 @@
         <h2 class="center">{{ page_title }}</h2>
         {% url 'get_interested_clients' as get_interested_clients_url %}
         {% if request.path == get_interested_clients_url %}
-            <a href="{% url "add_client" %}?is_interested=1" class="btn btn_add-client">Добавить клиента</a>
+            <a href="{% url "add_client" %}?is_interested=1" class="btn btn_add-client add-button">Добавить клиента</a>
         {% endif %}
         {% url 'get_clients' as get_clients_url %}
         {% if request.path == get_clients_url %}
-            <a href="{% url "add_client" %}" class="btn btn_add-client">Добавить клиента</a>
+            <a href="{% url "add_client" %}" class="btn btn_add-client add-button">Добавить клиента</a>
         {% endif %}
         {% if clients %}
-            <table class="table table-hover table-bordered" id="order-table">
+            <table class="table table-hover table-bordered" id="client-table">
                 <thead>
                     <tr>
                         <th>Организация</th>
@@ -41,16 +41,16 @@
                             {% endif %}
                             <td>
                                 {% if request.path == get_interested_clients_url %}
-                                    <a class="btn" href="{% url "add_claim" %}?client-id={{ client.pk }}">Добавить заявку</a>
+                                    <a class="btn add-order-button" href="{% url "add_claim" %}?client-id={{ client.pk }}">Добавить заявку</a>
                                 {% else %}
-                                    <a class="btn" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a>
+                                    <a class="btn add-order-button" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a>
                                 {% endif %}
                             </td>
                             <td>
                                 {% if request.path == get_interested_clients_url %}
-                                    <a class="btn" href="{% url "edit_client" %}?id={{ client.pk }}&is_interested=1"><i class="icon-pencil"></i></a>
+                                    <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}&is_interested=1"><i class="icon-pencil"></i></a>
                                 {% else %}
-                                    <a class="btn" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a>
+                                    <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a>
                                 {% endif %}
                             </td>
                             <td><a class="btn delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
@@ -77,18 +77,36 @@
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
-                $("#order-table").dataTable({
+                var $client_table = $("#client-table");
+                $client_table.dataTable({
                     "language": {
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
                         { "bSortable": false, "aTargets": [ 5, 6, 7{% if request.path == get_clients_url %},8{% endif %} ] },
                         { "bSearchable": false, "aTargets": [ 5, 6, 7{% if request.path == get_clients_url %},8{% endif %} ] }
-                    ]
+                    ],
+                    {% if length %}
+                        "iDisplayLength": {{ length }},
+                        "iDisplayStart": {{ start }}
+                    {% endif %}
                 });
+                var table = $client_table.DataTable();
                  $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
                     $('#delete__ok').attr({'href': '{% url "delete_client" %}?id=' + id});
+                });
+                $(".edit-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                $(".add-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "?page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                $(".add-order-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
                 });
             });
         })(jQuery);

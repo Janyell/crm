@@ -3,7 +3,8 @@
 {%block content%}
     <div class="container container_full-width">
         {% url 'get_orders' as get_orders_url %}
-        {% if request.path == get_orders_url %}
+        {% url 'index' as index_url %}
+        {% if request.path == get_orders_url or request.path == index_url %}
             {% if user_role == 0 %}
                 <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
             {% endif %}
@@ -13,12 +14,15 @@
         <a href="{% url "get_orders" %}" class="btn">Перейти к заказам</a>
         {% endif %}
         <h2 class="center">{{ page_title }}{{ organization_or_full_name }}</h2>
-        {% if request.path == get_orders_url %}
+        {% if request.path == get_orders_url or request.path == index_url  %}
             {% if user_role != 2 %}
                 {% if client_id %}
                     <a href="{% url "add_order" %}?client-id={{ client_id }}" class="btn btn_add-order">Добавить заказ</a>
                 {% else %}
                     <a href="{% url "add_order" %}" class="btn btn_add-order add-button">Добавить заказ</a>
+                    {% if user_role == 0 %}
+                        <a href="{% url "made_excel" %}" class="btn pull-right">Экспорт e-mail</a>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         {% endif %}
@@ -282,8 +286,8 @@
                     "aaSortingFixed": [
                         [17, 'desc']
                     ],
-                    {% if length and start %}
-                        "iDisplayLength": {{ length }},
+                    {% if request.GET.length and start >= 0 %}
+                        "iDisplayLength": {{ request.GET.length }},
                         "iDisplayStart": {{ start }}
                     {% endif %}
                 });

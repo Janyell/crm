@@ -9,7 +9,10 @@
                 <a class="close" data-dismiss="alert">×</a>
             </div>
         {% endif %}
-        <a href="{% url "add_claim" %}" class="btn btn_add-claim">Добавить заявку</a>
+        <a href="{% url "add_claim" %}" class="btn btn_add-claim add-button">Добавить заявку</a>
+        {% if user_role == 0 %}
+            <a href="{% url "made_excel" %}" class="btn pull-right">Экспорт e-mail</a>
+        {% endif %}
         {% if claims %}
         <table class="table table-hover table-bordered" id="claim-table">
             <thead>
@@ -78,11 +81,11 @@
                         </td>
                         <td>
                             {% if user_role == 0 %}
-                                <a class="btn btn-mini" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
                              {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                <a class="btn btn-mini" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
                             {% else %}
-                                <a class="btn btn-mini" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                <a class="btn btn-mini edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
                             {% endif %}
                         </td>
                         <td>
@@ -176,7 +179,8 @@
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
-                $("#claim-table").dataTable({
+                var $claim_table = $("#claim-table");
+                $claim_table.dataTable({
                     "language": {
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
@@ -187,10 +191,15 @@
                     ],
                     "order": [
                         [ 1, "desc" ]
-                    ]
+                    ],
+                    {% if length %}
+                        "iDisplayLength": {{ length }},
+                        "iDisplayStart": {{ start }}
+                    {% endif %}
                 });
+                var table = $claim_table.DataTable();
                 $('.get-client-info').bind('click', function(){
-                    var $client_info__data = $('#client-info .modal-body');
+                    var $client_info__data = $('#client-info').find('.modal-body');
                     var full_name = $(this).find('.client-data__full-name').text();
                     $client_info__data.find('.client-info__contact-person > .client-info__data').text(full_name);
                     var person_phone = $(this).find('.client-data__contact-person-phone').text();
@@ -228,6 +237,15 @@
                     e.preventDefault();
                     $('#registration').modal('toggle');
                 });
+                $(".edit-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                $(".add-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "?page=" + (info.page + 1) + "&length=" + info.length);
+                });
+
             });
         })(jQuery);
     </script>

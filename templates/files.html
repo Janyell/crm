@@ -1,4 +1,8 @@
+{%extends "base.html"%}
+{%block content%}
 {% load multiuploader %}
+
+    {{form.media}}
 
 <form method="POST" action="" enctype="multipart/form-data">
 <p>
@@ -13,3 +17,4 @@
 </form>
 
 {% multiuploader_form form_type="default" template="multiuploader/form.html" target_form_fieldname=forms.edit.uploadedFiles.html_name js_prefix="jQuery" send_button_selector="input[name=_edit]" wrapper_element_id="fileUploads" lock_while_uploading=True number_files_attached=forms.attached_count %}
+{%endblock%}

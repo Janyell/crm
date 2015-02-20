@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base_api',
-    'multiuploader',
+    'multiuploader'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -65,7 +65,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'base_for_api',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': '123',
     }
 }
 
