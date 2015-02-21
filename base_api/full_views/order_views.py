@@ -30,6 +30,9 @@ def full_add_edit_order(request):
         out.update({'length': length})
     if request.method == 'POST':
         form = OrdersForm(request.POST)
+        if 'clients_id' in request.GET:
+            clients_id = request.GET['client-id']
+            out.update({'clients_id': clients_id})
         if 'pk' in request.POST:
             pk = request.POST['pk']
             source = request.POST['source']
@@ -332,6 +335,15 @@ def full_add_edit_order(request):
         if organization.organization != "":
             organizations.append(organization.organization)
     out.update({'organizations': organizations})
+    files = []
+    if Order_Files.objects.filter(order_id=order.id).all() is not None:
+        for order_file in Order_Files.objects.filter(order_id=order.id).all():
+            order_file.name = order_file.title
+            order_file.url = order_file.file.url
+            files.append(order_file)
+    out.update({'files': files})
+    file_form = UploadFileForm()
+    out.update({'file_form': file_form})
     return render(request, 'add_edit_order.html', out)
 
 
@@ -482,6 +494,12 @@ def full_get_old_orders(request):
             orders_count_str = orders_count_str_right_format[::-1]
             order.bill_right_format = orders_count_str
             order.bill = order.bill_right_format
+        order.files = []
+        if Order_Files.objects.filter(order_id=order.id).all() is not None:
+            for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                order_file.name = order_file.title
+                order_file.url = order_file.file.url
+                order.files.append(order_file)
     out.update({'page_title': "Архив заказов"})
     out.update({'orders': orders})
     return render(request, 'get_orders.html', out)
