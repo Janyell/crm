@@ -222,10 +222,15 @@
                         Прикрепленные файлы
                     </label>
                     <div class="controls">
-                        <form action="#" method="post" enctype="multipart/form-data">
-                            <input name="uploads[]" type="file" multiple />
-                            <input type="submit" class="btn" />
-                        </form>
+                        {% if files %}
+                            {% for file in files %}
+                                <div class="file">
+                                    <a class="file__link" href="{{ file.url }}">
+                                        <i class="icon-file"></i>{{ file.name }}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
                 <div class="form-add__tips">
@@ -382,4 +387,8 @@
             });
         })(jQuery);
     </script>
+    <form action="{% url "upload_files" %}?order=8" method="post" enctype="multipart/form-data">
+                                {{ file_form }}
+    <input type="submit">
+                        </form>
 {%endblock%}
