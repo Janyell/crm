@@ -192,8 +192,8 @@
                     "order": [
                         [ 1, "desc" ]
                     ],
-                    {% if length %}
-                        "iDisplayLength": {{ length }},
+                    {% if request.GET.length and start >= 0 %}
+                        "iDisplayLength": {{ request.GET.length }},
                         "iDisplayStart": {{ start }}
                     {% endif %}
                 });
