@@ -20,6 +20,7 @@ def upload_file(request):
             order_file.name = order_file.title
             order_file.url = order_file.file.url
             files.append(order_file)
+    out.update({'files': files})
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         order_id = request.GET['order']
