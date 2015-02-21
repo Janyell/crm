@@ -2,7 +2,7 @@
 
 {%block content%}
     <div class="container">
-        <a href="{% url "get_companies" %}" class="btn">Назад</a>
+        <a href="{% url "get_companies" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}" class="btn">Назад</a>
         {% block request.GET.id %}
             {% if request.GET.id %}
                 <form class="form-horizontal form-add form-add-company" method="POST" action="{{ request.path }}?id={{ request.GET.id }}">

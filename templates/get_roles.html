@@ -3,7 +3,7 @@
 {%block content%}
     <div class="container">
         <h2 class="center">{{ page_title }}</h2>
-        <a href="{% url "add_role" %}" class="btn btn_add-role">Добавить роль</a>
+        <a href="{% url "add_role" %}" class="btn btn_add-role add-button">Добавить роль</a>
         {% if roles %}
             <table class="table table-hover table-bordered" id="role-table">
                 <thead>
@@ -21,7 +21,7 @@
                             <td>{{ role.role }}</td>
                             <td>{{ role.username }}</td>
                             <td>{{ role.full_name }}</td>
-                            <td><a class="btn btn-mini" href="{% url "edit_role" %}?id={{ role.pk }}"><i class="icon-pencil"></i></a></td>
+                            <td><a class="btn btn-mini edit-button" href="{% url "edit_role" %}?id={{ role.pk }}"><i class="icon-pencil"></i></a></td>
                             <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-role" value="{{ role.pk }}">
                                 <i class="icon-remove"></i></a>
                             </td>
@@ -46,18 +46,32 @@
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
-                $("#role-table").dataTable({
+                var $role_table = $("#role-table");
+                $role_table.dataTable({
                     "language": {
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
                         { "bSortable": false, "aTargets": [ 3, 4 ] },
                         { "bSearchable": false, "aTargets": [ 3, 4 ] }
-                    ]
+                    ],
+                    {% if request.GET.length and start >= 0 %}
+                        "iDisplayLength": {{ request.GET.length }},
+                        "iDisplayStart": {{ start }}
+                    {% endif %}
                 });
+                var table = $role_table.DataTable();
                  $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
                     $('#delete__ok').attr({'href': '{% url "delete_role" %}?id=' + id});
+                });
+                $(".edit-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                $(".add-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "?page=" + (info.page + 1) + "&length=" + info.length);
                 });
             });
         })(jQuery);

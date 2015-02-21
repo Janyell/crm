@@ -3,9 +3,9 @@
 {%block content%}
     <div class="container">
         <h2 class="center">{{ page_title }}</h2>
-        <a href="{% url "add_company" %}" class="btn btn_add-company">Добавить компанию</a>
+        <a href="{% url "add_company" %}" class="btn btn_add-company add-button">Добавить компанию</a>
         {% if companies %}
-            <table class="table table-hover table-bordered" id="order-table">
+            <table class="table table-hover table-bordered" id="company-table">
                 <thead>
                     <tr>
                         <th>Название</th>
@@ -19,7 +19,7 @@
                         <tr>
                             <td>{{ company.title }}</td>
                             <td>{{ company.full_name }}</td>
-                            <td><a class="btn btn-mini" href="{% url "edit_company" %}?id={{ company.pk }}"><i class="icon-pencil"></i></a></td>
+                            <td><a class="btn btn-mini edit-button" href="{% url "edit_company" %}?id={{ company.pk }}"><i class="icon-pencil"></i></a></td>
                             <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-company" value="{{ company.pk }}">
                                 <i class="icon-remove"></i></a>
                             </td>
@@ -44,18 +44,32 @@
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
-                $("#order-table").dataTable({
+                var $company_table = $("#company-table");
+                $company_table.dataTable({
                     "language": {
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
                         { "bSortable": false, "aTargets": [ 2, 3 ] },
                         { "bSearchable": false, "aTargets": [ 2, 3 ] }
-                    ]
+                    ],
+                    {% if request.GET.length and start >= 0 %}
+                        "iDisplayLength": {{ request.GET.length }},
+                        "iDisplayStart": {{ start }}
+                    {% endif %}
                 });
-                 $('.delete-button').bind('click', function(){
+                var table = $company_table.DataTable();
+                $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
                     $('#delete__ok').attr({'href': '{% url "delete_company" %}?id=' + id});
+                });
+                $(".edit-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                $(".add-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "?page=" + (info.page + 1) + "&length=" + info.length);
                 });
             });
         })(jQuery);

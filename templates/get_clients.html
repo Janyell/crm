@@ -86,8 +86,8 @@
                         { "bSortable": false, "aTargets": [ 5, 6, 7{% if request.path == get_clients_url %},8{% endif %} ] },
                         { "bSearchable": false, "aTargets": [ 5, 6, 7{% if request.path == get_clients_url %},8{% endif %} ] }
                     ],
-                    {% if length %}
-                        "iDisplayLength": {{ length }},
+                    {% if request.GET.length and start >= 0 %}
+                        "iDisplayLength": {{ request.GET.length }},
                         "iDisplayStart": {{ start }}
                     {% endif %}
                 });
@@ -102,7 +102,7 @@
                 });
                 $(".add-button").click(function() {
                     var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') + "?page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') + "{% if request.path == get_interested_clients_url %}&{% else %}?{% endif %}page=" + (info.page + 1) + "&length=" + info.length);
                 });
                 $(".add-order-button").click(function() {
                     var info = table.page.info();

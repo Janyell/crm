@@ -2,20 +2,23 @@
 
 {%block content%}
     <div class="container">
-    <a href="{% url "get_clients" %}" class="btn">Назад</a>
+    <a href="
+    {% if request.GET.is_interested %}
+        {% url "get_interested_clients" %}{% else %}
+        {% url "get_clients" %}{% endif %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}" class="btn">Назад</a>
     <h2 class="form-add__head">{{ page_title }}</h2>
         {% block request.GET.is_interested %}
             {% if request.GET.is_interested %}
                 {% if request.GET.id %}
-                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?is_interested=1&id={{ request.GET.id }}">
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?is_interested=1&id={{ request.GET.id }}{% if request.GET.page and request.GET.length %}&page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}">
                 {% else %}
-                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?is_interested=1">
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?is_interested=1{% if request.GET.page and request.GET.length %}&page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}">
                 {% endif %}
             {% else %}
                 {% if request.GET.id %}
-                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?id={{ request.GET.id }}">
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?id={{ request.GET.id }}{% if request.GET.page and request.GET.length %}&page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}">
                 {% else %}
-                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}">
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}">
                 {% endif %}
             {% endif %}
         {% endblock %}

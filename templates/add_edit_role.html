@@ -2,12 +2,12 @@
 
 {%block content%}
     <div class="container">
-        <a href="{% url "get_roles" %}" class="btn">Назад</a>
+        <a href="{% url "get_roles" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}" class="btn">Назад</a>
         {% block request.GET.id %}
             {% if request.GET.id %}
-                <form class="form-horizontal form-add-role form-add" method="POST" action="{{ request.path }}?id={{ request.GET.id }}">
+                <form class="form-horizontal form-add-role form-add" method="POST" action="{{ request.path }}?id={{ request.GET.id }}{% if request.GET.page and request.GET.length %}&page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}">
             {% else %}
-                <form class="form-horizontal form-add-role form-add" method="POST" action="{{ request.path }}">
+                <form class="form-horizontal form-add-role form-add" method="POST" action="{{ request.path }}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}">
             {% endif %}
         {% endblock %}
             <h2 class="form-add__head">{{ page_title }}</h2>
