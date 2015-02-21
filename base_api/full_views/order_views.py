@@ -313,6 +313,8 @@ def full_add_edit_order(request):
             id_order = request.GET['id']
             out.update({"error": 0})
             order = Orders.objects.get(pk=id_order, is_deleted=0)
+            client = order.client
+            out.update({'client_id': client.id})
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
