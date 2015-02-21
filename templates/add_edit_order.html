@@ -10,12 +10,16 @@
         {% url 'add_claim' as add_claim_url %}
         {% url 'edit_claim' as edit_claim_url %}
         {% url 'add_order' as add_order_url %}
+        {% url 'edit_order' as edit_order_url %}
         <a href="
-
         {% if request.path == add_claim_url and client_id >= 0 %}
             {% url "get_interested_clients" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
-        {% elif request.path == add_order_url and client_id >= 0 %}
+        {% elif request.GET.archive %}
+            {% url "get_old_orders" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
+        {% elif request.GET.history %}
             {% url "get_orders" %}?client-id={{ client_id }}{% if request.GET.page and request.GET.length %}&page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
+        {% elif request.path == add_order_url and client_id >= 0 %}
+            {% url "get_clients" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
         {% elif request.path == add_claim_url or request.path == edit_claim_url %}
             {% url "get_claims" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
         {% else %}
@@ -218,21 +222,21 @@
                         Прикрепленные файлы
                     </label>
                     <div class="controls">
-                        <form action='#' method='post' enctype='multipart/form-data'>
-  <input name='uploads[]' type=file multiple>
-  <input type='submit'>
-</form>
-                    {{ order_form.uploadedFiles }}
-{#                    {% multiuploader_form uploadForm form.uploadedFiles.html_name "$" "fileUploads" %}#}
-            </div>
-            <div class="form-add__tips">
-                <div class="form-add-tips__tip">
-                    <span class="required-input">*</span> - поля, обязательные для заполнения
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            <input name="uploads[]" type="file" multiple />
+                            <input type="submit" class="btn" />
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="form-add__submits">
-                <button type="submit" class="btn btn-primary">Сохранить</button>
-                <button type="button" class="btn">Очистить</button>
+                <div class="form-add__tips">
+                    <div class="form-add-tips__tip">
+                        <span class="required-input">*</span> - поля, обязательные для заполнения
+                    </div>
+                </div>
+                <div class="form-add__submits">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn">Очистить</button>
+                </div>
             </div>
         </form>
     </div>

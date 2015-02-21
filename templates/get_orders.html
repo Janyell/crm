@@ -17,7 +17,7 @@
         {% if request.path == get_orders_url or request.path == index_url  %}
             {% if user_role != 2 %}
                 {% if client_id %}
-                    <a href="{% url "add_order" %}?client-id={{ client_id }}" class="btn btn_add-order">Добавить заказ</a>
+                    <a href="{% url "add_order" %}?client-id={{ client_id }}" class="btn btn_add-order add-button">Добавить заказ</a>
                 {% else %}
                     <a href="{% url "add_order" %}" class="btn btn_add-order add-button">Добавить заказ</a>
                     {% if user_role == 0 %}
@@ -140,7 +140,7 @@
                         </td>
                         <td>
                             {% if user_role == 0 %}
-                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}{% if request.path == get_old_orders_url %}&archive=1{% endif %}"><i class="icon-pencil"></i></a>
                             {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
                                 <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                             {% elif user_role != 2 %}
@@ -333,11 +333,11 @@
                 });
                 $(".edit-button").click(function() {
                     var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1"{% endif %} + "&page=" + (info.page + 1) + "&length=" + info.length);
                 });
                 $(".add-button").click(function() {
                     var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') + "?page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1&"{% else %}+ "?"{% endif %} + "page=" + (info.page + 1) + "&length=" + info.length);
                 });
             });
         })(jQuery);
