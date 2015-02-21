@@ -88,6 +88,14 @@ def full_add_edit_claim(request):
             out.update({'clients_id': clients_id})
         if 'pk' in request.POST:
             pk = request.POST['pk']
+            claim = Orders.objects.get(id=pk)
+            files = []
+            if Order_Files.objects.filter(order_id=claim.id).all() is not None:
+                for order_file in Order_Files.objects.filter(order_id=claim.id).all():
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    files.append(order_file)
+            out.update({'files': files})
             source = request.POST['source']
             comment = request.POST['comment']
             if request.POST['company'] != '':
@@ -361,6 +369,13 @@ def full_add_edit_claim(request):
                                                                           order_id=id_order, is_deleted=0).count_of_products
             out.update({'order_form': form})
             out.update({'page_title': "Редактирование заявки"})
+            files = []
+            if Order_Files.objects.filter(order_id=claim.id).all() is not None:
+                for order_file in Order_Files.objects.filter(order_id=claim.id).all():
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    files.append(order_file)
+            out.update({'files': files})
         else:
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
