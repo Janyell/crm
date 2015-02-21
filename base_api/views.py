@@ -3,7 +3,7 @@
 import json
 from django.shortcuts import render, render_to_response
 from datetime import datetime
-from base_api.full_views.attach import upload_file
+from base_api.full_views.attach import upload_file, delete_file
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -316,6 +316,10 @@ def delete_from_archive(request):
 
 def upload_files(request):
     return upload_file(request)
+
+
+def delete_files(request):
+    return delete_file(request)
 
 
 def fix_bd_org_type(request):
