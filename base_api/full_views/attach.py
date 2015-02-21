@@ -13,6 +13,13 @@ def upload_file(request):
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role != 0:
         return HttpResponseRedirect('/oops/')
+    order_id = request.GET['order-id']
+    files = []
+    if Order_Files.objects.filter(order_id=order_id).all() is not None:
+        for order_file in Order_Files.objects.filter(order_id=order_id).all():
+            order_file.name = order_file.title
+            order_file.url = order_file.file.url
+            files.append(order_file)
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         order_id = request.GET['order']
@@ -25,7 +32,7 @@ def upload_file(request):
                 obj.save()
             except Exception as e:
                 print e.message
-            return HttpResponseRedirect('/')
+            return render(request, 'files.html', out)
     else:
         form = UploadFileForm()
     out.update({'form': form})
