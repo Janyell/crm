@@ -11,6 +11,7 @@
         {% url 'edit_claim' as edit_claim_url %}
         {% url 'add_order' as add_order_url %}
         <a href="
+
         {% if request.path == add_claim_url and client_id >= 0 %}
             {% url "get_interested_clients" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
         {% elif request.path == add_order_url and client_id >= 0 %}
