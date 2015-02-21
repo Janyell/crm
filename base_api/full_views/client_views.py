@@ -66,6 +66,8 @@ def full_add_edit_client(request):
                 organization_type = u'ТСЖ'
             elif 'op' == type:
                 organization_type = u'ОП'
+            else:
+                organization_type = u''
             if organization != '':
                 if Clients.objects.filter(organization=organization).count() == 0:
                     if 'save-and-add-order' in form.data:
@@ -167,6 +169,8 @@ def full_add_edit_client(request):
                     organization_type = u'ТСЖ'
                 elif 'op' == type:
                     organization_type = u'ОП'
+                else:
+                    organization_type = u''
                 role = Roles.objects.get(id=request.user.id, is_deleted=0)
                 is_interested = 0
                 if 'is_interested' in request.POST:
