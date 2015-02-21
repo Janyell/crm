@@ -1,23 +1,21 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, render
-from multiuploader.forms import MultiUploadForm
 from base_api.form import FileForm, ProductForm, UploadFileForm
 from base_api.models import Order_Files, Orders
 
 
-def my_view_up(request):
-    # context = {
-    # 'form': MultiUploadForm()
-    # }
-    # return render(request, "files.html", context)
+def upload_file(request):
     out = {}
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
+        order_id = request.GET['order']
         if form.is_valid():
             # file is saved
             obj = form.save(commit=False)
-            obj.order = Orders.objects.get(id=1)
+            obj.order = Orders.objects.get(id=order_id)
             try:
                 obj.save()
             except Exception as e:
@@ -25,8 +23,7 @@ def my_view_up(request):
             return HttpResponseRedirect('/')
     else:
         form = UploadFileForm()
-
     out.update({'form': form})
-    out.update({'page_title': 'rtyui'})
+    out.update({'page_title': 'Добавление файла'})
     print(form.errors)
     return render(request, 'files.html', out)
