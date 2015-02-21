@@ -30,9 +30,10 @@ def full_add_edit_order(request):
         out.update({'length': length})
     if request.method == 'POST':
         form = OrdersForm(request.POST)
-        if 'clients-id' in request.GET:
-            clients_id = request.GET['client-id']
-            out.update({'clients_id': clients_id})
+        if 'client-id' in request.GET:
+            client_id = request.GET['client-id']
+            out.update({'client_id': client_id})
+            # out.update({'rt': ghg})
         if 'pk' in request.POST:
             pk = request.POST['pk']
             order = Orders.objects.get(id=pk)
@@ -383,14 +384,14 @@ def full_get_orders(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     if 'client-id' in request.GET:
-        clients_id = request.GET['client-id']
-        if Clients.objects.filter(id=clients_id, is_deleted=0).count() != 1:
+        client_id = request.GET['client-id']
+        if Clients.objects.filter(id=client_id, is_deleted=0).count() != 1:
             out.update({'page_title': "Данного клиента не существует!"})
             return render(request, 'get_orders.html', out)
-        client = Clients.objects.get(id=clients_id, is_deleted=0)
+        client = Clients.objects.get(id=client_id, is_deleted=0)
         orders = Orders.objects.filter(is_deleted=0, client=client, is_claim=0)
         out.update({'page_title': "История заказов "})
-        out.update({'client_id': clients_id})
+        out.update({'client_id': client_id})
         if client.organization == '':
             client.organization_or_full_name = client.last_name + ' ' + client.name + ' ' + client.patronymic
         else:

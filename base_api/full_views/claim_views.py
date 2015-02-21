@@ -83,9 +83,9 @@ def full_add_edit_claim(request):
     out.update({'modal_title': 'Добавление человека'})
     if request.method == 'POST':
         form = ClaimsForm(request.POST)
-        if 'clients-id' in request.GET:
-            clients_id = request.GET['client-id']
-            out.update({'clients_id': clients_id})
+        if 'client-id' in request.GET:
+            client_id = request.GET['client-id']
+            out.update({'client_id': client_id})
         if 'pk' in request.POST:
             pk = request.POST['pk']
             claim = Orders.objects.get(id=pk)
