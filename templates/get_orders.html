@@ -126,17 +126,17 @@
                         {% endif %}
                         </td>
                         <td>
-                            <a class="btn files-button" data-toggle="modal" href="#view-order-files" value="
                             {% if order.files %}
-                                {% for file in order.files %}
-                                    <div class=&quot;file&quot;>
-                                        <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot;>
-                                            <i class=&quot;icon-file&quot;></i>{{ file.name }}
-                                        </a>
-                                    </div>
-                                {% endfor %}
+                                <a class="btn files-button" data-toggle="modal" href="#view-order-files" value="
+                                    {% for file in order.files %}
+                                        <div class=&quot;file&quot;>
+                                            <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot;>
+                                                <i class=&quot;icon-file&quot;></i>{{ file.name }}
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                "><i class="icon-file"></i></a>
                             {% endif %}
-                            "><i class="icon-file"></i></a>
                         </td>
                         <td>
                             {% if user_role == 0 %}
@@ -337,7 +337,7 @@
                 });
                 $(".add-button").click(function() {
                     var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1&"{% else %}+ "?"{% endif %} + "page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1"{% else %}+ "?"{% endif %} + "page=" + (info.page + 1) + "&length=" + info.length);
                 });
             });
         })(jQuery);

@@ -16,6 +16,7 @@ def upload_file(request):
             # file is saved
             obj = form.save(commit=False)
             obj.order = Orders.objects.get(id=order_id)
+            obj.title = request.FILES['file'].name
             try:
                 obj.save()
             except Exception as e:

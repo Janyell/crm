@@ -172,5 +172,5 @@ class UploadFileForm(ModelForm):
         widgets = {
             'title': TextInput(attrs={'id': "inputTitle",
                                      'placeholder': "Название"}),
-            # 'file': FileInput(),
+            'file': FileInput(),
         }
