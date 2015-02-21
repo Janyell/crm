@@ -29,6 +29,16 @@ def full_add_edit_order(request):
         out.update({'page': page})
         out.update({'length': length})
     if request.method == 'POST':
+        file_form = UploadFileForm(request.POST, request.FILES)
+        if file_form.is_valid():
+            # file is saved
+            obj = file_form.save(commit=False)
+            obj.order = Orders.objects.get(id=8)
+            try:
+                obj.save()
+            except Exception as e:
+                print e.message
+            return HttpResponseRedirect('/')
         form = OrdersForm(request.POST)
         if 'client-id' in request.GET:
             client_id = request.GET['client-id']
