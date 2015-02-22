@@ -29,16 +29,6 @@ def full_add_edit_order(request):
         out.update({'page': page})
         out.update({'length': length})
     if request.method == 'POST':
-        file_form = UploadFileForm(request.POST, request.FILES)
-        if file_form.is_valid():
-            # file is saved
-            obj = file_form.save(commit=False)
-            obj.order = Orders.objects.get(id=8)
-            try:
-                obj.save()
-            except Exception as e:
-                print e.message
-            return HttpResponseRedirect('/')
         form = OrdersForm(request.POST)
         if 'client-id' in request.GET:
             client_id = request.GET['client-id']
@@ -258,7 +248,10 @@ def full_add_edit_order(request):
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products)
             if is_order_create:
-                return HttpResponseRedirect('/orders/')
+                if 'only-save' in form.data:
+                    return HttpResponseRedirect('/orders/')
+                else:
+                    return HttpResponseRedirect('/uploads/?id=%s' % new_order.id)
             else:
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)
@@ -343,13 +336,6 @@ def full_add_edit_order(request):
                                                                           order_id=id_order, is_deleted=0).count_of_products
             out.update({'order_form': form})
             out.update({'page_title': "Редактирование заказа"})
-            files = []
-            if Order_Files.objects.filter(order_id=order.id).all() is not None:
-                for order_file in Order_Files.objects.filter(order_id=order.id).all():
-                    order_file.name = order_file.title
-                    order_file.url = order_file.file.url
-                    files.append(order_file)
-            out.update({'files': files})
         else:
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
@@ -363,8 +349,6 @@ def full_add_edit_order(request):
         if organization.organization != "":
             organizations.append(organization.organization)
     out.update({'organizations': organizations})
-    file_form = UploadFileForm()
-    out.update({'file_form': file_form})
     return render(request, 'add_edit_order.html', out)
 
 

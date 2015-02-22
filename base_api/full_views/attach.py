@@ -9,11 +9,18 @@ from base_api.models import Order_Files, Orders, Roles
 
 def upload_file(request):
     out = {}
+    out.update({'page_title': 'Управление файлами'})
+    # print(request)
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role != 0:
         return HttpResponseRedirect('/oops/')
-    order_id = request.GET['order-id']
+    if 'id' in request.GET:
+        order_id = request.GET['id']
+        is_claim = Orders.objects.get(id=order_id).is_claim
+        out.update({'is_claim': is_claim})
+    else:
+        return HttpResponseRedirect('/oops/')
     order_files = Order_Files.objects.filter(order_id=order_id).all()
     files = []
     if order_files is not None:
@@ -24,23 +31,32 @@ def upload_file(request):
     out.update({'files': files})
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
+        print(request.FILES)
         if form.is_valid():
             # file is saved
             obj = form.save(commit=False)
             obj.order = Orders.objects.get(id=order_id)
-            obj.title = request.FILES['file'].name
+            if obj.title is None or obj.title == '':
+                obj.title = request.FILES['file'].name
             try:
                 obj.save()
             except Exception as e:
                 print e
             print(obj.id)
-            form = UploadFileForm()
-            out.update({'form': form})
+            form_new = UploadFileForm()
+            out.update({'form': form_new})
+            order_files = Order_Files.objects.filter(order_id=order_id).all()
+            files = []
+            if order_files is not None:
+                for order_file in order_files:
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    files.append(order_file)
+            out.update({'files': files})
             return render(request, 'files.html', out)
     else:
         form = UploadFileForm()
     out.update({'form': form})
-    out.update({'page_title': 'Добавление файла'})
     print(form.errors)
     return render(request, 'files.html', out)
 
@@ -53,4 +69,4 @@ def delete_file(request):
     id = request.GET['id']
     order_file = Order_Files.objects.get(pk=id)
     order_file.delete()
-    return HttpResponseRedirect('/orders/')
+    return render(request, 'files.html')
