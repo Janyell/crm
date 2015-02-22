@@ -68,5 +68,6 @@ def delete_file(request):
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     order_file = Order_Files.objects.get(pk=id)
+    id = order_file.order.id
     order_file.delete()
-    return render(request, 'files.html')
+    return HttpResponseRedirect('/uploads/?id=%s' % id)
