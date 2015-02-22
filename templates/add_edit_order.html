@@ -223,7 +223,7 @@
                             Прикрепленные файлы
                         </label>
                         <div class="controls">
-                            <a class="btn" data-toggle="modal" href="#manage-attachments">Управление прикрепленными файлами</a>
+                            <a class="btn" data-toggle="modal" href="#manage-attachments">Управление файлами</a>
                         </div>
                     </div>
                 {% endif %}
@@ -268,12 +268,16 @@
     {% endif %}
     {% if request.path == edit_order_url or request.path == edit_claim_url %}
         <div class="modal hide fade" id="manage-attachments" tabindex="-1" role="dialog" aria-labelledby="AttachmentsLabel" aria-hidden="true">
-            <form class="form-horizontal form-add_modal form-add-file" method="post" action="{% url "upload_files" %}{% if request.GET.id >= 0 %}?order-id={{ request.GET.id }}{% endif %}">
+            <form class="form-horizontal form-add_modal form-add-file" method="post" action="{% url "upload_files" %}?id={{ request.GET.id }}" enctype="multipart/form-data">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
-                    <h3 class="form-add__head">Управление прикрепленными файлами</h3>
+                    <h3 class="form-add__head">Управление файлами</h3>
                 </div>
                 <div class="modal-body">
+                <div class="form-add__in-modal"></div>
+                <div class="form-add__submits">
+                    <button type="submit" class="btn btn-primary">Добавить файл</button>
+                </div>
                 </div>
                 <div class="modal-footer">
                     <div class="form-add__submits">
@@ -337,6 +341,7 @@
                 });
                 $select_company.selectpicker();
 
+                {% if request.path == add_order_url or request.path == add_claim_url %}
                 var url;
                 {% if request.path == add_claim_url %}
                     url = "{% url "add_client" %}?is_interested=1";
@@ -533,9 +538,10 @@
                         return false;
                     });
                 });
+                {% else %}
                 var $manage_attachments = $("#manage-attachments");
-                var manage_attachments_url = "{% url "upload_files" %}{% if request.GET.id >= 0 %}?order-id={{ request.GET.id }}{% endif %}"
-                $manage_attachments.find(".modal-body").load( manage_attachments_url + ' .in-modal', function() {
+                var manage_attachments_url = "{% url "upload_files" %}?id={{ request.GET.id }}";
+                $manage_attachments.find(".form-add__in-modal").load( manage_attachments_url + ' .in-modal', function() {
                     $('.btn-file').each(function (){
                         var self = this;
                         $('input[type=file]', this).change(function (){
@@ -543,7 +549,6 @@
                             var value = $(this).val();
                             var fileName = value.substring(value.lastIndexOf('/') + 1);
                             fileName = value.substring(value.lastIndexOf('\\') + 1);
-                            console.log(value);
                             var fileExt = fileName.split('.').pop().toLowerCase();
                             $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
                         });
@@ -554,18 +559,36 @@
                     });
                 });
                 $('.form-add-file').on('submit', function(e) {
-                        e.preventDefault();
-                        $.ajax({
-                            type: $(this).attr('method'),
-                            url: this.action,
-                            data: $(this).serialize(),
-                            context: this,
-                            success: function(data, status) {
-                                var $in_modal = $(data).find(".in-modal").children();
-                            }
-                        });
-                        return false;
+                    e.preventDefault();
+                    console.log("hdsjehs");
+                    $.ajax({
+                        type: $(this).attr('method'),
+                        url: this.action,
+                        data: $(this).serialize(),
+                        context: this,
+                        success: function(data, status) {
+                            $manage_attachments.find(".form-add__in-modal").load(manage_attachments_url + ' .in-modal', function() {
+                                $('.btn-file').each(function (){
+                                    var self = this;
+                                    $('input[type=file]', this).change(function (){
+                                        $(self).next().remove();
+                                        var value = $(this).val();
+                                        var fileName = value.substring(value.lastIndexOf('/') + 1);
+                                        fileName = value.substring(value.lastIndexOf('\\') + 1);
+                                        var fileExt = fileName.split('.').pop().toLowerCase();
+                                        $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
+                                    });
+                                });
+                                $('.delete-button').bind('click', function(){
+                                    var id = $(this).attr('value');
+                                    $('#delete__ok').attr({'href': '{% url "delete_files" %}?id=' + id});
+                                });
+                            });
+                        }
                     });
+                    return false;
+                });
+                {% endif %}
             });
             $(window).load(function () {
                 $("#add-product-table_filter").find("input[type='search']").attr("placeholder", "Поиск");

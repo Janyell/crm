@@ -2,7 +2,8 @@
 
 {%block content%}
     <div class="container">
-        <form class="form-horizontal form-add form-add-file" method="post" action="" enctype="multipart/form-data">
+    <a href="{% if is_claim %}{% url "edit_claim" %}{% else %}{% url "edit_order" %}{% endif %}?id={{ request.GET.id }}" class="btn">Перейти к редактированию {% if is_claim %}заявки{% else %}заказа{% endif %}</a>
+        <form class="form-horizontal form-add form-add-file" method="post" action="{% url "upload_files" %}?id={{ request.GET.id }}" enctype="multipart/form-data">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <div class="in-modal">
             {% if files %}
@@ -53,9 +54,9 @@
                     <span class="required-input">*</span> - поле, обязательное для заполнения
                 </div>
             </div>
+            </div>
             <div class="form-add__submits">
                 <button type="submit" class="btn btn-primary">Добавить файл</button>
-            </div>
             </div>
         </form>
     </div>
@@ -78,7 +79,6 @@
                     var value = $(this).val();
                     var fileName = value.substring(value.lastIndexOf('/') + 1);
                     fileName = value.substring(value.lastIndexOf('\\') + 1);
-                    console.log(value);
                     var fileExt = fileName.split('.').pop().toLowerCase();
                     $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
                 });
