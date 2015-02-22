@@ -3,6 +3,7 @@
 import json
 from django.shortcuts import render, render_to_response
 from datetime import datetime
+from api.settings import MEDIA_ROOT
 from base_api.full_views.attach import upload_file, delete_file
 from base_api.models import *
 from base_api.form import *
@@ -352,7 +353,8 @@ def fix_bd_org_type(request):
 
 
 def made_excel(request):
-    wb = openpyxl.load_workbook(filename='/Users/megge/Documents/crm/info.xlsx')
+    filename = MEDIA_ROOT + '/' + str(Order_Files.objects.get(id=1).file)
+    wb = openpyxl.load_workbook(filename=filename)
     sheet = wb['test']
     clients = Clients.objects.filter(is_deleted=0).all()
     row_index = 1
@@ -372,5 +374,5 @@ def made_excel(request):
         sheet.cell(row=row_index, column=column_index).value = client.last_name + ' ' + client.name + ' ' + \
                                                                client.patronymic
     # сохраняем данные
-    wb.save('/Users/megge/Documents/crm/info.xlsx')
-    return HttpResponseRedirect('/clients/interested/')
+    wb.save(filename)
+    return HttpResponseRedirect(Order_Files.objects.get(id=1).file.url)
