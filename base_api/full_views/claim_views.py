@@ -64,6 +64,12 @@ def full_get_claims(request):
                         orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
             orders_count_str = orders_count_str_right_format[::-1]
             order.bill = orders_count_str
+        order.files = []
+        if Order_Files.objects.filter(order_id=order.id).all() is not None:
+            for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                order_file.name = order_file.title
+                order_file.url = order_file.file.url
+                order.files.append(order_file)
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'page_title': "Заявки"})
