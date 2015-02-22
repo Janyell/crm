@@ -23,7 +23,7 @@ def upload_file(request):
     out.update({'files': files})
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
-        order_id = request.GET['order']
+        order_id = request.GET['order-id']
         if form.is_valid():
             # file is saved
             obj = form.save(commit=False)

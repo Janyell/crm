@@ -217,29 +217,26 @@
                         {{ order_form.source }}
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="inputFile">
-                        Прикрепленные файлы
-                    </label>
-                    <div class="controls">
-                        {% if files %}
-                            {% for file in files %}
-                                <div class="file">
-                                    <a class="file__link" href="{{ file.url }}">
-                                        <i class="icon-file"></i>{{ file.name }}
-                                    </a>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                {% if request.path == edit_order_url or request.path == edit_claim_url %}
+                    <div class="control-group">
+                        <label class="control-label">
+                            Прикрепленные файлы
+                        </label>
+                        <div class="controls">
+                            <a class="btn" data-toggle="modal" href="#manage-attachments">Управление прикрепленными файлами</a>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
                 <div class="form-add__tips">
                     <div class="form-add-tips__tip">
                         <span class="required-input">*</span> - поля, обязательные для заполнения
                     </div>
                 </div>
                 <div class="form-add__submits">
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="submit" class="btn btn-primary" name="only-save" value="only-save">Сохранить</button>
+                    {% if request.path == add_order_url or request.path == add_claim_url %}
+                        <button type="submit" class="btn" name="save-and-upload-file" value="save-and-upload-file">Сохранить и перейти к загрузке файлов</button>
+                    {% endif %}
                     <button type="button" class="btn">Очистить</button>
                 </div>
             </div>
@@ -267,6 +264,33 @@
                     </div>
                 </div>
             </form>
+        </div>
+    {% endif %}
+    {% if request.path == edit_order_url or request.path == edit_claim_url %}
+        <div class="modal hide fade" id="manage-attachments" tabindex="-1" role="dialog" aria-labelledby="AttachmentsLabel" aria-hidden="true">
+            <form class="form-horizontal form-add_modal form-add-file" method="post" action="{% url "upload_files" %}{% if request.GET.id >= 0 %}?order-id={{ request.GET.id }}{% endif %}">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3 class="form-add__head">Управление прикрепленными файлами</h3>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <div class="form-add__submits">
+                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal hide fade" id="delete-file" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3>Вы уверены, что хотите удалить этот файл?</h3>
+            </div>
+            <div class="modal-footer">
+                <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+                <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+            </div>
         </div>
     {% endif %}
     <script type="text/javascript">
@@ -321,13 +345,56 @@
                 {% endif %}
                 var $add_client = $('#add-client');
                 var $style = $('style');
+
                 $add_client.find(".modal-body").load(url + ' .in-modal', function() {
-                    $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
-                    $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                    var $input_person_phone = $('#inputPersonPhone'),
+                        $input_organization_phone = $('#inputOrganizationPhone');
+                    $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                    $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
                     $("#inputOrganization").attr({
                         'data-provide': "typeahead",
                         'data-items': "10",
                         'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
+                    });
+                    $(".person-phone-code").click(function(){
+                        if( $(this).is(':checked') ) {
+                            var person_phone_code = $(this).val();
+                            if (person_phone_code == 3) {
+                                $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                            }
+                            else {
+                                var input_person_phone_val = $input_person_phone.val(),
+                                    person_phone = parseInt(input_person_phone_val.replace(/\D+/g,""));
+                                if (person_phone_code == 4) {
+                                    $input_person_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
+                                    $input_person_phone.val(person_phone);
+                                }
+                                else {
+                                    $input_person_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
+                                    $input_person_phone.val(person_phone);
+                                }
+                            }
+                        }
+                    });
+                    $(".organization-phone-code").click(function(){
+                        if( $(this).is(':checked') ) {
+                            var organization_phone_code = $(this).val();
+                            if (organization_phone_code == 3) {
+                                $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                            }
+                            else {
+                                var input_organization_phone_val = $input_organization_phone.val(),
+                                    organization_phone = parseInt(input_organization_phone_val.replace(/\D+/g,""));
+                                if (organization_phone_code == 4) {
+                                    $input_organization_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
+                                    $input_organization_phone.val(organization_phone);
+                                }
+                                else {
+                                    $input_organization_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
+                                    $input_organization_phone.val(organization_phone);
+                                }
+                            }
+                        }
                     });
                     $('.form-add-client').on('submit', function(e) {
                         e.preventDefault();
@@ -341,14 +408,56 @@
                                 if ($in_modal.length == 0) {
                                     $add_client.modal("hide");
                                     $add_client.find(".modal-body").load(url + ' .in-modal', function() {
-                                        $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
-                                        $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                                        var $input_person_phone = $('#inputPersonPhone'),
+                                            $input_organization_phone = $('#inputOrganizationPhone');
+                                        $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                                        $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
                                         $("#inputOrganization").attr({
                                             'data-provide': "typeahead",
                                             'data-items': "10",
                                             'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
                                         });
                                         $style.html(".typeahead { top: 300px !important; }");
+                                        $(".person-phone-code").click(function(){
+                                            if( $(this).is(':checked') ) {
+                                                var person_phone_code = $(this).val();
+                                                if (person_phone_code == 3) {
+                                                    $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                                                }
+                                                else {
+                                                    var input_person_phone_val = $input_person_phone.val(),
+                                                        person_phone = parseInt(input_person_phone_val.replace(/\D+/g,""));
+                                                    if (person_phone_code == 4) {
+                                                        $input_person_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
+                                                        $input_person_phone.val(person_phone);
+                                                    }
+                                                    else {
+                                                        $input_person_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
+                                                        $input_person_phone.val(person_phone);
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        $(".organization-phone-code").click(function(){
+                                            if( $(this).is(':checked') ) {
+                                                var organization_phone_code = $(this).val();
+                                                if (organization_phone_code == 3) {
+                                                    $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                                                }
+                                                else {
+                                                    var input_organization_phone_val = $input_organization_phone.val(),
+                                                        organization_phone = parseInt(input_organization_phone_val.replace(/\D+/g,""));
+                                                    if (organization_phone_code == 4) {
+                                                        $input_organization_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
+                                                        $input_organization_phone.val(organization_phone);
+                                                    }
+                                                    else {
+                                                        $input_organization_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
+                                                        $input_organization_phone.val(organization_phone);
+                                                    }
+                                                }
+                                            }
+                                        });
                                     });
                                     $('.form-add__client').html($(data).find(".form-add__client").children());
                                     var $select_client = $('#id_client');
@@ -360,13 +469,16 @@
                                 }
                                 else {
                                     $(".form-add-client .modal-body").html($in_modal);
-                                    $('#inputPersonPhone').inputmask("mask", {"mask": "(999) 999-9999"});
-                                    $('#inputOrganizationPhone').inputmask("mask", {"mask": "(999) 999-9999"});
+                                    var $input_person_phone = $('#inputPersonPhone'),
+                                        $input_organization_phone = $('#inputOrganizationPhone');
+                                    $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                                    $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
                                     $("#inputOrganization").attr({
                                         'data-provide': "typeahead",
                                         'data-items': "10",
                                         'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
                                     });
+
                                     if ($(".text-error_one").size()) {
                                         $style.html(".typeahead { top: 330px !important; }");
                                     }
@@ -375,20 +487,89 @@
                                             $style.html(".typeahead { top: 350px !important; }");
                                         }
                                     }
+                                    $(".person-phone-code").click(function(){
+                                        if( $(this).is(':checked') ) {
+                                            var person_phone_code = $(this).val();
+                                            if (person_phone_code == 3) {
+                                                $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                                            }
+                                            else {
+                                                var input_person_phone_val = $input_person_phone.val(),
+                                                    person_phone = parseInt(input_person_phone_val.replace(/\D+/g,""));
+                                                if (person_phone_code == 4) {
+                                                    $input_person_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
+                                                    $input_person_phone.val(person_phone);
+                                                }
+                                                else {
+                                                    $input_person_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
+                                                    $input_person_phone.val(person_phone);
+                                                }
+                                            }
+                                        }
+                                    });
+                                    $(".organization-phone-code").click(function(){
+                                        if( $(this).is(':checked') ) {
+                                            var organization_phone_code = $(this).val();
+                                            if (organization_phone_code == 3) {
+                                                $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
+                                            }
+                                            else {
+                                                var input_organization_phone_val = $input_organization_phone.val(),
+                                                    organization_phone = parseInt(input_organization_phone_val.replace(/\D+/g,""));
+                                                if (organization_phone_code == 4) {
+                                                    $input_organization_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
+                                                    $input_organization_phone.val(organization_phone);
+                                                }
+                                                else {
+                                                    $input_organization_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
+                                                    $input_organization_phone.val(organization_phone);
+                                                }
+                                            }
+                                        }
+                                    });
                                 }
                             }
                         });
                         return false;
                     });
                 });
+                var $manage_attachments = $("#manage-attachments");
+                var manage_attachments_url = "{% url "upload_files" %}{% if request.GET.id >= 0 %}?order-id={{ request.GET.id }}{% endif %}"
+                $manage_attachments.find(".modal-body").load( manage_attachments_url + ' .in-modal', function() {
+                    $('.btn-file').each(function (){
+                        var self = this;
+                        $('input[type=file]', this).change(function (){
+                            $(self).next().remove();
+                            var value = $(this).val();
+                            var fileName = value.substring(value.lastIndexOf('/') + 1);
+                            fileName = value.substring(value.lastIndexOf('\\') + 1);
+                            console.log(value);
+                            var fileExt = fileName.split('.').pop().toLowerCase();
+                            $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
+                        });
+                    });
+                    $('.delete-button').bind('click', function(){
+                        var id = $(this).attr('value');
+                        $('#delete__ok').attr({'href': '{% url "delete_files" %}?id=' + id});
+                    });
+                });
+                $('.form-add-file').on('submit', function(e) {
+                        e.preventDefault();
+                        $.ajax({
+                            type: $(this).attr('method'),
+                            url: this.action,
+                            data: $(this).serialize(),
+                            context: this,
+                            success: function(data, status) {
+                                var $in_modal = $(data).find(".in-modal").children();
+                            }
+                        });
+                        return false;
+                    });
             });
             $(window).load(function () {
                 $("#add-product-table_filter").find("input[type='search']").attr("placeholder", "Поиск");
             });
         })(jQuery);
     </script>
-    <form action="{% url "upload_files" %}?order=8" method="post" enctype="multipart/form-data">
-                                {{ file_form }}
-    <input type="submit">
-                        </form>
 {%endblock%}
