@@ -10,7 +10,7 @@ from base_api.models import Order_Files, Orders, Roles
 def upload_file(request):
     out = {}
     out.update({'page_title': 'Управление файлами'})
-    # print(request)
+    print(request)
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role != 0:
@@ -38,10 +38,10 @@ def upload_file(request):
             obj.order = Orders.objects.get(id=order_id)
             if obj.title is None or obj.title == '':
                 obj.title = request.FILES['file'].name
-            try:
-                obj.save()
-            except Exception as e:
-                print e
+            # try:
+            #     obj.save()
+            # except Exception as e:
+            #     print e
             print(obj.id)
             form_new = UploadFileForm()
             out.update({'form': form_new})
