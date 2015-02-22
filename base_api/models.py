@@ -154,7 +154,7 @@ class Order_Product(models.Model):
 
 
 class Order_Files(models.Model):
-    order = models.ForeignKey(Orders)
+    order_id = models.ForeignKey(Orders, null=True, blank=True)
     title = models.CharField(max_length=50, null=False, blank=True)
     file = models.FileField(upload_to="uploads/", null=True)
 # Create your models here.
