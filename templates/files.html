@@ -59,7 +59,11 @@
                 <button type="submit" class="btn btn-primary">Добавить файл</button>
             </div>
         </form>
+    <div class="text-center">
+        <a href="{% if is_claim %}{% url "get_claims" %}{% else %}{% url "get_orders" %}{% endif %}" class="btn btn_finish">Закончить работу с файлами {% if is_claim %}заявки{% else %}заказа{% endif %}</a>
     </div>
+    </div>
+
     <div class="modal hide fade" id="delete-file" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">×</a>

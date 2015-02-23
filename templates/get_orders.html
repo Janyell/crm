@@ -58,7 +58,11 @@
                             {% if user_role != 2 %}
                                 <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
                                     <div class="get-client-info__head">
-                                        {{ order.client.organization_or_full_name }}
+                                        {% if order.client.organization %}
+                                            &laquo;{{ order.client.organization }}&raquo;{% if order.client.organization_type %}, {{ order.client.organization_type }}{% endif %}
+                                        {% else %}
+                                            {{ order.client.full_name }}
+                                        {% endif %}
                                     </div>
                                     <div class="hidden get-client-info__data">
                                         <div class="client-data__full-name">{{ order.client.full_name }}</div>

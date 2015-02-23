@@ -232,3 +232,6 @@ select.hidden, div.hidden {
 transform: translate(-300px, 0) scale(4); font-size: 23px; direction: ltr; cursor: pointer; }
 /* Fix for IE 7: */
 * + html .btn-file { padding: 2px 15px; margin: 1px 0 0 0; }
+.btn_finish {
+    margin-top: 20px;
+}
