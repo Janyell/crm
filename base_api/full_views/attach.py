@@ -10,11 +10,12 @@ from base_api.models import Order_Files, Orders, Roles
 def upload_file(request):
     out = {}
     out.update({'page_title': 'Управление файлами'})
-    print(request)
+    # print(request)
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role != 0:
+    if Roles.objects.get(id=request.user.id).role == 2:
         return HttpResponseRedirect('/oops/')
+    out.update({'user_role': Roles.objects.get(id=request.user.id).role})
     if 'id' in request.GET:
         order_id = request.GET['id']
         is_claim = Orders.objects.get(id=order_id).is_claim
@@ -38,10 +39,10 @@ def upload_file(request):
             obj.order = Orders.objects.get(id=order_id)
             if obj.title is None or obj.title == '':
                 obj.title = request.FILES['file'].name
-            # try:
-            #     obj.save()
-            # except Exception as e:
-            #     print e
+            try:
+                obj.save()
+            except Exception as e:
+                print e
             print(obj.id)
             form_new = UploadFileForm()
             out.update({'form': form_new})
@@ -64,7 +65,7 @@ def upload_file(request):
 def delete_file(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role != 0:
+    if Roles.objects.get(id=request.user.id).role == 2:
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     order_file = Order_Files.objects.get(pk=id)
