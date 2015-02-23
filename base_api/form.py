@@ -24,8 +24,10 @@ class ClientModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         if obj.organization == '':
             return obj.last_name + ' ' + obj.name + ' ' + obj.patronymic
+        elif obj.organization_type != '':
+            return '"' + obj.organization + '", ' + obj.organization_type
         else:
-            return obj.organization
+            return '"' + obj.organization + '"'
 
 
 class RoleForm(ModelForm):

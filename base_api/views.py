@@ -353,6 +353,11 @@ def fix_bd_org_type(request):
 
 
 def made_excel(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role != 0:
+        return HttpResponseRedirect('/oops/')
     filename = MEDIA_ROOT + '/' + str(Order_Files.objects.get(id=1).file)
     wb = openpyxl.load_workbook(filename=filename)
     sheet = wb['test']
@@ -367,9 +372,9 @@ def made_excel(request):
         sheet.cell(row=row_index, column=column_index).value = client.email
         column_index += 1
         if client.organization_type == "" or client.organization_type is None:
-            sheet.cell(row=row_index, column=column_index).value = client.organization
+            sheet.cell(row=row_index, column=column_index).value = '"' + client.organization + '"'
         else:
-            sheet.cell(row=row_index, column=column_index).value = client.organization + ', ' + client.organization_type
+            sheet.cell(row=row_index, column=column_index).value = '"' + client.organization + '", ' + client.organization_type
         column_index += 1
         sheet.cell(row=row_index, column=column_index).value = client.last_name + ' ' + client.name + ' ' + \
                                                                client.patronymic
