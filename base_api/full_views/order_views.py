@@ -251,7 +251,7 @@ def full_add_edit_order(request):
                 if 'only-save' in form.data:
                     return HttpResponseRedirect('/orders/')
                 else:
-                    return HttpResponseRedirect('/uploads/?id=%s' % new_order.id)
+                    return HttpResponseRedirect('/uploads/?id=%s', new_order.id)
             else:
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)
