@@ -39,7 +39,11 @@
                         <td>
                             <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
                                 <div class="get-client-info__head">
-                                    {{ claim.client.organization_or_full_name }}
+                                    {% if claim.client.organization %}
+                                        &laquo;{{ claim.client.organization }}&raquo;{% if claim.client.organization_type %}, {{ claim.client.organization_type }}{% endif %}
+                                    {% else %}
+                                        {{ claim.client.full_name }}
+                                    {% endif %}
                                 </div>
                                 <div class="hidden get-client-info__data">
                                     <div class="client-data__full-name">{{ claim.client.full_name }}</div>
