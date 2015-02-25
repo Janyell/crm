@@ -29,7 +29,8 @@ def full_analyze_period(request):
         for order in orders:
             order_from_table_order = Orders.objects.get(id=order.order_id)
             is_sell = False
-            if order_from_table_order.order_status == 1 or order_from_table_order.order_status == 2:
+            if str(order_from_table_order.order_date) <= until_date and str(order_from_table_order.order_date) >= since_date and \
+                    order_from_table_order.is_deleted == 0 and (order_from_table_order.order_status == 1 or order_from_table_order.order_status == 2):
                 is_sell = True
             if is_sell and order.product_id not in products:
                 products.append(order.product_id)
@@ -42,7 +43,8 @@ def full_analyze_period(request):
             for order in orders:
                 order_from_table_order = Orders.objects.get(id=order.order_id)
                 is_sell = False
-                if order_from_table_order.is_deleted == 0 and (order_from_table_order.order_status == 1 or order_from_table_order.order_status == 2):
+                if str(order_from_table_order.order_date) <= until_date and str(order_from_table_order.order_date) >= since_date and \
+                                order_from_table_order.is_deleted == 0 and (order_from_table_order.order_status == 1 or order_from_table_order.order_status == 2):
                     is_sell = True
                 if is_sell and order.product_id == product:
                     data[i].number += order.count_of_products

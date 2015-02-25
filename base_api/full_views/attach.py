@@ -18,7 +18,7 @@ def upload_file(request):
     out.update({'user_role': Roles.objects.get(id=request.user.id).role})
     if 'id' in request.GET:
         order_id = request.GET['id']
-        is_claim = Orders.objects.get(id=order_id).is_claim
+        is_claim = int(Orders.objects.get(id=order_id).is_claim)
         out.update({'is_claim': is_claim})
     else:
         return HttpResponseRedirect('/oops/')

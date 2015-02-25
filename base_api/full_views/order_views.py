@@ -251,7 +251,8 @@ def full_add_edit_order(request):
                 if 'only-save' in form.data:
                     return HttpResponseRedirect('/orders/')
                 else:
-                    return HttpResponseRedirect('/uploads/?id=%s', new_order.id)
+                    print(new_order.id)
+                    return HttpResponseRedirect('/uploads/?id=%s' % new_order.id)
             else:
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)
@@ -385,7 +386,7 @@ def full_get_orders(request):
             out.update({'page_title': "Данного клиента не существует!"})
             return render(request, 'get_orders.html', out)
         client = Clients.objects.get(id=client_id, is_deleted=0)
-        orders = Orders.objects.filter(is_deleted=0, client=client, is_claim=0)
+        orders = Orders.objects.filter(is_deleted=0, client=client, is_claim=0).order_by('-order_status')
         out.update({'page_title': "История заказов "})
         out.update({'client_id': client_id})
         if client.organization == '':
@@ -395,7 +396,7 @@ def full_get_orders(request):
         out.update({'organization_or_full_name': client.organization_or_full_name})
         out.update({'client_id': client.id})
     else:
-        orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0)
+        orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0).order_by('-order_status')
         out.update({'page_title': "Заказы"})
     for order in orders:
         if order.client.organization == '':

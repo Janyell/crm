@@ -289,10 +289,13 @@ def full_add_edit_claim(request):
                                                                           count_of_products=count_of_products)
                     client.save(update_fields=["is_interested"])
             if is_claim_create:
-                if displacement == 1:
-                    return HttpResponseRedirect('/claims/?displacement=1')
+                if 'only-save' in form.data:
+                    if displacement == 1:
+                        return HttpResponseRedirect('/claims/?displacement=1')
+                    else:
+                        return HttpResponseRedirect('/claims/')
                 else:
-                    return HttpResponseRedirect('/claims/')
+                    return HttpResponseRedirect('/uploads/?id=%s' % new_claim.id)
             else:
                 ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)
