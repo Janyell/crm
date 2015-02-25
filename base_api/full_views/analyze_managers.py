@@ -160,14 +160,14 @@ def full_analyze_managers(request):
                     number_bill_data_count.append(0)
                 if manager_id == 'all':
                     clients_orders = Clients.objects.filter(is_deleted=0)
-                    calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
+                    calls_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
                     sources_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(is_deleted=0, is_claim=1)
                 else:
                     clients_orders = Clients.objects.filter(is_deleted=0, role_id=manager.id)
-                    calls_orders = Orders.objects.filter(role_id=manager.id, client__is_interested=0, is_deleted=0, is_claim=0)
+                    calls_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
                     sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
@@ -255,18 +255,32 @@ def full_analyze_managers(request):
                     number_bill_data_count.append(0)
                 if manager_id == 'all':
                     clients_orders = Clients.objects.filter(is_deleted=0)
-                    calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
+                    calls_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
                     sources_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(is_deleted=0, is_claim=1)
                 else:
                     clients_orders = Clients.objects.filter(is_deleted=0, role_id=manager.id)
-                    calls_orders = Orders.objects.filter(role_id=manager.id, client__is_interested=0, is_deleted=0, is_claim=0)
+                    calls_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
                     shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=1)
                     bill_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
                     sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
+                # if manager_id == 'all':
+                #     clients_orders = Clients.objects.filter(is_deleted=0)
+                #     calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
+                #     shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
+                #     bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
+                #     sources_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
+                #     sources_claims = Orders.objects.filter(is_deleted=0, is_claim=1)
+                # else:
+                #     clients_orders = Clients.objects.filter(is_deleted=0, role_id=manager.id)
+                #     calls_orders = Orders.objects.filter(role_id=manager.id, client__is_interested=0, is_deleted=0, is_claim=0)
+                #     shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=1)
+                #     bill_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
+                #     sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
+                #     sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
                 clients_orders_in_period = []
                 for order in clients_orders:
                     if order.creation_date is not None:

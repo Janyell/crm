@@ -52,6 +52,7 @@ urlpatterns = patterns('',
                        url(r'^uploads/$', 'base_api.views.upload_files', name='upload_files'),
                        url(r'^uploads/delete/$', 'base_api.views.delete_files', name='delete_files'),
                        url(r'^excel/$',  'base_api.views.made_excel', name='made_excel'),
+                       url(r'^fix_bd_org_type/$',  'base_api.views.fix_bd_org_type', name='fix_bd_org_type'),
                        url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", mimetype="text/plain")),
                        # url(r'', 'base_api.views.page_not_found', name='404'),
 )

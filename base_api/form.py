@@ -4,7 +4,6 @@ from django.forms import *
 from django import forms
 from base_api.models import *
 from django.forms import ModelChoiceField
-from multiuploader.forms import MultiuploaderField
 
 
 BILL_STATUS_CHOICES_FOR_CLAIM = (('0', 'Выставлен'),
@@ -160,10 +159,6 @@ class ProductForm(ModelForm):
             'title': TextInput(attrs={'id': "inputTitle",
                                       'required': 1}),
         }
-
-
-class FileForm(forms.Form):
-    uploadedFiles = MultiuploaderField(required=False)
 
 
 class UploadFileForm(ModelForm):
