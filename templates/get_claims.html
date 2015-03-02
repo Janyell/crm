@@ -40,7 +40,7 @@
                             <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
                                 <div class="get-client-info__head">
                                     {% if claim.client.organization %}
-                                        &laquo;{{ claim.client.organization }}&raquo;{% if claim.client.organization_type %}, {{ claim.client.organization_type }}{% endif %}
+                                        {{ claim.client.organization }}{% if claim.client.organization_type %}, {{ claim.client.organization_type }}{% endif %}
                                     {% else %}
                                         {{ claim.client.full_name }}
                                     {% endif %}

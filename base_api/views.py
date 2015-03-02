@@ -372,9 +372,9 @@ def made_excel(request):
         sheet.cell(row=row_index, column=column_index).value = client.email
         column_index += 1
         if client.organization_type == "" or client.organization_type is None:
-            sheet.cell(row=row_index, column=column_index).value = '"' + client.organization + '"'
+            sheet.cell(row=row_index, column=column_index).value = client.organization
         else:
-            sheet.cell(row=row_index, column=column_index).value = '"' + client.organization + '", ' + client.organization_type
+            sheet.cell(row=row_index, column=column_index).value = client.organization + ', ' + client.organization_type
         column_index += 1
         sheet.cell(row=row_index, column=column_index).value = client.last_name + ' ' + client.name + ' ' + \
                                                                client.patronymic

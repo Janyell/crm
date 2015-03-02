@@ -33,7 +33,7 @@
                         <tr>
                             <td>
                                 {% if client.organization %}
-                                    &laquo;{{ client.organization }}&raquo;{% if client.organization_type %}, {{ client.organization_type }}{% endif %}</td>
+                                    {{ client.organization }}{% if client.organization_type %}, {{ client.organization_type }}{% endif %}</td>
                                 {% endif %}
                             <td>{{ client.organization_phone }}</td>
                             <td>{{ client.person_full_name }}</td>

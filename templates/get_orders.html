@@ -59,7 +59,7 @@
                                 <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
                                     <div class="get-client-info__head">
                                         {% if order.client.organization %}
-                                            &laquo;{{ order.client.organization }}&raquo;{% if order.client.organization_type %}, {{ order.client.organization_type }}{% endif %}
+                                            {{ order.client.organization }}{% if order.client.organization_type %}, {{ order.client.organization_type }}{% endif %}
                                         {% else %}
                                             {{ order.client.full_name }}
                                         {% endif %}
