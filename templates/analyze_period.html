@@ -33,6 +33,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputCount">
+                        Подсчет по
+                    </label>
+                    <div class="controls">
+                        <label class="radio">
+                            <input type="radio" id="inputCount" name="count" class="count" value="shipped" checked />
+                            Отгружено
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="count" class="count" value="made-claims" {% if request.GET.count == "made-claims" %} checked {% endif %} />
+                            Подано заявок
+                        </label>
+                    </div>
+                </div>
                 <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
             </form>
         </div>
@@ -65,11 +80,13 @@
                 });
                 $('#sinceDate').datetimepicker({
                     format: 'yyyy-MM-dd hh:mm:ss',
-                    language: 'ru'
+                    language: 'ru',
+                    weekStart: 1
                 });
                 $('#untilDate').datetimepicker({
                     format: 'yyyy-MM-dd hh:mm:ss',
-                    language: 'ru'
+                    language: 'ru',
+                    weekStart: 1
                 });
             });
             $(window).load(function() {

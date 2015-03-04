@@ -93,7 +93,7 @@
                         <td>
                             {% if order.products %}
                                 {% for product in order.products %}
-                                    <div>
+                                    <div class="product-wrap">
                                         {{ product.product.title }} - {{ product.count_of_products }} шт.
                                     </div>
                                 {% endfor %}

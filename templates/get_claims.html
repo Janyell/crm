@@ -66,7 +66,7 @@
                         <td>
                             {% if claim.products %}
                                 {% for product in claim.products %}
-                                    <div>
+                                    <div class="product-wrap">
                                         {{ product.product.title }} - {{ product.count_of_products }} шт.
                                     </div>
                                 {% endfor %}
