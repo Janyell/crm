@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from django.db.models import Sum, Count, Q
 from django.shortcuts import render, render_to_response
 from datetime import datetime
 from base_api.models import *
@@ -22,58 +23,26 @@ def full_analyze_period(request):
         since_date = request.GET['since-date']
         until_date = request.GET['until-date']
         count_for = request.GET['count']
-        orders = Order_Product.objects.filter(order_date__gte=since_date).filter(order_date__lte=until_date).filter(is_deleted=0)
-        data_object = []
-        products = []
-        data = []
-        i = 0
         if count_for == 'shipped':
-            for order in orders:
-                order_from_table_order = Orders.objects.get(id=order.order_id)
-                is_sell = False
-                if str(order_from_table_order.order_date) <= until_date and str(order_from_table_order.order_date) >= since_date and \
-                        order_from_table_order.is_deleted == 0 and (order_from_table_order.order_status == 1 or order_from_table_order.order_status == 2):
-                    is_sell = True
-                if is_sell and order.product_id not in products:
-                    products.append(order.product_id)
-                    data.append(data_object)
-                    data[i] = Products.objects.get(id=order.product_id)
-                    data[i].number = 0
-                    i += 1
-            i = 0
-            for product in products:
-                for order in orders:
-                    order_from_table_order = Orders.objects.get(id=order.order_id)
-                    is_sell = False
-                    if str(order_from_table_order.order_date) <= until_date and str(order_from_table_order.order_date) >= since_date and \
-                                    order_from_table_order.is_deleted == 0 and (order_from_table_order.order_status == 1 or order_from_table_order.order_status == 2):
-                        is_sell = True
-                    if is_sell and order.product_id == product:
-                        data[i].number += order.count_of_products
-                i += 1
+            orders = Order_Product.objects.filter(is_deleted=0)\
+                                            .filter(order__order_date__gte=since_date)\
+                                            .filter(order__order_date__lte=until_date)\
+                                            .filter(Q(order__order_status=1) | Q(order__order_status=2))\
+                                            .values("product__title")\
+                                            .annotate(number=Sum('count_of_products'))\
+                                            .order_by()
         elif count_for == 'made-claims':
-            orders = Orders.objects.filter(order_date__gte=since_date).filter(order_date__lte=until_date).filter(is_deleted=0).filter(is_claim=1)
-            for order in orders:
-                order_products = Order_Product.objects.filter(order_id=order.id).filter(is_deleted=0)
-                for order_product in order_products:
-                    if order_product.product_id not in products:
-                        products.append(order_product.product_id)
-                        data.append(data_object)
-                        data[i] = Products.objects.get(id=order_product.product_id)
-                        data[i].number = 0
-                        i += 1
-            i = 0
-            for product in products:
-                for order in orders:
-                    order_products = Order_Product.objects.filter(order_id=order.id).filter(is_deleted=0)
-                    for order_product in order_products:
-                        if order_product.product_id == product:
-                            data[i].number += order_product.count_of_products
-                i += 1
-        out.update({'analysed_data': data})
+            orders = Order_Product.objects.filter(is_deleted=0)\
+                                            .filter(order__order_date__gte=since_date)\
+                                            .filter(order__order_date__lte=until_date)\
+                                            .filter(order__is_claim=1)\
+                                            .values("product__title")\
+                                            .annotate(number=Sum('count_of_products'))\
+                                            .order_by()
+        out.update({'analysed_data': orders})
         out.update({'since_date': since_date})
         out.update({'until_date': until_date})
-        if i == 0:
+        if not orders.exists():
             out.update({'error': 'В данный период заказов не поступало'})
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
