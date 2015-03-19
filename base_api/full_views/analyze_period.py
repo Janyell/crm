@@ -23,6 +23,14 @@ def full_analyze_period(request):
         since_date = request.GET['since-date']
         until_date = request.GET['until-date']
         count_for = request.GET['count']
+        if since_date == '' or until_date == '':
+            out.update({'since_date': since_date})
+            out.update({'until_date': until_date})
+            out.update({'error': 'Укажите период полностью!'})
+            user_role = Roles.objects.get(id=request.user.id).role
+            out.update({'user_role': user_role})
+            out.update({'page_title': 'Анализ продаж продуктов за период'})
+            return render(request, 'analyze_period.html', out)
         if count_for == 'shipped':
             orders = Order_Product.objects.filter(is_deleted=0)\
                                             .filter(order__order_date__gte=since_date)\

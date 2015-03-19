@@ -443,7 +443,6 @@ def full_get_orders(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'orders': orders})
-    print(out)
     return render(request, 'get_orders.html', out)
 
 

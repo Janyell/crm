@@ -10,7 +10,6 @@ from base_api.models import Order_Files, Orders, Roles
 def upload_file(request):
     out = {}
     out.update({'page_title': 'Управление файлами'})
-    # print(request)
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role == 2:
@@ -32,18 +31,14 @@ def upload_file(request):
     out.update({'files': files})
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
-        print(request.FILES)
         if form.is_valid():
             # file is saved
             obj = form.save(commit=False)
             obj.order = Orders.objects.get(id=order_id)
             if obj.title is None or obj.title == '':
                 obj.title = request.FILES['file'].name
-            try:
+            if obj.file is not None and obj.file != '':
                 obj.save()
-            except Exception as e:
-                print e
-            print(obj.id)
             form_new = UploadFileForm()
             out.update({'form': form_new})
             order_files = Order_Files.objects.filter(order_id=order_id).all()
