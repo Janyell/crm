@@ -55,8 +55,11 @@ def full_add_edit_order(request):
                 payment_date = datetime.strptime(payment_date, '%Y-%m-%d %H:%M:%S')
             else:
                 payment_date = None
+            shipped_date = None
             if request.POST['order_status'] != '':
                 order_status = int(request.POST['order_status'])
+                if order_status == 1:
+                    shipped_date = datetime.now()
             else:
                 order_status = None
             if request.POST['bill_status'] != '':
@@ -129,6 +132,7 @@ def full_add_edit_order(request):
             new_order.payment_date = payment_date
             new_order.order_status = order_status
             new_order.bill_status = bill_status
+            new_order.shipped_date = shipped_date
             new_order.ready_date = ready_date
             new_order.comment = comment
             new_order.city = city
@@ -196,6 +200,9 @@ def full_add_edit_order(request):
             payment_date = form.cleaned_data['payment_date']
             order_status = form.cleaned_data['order_status']
             bill_status = form.cleaned_data['bill_status']
+            shipped_date = None
+            if order_status == 1:
+                shipped_date = datetime.now()
             ready_date = form.cleaned_data['ready_date']
             comment = form.cleaned_data['comment']
             city = form.cleaned_data['city']
@@ -243,7 +250,7 @@ def full_add_edit_order(request):
                                               unique_number=unique_number, company=company, bill=bill,
                                               payment_date=payment_date, order_status=order_status, city=city,
                                               bill_status=bill_status, ready_date=ready_date, comment=comment,
-                                              account_number=account_number)
+                                              account_number=account_number, shipped_date=shipped_date)
                     new_order_product_link = Order_Product.objects.create(order=new_order, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products)
@@ -472,15 +479,14 @@ def full_get_old_orders(request):
         for pr in prs:
             products_list.append(pr)
         order.products = products_list
-        # if order.order_status == 0:
-        #     order.order_status = 'В производстве'
-        # elif order.order_status == 1:
-        #     order.order_status = 'Отгружен'
-        # elif order.order_status  == 2:
-        #     order.order_status = 'Готов'
-        # else:
-        #     order.order_status = ''
-        order.order_status = 'Отгружен'
+        if order.order_status == 0:
+            order.order_status = 'В производстве'
+        elif order.order_status == 1:
+            order.order_status = 'Отгружен'
+        elif order.order_status == 2:
+            order.order_status = 'Готов'
+        else:
+            order.order_status = ''
         if order.bill is not None:
             orders_count_str = str(order.bill)
             orders_count_str_reverse = orders_count_str[::-1]

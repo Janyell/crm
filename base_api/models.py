@@ -138,6 +138,7 @@ class Orders(models.Model):
     account_number = models.CharField(max_length=50, null=True, blank=True)
     is_claim = models.BooleanField(default=0)
     is_comment_my = models.BooleanField(default=1)
+    shipped_date = UnixTimestampField(blank=True, null=True)
 
 
 class Products(models.Model):
