@@ -42,6 +42,19 @@
                         </div>
                     </div>
                 </div>
+                <div class="control-group">
+                    <label class="control-label" for="inputShippedDate">
+                        Дата отгрузки
+                    </label>
+                    <div class="controls">
+                        <div id="shippedDate" class="input-append date">
+                            {{ order_form.shipped_date }}
+                            <span class="add-on">
+                                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="form-add__submits">
@@ -56,7 +69,14 @@
                 $('#readyDate').datetimepicker({
                     format: 'yyyy-MM-dd hh:mm:ss',
                     language: 'ru',
-                    pickSeconds: false
+                    pickSeconds: false,
+                    weekStart: 1
+                });
+                $('#shippedDate').datetimepicker({
+                    format: 'yyyy-MM-dd',
+                    language: 'ru',
+                    pickTime: false,
+                    weekStart: 1
                 });
             });
         })(jQuery);
