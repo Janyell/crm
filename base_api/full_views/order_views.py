@@ -60,8 +60,10 @@ def full_add_edit_order(request):
                 order_status = int(request.POST['order_status'])
                 if order_status == 1:
                     shipped_date = request.POST['shipped_date']
-                    if shipped_date is None:
+                    if shipped_date is None or shipped_date == '':
                         shipped_date = datetime.now()
+                    else:
+                        shipped_date = datetime.strptime(shipped_date, '%Y-%m-%d').date()
             else:
                 order_status = None
             if request.POST['bill_status'] != '':
@@ -342,7 +344,7 @@ def full_add_edit_order(request):
                                'payment_date': order.payment_date, 'order_status': order.order_status,
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
-                               'account_number': order.account_number, 'shipped_date': shipped_date})
+                               'account_number': order.account_number, 'shipped_date': order.shipped_date})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -559,9 +561,11 @@ def full_edit_order_for_factory(request):
                 ready_date = None
             new_order = Orders.objects.get(id=pk, is_deleted=0)
             if order_status == 1:
-                new_order.shipped_date = request.POST['shipped_date']
-                if new_order.shipped_date is None:
+                shipped_date = request.POST['shipped_date']
+                if shipped_date is None or shipped_date == '':
                     new_order.shipped_date = datetime.now()
+                else:
+                    new_order.shipped_date = datetime.strptime(shipped_date, '%Y-%m-%d').date()
             new_order.order_status = order_status
             new_order.ready_date = ready_date
             new_order.save(force_update=True)
