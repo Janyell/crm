@@ -123,7 +123,10 @@ class OrdersForm(forms.ModelForm):
             'source': Select(attrs={'id': "selectSource", 'required': 1}),
             'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                            'class': "datetime",
-                                           'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"})
+                                           'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
+            'shipped_date': TextInput(attrs={'id': "inputShippedDate",
+                                             'class': "datetime",
+                                             'placeholder': "ГГГГ-ММ-ДД"}),
         }
 
 
@@ -147,7 +150,7 @@ class ClaimsForm(forms.ModelForm):
             'source': Select(attrs={'id': "selectSource", 'required': 1}),
             'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                            'class': "datetime",
-                                           'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"})
+                                           'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
         }
 
 
