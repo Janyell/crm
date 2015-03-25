@@ -112,6 +112,10 @@ DATETIME_FORMAT = (
     'd.m.Y H:i'
 )
 
+DATE_FORMAT = (
+    'd.m.Y'
+)
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',

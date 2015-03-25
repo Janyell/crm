@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, render_to_response, redirect
-from datetime import datetime
+from datetime import datetime, date
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -419,7 +419,14 @@ def full_get_orders(request):
         if order.order_status == 0:
             order.order_status = 'В производстве'
         elif order.order_status == 1:
+            order.is_shipped = 1
             order.order_status = 'Отгружен'
+            if order.shipped_date is not None:
+                order.shipped_date = date(order.shipped_date.year, order.shipped_date.month, order.shipped_date.day)
+            # else:
+            #     order.shipped_date = order.order_date
+            #     order.save(update_fields=["shipped_date"])
+            #     order.shipped_date = date(order.shipped_date.year, order.shipped_date.month, order.shipped_date.day)
         elif order.order_status == 2:
             order.order_status = 'Готов'
         else:
@@ -483,6 +490,9 @@ def full_get_old_orders(request):
             order.order_status = 'В производстве'
         elif order.order_status == 1:
             order.order_status = 'Отгружен'
+            if order.shipped_date is not None:
+                order.is_shipped = 1
+                order.shipped_date = date(order.shipped_date.year, order.shipped_date.month, order.shipped_date.day)
         elif order.order_status == 2:
             order.order_status = 'Готов'
         else:

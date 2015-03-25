@@ -125,7 +125,7 @@ def full_analyze_managers(request):
                         if order.bill is not None:
                             sum_bill_data_count[int(data_day) - 1] += int(order.bill)
                 for order in shipped_orders:
-                    data = str(order.order_date)
+                    data = str(order.shipped_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_day = data[8:]
@@ -199,7 +199,7 @@ def full_analyze_managers(request):
                         if order.bill is not None:
                             sum_bill_data_count[int(data_mounth) - 1] += int(order.bill)
                 for order in shipped_orders:
-                    data = str(order.order_date)
+                    data = str(order.shipped_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
@@ -316,7 +316,7 @@ def full_analyze_managers(request):
                     if order.bill is not None:
                         sum_bill_data_count[i] += int(order.bill)
                 for order in shipped_orders:
-                    data = str(order.order_date)
+                    data = str(order.shipped_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]

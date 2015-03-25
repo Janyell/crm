@@ -99,7 +99,11 @@
                                 {% endfor %}
                             {% endif %}
                         </td>
-                        <td>{{ order.order_status }}</td>
+                        <td>{{ order.order_status }}
+                            {% if order.is_shipped %}
+                                {{ order.shipped_date }}
+                            {% endif %}
+                        </td>
                         <td>
                             {% if order.ready_date != None %}
                                 {{ order.ready_date }}
