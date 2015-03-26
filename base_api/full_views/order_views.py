@@ -387,6 +387,7 @@ def full_delete_order(request):
 
 
 def full_get_orders(request):
+    orders = Orders.objects.all()
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
@@ -431,14 +432,10 @@ def full_get_orders(request):
         if order.order_status == 0:
             order.order_status = 'В производстве'
         elif order.order_status == 1:
-            order.is_shipped = 1
             order.order_status = 'Отгружен'
             if order.shipped_date is not None:
+                order.is_shipped = 1
                 order.shipped_date = date(order.shipped_date.year, order.shipped_date.month, order.shipped_date.day)
-            # else:
-            #     order.shipped_date = order.order_date
-            #     order.save(update_fields=["shipped_date"])
-            #     order.shipped_date = date(order.shipped_date.year, order.shipped_date.month, order.shipped_date.day)
         elif order.order_status == 2:
             order.order_status = 'Готов'
         else:
@@ -463,9 +460,10 @@ def full_get_orders(request):
         order.files = []
         if Order_Files.objects.filter(order_id=order.id).all() is not None:
             for order_file in Order_Files.objects.filter(order_id=order.id).all():
-                order_file.name = order_file.title
-                order_file.url = order_file.file.url
-                order.files.append(order_file)
+                if order_file.file:
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    order.files.append(order_file)
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'orders': orders})
