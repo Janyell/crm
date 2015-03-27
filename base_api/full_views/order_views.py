@@ -86,10 +86,15 @@ def full_add_edit_order(request):
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(
                     queryset=Companies.objects.filter(is_deleted=0), required=False)
                 OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                if order.shipped_date is not None:
+                    shipped_day_month = order.shipped_date.date()
+                else:
+                    shipped_day_month = None
                 form = OrdersForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
-                                   'source': source, 'ready_date': ready_date, 'account_number': account_number})
+                                   'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                                   'shipped_date': shipped_day_month})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -108,11 +113,15 @@ def full_add_edit_order(request):
                     OrdersForm.base_fields['company'] = CompanyModelChoiceField(
                         queryset=Companies.objects.filter(is_deleted=0), required=False)
                     OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                    if order.shipped_date is not None:
+                        shipped_day_month = order.shipped_date.date()
+                    else:
+                        shipped_day_month = None
                     form = OrdersForm({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'payment_date': payment_date, 'order_status': order_status,
                                        'bill_status': bill_status, 'city': city, 'comment': comment,
                                        'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                       'shipped_date': shipped_date})
+                                       'shipped_date': shipped_day_month})
                     form.products = Products.objects.filter(is_deleted=0)
                     products_list = request.POST.getlist('products[]')
                     for product in form.products:
@@ -157,11 +166,15 @@ def full_add_edit_order(request):
                         OrdersForm.base_fields['company'] = CompanyModelChoiceField(
                             queryset=Companies.objects.filter(is_deleted=0), required=False)
                         OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                        if order.shipped_date is not None:
+                            shipped_day_month = order.shipped_date.date()
+                        else:
+                            shipped_day_month = None
                         form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                           'shipped_date': shipped_date})
+                                           'shipped_date': shipped_day_month})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -227,11 +240,15 @@ def full_add_edit_order(request):
                         OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                                     required=False)
                         OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                        if order.shipped_date is not None:
+                            shipped_day_month = order.shipped_date.date()
+                        else:
+                            shipped_day_month = None
                         form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                           'shipped_date': shipped_date})
+                                           'shipped_date': shipped_day_month})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -273,11 +290,15 @@ def full_add_edit_order(request):
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)
                 OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                if order.shipped_date is not None:
+                    shipped_day_month = order.shipped_date.date()
+                else:
+                    shipped_day_month = None
                 form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                   'shipped_date': shipped_date})
+                                   'shipped_date': shipped_day_month})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -304,11 +325,15 @@ def full_add_edit_order(request):
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            if order.shipped_date is not None:
+                shipped_day_month = order.shipped_date.date()
+            else:
+                shipped_day_month = None
             form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                'payment_date': payment_date, 'order_status': order_status,
                                'bill_status': bill_status, 'city': city, 'comment': comment,
                                'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                               'shipped_date': shipped_date})
+                               'shipped_date': shipped_day_month})
             form.products = Products.objects.filter(is_deleted=0)
             products_list = request.POST.getlist('products[]')
             for product in form.products:
@@ -340,11 +365,15 @@ def full_add_edit_order(request):
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            if order.shipped_date is not None:
+                shipped_day_month = order.shipped_date.date()
+            else:
+                shipped_day_month = None
             form = OrdersForm({'client': order.client, 'company': order.company, 'bill': order.bill,
                                'payment_date': order.payment_date, 'order_status': order.order_status,
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
-                               'account_number': order.account_number, 'shipped_date': order.shipped_date})
+                               'account_number': order.account_number, 'shipped_date': shipped_day_month})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -387,7 +416,6 @@ def full_delete_order(request):
 
 
 def full_get_orders(request):
-    orders = Orders.objects.all()
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
