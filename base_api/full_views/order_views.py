@@ -40,9 +40,10 @@ def full_add_edit_order(request):
             files = []
             if Order_Files.objects.filter(order_id=order.id).all() is not None:
                 for order_file in Order_Files.objects.filter(order_id=order.id).all():
-                    order_file.name = order_file.title
-                    order_file.url = order_file.file.url
-                    files.append(order_file)
+                    if order_file.file is not None and order_file.file != '':
+                        order_file.name = order_file.title
+                        order_file.url = order_file.file.url
+                        files.append(order_file)
             out.update({'files': files})
             source = request.POST['source']
             if request.POST['company'] != '':
@@ -488,7 +489,7 @@ def full_get_orders(request):
         order.files = []
         if Order_Files.objects.filter(order_id=order.id).all() is not None:
             for order_file in Order_Files.objects.filter(order_id=order.id).all():
-                if order_file.file:
+                if order_file.file is not None and order_file.file != '':
                     order_file.name = order_file.title
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
@@ -556,9 +557,10 @@ def full_get_old_orders(request):
         order.files = []
         if Order_Files.objects.filter(order_id=order.id).all() is not None:
             for order_file in Order_Files.objects.filter(order_id=order.id).all():
-                order_file.name = order_file.title
-                order_file.url = order_file.file.url
-                order.files.append(order_file)
+                if order_file.file is not None and order_file.file != '':
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    order.files.append(order_file)
     out.update({'page_title': "Архив заказов"})
     out.update({'orders': orders})
     return render(request, 'get_orders.html', out)

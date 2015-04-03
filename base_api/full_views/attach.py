@@ -37,7 +37,7 @@ def upload_file(request):
             obj.order = Orders.objects.get(id=order_id)
             if obj.title is None or obj.title == '':
                 obj.title = request.FILES['file'].name
-            if obj.file is not None and obj.file != '':
+            if obj.file is not None or obj.file != '':
                 obj.save()
             form_new = UploadFileForm()
             out.update({'form': form_new})
