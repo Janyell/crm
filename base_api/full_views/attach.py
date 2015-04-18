@@ -3,8 +3,8 @@
 from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, render
-from base_api.form import ProductForm, UploadFileForm
-from base_api.models import Order_Files, Orders, Roles, Client_Files
+from base_api.form import ProductForm, UploadFileForOrderForm, UploadFileForClientForm
+from base_api.models import Order_Files, Orders, Roles, Client_Files, Clients
 
 
 def upload_order_file(request):
@@ -30,7 +30,7 @@ def upload_order_file(request):
             files.append(order_file)
     out.update({'files': files})
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
+        form = UploadFileForOrderForm(request.POST, request.FILES)
         if form.is_valid():
             # file is saved
             obj = form.save(commit=False)
@@ -39,7 +39,7 @@ def upload_order_file(request):
                 obj.title = request.FILES['file'].name
             if obj.file is not None and obj.file != '':
                 obj.save()
-            form_new = UploadFileForm()
+            form_new = UploadFileForOrderForm()
             out.update({'form': form_new})
             order_files = Order_Files.objects.filter(order_id=order_id).all()
             files = []
@@ -51,7 +51,7 @@ def upload_order_file(request):
             out.update({'files': files})
             return render(request, 'files.html', out)
     else:
-        form = UploadFileForm()
+        form = UploadFileForOrderForm()
     out.update({'form': form})
     return render(request, 'files.html', out)
 
@@ -78,6 +78,8 @@ def upload_client_file(request):
     out.update({'user_role': Roles.objects.get(id=request.user.id).role})
     if 'id' in request.GET:
         client_id = request.GET['id']
+        is_interested = int(Clients.objects.get(id=client_id).is_interested)
+        out.update({'is_interested': is_interested})
     else:
         return HttpResponseRedirect('/oops/')
     client_files = Client_Files.objects.filter(client_id=client_id).all()
@@ -89,7 +91,7 @@ def upload_client_file(request):
             files.append(client_file)
     out.update({'files': files})
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
+        form = UploadFileForClientForm(request.POST, request.FILES)
         if form.is_valid():
             # file is saved
             obj = form.save(commit=False)
@@ -98,7 +100,7 @@ def upload_client_file(request):
                 obj.title = request.FILES['file'].name
             if obj.file is not None and obj.file != '':
                 obj.save()
-            form_new = UploadFileForm()
+            form_new = UploadFileForClientForm()
             out.update({'form': form_new})
             client_files = Client_Files.objects.filter(client_id=client_id).all()
             files = []
@@ -110,7 +112,7 @@ def upload_client_file(request):
             out.update({'files': files})
             return render(request, 'files.html', out)
     else:
-        form = UploadFileForm()
+        form = UploadFileForClientForm()
     out.update({'form': form})
     return render(request, 'files.html', out)
 

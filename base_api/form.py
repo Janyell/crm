@@ -164,13 +164,23 @@ class ProductForm(ModelForm):
         }
 
 
-class UploadFileForm(ModelForm):
-
+class UploadFileForOrderForm(ModelForm):
     class Meta:
         model = Order_Files
         exclude = ['order']
         widgets = {
             'title': TextInput(attrs={'id': "inputTitle",
-                                     'placeholder': "Название"}),
+                                      'placeholder': "Название"}),
+            'file': FileInput(),
+        }
+
+
+class UploadFileForClientForm(ModelForm):
+    class Meta:
+        model = Client_Files
+        exclude = ['client']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputTitle",
+                                      'placeholder': "Название"}),
             'file': FileInput(),
         }
