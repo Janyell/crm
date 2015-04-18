@@ -340,7 +340,28 @@ def full_add_edit_claim(request):
             out.update({'order_form': form})
             out.update({'page_title': "Добавление заявки"})
     else:
-        if 'client-id' in request.GET:
+        if 'copy' in request.GET:
+            id_order = request.GET['copy']
+            out.update({"error": 0})
+            claim = Orders.objects.get(pk=id_order, is_deleted=0, is_claim=1)
+            ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
+                                                                        required=False)
+            ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            form = ClaimsForm({'company': claim.company, 'bill': claim.bill,
+                               'bill_status': claim.bill_status, 'account_number': claim.account_number,
+                               'comment': claim.comment, 'source': claim.source})
+            form.products = Products.objects.filter(is_deleted=0)
+            order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
+            products_list = []
+            for pr in order_products:
+                products_list.append(pr.product_id)
+            for product in form.products:
+                if product.id in products_list:
+                    product.count_of_products = Order_Product.objects.get(product_id=product.id,
+                                                                          order_id=id_order, is_deleted=0).count_of_products
+            out.update({'order_form': form})
+            out.update({'page_title': "Добавление заявки"})
+        elif 'client-id' in request.GET:
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))

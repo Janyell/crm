@@ -158,4 +158,10 @@ class Order_Files(models.Model):
     order = models.ForeignKey(Orders, null=True, blank=True)
     title = models.CharField(max_length=50, null=False, blank=True)
     file = models.FileField(upload_to="uploads/", null=True, blank=True)
-# Create your models here.
+
+
+class Client_Files(models.Model):
+    client = models.ForeignKey(Clients, null=True, blank=True)
+    title = models.CharField(max_length=50, null=False, blank=True)
+    file = models.FileField(upload_to="uploads/", null=True, blank=True)
+
