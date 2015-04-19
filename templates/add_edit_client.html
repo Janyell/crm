@@ -204,7 +204,7 @@
     </div>
     {% if request.path == edit_client_url %}
         <div class="modal hide fade" id="manage-attachments" tabindex="-1">
-            <form class="form-horizontal form-add_modal form-add-file" method="post" action="{% url "upload_order_files" %}?id={{ request.GET.id }}" enctype="multipart/form-data" role="form">
+            <form class="form-horizontal form-add_modal form-add-file" method="post" action="{% url "upload_client_files" %}?id={{ request.GET.id }}" enctype="multipart/form-data" role="form">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
                     <h3 class="form-add__head">Управление файлами</h3>
