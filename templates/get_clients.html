@@ -138,6 +138,10 @@
                     var info = table.page.info();
                     $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
                 });
+                $('.files-button').bind('click', function(){
+                    var files = $(this).attr('value');
+                    $('.files__data_modal').html(files);
+                });
             });
         })(jQuery);
     </script>
