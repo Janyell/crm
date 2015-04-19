@@ -324,6 +324,13 @@ def full_get_clients(request):
     clients = Clients.objects.filter(is_deleted=0, is_interested=0)
     for c in clients:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
+        c.files = []
+        if Client_Files.objects.filter(client_id=c.id).all() is not None:
+            for client_file in Client_Files.objects.filter(client_id=c.id).all():
+                if client_file.file is not None and client_file.file != '':
+                    client_file.name = client_file.title
+                    client_file.url = client_file.file.url
+                    c.files.append(client_file)
     out.update({'page_title': "Клиенты"})
     out.update({'clients': clients})
     return render(request, 'get_clients.html', out)
@@ -346,6 +353,13 @@ def full_get_interested_clients(request):
     clients = Clients.objects.filter(is_deleted=0)
     for c in clients:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
+        c.files = []
+        if Client_Files.objects.filter(client_id=c.id).all() is not None:
+            for client_file in Client_Files.objects.filter(client_id=c.id).all():
+                if client_file.file is not None and client_file.file != '':
+                    client_file.name = client_file.title
+                    client_file.url = client_file.file.url
+                    c.files.append(client_file)
     out.update({'page_title': "Люди"})
     out.update({'clients': clients})
     return render(request, 'get_clients.html', out)
