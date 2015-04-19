@@ -35,9 +35,9 @@ def upload_order_file(request):
             # file is saved
             obj = form.save(commit=False)
             obj.order = Orders.objects.get(id=order_id)
-            if obj.title is None or obj.title == '':
-                obj.title = request.FILES['file'].name
-            if obj.file is not None and obj.file != '':
+            if obj.file is not None and str(obj.file) != '':
+                if obj.title is None or obj.title == '':
+                    obj.title = request.FILES['file'].name
                 obj.save()
             form_new = UploadFileForOrderForm()
             out.update({'form': form_new})
@@ -95,10 +95,10 @@ def upload_client_file(request):
         if form.is_valid():
             # file is saved
             obj = form.save(commit=False)
-            obj.client = Orders.objects.get(id=client_id)
-            if obj.title is None or obj.title == '':
-                obj.title = request.FILES['file'].name
-            if obj.file is not None and obj.file != '':
+            obj.client = Clients.objects.get(id=client_id)
+            if obj.file is not None and str(obj.file) != '':
+                if obj.title is None or obj.title == '':
+                    obj.title = request.FILES['file'].name
                 obj.save()
             form_new = UploadFileForClientForm()
             out.update({'form': form_new})
