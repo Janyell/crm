@@ -26,6 +26,14 @@
             {% url "get_orders" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
         {% endif %}
         " class="btn">Назад</a>
+        {% if request.path == edit_claim_url or request.path == edit_order_url %}
+            <a href="
+            {% if request.path == edit_claim_url %}
+                {% url "add_claim" %}?copy={{ request.GET.id }}" class="btn pull-right">Копировать заявку
+            {% else %}
+                {% url "add_order" %}?copy={{ request.GET.id }}" class="btn pull-right">Копировать заказ
+            {% endif %}</a>
+        {% endif %}
         <form class="form-horizontal form-add form-add-order" method="post" action="">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
@@ -271,7 +279,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="form-add__submits">
-                        <button type="submit" class="btn btn-primary" name="save-and-add-order" value="save-and-add-order">Сохранить</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
                         <button type="reset" class="btn">Очистить</button>
                         <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                     </div>
@@ -281,7 +289,7 @@
     {% endif %}
     {% if request.path == edit_order_url or request.path == edit_claim_url %}
         <div class="modal hide fade" id="manage-attachments" tabindex="-1">
-            <form class="form-horizontal form-add_modal form-add-file" method="post" action="{% url "upload_files" %}?id={{ request.GET.id }}" enctype="multipart/form-data" role="form">
+            <form class="form-horizontal form-add_modal form-add-file" method="post" action="{% url "upload_order_files" %}?id={{ request.GET.id }}" enctype="multipart/form-data" role="form">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
                     <h3 class="form-add__head">Управление файлами</h3>
@@ -561,7 +569,7 @@
                 });
                 {% else %}
                 var $manage_attachments = $("#manage-attachments");
-                var manage_attachments_url = "{% url "upload_files" %}?id={{ request.GET.id }}";
+                var manage_attachments_url = "{% url "upload_order_files" %}?id={{ request.GET.id }}";
                 $manage_attachments.find(".form-add__in-modal").load( manage_attachments_url + ' .in-modal', function() {
                     $('.btn-file').each(function (){
                         var self = this;
@@ -576,7 +584,7 @@
                     });
                     $('.delete-button').bind('click', function(){
                         var id = $(this).attr('value');
-                        $('#delete__ok').attr({'href': '{% url "delete_files" %}?id=' + id});
+                        $('#delete__ok').attr({'href': '{% url "delete_order_files" %}?id=' + id});
                     });
                 });
                 $('.form-add-file').on('submit', function(e) {
@@ -607,7 +615,7 @@
                                 });
                                 $('.delete-button').bind('click', function(){
                                     var id = $(this).attr('value');
-                                    $('#delete__ok').attr({'href': '{% url "delete_files" %}?id=' + id});
+                                    $('#delete__ok').attr({'href': '{% url "delete_order_files" %}?id=' + id});
                                 });
                             });
                         }
@@ -634,7 +642,7 @@
                                 });
                                 $('.delete-button').bind('click', function(){
                                     var id = $(this).attr('value');
-                                    $('#delete__ok').attr({'href': '{% url "delete_files" %}?id=' + id});
+                                    $('#delete__ok').attr({'href': '{% url "delete_order_files" %}?id=' + id});
                                 });
                             });
                         }

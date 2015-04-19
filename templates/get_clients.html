@@ -26,6 +26,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,6 +48,19 @@
                                     <a class="btn add-order-button" href="{% url "add_claim" %}?client-id={{ client.pk }}">Добавить заявку</a>
                                 {% else %}
                                     <a class="btn add-order-button" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if client.files %}
+                                    <a class="btn files-button" data-toggle="modal" href="#view-client-files" value="
+                                        {% for file in client.files %}
+                                            <div class=&quot;file&quot;>
+                                                <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot;>
+                                                    <i class=&quot;icon-file&quot;></i>{{ file.name }}
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    "><i class="icon-file"></i></a>
                                 {% endif %}
                             </td>
                             <td>
@@ -77,6 +91,19 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    <div class="modal hide fade" id="view-client-files" tabindex="-1" role="dialog" aria-labelledby="FilesLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Прикрепленные к клиенту файлы</h3>
+        </div>
+        <div class="modal-body">
+            <div class="files__data_modal">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -86,8 +113,8 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 5, 6, 7{% if request.path == get_clients_url %},8{% endif %} ] },
-                        { "bSearchable": false, "aTargets": [ 5, 6, 7{% if request.path == get_clients_url %},8{% endif %} ] }
+                        { "bSortable": false, "aTargets": [ 5, 6, 7, 8{% if request.path == get_clients_url %},9{% endif %} ] },
+                        { "bSearchable": false, "aTargets": [ 5, 6, 7, 8{% if request.path == get_clients_url %},9{% endif %} ] }
                     ],
                     {% if request.GET.length and start >= 0 %}
                         "iDisplayLength": {{ request.GET.length }},

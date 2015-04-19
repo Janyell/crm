@@ -2,8 +2,13 @@
 
 {%block content%}
     <div class="container">
-    <a href="{% if is_claim %}{% url "edit_claim" %}{% else %}{% url "edit_order" %}{% endif %}?id={{ request.GET.id }}" class="btn">Перейти к редактированию {% if is_claim %}заявки{% else %}заказа{% endif %}</a>
-        <form class="form-horizontal form-add form-add-file" method="post" action="{% url "upload_files" %}?id={{ request.GET.id }}" enctype="multipart/form-data">
+        {% url 'upload_order_files' as upload_order_files_url %}
+        {% if request.path == upload_order_files_url %}
+            <a href="{% if is_claim %}{% url "edit_claim" %}{% else %}{% url "edit_order" %}{% endif %}?id={{ request.GET.id }}" class="btn">Перейти к редактированию {% if is_claim %}заявки{% else %}заказа{% endif %}</a>
+        {% else %}
+            <a href="{% url "edit_client" %}?id={{ request.GET.id }}" class="btn">Перейти к редактированию клиента</a>
+        {% endif %}
+        <form class="form-horizontal form-add form-add-file" method="post" action="?id={{ request.GET.id }}" enctype="multipart/form-data">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <div class="in-modal">
             {% if files %}
@@ -60,7 +65,11 @@
             </div>
         </form>
     <div class="text-center">
-        <a href="{% if is_claim %}{% url "get_claims" %}{% else %}{% url "get_orders" %}{% endif %}" class="btn btn_finish">Закончить работу с файлами {% if is_claim %}заявки{% else %}заказа{% endif %}</a>
+        {% if request.path == upload_order_files_url %}
+            <a href="{% if is_claim %}{% url "get_claims" %}{% else %}{% url "get_orders" %}{% endif %}" class="btn btn_finish">Закончить работу с файлами {% if is_claim %}заявки{% else %}заказа{% endif %}</a>
+        {% else %}
+            <a href="{% if is_interested %}{% url "get_clients" %}{% else %}{% url "get_interested_clients" %}{% endif %}" class="btn btn_finish">Закончить работу с файлами клиента</a>
+        {% endif %}
     </div>
     </div>
 
@@ -74,6 +83,11 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    {% if request.path == upload_order_files_url %}
+        {% url "delete_order_files" as delete_files_url %}
+    {% else %}
+        {% url "delete_client_files" as delete_files_url %}
+    {% endif %}
     <script type="text/javascript">
         (function ($){
             $('.btn-file').each(function (){
@@ -87,9 +101,10 @@
                     $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
                 });
             });
+
             $('.delete-button').bind('click', function(){
                 var id = $(this).attr('value');
-                $('#delete__ok').attr({'href': '{% url "delete_files" %}?id=' + id});
+                $('#delete__ok').attr({'href': '{{ delete_files_url }}?id' +id});
             });
         })(jQuery);
     </script>

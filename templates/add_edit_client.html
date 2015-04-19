@@ -167,6 +167,17 @@
                     {{ client_form.email }}
                 </div>
             </div>
+            {% url "edit_client" as edit_client_url %}
+            {% if request.path == edit_client_url %}
+                <div class="control-group">
+                    <label class="control-label">
+                        Прикрепленные файлы
+                    </label>
+                    <div class="controls">
+                        <a class="btn" data-toggle="modal" href="#manage-attachments">Управление файлами</a>
+                    </div>
+                </div>
+            {% endif %}
             <div class="form-add__tips">
                 <div class="form-add-tips__tip">
                     <span class="required-input">*</span> - хотя бы одно из полей "Контактное лицо" и "Организация" обязательно для заполнения
@@ -179,15 +190,49 @@
             <div class="form-add__submits">
                 {% if not request.GET.is_interested %}
                     <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заказа</button>
-                {% endif %}
-                {% if request.GET.is_interested %}
+                {% else %}
                     <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заявки</button>
+                {% endif %}
+                {% url "add_client" as add_client_url %}
+                {% if request.path == add_client_url %}
+                    <button type="submit" class="btn" name="save-and-upload-file" value="save-and-upload-file">Сохранить и перейти к загрузке файлов</button>
                 {% endif %}
                 <button type="submit" class="btn" name="only-save" value="only-save">Сохранить</button>
                 <button type="reset" class="btn">Очистить</button>
             </div>
         </form>
     </div>
+    {% if request.path == edit_client_url %}
+        <div class="modal hide fade" id="manage-attachments" tabindex="-1">
+            <form class="form-horizontal form-add_modal form-add-file" method="post" action="{% url "upload_order_files" %}?id={{ request.GET.id }}" enctype="multipart/form-data" role="form">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3 class="form-add__head">Управление файлами</h3>
+                </div>
+                <div class="modal-body">
+                <div class="form-add__in-modal"></div>
+                <div class="form-add__submits">
+                    <button type="submit" class="btn btn-primary">Добавить файл</button>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-add__submits">
+                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal hide fade" id="delete-file" tabindex="-1">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3>Вы уверены, что хотите удалить этот файл?</h3>
+            </div>
+            <div class="modal-footer">
+                <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+                <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+            </div>
+        </div>
+    {% endif %}
     <script type="text/javascript">
         (function($){
             var $input_person_phone = $('#inputPersonPhone'),
@@ -205,6 +250,88 @@
                     'data-items': "10",
                     'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
                 });
+                {% if request.path == edit_client_url %}
+                    var $manage_attachments = $("#manage-attachments");
+                    var manage_attachments_url = "{% url "upload_client_files" %}?id={{ request.GET.id }}";
+                    $manage_attachments.find(".form-add__in-modal").load( manage_attachments_url + ' .in-modal', function() {
+                        $('.btn-file').each(function () {
+                            var self = this;
+                            $('input[type=file]', this).change(function () {
+                                $(self).next().remove();
+                                var value = $(this).val();
+                                var fileName = value.substring(value.lastIndexOf('/') + 1);
+                                fileName = value.substring(value.lastIndexOf('\\') + 1);
+                                var fileExt = fileName.split('.').pop().toLowerCase();
+                                $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
+                            });
+                            $('.delete-button').bind('click', function(){
+                                var id = $(this).attr('value');
+                                $('#delete__ok').attr({'href': '{% url "delete_client_files" %}?id=' + id});
+                            });
+                        });
+                        $('.form-add-file').on('submit', function(e) {
+                            e.preventDefault();
+                            var formdata = false;
+                            if(window.FormData){
+                                formdata = new FormData($(this)[0]);
+                            }
+                            $.ajax({
+                                type: $(this).attr('method'),
+                                url: this.action,
+                                data: formdata ? formdata : $(this).serialize(),
+                                context: this,
+                                processData: false,
+                                contentType: false,
+                                success: function(data, status) {
+                                    $manage_attachments.find(".form-add__in-modal").load(manage_attachments_url + ' .in-modal', function() {
+                                        $('.btn-file').each(function (){
+                                            var self = this;
+                                            $('input[type=file]', this).change(function (){
+                                                $(self).next().remove();
+                                                var value = $(this).val();
+                                                var fileName = value.substring(value.lastIndexOf('/') + 1);
+                                                fileName = value.substring(value.lastIndexOf('\\') + 1);
+                                                var fileExt = fileName.split('.').pop().toLowerCase();
+                                                $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
+                                            });
+                                        });
+                                        $('.delete-button').bind('click', function(){
+                                            var id = $(this).attr('value');
+                                            $('#delete__ok').attr({'href': '{% url "delete_client_files" %}?id=' + id});
+                                        });
+                                    });
+                                }
+                            });
+                            return false;
+                        });
+                        $("#delete__ok").bind('click', function(e) {
+                            e.preventDefault();
+                            $.ajax({
+                                url: $(this).attr('href'),
+                                success: function(data, status) {
+                                    $("#delete-file").modal("hide");
+                                    $manage_attachments.find(".form-add__in-modal").load(manage_attachments_url + ' .in-modal', function() {
+                                        $('.btn-file').each(function (){
+                                            var self = this;
+                                            $('input[type=file]', this).change(function (){
+                                                $(self).next().remove();
+                                                var value = $(this).val();
+                                                var fileName = value.substring(value.lastIndexOf('/') + 1);
+                                                fileName = value.substring(value.lastIndexOf('\\') + 1);
+                                                var fileExt = fileName.split('.').pop().toLowerCase();
+                                                $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
+                                            });
+                                        });
+                                        $('.delete-button').bind('click', function(){
+                                            var id = $(this).attr('value');
+                                            $('#delete__ok').attr({'href': '{% url "delete_client_files" %}?id=' + id});
+                                        });
+                                    });
+                                }
+                            });
+                        });
+                    });
+                {% endif %}
             });
 
             $(".person-phone-code").click(function(){
