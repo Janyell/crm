@@ -296,7 +296,7 @@ def full_add_edit_claim(request):
                     else:
                         return HttpResponseRedirect('/claims/')
                 else:
-                    return HttpResponseRedirect('/uploads/?id=%s' % new_claim.id)
+                    return HttpResponseRedirect('/uploads/order/?id=%s' % new_claim.id)
             else:
                 ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)

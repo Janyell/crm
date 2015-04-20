@@ -286,7 +286,7 @@ def full_add_edit_order(request):
                     return HttpResponseRedirect('/orders/')
                 else:
                     print(new_order.id)
-                    return HttpResponseRedirect('/uploads/?id=%s' % new_order.id)
+                    return HttpResponseRedirect('/uploads/order/?id=%s' % new_order.id)
             else:
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)
