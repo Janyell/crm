@@ -68,7 +68,7 @@
         {% if request.path == upload_order_files_url %}
             <a href="{% if is_claim %}{% url "get_claims" %}{% else %}{% url "get_orders" %}{% endif %}" class="btn btn_finish">Закончить работу с файлами {% if is_claim %}заявки{% else %}заказа{% endif %}</a>
         {% else %}
-            <a href="{% if is_interested %}{% url "get_clients" %}{% else %}{% url "get_interested_clients" %}{% endif %}" class="btn btn_finish">Закончить работу с файлами клиента</a>
+            <a href="{% if is_interested %}{% url "get_interested_clients" %}{% else %}{% url "get_clients" %}{% endif %}" class="btn btn_finish">Закончить работу с файлами клиента</a>
         {% endif %}
     </div>
     </div>
