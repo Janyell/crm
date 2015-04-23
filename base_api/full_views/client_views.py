@@ -27,7 +27,6 @@ def full_add_edit_client(request):
             is_interested = 0
             if 'is_interested' in request.POST:
                 is_interested = 1
-            print(is_interested)
             id_client = request.POST['pk']
             organization = request.POST['organization']
             last_name = request.POST['last_name']
@@ -291,7 +290,6 @@ def full_add_edit_client(request):
                     return HttpResponseRedirect('/clients/')
             else:
                 out.update({'page_title': "Добавление клиента"})
-                print(form.errors)
     else:
         if 'id' in request.GET:
             id_client = request.GET['id']

@@ -176,7 +176,6 @@ def full_add_edit_claim(request):
                 old_product.save(update_fields=["is_deleted"])
             products_list = request.POST.getlist('products[]')
             for id_of_pr in products_list:
-                print(int(id_of_pr))
                 if int(id_of_pr) < 0:
                     name_of_pr = 'select-product__title_' + id_of_pr
                     title_of_product = request.POST[name_of_pr]
@@ -315,7 +314,6 @@ def full_add_edit_claim(request):
                 out.update({'order_form': form})
                 out.update({'page_title': "Добавление заявки"})
         else:
-            print(form.errors)
             client = request.POST['client']
             source = request.POST['source']
             company = request.POST['company']

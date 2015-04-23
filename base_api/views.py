@@ -98,7 +98,6 @@ def log_in(request):
             username = request.POST["username"]
             password = request.POST["password"]
             user = authenticate(username=username, password=password)
-            print (user)
             if user is not None:
                 login(request, user)
                 if Roles.objects.get(id=request.user.id).role != 0:
@@ -334,7 +333,6 @@ def delete_client_files(request):
 def fix_bd_org_type(request):
     clients = Clients.objects.all()
     for client in clients:
-        print(client.organization)
         if u'ИП' in client.organization:
             client.organization_type = u'ИП'
             client.organization = client.organization[3:]
