@@ -26,8 +26,9 @@ def upload_order_file(request):
     if order_files is not None:
         for order_file in order_files:
             order_file.name = order_file.title
-            order_file.url = order_file.file.url
-            files.append(order_file)
+            if order_file.file:
+                order_file.url = order_file.file.url
+                files.append(order_file)
     out.update({'files': files})
     if request.method == 'POST':
         form = UploadFileForOrderForm(request.POST, request.FILES)
@@ -46,8 +47,9 @@ def upload_order_file(request):
             if order_files is not None:
                 for order_file in order_files:
                     order_file.name = order_file.title
-                    order_file.url = order_file.file.url
-                    files.append(order_file)
+                    if order_file.file:
+                        order_file.url = order_file.file.url
+                        files.append(order_file)
             out.update({'files': files})
             return render(request, 'files.html', out)
     else:
@@ -87,8 +89,9 @@ def upload_client_file(request):
     if client_files is not None:
         for client_file in client_files:
             client_file.name = client_file.title
-            client_file.url = client_file.file.url
-            files.append(client_file)
+            if client_file.file:
+                client_file.url = client_file.file.url
+                files.append(client_file)
     out.update({'files': files})
     if request.method == 'POST':
         form = UploadFileForClientForm(request.POST, request.FILES)
@@ -107,8 +110,9 @@ def upload_client_file(request):
             if client_files is not None:
                 for client_file in client_files:
                     client_file.name = client_file.title
-                    client_file.url = client_file.file.url
-                    files.append(client_file)
+                    if client_file.file:
+                        client_file.url = client_file.file.url
+                        files.append(client_file)
             out.update({'files': files})
             return render(request, 'files.html', out)
     else:
