@@ -141,7 +141,8 @@ def full_add_edit_client(request):
                                                    "person_phone", "organization_phone", "email", "is_interested",
                                                    "organization_type"])
                 return HttpResponseRedirect('/uploads/client/?id=%s' % new_client.id)
-            else:
+            # else:
+            elif 'only-save' in form.data:
                 new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                          patronymic=patronymic, person_phone=person_phone,
                                          organization_phone=organization_phone, email=email,
@@ -206,6 +207,7 @@ def full_add_edit_client(request):
                                                            organization_phone=organization_phone,
                                                            is_deleted=0)
                     except ObjectDoesNotExist:
+                        print(form.data)
                         if 'save-and-upload-file' in form.data:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
@@ -228,8 +230,8 @@ def full_add_edit_client(request):
                                                                     creation_date=datetime.now(), role=role,
                                                                     organization_type=organization_type)
                                 return HttpResponseRedirect('/clients/')
-                        # if 'save-and-add-order' in form.data:
-                        else:
+                        elif 'save-and-add-order' in form.data:
+                        # else:
                             if is_interested == 1:
                                 new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                     patronymic=patronymic, person_phone=person_phone,
@@ -272,8 +274,8 @@ def full_add_edit_client(request):
                                                                 creation_date=datetime.now(), is_interested=is_interested,
                                                                 role=role, organization_type=organization_type)
                             return HttpResponseRedirect('/uploads/client/?id=%s' % new_client.pk)
-                    # elif 'save-and-add-order' in form.data:
-                    else:
+                    elif 'save-and-add-order' in form.data:
+                    # else:
                         if is_interested == 1:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
