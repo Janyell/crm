@@ -265,7 +265,15 @@ def full_add_edit_client(request):
                                                                 creation_date=datetime.now(), role=role,
                                                                 organization_type=organization_type)
                             return HttpResponseRedirect('/clients/')
-                    elif 'save-and-add-order' in form.data:
+                    elif 'save-and-upload-file' in form.data:
+                            new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
+                                                                patronymic=patronymic, person_phone=person_phone,
+                                                                organization_phone=organization_phone, email=email,
+                                                                creation_date=datetime.now(), is_interested=is_interested,
+                                                                role=role, organization_type=organization_type)
+                            return HttpResponseRedirect('/uploads/client/?id=%s' % new_client.pk)
+                    # elif 'save-and-add-order' in form.data:
+                    else:
                         if is_interested == 1:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
@@ -281,13 +289,6 @@ def full_add_edit_client(request):
                                                                 creation_date=datetime.now(), role=role,
                                                                 organization_type=organization_type)
                             return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
-                    elif 'save-and-upload-file' in form.data:
-                            new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
-                                                                patronymic=patronymic, person_phone=person_phone,
-                                                                organization_phone=organization_phone, email=email,
-                                                                creation_date=datetime.now(), is_interested=is_interested,
-                                                                role=role, organization_type=organization_type)
-                            return HttpResponseRedirect('/uploads/client/?id=%s' % new_client.pk)
                     return HttpResponseRedirect('/clients/')
             else:
                 out.update({'page_title': "Добавление клиента"})
