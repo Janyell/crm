@@ -3,6 +3,13 @@
 {%block content%}
     <div class="container">
         <a href="{% url "get_orders" %}" class="btn">Назад</a>
+            {% url "edit_claim_for_other_managers" as edit_claim_for_other_managers_url %}
+            <a href="
+            {% if request.path == edit_claim_for_other_managers_url %}
+                {% url "add_claim" %}?copy={{ request.GET.id }}" class="btn pull-right">Копировать заявку
+            {% else %}
+                {% url "add_order" %}?copy={{ request.GET.id }}" class="btn pull-right">Копировать заказ
+            {% endif %}</a>
         <form class="form-horizontal form-add form-add-order" method="post" action="">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <input type="hidden" name="pk" value="{{ request.GET.id }}">
