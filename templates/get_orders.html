@@ -67,7 +67,11 @@
                                     <div class="hidden get-client-info__data">
                                         <div class="client-data__full-name">{{ order.client.full_name }}</div>
                                         <div class="client-data__contact-person-phone">{{ order.client.person_phone }}</div>
-                                        <div class="client-data__organization">{{ order.client.organization }}</div>
+                                        <div class="client-data__organization">
+                                            {% if order.client.organization %}
+                                                {{ order.client.organization }}{% if order.client.organization_type %}, {{ order.client.organization_type }}{% endif %}
+                                            {% endif %}
+                                        </div>
                                         <div class="client-data__organization-phone">{{ order.client.organization_phone }}</div>
                                         <div class="client-data__email">{{ order.client.email }}</div>
                                     </div>
@@ -138,7 +142,7 @@
                                 <a class="btn files-button" data-toggle="modal" href="#view-order-files" value="
                                     {% for file in order.files %}
                                         <div class=&quot;file&quot;>
-                                            <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot;>
+                                            <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
                                                 <i class=&quot;icon-file&quot;></i>{{ file.name }}
                                             </a>
                                         </div>

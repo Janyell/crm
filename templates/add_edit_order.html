@@ -56,6 +56,19 @@
                 <input type="hidden" name="pk" value="{{ request.GET.id }}">
             {% endif %}
             <div class="form-add">
+                {% if request.path == edit_claim_url or request.path == edit_order_url %}
+                    {% if user_role == 0 and order_form.role %}
+                        <div class="control-group">
+                            <label class="control-label" for="selectRole">
+                                Менеджер
+                                <span class="required-input">*</span>
+                            </label>
+                            <div class="controls">
+                                {{ order_form.role }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
                 <div class="control-group form-add__client">
                     <label class="control-label" for="selectClient">
                         Клиент
