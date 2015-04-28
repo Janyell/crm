@@ -103,38 +103,83 @@ class LoginForm(ModelForm):
                                              'required': 1})
         }
 
+orders_form_widgets = {
+    'client': Select(attrs={'id': "selectClient", 'required': 1, 'class': 'selectpicker'}),
+    'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker'}),
+    'bill': TextInput(attrs={'id': "inputBill"}),
+    'payment_date': TextInput(attrs={'id': "inputPaymentDate",
+                                     'class': "datetime",
+                                     'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
+    'order_status': Select(attrs={'id': "selectStatus"}),
+    'bill_status': Select(attrs={'id': "selectBillStatus"}, choices=BILL_STATUS_CHOICES_FOR_ORDER),
+    'city': TextInput(attrs={'id': "inputCity",
+                             'placeholder': "Город"}),
+    'comment': Textarea(attrs={'id': "inputComment",
+                               'placeholder': "Комментарии"}),
+    'source': Select(attrs={'id': "selectSource", 'required': 1}),
+    'ready_date': TextInput(attrs={'id': "inputReadyDate",
+                                   'class': "datetime",
+                                   'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
+    'shipped_date': TextInput(attrs={'id': "inputShippedDate",
+                                     'class': "datetime",
+                                     'placeholder': "ГГГГ-ММ-ДД"}),
+}
 
 class OrdersForm(forms.ModelForm):
     class Meta:
         model = Orders
         exclude = ['is_deleted', 'role', 'in_archive', 'order_date', 'unique_number']
-        widgets = {
-            'client': Select(attrs={'id': "selectClient", 'required': 1, 'class': 'selectpicker'}),
-            'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker'}),
-            'bill': TextInput(attrs={'id': "inputBill"}),
-            'payment_date': TextInput(attrs={'id': "inputPaymentDate",
-                                             'class': "datetime",
-                                             'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
-            'order_status': Select(attrs={'id': "selectStatus"}),
-            'bill_status': Select(attrs={'id': "selectBillStatus"}, choices=BILL_STATUS_CHOICES_FOR_ORDER),
-            'city': TextInput(attrs={'id': "inputCity",
-                                     'placeholder': "Город"}),
-            'comment': Textarea(attrs={'id': "inputComment",
-                                       'placeholder': "Комментарии"}),
-            'source': Select(attrs={'id': "selectSource", 'required': 1}),
-            'ready_date': TextInput(attrs={'id': "inputReadyDate",
-                                           'class': "datetime",
-                                           'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
-            'shipped_date': TextInput(attrs={'id': "inputShippedDate",
-                                             'class': "datetime",
-                                             'placeholder': "ГГГГ-ММ-ДД"}),
-        }
+        widgets = orders_form_widgets
+
+orders_form_widgets.update({'role': Select(attrs={'id': "selectRole", 'required': 1})})
+
+
+class OrdersFormForAdmins(forms.ModelForm):
+    class Meta:
+        model = Orders
+        exclude = ['is_deleted', 'role', 'in_archive', 'order_date', 'unique_number']
+        widgets = orders_form_widgets
+
+claims_form_widgets = {
+    'client': Select(attrs={'id': "selectClient", 'required': 1, 'class': 'selectpicker'}),
+    'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker'}),
+    'bill': TextInput(attrs={'id': "inputBill"}),
+    'payment_date': TextInput(attrs={'id': "inputPaymentDate",
+                                     'class': "datetime",
+                                     'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
+    'order_status': Select(attrs={'id': "selectStatus"}),
+    'bill_status': Select(attrs={'id': "selectBillStatus"}, choices=BILL_STATUS_CHOICES_FOR_CLAIM),
+    'city': TextInput(attrs={'id': "inputCity",
+                             'placeholder': "Город"}),
+    'comment': Textarea(attrs={'id': "inputComment",
+                               'placeholder': "Комментарии"}),
+    'source': Select(attrs={'id': "selectSource", 'required': 1}),
+    'ready_date': TextInput(attrs={'id': "inputReadyDate",
+                                   'class': "datetime",
+                                   'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
+}
 
 
 class ClaimsForm(forms.ModelForm):
     class Meta:
         model = Orders
         exclude = ['is_deleted', 'role', 'in_archive', 'order_date', 'unique_number']
+        widgets = claims_form_widgets
+
+claims_form_widgets.update({'role': Select(attrs={'id': "selectRole", 'required': 1})})
+
+
+class ClaimsFormForAdmins(forms.ModelForm):
+    class Meta:
+        model = Orders
+        exclude = ['is_deleted', 'in_archive', 'order_date', 'unique_number']
+        widgets = claims_form_widgets
+
+
+class ClaimsFormForAdmin(forms.ModelForm):
+    class Meta:
+        model = Orders
+        exclude = ['is_deleted', 'in_archive', 'order_date', 'unique_number']
         widgets = {
             'client': Select(attrs={'id': "selectClient", 'required': 1, 'class': 'selectpicker'}),
             'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker'}),
@@ -152,6 +197,7 @@ class ClaimsForm(forms.ModelForm):
             'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                            'class': "datetime",
                                            'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
+            'role': Select(attrs={'id': "selectRole", 'required': 1}),
         }
 
 

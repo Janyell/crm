@@ -75,7 +75,7 @@
                 <div class="analyze-managers__input">
                     <select name="period" id="selectPeriod">
                         <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>Последний месяц</option>
-                        <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>Последний год</option>
+                        <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>По месяцам</option>
                         <option value="all"{% if request.GET.period == "all" %} selected="selected"{% endif %}>Весь период продаж</option>
                     </select>
                 </div>
