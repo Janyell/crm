@@ -8,11 +8,11 @@ body {
 .navbar-link_logout {
     padding-left: 20px; 
 }
-.required-input {
+.required-input, .red {
     color: red;
     font-weight: normal;
 }
-.required-input_second {
+.required-input_second, .blue {
     color: blue;
 }
 .form-add__input, .analyst__btns {
@@ -63,16 +63,16 @@ body {
 .dataTables_length select {
     margin: 0 5px;
 }
-.client-info__head {
+.client-info__head, .bill-info__head {
     float: left;
     width: 160px;
     text-align: right;
     font-weight: bold;
 }
-.client-info__data {
+.client-info__data, .bill-info__data {
     margin-left: 180px;
 }
-.client-info__item {
+.client-info__item, .bill-info__item {
     margin: 5px 0;
 }
 #add-product-table_wrapper, .select-product-table_wrapper {

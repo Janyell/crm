@@ -162,11 +162,19 @@
                 </div>
                 {% if request.path == add_claim_url or request.path == edit_claim_url %}
                 <div class="control-group">
-                    <label class="control-label" for="selectStatus">
+                    <label class="control-label" for="selectBillStatus">
                         Статус заявки
                     </label>
                     <div class="controls">
                         {{ order_form.bill_status }}
+                    </div>
+                </div>
+                <div class="control-group brought-sum hide">
+                    <label class="control-label" for="inputBroughtSum">
+                        Внесена сумма
+                    </label>
+                    <div class="controls">
+                        {{ order_form.brought_sum }}
                     </div>
                 </div>
                 {% else %}
@@ -223,6 +231,14 @@
                     </label>
                     <div class="controls">
                         {{ order_form.bill_status }}
+                    </div>
+                </div>
+                <div class="control-group brought-sum hide">
+                    <label class="control-label" for="inputBroughtSum">
+                        Внесена сумма
+                    </label>
+                    <div class="controls">
+                        {{ order_form.brought_sum }}
                     </div>
                 </div>
                 <div class="control-group">
@@ -382,6 +398,20 @@
                     'data-size': "10"
                 });
                 $select_company.selectpicker();
+
+                var $brought_sum = $('.brought-sum');
+                var $select_bill_status = $('#selectBillStatus');
+                if ($select_bill_status.val() == 1) {
+                    $brought_sum.css({'display': 'block'});
+                }
+                $select_bill_status.change(function() {
+                    if ($(this).val() == 1) {
+                        $brought_sum.css({'display': 'block'});
+                    }
+                    else {
+                        $brought_sum.css({'display': 'none'});
+                    }
+                });
 
                 {% if request.path == add_order_url or request.path == add_claim_url %}
                 var url;

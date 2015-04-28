@@ -69,15 +69,31 @@
                 </div>
             </div><!--
             --><div class="control-group control-group_inline">
-                <label class="analyze-managers__head" for="selectPeriod">
+                <div class="analyze-managers__head">
                     Период
-                </label>
+                </div>
                 <div class="analyze-managers__input">
-                    <select name="period" id="selectPeriod">
-                        <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>Последний месяц</option>
-                        <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>По месяцам</option>
-                        <option value="all"{% if request.GET.period == "all" %} selected="selected"{% endif %}>Весь период продаж</option>
-                    </select>
+                    <label class="radio">
+                        <input type="radio" class="radio-month" name="period[]" value="month"
+                            {% if not period or "month" in period %} checked="checked"{% endif %} />
+                        Месяц
+                    </label>
+                    <div id="monthDate" class="input-append date{% if not period or "month" in period %}show{% else %}hide{% endif %}">
+                        <input type="text" id="inputMonthDate" class="datetime" placeholder="ГГГГ-ММ" name="month-date" value="{{ month_date }}" />
+                        <span class="add-on">
+                            <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                        </span>
+                    </div>
+                    <label class="radio">
+                        <input type="radio" name="period[]" value="year"
+                            {% if "year" in period %} checked="checked"{% endif %} />
+                        По месяцам
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="period[]" value="all"
+                            {% if "all" in period %} checked="checked"{% endif %} />
+                        Весь период продаж
+                    </label>
                 </div>
             </div>
             <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
@@ -248,5 +264,30 @@
                 </script>
             {% endfor %}
         {% endif %}
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function() {
+                    var $month_date = $('#monthDate');
+                    $month_date.datetimepicker({
+                        format: 'yyyy-MM',
+                        language: 'ru',
+                        pickTime: false,
+                        viewMode: "months",
+                        minViewMode: "months"
+                    });
+{#                    $month_date.datetimepicker("setDate", new Date());#}
+
+                    var $radio_month = $('.radio-month');
+                    $("input[name='period[]']").change(function () {
+                        if ($radio_month.is(":checked")) {
+                            $month_date.css({'display': 'block'});
+                        }
+                        else {
+                            $month_date.css({'display': 'none'});
+                        }
+                    });
+                });
+            })(jQuery);
+        </script>
     </div>
 {% endblock %}
