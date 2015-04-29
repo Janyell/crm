@@ -86,8 +86,26 @@
                                 {{ order.account_number }}
                             {% endif %}
                         </td>
-                        <td>{% if order.bill != None %}
-                                {{ order.bill_right_format }}
+                        <td class="product-wrap">
+                            {% if order.bill_right_format != None %}
+                                {% if not order.debt_right_format and order.debt_right_format > 0 %}
+                                    <a href="#bill-info" role="button" data-toggle="modal" class="get-bill-info red">
+                                        <div class="get-bill-info__head">
+                                            {{ order.bill_right_format }}
+                                        </div>
+                                        <div class="hidden get-bill-info__data">
+                                            <div class="bill-data__bill">{{ order.bill_right_format }}</div>
+                                            <div class="client-data__brought_sum">{{ order.brought_sum_right_format }}</div>
+                                            <div class="client-data__debt">{{ order.debt_right_format }}</div>
+                                        </div>
+                                    </a>
+                                {% elif order.debt_right_format == 0 %}
+                                    <span class="blue">
+                                        {{ order.bill_right_format }}
+                                    </span>
+                                {% else %}
+                                    {{ order.bill_right_format }}
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td>{% if order.payment_date != None %}
@@ -274,6 +292,38 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    <div class="modal hide fade" id="bill-info" tabindex="-1" role="dialog" aria-labelledby="billInfoLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 class="center">Детализация счета</h3>
+        </div>
+        <div class="modal-body bill-info">
+            <div class="bill-info__item bill-info__bill clearfix">
+                <div class="bill-info__head">
+                    Сумма счета
+                </div>
+                <div class="bill-info__data">
+                </div>
+            </div>
+            <div class="bill-info__item bill-info__brought-sum clearfix">
+                <div class="bill-info__head">
+                    Внесенная сумма
+                </div>
+                <div class="bill-info__data">
+                </div>
+            </div>
+            <div class="bill-info__item bill-info__debt clearfix">
+                <div class="bill-info__head">
+                    Долг
+                </div>
+                <div class="bill-info__data">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -350,6 +400,15 @@
                 $(".add-button").click(function() {
                     var info = table.page.info();
                     $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1"{% else %}+ "?"{% endif %} + "page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                $('.get-bill-info').bind('click', function(){
+                    var $bill_info__data = $('#bill-info').find('.modal-body');
+                    var bill = $(this).find('.bill-data__bill').text();
+                    $bill_info__data.find('.bill-info__bill > .bill-info__data').text(bill);
+                    var brought_sum = $(this).find('.bill-data__brought_sum').text();
+                    $bill_info__data.find('.bill-info__brought_sum > .bill-info__data').text(brought_sum);
+                    var debt = $(this).find('.bill-data__debt').text();
+                    $bill_info__data.find('.bill-info__debt > .bill-info__data').text(debt);
                 });
             });
         })(jQuery);
