@@ -29,7 +29,10 @@ def full_add_edit_order(request):
         out.update({'page': page})
         out.update({'length': length})
     if request.method == 'POST':
-        form = OrdersForm(request.POST)
+        if user_role == 0:
+            form = OrdersFormForAdmins(request.POST)
+        else:
+            form = OrdersForm(request.POST)
         if 'client-id' in request.GET:
             client_id = request.GET['client-id']
             out.update({'client_id': client_id})
@@ -84,14 +87,28 @@ def full_add_edit_order(request):
                 client = Clients.objects.get(id=id_client, is_deleted=0)
             else:
                 out.update({"error": 1})
-                OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                if user_role == 0:
+                    OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
                     queryset=Companies.objects.filter(is_deleted=0), required=False)
-                OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                else:
+                    OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                    queryset=Companies.objects.filter(is_deleted=0), required=False)
+                if user_role == 0:
+                    OrdersFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                else:
+                    OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 if order.shipped_date is not None:
                     shipped_day_month = order.shipped_date.date()
                 else:
                     shipped_day_month = None
-                form = OrdersForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
+                if user_role == 0:
+                    form = OrdersFormForAdmins({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
+                                   'payment_date': payment_date, 'order_status': order_status,
+                                   'bill_status': bill_status, 'city': city, 'comment': comment,
+                                   'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                                   'shipped_date': shipped_day_month, 'role': request.POST['role']})
+                else:
+                    form = OrdersForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
@@ -111,14 +128,28 @@ def full_add_edit_order(request):
                     bill = int(request.POST['bill'])
                 except Exception:
                     out.update({"error": 1})
-                    OrdersForm.base_fields['company'] = CompanyModelChoiceField(
-                        queryset=Companies.objects.filter(is_deleted=0), required=False)
-                    OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                    if user_role == 0:
+                        OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                                                    queryset=Companies.objects.filter(is_deleted=0), required=False)
+                    else:
+                        OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                                                    queryset=Companies.objects.filter(is_deleted=0), required=False)
+                    if user_role == 0:
+                        OrdersFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                    else:
+                        OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                     if order.shipped_date is not None:
                         shipped_day_month = order.shipped_date.date()
                     else:
                         shipped_day_month = None
-                    form = OrdersForm({'client': client, 'company': company, 'bill': request.POST['bill'],
+                    if user_role == 0:
+                        form = OrdersFormForAdmins({'client': client, 'company': company, 'bill': request.POST['bill'],
+                                       'payment_date': payment_date, 'order_status': order_status,
+                                       'bill_status': bill_status, 'city': city, 'comment': comment,
+                                       'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                                       'shipped_date': shipped_day_month, 'role': request.POST['role']})
+                    else:
+                        form = OrdersForm({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'payment_date': payment_date, 'order_status': order_status,
                                        'bill_status': bill_status, 'city': city, 'comment': comment,
                                        'source': source, 'ready_date': ready_date, 'account_number': account_number,
@@ -164,14 +195,28 @@ def full_add_edit_order(request):
                     title_of_product = request.POST[name_of_pr]
                     if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
                         out.update({"error": 2})
-                        OrdersForm.base_fields['company'] = CompanyModelChoiceField(
-                            queryset=Companies.objects.filter(is_deleted=0), required=False)
-                        OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                        if user_role == 0:
+                            OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                                                        queryset=Companies.objects.filter(is_deleted=0), required=False)
+                        else:
+                            OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                                                        queryset=Companies.objects.filter(is_deleted=0), required=False)
+                        if user_role == 0:
+                            OrdersFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                        else:
+                            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         if order.shipped_date is not None:
                             shipped_day_month = order.shipped_date.date()
                         else:
                             shipped_day_month = None
-                        form = OrdersForm({'client': client, 'company': company, 'bill': bill,
+                        if user_role == 0:
+                            form = OrdersFormForAdmins({'client': client, 'company': company, 'bill': bill,
+                                           'payment_date': payment_date, 'order_status': order_status,
+                                           'bill_status': bill_status, 'city': city, 'comment': comment,
+                                           'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                                           'shipped_date': shipped_day_month, 'role': request.POST['role']})
+                        else:
+                            form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
@@ -212,7 +257,6 @@ def full_add_edit_order(request):
             return HttpResponseRedirect('/orders/')
         if form.is_valid():
             client = form.cleaned_data['client']
-            role = Roles.objects.get(id=request.user.id, is_deleted=0)
             source = form.cleaned_data['source']
             unique_number = id_generator()
             company = form.cleaned_data['company']
@@ -229,6 +273,7 @@ def full_add_edit_order(request):
             comment = form.cleaned_data['comment']
             city = form.cleaned_data['city']
             account_number = form.cleaned_data['account_number']
+            role = form.cleaned_data['role']
             products_list = request.POST.getlist('products[]')
             is_order_create = False
             new_order_was_not_created = True
@@ -238,14 +283,28 @@ def full_add_edit_order(request):
                     title_of_product = request.POST[name_of_pr]
                     if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
                         out.update({"error": 2})
-                        OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                                    required=False)
-                        OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                        if user_role == 0:
+                            OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                                                        queryset=Companies.objects.filter(is_deleted=0), required=False)
+                        else:
+                            OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                                                        queryset=Companies.objects.filter(is_deleted=0), required=False)
+                        if user_role == 0:
+                            OrdersFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                        else:
+                            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         if shipped_date is not None:
                             shipped_day_month = shipped_date.date()
                         else:
                             shipped_day_month = None
-                        form = OrdersForm({'client': client, 'company': company, 'bill': bill,
+                        if user_role == 0:
+                            form = OrdersFormForAdmins({'client': client, 'company': company, 'bill': bill,
+                                           'payment_date': payment_date, 'order_status': order_status,
+                                           'bill_status': bill_status, 'city': city, 'comment': comment,
+                                           'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                                           'shipped_date': shipped_day_month, 'role': role})
+                        else:
+                            form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
@@ -287,14 +346,28 @@ def full_add_edit_order(request):
                 else:
                     return HttpResponseRedirect('/uploads/order/?id=%s' % new_order.id)
             else:
-                OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                            required=False)
-                OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                if user_role == 0:
+                    OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                                                queryset=Companies.objects.filter(is_deleted=0), required=False)
+                else:
+                    OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                                                queryset=Companies.objects.filter(is_deleted=0), required=False)
+                if user_role == 0:
+                    OrdersFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                else:
+                    OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 if shipped_date is not None:
                     shipped_day_month = shipped_date.date()
                 else:
                     shipped_day_month = None
-                form = OrdersForm({'client': client, 'company': company, 'bill': bill,
+                if user_role == 0:
+                    form = OrdersFormForAdmins({'client': client, 'company': company, 'bill': bill,
+                                   'payment_date': payment_date, 'order_status': order_status,
+                                   'bill_status': bill_status, 'city': city, 'comment': comment,
+                                   'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                                   'shipped_date': shipped_day_month, 'role': role})
+                else:
+                    form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
@@ -314,6 +387,7 @@ def full_add_edit_order(request):
             source = request.POST['source']
             company = request.POST['company']
             bill = request.POST['bill']
+            role = request.POST['role']
             payment_date = request.POST['payment_date']
             order_status = request.POST['order_status']
             bill_status = request.POST['bill_status']
@@ -322,14 +396,28 @@ def full_add_edit_order(request):
             comment = request.POST['comment']
             city = request.POST['city']
             account_number = request.POST['account_number']
-            OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=False)
-            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            if user_role == 0:
+                OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+            else:
+                OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+            if user_role == 0:
+                OrdersFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            else:
+                OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             if shipped_date is not None:
                 shipped_day_month = shipped_date.date()
             else:
                 shipped_day_month = None
-            form = OrdersForm({'client': client, 'company': company, 'bill': bill,
+            if user_role == 0:
+                form = OrdersFormForAdmins({'client': client, 'company': company, 'bill': bill,
+                               'payment_date': payment_date, 'order_status': order_status,
+                               'bill_status': bill_status, 'city': city, 'comment': comment,
+                               'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                               'shipped_date': shipped_day_month, 'role': role})
+            else:
+                form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                'payment_date': payment_date, 'order_status': order_status,
                                'bill_status': bill_status, 'city': city, 'comment': comment,
                                'source': source, 'ready_date': ready_date, 'account_number': account_number,
@@ -351,14 +439,29 @@ def full_add_edit_order(request):
             order = Orders.objects.get(pk=id_order, is_deleted=0)
             client = order.client
             out.update({'client_id': client.id})
-            OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=False)
-            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            if user_role == 0:
+                OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+            else:
+                OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+            if user_role == 0:
+                OrdersFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            else:
+                OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             if order.shipped_date is not None:
                 shipped_day_month = order.shipped_date.date()
             else:
                 shipped_day_month = None
-            form = OrdersForm({'company': order.company, 'bill': order.bill,
+            if user_role == 0:
+                form = OrdersFormForAdmins({'company': order.company, 'bill': order.bill,
+                               'payment_date': order.payment_date, 'order_status': order.order_status,
+                               'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
+                               'source': order.source, 'ready_date': order.ready_date,
+                               'account_number': order.account_number, 'shipped_date': shipped_day_month,
+                               'role': order.role})
+            else:
+                form = OrdersForm({'company': order.company, 'bill': order.bill,
                                'payment_date': order.payment_date, 'order_status': order.order_status,
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
@@ -375,12 +478,22 @@ def full_add_edit_order(request):
             out.update({'order_form': form})
             out.update({'page_title': "Добавление заказа"})
         elif 'client-id' in request.GET:
-            OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=False)
-            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            if user_role == 0:
+                OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+            else:
+                OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+            if user_role == 0:
+                OrdersFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            else:
+                OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_id = request.GET['client-id']
             client = Clients.objects.get(id=client_id, is_deleted=0)
-            form = OrdersForm({'client': client})
+            if user_role == 0:
+                form = OrdersFormForAdmins({'client': client})
+            else:
+                form = OrdersForm({'client': client})
             form.products = Products.objects.filter(is_deleted=0)
             out.update({'order_form': form})
             out.update({'client_id': client_id})
@@ -391,14 +504,29 @@ def full_add_edit_order(request):
             order = Orders.objects.get(pk=id_order, is_deleted=0)
             client = order.client
             out.update({'client_id': client.id})
-            OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=False)
-            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            if user_role == 0:
+                OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+            else:
+                OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+            if user_role == 0:
+                OrdersFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            else:
+                OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             if order.shipped_date is not None:
                 shipped_day_month = order.shipped_date.date()
             else:
                 shipped_day_month = None
-            form = OrdersForm({'client': order.client, 'company': order.company, 'bill': order.bill,
+            if user_role == 0:
+                form = OrdersFormForAdmins({'client': order.client, 'company': order.company, 'bill': order.bill,
+                               'payment_date': order.payment_date, 'order_status': order.order_status,
+                               'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
+                               'source': order.source, 'ready_date': order.ready_date,
+                               'account_number': order.account_number, 'shipped_date': shipped_day_month,
+                               'role': order.role})
+            else:
+                form = OrdersForm({'client': order.client, 'company': order.company, 'bill': order.bill,
                                'payment_date': order.payment_date, 'order_status': order.order_status,
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
@@ -415,10 +543,20 @@ def full_add_edit_order(request):
             out.update({'order_form': form})
             out.update({'page_title': "Редактирование заказа"})
         else:
-            OrdersForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=False)
-            OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
-            form = OrdersForm()
+            if user_role == 0:
+                OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+            else:
+                OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                                            queryset=Companies.objects.filter(is_deleted=0), required=False)
+            if user_role == 0:
+                OrdersFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            else:
+                OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            if user_role == 0:
+                form = OrdersFormForAdmins()
+            else:
+                form = OrdersForm()
             form.products = Products.objects.filter(is_deleted=0)
             out.update({'order_form': form})
             out.update({'page_title': "Добавление заказа"})

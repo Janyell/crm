@@ -139,7 +139,7 @@ orders_form_widgets.update({'role': Select(attrs={'id': "selectRole", 'required'
 class OrdersFormForAdmins(forms.ModelForm):
     class Meta:
         model = Orders
-        exclude = ['is_deleted', 'role', 'in_archive', 'order_date', 'unique_number']
+        exclude = ['is_deleted', 'in_archive', 'order_date', 'unique_number']
         widgets = orders_form_widgets
 
 claims_form_widgets = {
