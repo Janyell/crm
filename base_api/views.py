@@ -387,3 +387,7 @@ def made_excel(request):
     # сохраняем данные
     wb.save(filename)
     return HttpResponseRedirect(Order_Files.objects.get(id=1).file.url)
+
+
+def analyze_debtors(request):
+    return render(request, 'analyze_debtors.html')

@@ -52,7 +52,7 @@
                                 </li>
                             {% endif %}
                             {% if user_role == 0 %}
-                                <li class={% navactive request 'analyst analyze_products view_analyzed_product analyze_managers analyze_period' %}>
+                                <li class={% navactive request 'analyst analyze_products view_analyzed_product analyze_managers analyze_period analyze_debtors' %}>
                                     <a href="{% url "analyst" %}">Аналитика</a>
                                 </li>
                             {% endif %}

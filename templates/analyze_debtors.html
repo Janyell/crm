@@ -1,0 +1,148 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <div class="container">
+        <h2 class="center">{{ page_title }}</h2>
+        {% url 'get_interested_clients' as get_interested_clients_url %}
+        {% if request.path == get_interested_clients_url %}
+            <a href="{% url "add_client" %}?is_interested=1" class="btn btn_add-client add-button">Добавить клиента</a>
+        {% endif %}
+        {% url 'get_clients' as get_clients_url %}
+        {% if request.path == get_clients_url %}
+            <a href="{% url "add_client" %}" class="btn btn_add-client add-button">Добавить клиента</a>
+        {% endif %}
+        {% if clients %}
+            <table class="table table-hover table-bordered" id="client-table">
+                <thead>
+                    <tr>
+                        <th>Организация</th>
+                        <th>Телефон организации</th>
+                        <th>Контактное лицо</th>
+                        <th>Телефон контактного лица</th>
+                        <th>E-mail</th>
+                        {% if request.path == get_clients_url %}
+                            <th></th>
+                        {% endif %}
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td>
+                                {% if client.organization %}
+                                    {{ client.organization }}{% if client.organization_type %}, {{ client.organization_type }}{% endif %}</td>
+                                {% endif %}
+                            <td>{{ client.organization_phone }}</td>
+                            <td>{{ client.person_full_name }}</td>
+                            <td>{{ client.person_phone }}</td>
+                            <td>{{ client.email }}</td>
+                            {% if request.path == get_clients_url %}
+                                <td><a class="btn" href="{% url "get_orders" %}?client-id={{ client.pk }}">Заказы</a></td>
+                            {% endif %}
+                            <td>
+                                {% if request.path == get_interested_clients_url %}
+                                    <a class="btn add-order-button" href="{% url "add_claim" %}?client-id={{ client.pk }}">Добавить заявку</a>
+                                {% else %}
+                                    <a class="btn add-order-button" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if client.files %}
+                                    <a class="btn files-button" data-toggle="modal" href="#view-client-files" value="
+                                        {% for file in client.files %}
+                                            <div class=&quot;file&quot;>
+                                                <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
+                                                    <i class=&quot;icon-file&quot;></i>{{ file.name }}
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    "><i class="icon-file"></i></a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if request.path == get_interested_clients_url %}
+                                    <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}&is_interested=1"><i class="icon-pencil"></i></a>
+                                {% else %}
+                                    <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a>
+                                {% endif %}
+                            </td>
+                            <td><a class="btn delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
+                                <i class="icon-remove"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h5 class="center">Не было добавлено ни одного клиента</h5>
+        {% endif %}
+    </div>
+     <div class="modal hide fade" id="delete-client" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Вы уверены, что хотите удалить этого клиента?</h3>
+        </div>
+        <div class="modal-footer">
+            <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+    <div class="modal hide fade" id="view-client-files" tabindex="-1" role="dialog" aria-labelledby="FilesLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Прикрепленные к клиенту файлы</h3>
+        </div>
+        <div class="modal-body">
+            <div class="files__data_modal">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                var $client_table = $("#client-table");
+                $client_table.dataTable({
+                    "language": {
+                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                    },
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 5, 6, 7, 8{% if request.path == get_clients_url %},9{% endif %} ] },
+                        { "bSearchable": false, "aTargets": [ 5, 6, 7, 8{% if request.path == get_clients_url %},9{% endif %} ] }
+                    ],
+                    {% if request.GET.length and start >= 0 %}
+                        "iDisplayLength": {{ request.GET.length }},
+                        "iDisplayStart": {{ start }}
+                    {% endif %}
+                });
+                var table = $client_table.DataTable();
+                 $('.delete-button').bind('click', function(){
+                    var id = $(this).attr('value');
+                    $('#delete__ok').attr({'href': '{% url "delete_client" %}?id=' + id});
+                });
+                $(".edit-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                $(".add-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "{% if request.path == get_interested_clients_url %}&{% else %}?{% endif %}page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                $(".add-order-button").click(function() {
+                    var info = table.page.info();
+                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                $('.files-button').bind('click', function(){
+                    var files = $(this).attr('value');
+                    $('.files__data_modal').html(files);
+                });
+            });
+        })(jQuery);
+    </script>
+{%endblock%}

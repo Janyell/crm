@@ -74,7 +74,7 @@
                 </div>
                 <div class="analyze-managers__input">
                     <label class="radio">
-                        <input type="radio" class="radio-month" name="period[]" value="month"
+                        <input type="radio" class="radio-month" name="period" value="month"
                             {% if not period or "month" in period %} checked="checked"{% endif %} />
                         Месяц
                     </label>
@@ -85,12 +85,12 @@
                         </span>
                     </div>
                     <label class="radio">
-                        <input type="radio" name="period[]" value="year"
+                        <input type="radio" name="period" value="year"
                             {% if "year" in period %} checked="checked"{% endif %} />
                         По месяцам
                     </label>
                     <label class="radio">
-                        <input type="radio" name="period[]" value="all"
+                        <input type="radio" name="period" value="all"
                             {% if "all" in period %} checked="checked"{% endif %} />
                         Весь период продаж
                     </label>
