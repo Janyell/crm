@@ -13,6 +13,8 @@
                 <thead>
                     <tr>
                         <th>Название</th>
+                        <th>Цена</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -20,14 +22,26 @@
                     {% for product in products %}
                         <tr>
                             <td>{{ product.title }}</td>
-                            <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-product" value="{{ product.pk }}">
-                                <i class="icon-remove"></i></a>
+                            <td>{{ product.price_right_format }}</td>
+                            <td>
+                                <a class="btn btn-mini edit-button" data-toggle="modal" href="#edit-product" value="{{ product.pk }}">
+                                    <i class="icon-pencil"></i>
+                                    <div class="hidden edit-product__data">
+                                        <div class="product-data__title">{{ product.title }}</div>
+                                        <div class="product-data__price">{{ product.price }}</div>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-product" value="{{ product.pk }}">
+                                    <i class="icon-remove"></i>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <div class="modal hide fade" id="delete-product" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+            <div class="modal hide fade" id="delete-product" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
                     <h3>Вы уверены, что хотите удалить этот продукт?</h3>
@@ -37,6 +51,46 @@
                     <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                 </div>
             </div>
+            <div class="modal hide fade" id="edit-product" tabindex="-1" role="dialog" aria-hidden="true">
+                <form action="{% url "edit_product" %}" method="post" class="form-horizontal form-add_modal form-edit-product">
+                    <div class="modal-header">
+                        <a class="close" data-dismiss="modal">×</a>
+                        <h3>Редактирование продукта</h3>
+                    </div>
+                    <div class="modal-body">
+                        <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
+                        <div class="control-group">
+                            <label class="control-label" for="inputEditTitle">
+                                Название
+                                <span class="required-input">*</span>
+                            </label>
+                            <div class="controls">
+                                {{ product_edit_form.title }}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="inputEditPrice">
+                                Цена
+                            </label>
+                            <div class="controls">
+                                {{ product_edit_form.price }}
+                            </div>
+                        </div>
+                        <div class="form-add__tips">
+                            <div class="form-add-tips__tip">
+                                <span class="required-input">*</span> - поле, обязательное для заполнения
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-add__submits">
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                            <button type="reset" class="btn">Очистить</button>
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
             <script type="text/javascript">
                 (function($){
                     $(document).ready(function(){
@@ -45,13 +99,23 @@
                                 "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
                             },
                             "aoColumnDefs": [
-                                { "bSortable": false, "aTargets": [ 1 ] },
-                                { "bSearchable": false, "aTargets": [ 1 ] }
+                                { "bSortable": false, "aTargets": [ 2, 3 ] },
+                                { "bSearchable": false, "aTargets": [ 2, 3 ] }
                             ]
                         });
-                         $('.delete-button').bind('click', function(){
+                        $('.delete-button').bind('click', function(){
                             var id = $(this).attr('value');
                             $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id});
+                        });
+                        var $form_edit_product = $('.form-edit-product');
+                        $('.edit-button').bind('click', function(){
+                            var id = $(this).attr('value');
+                            $form_edit_product.attr({'action': '{% url "edit_product" %}?id=' + id});
+                            var $edit_product__data = $('#edit-product').find('.modal-body');
+                            var title = $(this).find('.product-data__title').text();
+                            $edit_product__data.find('#inputEditTitle').val(title);
+                            var price = $(this).find('.product-data__price').text();
+                            $edit_product__data.find('#inputEditPrice').val(price);
                         });
                     });
                 })(jQuery);
@@ -62,12 +126,20 @@
         <form action="{% url "get_products" %}" method="post" class="form-add form-horizontal">
             <h5 class="form-add-heading">Для добавления продукции заполните, пожалуйста, следующую форму:</h5>
             <div class="control-group">
-                <label class="control-label" for="inputPersonPhone">
+                <label class="control-label" for="inputTitle">
                     Название
                     <span class="required-input">*</span>
                 </label>
                 <div class="controls">
                     {{ product_form.title }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPrice">
+                    Цена
+                </label>
+                <div class="controls">
+                    {{ product_form.price }}
                 </div>
             </div>
             <div class="form-add__tips">

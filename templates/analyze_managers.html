@@ -4,7 +4,7 @@
     <script src="{{ STATIC_URL }}js/Chart.min.js"></script>
 
     <div class="container">
-    <a href="{% url "analyst" %}" class="btn">Назад</a>
+        <a href="{% url "analyst" %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }}</h2>
         <form method="get" action="{% url "analyze_managers" %}" class="analyze-managers">
             <div class="control-group control-group_inline">

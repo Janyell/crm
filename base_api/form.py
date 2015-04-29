@@ -186,8 +186,19 @@ class ProductForm(ModelForm):
         widgets = {
             'title': TextInput(attrs={'id': "inputTitle",
                                       'required': 1}),
+            'price': NumberInput(attrs={'id': "inputPrice"})
         }
 
+
+class ProductEditForm(ModelForm):
+    class Meta:
+        model = Products
+        exclude = ['is_deleted']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputEditTitle",
+                                      'required': 1}),
+            'price': NumberInput(attrs={'id': "inputEditPrice"})
+        }
 
 class UploadFileForOrderForm(ModelForm):
     class Meta:

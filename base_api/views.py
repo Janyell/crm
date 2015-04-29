@@ -391,3 +391,7 @@ def made_excel(request):
 
 def analyze_debtors(request):
     return render(request, 'analyze_debtors.html')
+
+
+def edit_product(request):
+    pass
