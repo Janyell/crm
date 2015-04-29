@@ -50,6 +50,10 @@ def full_analyze_managers(request):
             sources_orders_count = [0, 0, 0, 0, 0]
             sources_claims_count = [0, 0, 0, 0, 0]
             if type_of_period == 'month':
+                month_date = request.GET['month-date']
+                out.update({'month_date': month_date})
+                current_mounth = month_date[5:]
+                current_year = month_date[:4]
                 long_mounths = ['01', '03', '05', '07', '08', '10', '12']
                 for i in range(28):
                     period.append(i+1)
