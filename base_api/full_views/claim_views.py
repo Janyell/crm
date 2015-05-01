@@ -11,73 +11,6 @@ import random
 import string
 
 
-def full_get_claims(request):
-    if not request.user.is_active:
-        return HttpResponseRedirect('/login/')
-    out = {}
-    if 'page' in request.GET and 'length' in request.GET:
-        page = int(request.GET['page'])
-        length = int(request.GET['length'])
-        start = (page - 1) * length
-        out.update({'start': start})
-    user_id = request.user.id
-    out.update({'user_id': user_id})
-    user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
-        return HttpResponseRedirect('/oops/')
-    else:
-        out.update({'user_role': user_role})
-    orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=1)
-    for order in orders:
-        if order.client.organization == '':
-            order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
-        else:
-            order.client.organization_or_full_name = order.client.organization
-        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
-        prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
-        products_list = []
-        for pr in prs:
-            products_list.append(pr)
-        order.products = products_list
-        if order.bill_status == 0:
-            order.bill_status = 'Выставлен'
-        elif order.bill_status == 1:
-            order.bill_status = 'Нужна доплата'
-        elif order.bill_status == 2:
-            order.bill_status = 'Оплачен'
-        else:
-            order.bill_status = ''
-        if order.bill != None:
-            orders_count_str = str(order.bill)
-            orders_count_str_reverse = orders_count_str[::-1]
-            orders_count_str_right_format = ''
-            for i in range(0, len(orders_count_str)/3 + 1):
-                j = 3
-                if i != (len(orders_count_str)/3):
-                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
-                else:
-                    if (len(orders_count_str) % 3) == 2:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                        orders_count_str_reverse[i*j+1]
-                    elif (len(orders_count_str) % 3) == 1:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
-            orders_count_str = orders_count_str_right_format[::-1]
-            order.bill = orders_count_str
-        order.files = []
-        if Order_Files.objects.filter(order_id=order.id).all() is not None:
-            for order_file in Order_Files.objects.filter(order_id=order.id).all():
-                if order_file.file:
-                    order_file.name = order_file.title
-                    order_file.url = order_file.file.url
-                    order.files.append(order_file)
-    user_role = Roles.objects.get(id=request.user.id).role
-    out.update({'user_role': user_role})
-    out.update({'page_title': "Заявки"})
-    out.update({'claims': orders})
-    return render(request, 'get_claims.html', out)
-
-
 def full_add_edit_claim(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
@@ -97,7 +30,6 @@ def full_add_edit_claim(request):
             pk = request.POST['pk']
             claim = Orders.objects.get(id=pk)
             source = request.POST['source']
-            role = request.POST['role']
             comment = request.POST['comment']
             if request.POST['company'] != '':
                 id_company = int(request.POST['company'])
@@ -109,6 +41,10 @@ def full_add_edit_claim(request):
             else:
                 bill_status = None
             account_number = request.POST['account_number']
+            if 'role' in request.POST:
+                role = request.POST['role']
+            else:
+                role = request.user.id
             if request.POST['client'] != '':
                 id_client = int(request.POST['client'])
                 client = Clients.objects.get(id=id_client, is_deleted=0)
@@ -455,6 +391,73 @@ def full_add_edit_claim(request):
             organizations.append(organization.organization)
     out.update({'organizations': organizations})
     return render(request, 'add_edit_order.html', out)
+
+
+def full_get_claims(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+    user_id = request.user.id
+    out.update({'user_id': user_id})
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=1)
+    for order in orders:
+        if order.client.organization == '':
+            order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        else:
+            order.client.organization_or_full_name = order.client.organization
+        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
+        products_list = []
+        for pr in prs:
+            products_list.append(pr)
+        order.products = products_list
+        if order.bill_status == 0:
+            order.bill_status = 'Выставлен'
+        elif order.bill_status == 1:
+            order.bill_status = 'Нужна доплата'
+        elif order.bill_status == 2:
+            order.bill_status = 'Оплачен'
+        else:
+            order.bill_status = ''
+        if order.bill != None:
+            orders_count_str = str(order.bill)
+            orders_count_str_reverse = orders_count_str[::-1]
+            orders_count_str_right_format = ''
+            for i in range(0, len(orders_count_str)/3 + 1):
+                j = 3
+                if i != (len(orders_count_str)/3):
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+                else:
+                    if (len(orders_count_str) % 3) == 2:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                        orders_count_str_reverse[i*j+1]
+                    elif (len(orders_count_str) % 3) == 1:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+            orders_count_str = orders_count_str_right_format[::-1]
+            order.bill = orders_count_str
+        order.files = []
+        if Order_Files.objects.filter(order_id=order.id).all() is not None:
+            for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                if order_file.file:
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    order.files.append(order_file)
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    out.update({'page_title': "Заявки"})
+    out.update({'claims': orders})
+    return render(request, 'get_claims.html', out)
 
 
 def full_delete_claim(request):

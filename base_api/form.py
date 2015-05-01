@@ -133,7 +133,7 @@ class OrdersForm(forms.ModelForm):
         exclude = ['is_deleted', 'role', 'in_archive', 'order_date', 'unique_number']
         widgets = orders_form_widgets
 
-orders_form_widgets.update({'role': Select(attrs={'id': "selectRole", 'required': 1})})
+orders_form_widgets.update({'role': Select(attrs={'id': "selectRole"})})
 
 
 class OrdersFormForAdmins(forms.ModelForm):
