@@ -141,6 +141,7 @@ class Orders(models.Model):
     is_claim = models.BooleanField(default=0)
     is_comment_my = models.BooleanField(default=1)
     shipped_date = UnixTimestampField(blank=True, null=True)
+    brought_sum = models.IntegerField(null=True, blank=True)
 
 
 class Products(models.Model):

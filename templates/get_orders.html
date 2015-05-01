@@ -88,7 +88,7 @@
                         </td>
                         <td class="product-wrap">
                             {% if order.bill_right_format != None %}
-                                {% if not order.debt_right_format and order.debt_right_format > 0 %}
+                                {% if order.debt_right_format and order.debt_right_format > 0 %}
                                     <a href="#bill-info" role="button" data-toggle="modal" class="get-bill-info red">
                                         <div class="get-bill-info__head">
                                             {{ order.bill_right_format }}

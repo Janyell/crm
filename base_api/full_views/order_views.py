@@ -76,6 +76,7 @@ def full_add_edit_order(request):
                 ready_date = None
             comment = request.POST['comment']
             city = request.POST['city']
+            brought_sum = request.POST['brought_sum']
             account_number = request.POST['account_number']
             if 'role' in request.POST:
                 role = request.POST['role']
@@ -105,13 +106,13 @@ def full_add_edit_order(request):
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                   'shipped_date': shipped_day_month, 'role': role})
+                                   'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum})
                 else:
                     form = OrdersForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                   'shipped_date': shipped_day_month})
+                                   'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -146,13 +147,13 @@ def full_add_edit_order(request):
                                        'payment_date': payment_date, 'order_status': order_status,
                                        'bill_status': bill_status, 'city': city, 'comment': comment,
                                        'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                       'shipped_date': shipped_day_month, 'role': role})
+                                       'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum})
                     else:
                         form = OrdersForm({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'payment_date': payment_date, 'order_status': order_status,
                                        'bill_status': bill_status, 'city': city, 'comment': comment,
                                        'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                       'shipped_date': shipped_day_month})
+                                       'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
                     form.products = Products.objects.filter(is_deleted=0)
                     products_list = request.POST.getlist('products[]')
                     for product in form.products:
@@ -174,6 +175,7 @@ def full_add_edit_order(request):
             new_order.source = source
             new_order.company = company
             new_order.bill = bill
+            new_order.brought_sum = brought_sum
             new_order.payment_date = payment_date
             new_order.order_status = order_status
             new_order.bill_status = bill_status
@@ -214,13 +216,13 @@ def full_add_edit_order(request):
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                           'shipped_date': shipped_day_month, 'role': role})
+                                           'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum})
                         else:
                             form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                           'shipped_date': shipped_day_month})
+                                           'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -264,6 +266,7 @@ def full_add_edit_order(request):
             payment_date = form.cleaned_data['payment_date']
             order_status = form.cleaned_data['order_status']
             bill_status = form.cleaned_data['bill_status']
+            brought_sum = form.cleaned_data['brought_sum']
             shipped_date = None
             if order_status == 1:
                 shipped_date = form.cleaned_data['shipped_date']
@@ -294,7 +297,7 @@ def full_add_edit_order(request):
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                           'shipped_date': shipped_day_month})
+                                           'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -322,7 +325,8 @@ def full_add_edit_order(request):
                                               unique_number=unique_number, company=company, bill=bill,
                                               payment_date=payment_date, order_status=order_status, city=city,
                                               bill_status=bill_status, ready_date=ready_date, comment=comment,
-                                              account_number=account_number, shipped_date=shipped_date)
+                                              account_number=account_number, shipped_date=shipped_date,
+                                              brought_sum=brought_sum)
                     new_order_product_link = Order_Product.objects.create(order=new_order, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products)
@@ -343,7 +347,7 @@ def full_add_edit_order(request):
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                   'shipped_date': shipped_day_month})
+                                   'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -359,6 +363,7 @@ def full_add_edit_order(request):
             source = request.POST['source']
             company = request.POST['company']
             bill = request.POST['bill']
+            brought_sum = request.POST['brought_sum']
             if 'role' in request.POST:
                 role = request.POST['role']
             else:
@@ -374,9 +379,6 @@ def full_add_edit_order(request):
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(
                                             queryset=Companies.objects.filter(is_deleted=0), required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
-
-            print(form.errors)
-
             if shipped_date:
                 shipped_day_month = shipped_date[:7]
                 # shipped_day_month = shipped_date.date()
@@ -386,7 +388,7 @@ def full_add_edit_order(request):
                                'payment_date': payment_date, 'order_status': order_status,
                                'bill_status': bill_status, 'city': city, 'comment': comment,
                                'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                               'shipped_date': shipped_day_month})
+                               'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
             form.products = Products.objects.filter(is_deleted=0)
             products_list = request.POST.getlist('products[]')
             for product in form.products:
@@ -415,7 +417,8 @@ def full_add_edit_order(request):
                                'payment_date': order.payment_date, 'order_status': order.order_status,
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
-                               'account_number': order.account_number, 'shipped_date': shipped_day_month})
+                               'account_number': order.account_number, 'shipped_date': shipped_day_month,
+                               'brought_sum': order.brought_sum})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -464,13 +467,14 @@ def full_add_edit_order(request):
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
-                               'role': order.role})
+                               'role': order.role, 'brought_sum': order.brought_sum})
             else:
                 form = OrdersForm({'client': order.client, 'company': order.company, 'bill': order.bill,
                                'payment_date': order.payment_date, 'order_status': order.order_status,
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
-                               'account_number': order.account_number, 'shipped_date': shipped_day_month})
+                               'account_number': order.account_number, 'shipped_date': shipped_day_month,
+                               'brought_sum': order.brought_sum})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -566,22 +570,12 @@ def full_get_orders(request):
         else:
             order.order_status = ''
         if order.bill is not None:
-            orders_count_str = str(order.bill)
-            orders_count_str_reverse = orders_count_str[::-1]
-            orders_count_str_right_format = ''
-            for i in range(0, len(orders_count_str)/3 + 1):
-                j = 3
-                if i != (len(orders_count_str)/3):
-                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
-                else:
-                    if (len(orders_count_str) % 3) == 2:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                        orders_count_str_reverse[i*j+1]
-                    elif (len(orders_count_str) % 3) == 1:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
-            orders_count_str = orders_count_str_right_format[::-1]
-            order.bill_right_format = orders_count_str
+            order.bill_right_format = right_money_format(order.bill)
+        order.brought_sum_right_format = 0
+        order.debt_right_format = 0
+        if order.brought_sum is not None and order.bill is not None:
+            order.brought_sum_right_format = right_money_format(order.brought_sum)
+            order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
         order.files = []
         if Order_Files.objects.filter(order_id=order.id).all() is not None:
             for order_file in Order_Files.objects.filter(order_id=order.id).all():
@@ -633,23 +627,12 @@ def full_get_old_orders(request):
         else:
             order.order_status = ''
         if order.bill is not None:
-            orders_count_str = str(order.bill)
-            orders_count_str_reverse = orders_count_str[::-1]
-            orders_count_str_right_format = ''
-            for i in range(0, len(orders_count_str)/3 + 1):
-                j = 3
-                if i != (len(orders_count_str)/3):
-                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
-                else:
-                    if (len(orders_count_str) % 3) == 2:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                        orders_count_str_reverse[i*j+1]
-                    elif (len(orders_count_str) % 3) == 1:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
-            orders_count_str = orders_count_str_right_format[::-1]
-            order.bill_right_format = orders_count_str
-            order.bill = order.bill_right_format
+            order.bill_right_format = right_money_format(order.bill)
+        order.brought_sum_right_format = 0
+        order.debt_right_format = 0
+        if order.brought_sum is not None and order.bill is not None:
+            order.brought_sum_right_format = right_money_format(order.brought_sum)
+            order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
         order.files = []
         if Order_Files.objects.filter(order_id=order.id).all() is not None:
             for order_file in Order_Files.objects.filter(order_id=order.id).all():
@@ -739,3 +722,22 @@ def full_delete_from_archive(request):
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+def right_money_format(bill):
+    orders_count_str = str(bill)
+    orders_count_str_reverse = orders_count_str[::-1]
+    orders_count_str_right_format = ''
+    for i in range(0, len(orders_count_str)/3 + 1):
+        j = 3
+        if i != (len(orders_count_str)/3):
+            orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                            orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+        else:
+            if (len(orders_count_str) % 3) == 2:
+                orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                orders_count_str_reverse[i*j+1]
+            elif (len(orders_count_str) % 3) == 1:
+                orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+    orders_count_str = orders_count_str_right_format[::-1]
+    return orders_count_str
