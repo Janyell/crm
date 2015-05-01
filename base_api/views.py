@@ -4,6 +4,7 @@ import json
 from django.shortcuts import render, render_to_response
 from datetime import datetime
 from api.settings import MEDIA_ROOT
+from base_api.full_views.analyze_debtors import full_analyze_debtors
 from base_api.full_views.attach import *
 from base_api.models import *
 from base_api.form import *
@@ -390,7 +391,7 @@ def made_excel(request):
 
 
 def analyze_debtors(request):
-    return render(request, 'analyze_debtors.html')
+    return full_analyze_debtors(request)
 
 
 def edit_product(request):

@@ -19,10 +19,10 @@
                     {% for debt in debts %}
                         <tr>
                             <td>
-                                {% if debt.debt.organization %}
-                                    {{ debt.debt.organization }}{% if debt.debt.organization_type %}, {{ debt.debt.organization_type }}{% endif %}
+                                {% if debt.client.organization %}
+                                    {{ debt.client.organization }}{% if debt.client.organization_type %}, {{ debt.client.organization_type }}{% endif %}
                                 {% else %}
-                                    {{ debt.debt.full_name }}
+                                    {{ debt.client.full_name }}
                                 {% endif %}
                             </td>
                             <td>{{ debt.company.title }}</td>
