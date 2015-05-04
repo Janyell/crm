@@ -395,4 +395,4 @@ def analyze_debtors(request):
 
 
 def edit_product(request):
-    pass
+    return full_edit_product(request)
