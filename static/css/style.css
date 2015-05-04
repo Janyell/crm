@@ -5,8 +5,14 @@ body {
 .sidebar-nav {
     padding: 9px 0;
 }
+.navbar-text {
+    padding-left: 20px;
+}
 .navbar-link_logout {
     padding-left: 20px; 
+}
+.navbar .brand {
+    padding-right: 10px;
 }
 .required-input, .red {
     color: red;

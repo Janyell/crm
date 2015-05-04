@@ -334,7 +334,7 @@
                     },
                     "aoColumnDefs": [
                         { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16 ] },
-                        { "bSearchable": false, "aTargets": [ 11, 12, 13, 14, 15, 17 ] },
+{#                        { "bSearchable": false, "aTargets": [ 11, 12, 13, 14, 15, 17 ] },#}
                         { "sType": "de_datetime", "aTargets": [ 6, 9, 16 ] },
                         {% if user_role == 2 %}
                             { "bVisible": false,  "aTargets": [ 3, 5, 12, 15, 16, 17]},
@@ -348,6 +348,7 @@
                     "aaSortingFixed": [
                         [17, 'desc']
                     ],
+                    "bFilter": false,
                     {% if request.GET.length and start >= 0 %}
                         "iDisplayLength": {{ request.GET.length }},
                         "iDisplayStart": {{ start }}

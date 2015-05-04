@@ -1,0 +1,14 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <div class="container container_mini-width">
+        <h2 class="center">Поиск по {{ request.GET.search }}</h2>
+        {% if search_results %}
+            <h5>Результаты поиска:</h5>
+            {% for result in search_results %}
+            {% endfor %}
+        {% else %}
+           <h5 class="center">Ничего не найдено по Вашему запросу. Попробуйте еще раз.</h5>
+        {% endif %}
+    </div>
+{%endblock%}

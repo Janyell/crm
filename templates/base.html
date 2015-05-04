@@ -35,12 +35,15 @@
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <a class="brand" href="{% if user_role != 0 %}{% url "get_orders" %}{% else %}{% url "index" %}{% endif %}">Завод "Триумф"</a>
+                    <a class="brand" href="{% if user_role != 0 %}{% url "get_orders" %}{% else %}{% url "index" %}{% endif %}">"Триумф"</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
                             {{ user.username }}
                             <a href="{% url "logout" %}" class="navbar-link navbar-link_logout">Выйти</a>
                         </p>
+                        <form class="navbar-search pull-right" method="get" action="{% url "search" %}">
+                            <input type="search" name="search" class="search-query" placeholder="Поиск" />
+                        </form>
                         <ul class="nav">
                             {% url "upload_files" as upload_files_url %}
                              <li class={% navactive request 'index get_orders add_order edit_order get_old_orders edit_order_for_factory' %}{% if request.path == upload_files_url and is_claim == 0 %}active{% endif %}>
@@ -63,13 +66,9 @@
                                 <li class={% navactive request 'get_interested_clients' %}>
                                     <a href="{% url "get_interested_clients" %}">Люди</a>
                                 </li>
-                            {% endif %}
-                            {% if user_role != 2 %}
                                 <li class={% navactive request 'get_products' %}>
                                     <a href="{% url "get_products" %}">Продукты</a>
                                 </li>
-                            {% endif %}
-                            {% if user_role != 2 %}
                                 {% if user_role == 0 %}
                                     <li class={% navactive request 'get_roles add_role edit_role' %}>
                                         <a href="{% url "get_roles" %}">Роли</a>
@@ -78,6 +77,9 @@
                                         <a href="{% url "get_companies" %}">Компании</a>
                                     </li>
                                 {% endif %}
+                                <li class={% navactive request 'get_documents' %}>
+                                    <a href="{% url "get_documents" %}">Документы</a>
+                                </li>
                             {% endif %}
                         </ul>
                     </div>
