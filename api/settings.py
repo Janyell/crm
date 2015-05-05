@@ -32,13 +32,15 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base_api',
+    'django.contrib.admin',
+    'mptt',
+    'media_tree',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -198,3 +200,5 @@ MULTIUPLOADER_FORMS_SETTINGS = {
         'AUTO_UPLOAD': True,
     }
 }
+
+MEDIA_TREE_UPLOAD_SUBDIR = 'uploads'

@@ -104,7 +104,7 @@
 
             $('.delete-button').bind('click', function(){
                 var id = $(this).attr('value');
-                $('#delete__ok').attr({'href': '{{ delete_files_url }}?id' +id});
+                $('#delete__ok').attr({'href': '{{ delete_files_url }}?id=' +id});
             });
         })(jQuery);
     </script>

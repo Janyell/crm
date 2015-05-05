@@ -200,6 +200,7 @@ class ProductEditForm(ModelForm):
             'price': NumberInput(attrs={'id': "inputEditPrice"})
         }
 
+
 class UploadFileForOrderForm(ModelForm):
     class Meta:
         model = Order_Files

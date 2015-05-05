@@ -404,3 +404,14 @@ def get_documents(request):
 
 def search(request):
     return render(request, 'search.html')
+
+
+def fix_file_nodes(request):
+    files = Order_Files.objects.all()
+    for file in files:
+        if file.title != 'Emails_of_clients.xlsx':
+            save_file_in_node(file)
+    files = Client_Files.objects.all()
+    for file in files:
+        save_file_in_node(file)
+    return HttpResponseRedirect('/')

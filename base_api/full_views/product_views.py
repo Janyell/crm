@@ -49,10 +49,11 @@ def full_get_products(request):
     products = Products.objects.filter(is_deleted=0)
     for product in products:
         product.price_right_format = right_money_format(product.price)
+    product_edit_form = ProductEditForm()
     out.update({'page_title': "Продукты"})
     out.update({'products': products})
     out.update({'product_form': form})
-    out.update({'product_edit_form': form})
+    out.update({'product_edit_form': product_edit_form})
     return render(request, 'get_products.html', out)
 
 
@@ -66,7 +67,6 @@ def full_edit_product(request):
     else:
         out.update({'user_role': user_role})
     if request.method == 'POST':
-        form = ProductForm(request.POST)
         id = request.GET['id']
         product = Products.objects.get(id=id)
         title = request.POST['title']

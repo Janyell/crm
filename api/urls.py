@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
+from filebrowser.sites import site
+from django.contrib import admin
 
 urlpatterns = patterns('',
                        url(r'^$', 'base_api.views.get_orders', name='index'),
@@ -43,7 +45,7 @@ urlpatterns = patterns('',
                        url(r'^oops/$', 'base_api.views.permission_deny', name='permission_deny'),
                        url(r'^order_status/$', 'base_api.views.give_order_status', name='give_order_status'),
                        url(r'^products/$', 'base_api.views.get_products', name='get_products'),
-                        url(r'^products/edit/$', 'base_api.views.edit_product', name='edit_product'),
+                       url(r'^products/edit/$', 'base_api.views.edit_product', name='edit_product'),
                        url(r'^products/delete/$', 'base_api.views.delete_product', name='delete_product'),
                        url(r'^claims/$', 'base_api.views.get_claims', name='get_claims'),
                        url(r'^claims/add/$', 'base_api.views.add_edit_claim', name='add_claim'),
@@ -58,8 +60,10 @@ urlpatterns = patterns('',
                        url(r'^excel/$',  'base_api.views.made_excel', name='made_excel'),
                        url(r'^documents/$',  'base_api.views.get_documents', name='get_documents'),
                        url(r'^fix_bd_org_type/$',  'base_api.views.fix_bd_org_type', name='fix_bd_org_type'),
+                       url(r'^fix_file_nodes/$',  'base_api.views.fix_file_nodes', name='fix_file_nodes'),
                        url(r'^search/$',  'base_api.views.search', name='search'),
                        url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", mimetype="text/plain")),
+                       url(r'^admin/', include(admin.site.urls)),
                        # url(r'', 'base_api.views.page_not_found', name='404'),
 )
 
