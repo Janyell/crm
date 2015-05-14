@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, render_to_response
 from datetime import datetime
 from base_api.models import *
@@ -415,8 +416,20 @@ def full_get_claims(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    # if 'sort' in request.GET:
+    #     sort = request.GET['sort']
+    # else:
+    #     sort = id
     orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=1)
-    for order in orders:
+    orders_pages = Paginator(orders, 10)
+    page = request.GET.get('page')
+    try:
+        order_list = orders_pages.page(page)
+    except PageNotAnInteger:
+        order_list = orders_pages.page(1)
+    except EmptyPage:
+        order_list = orders_pages.page(orders_pages.num_pages)
+    for order in order_list:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
@@ -462,7 +475,7 @@ def full_get_claims(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'page_title': "Заявки"})
-    out.update({'claims': orders})
+    out.update({'claims': order_list})
     return render(request, 'get_claims.html', out)
 
 

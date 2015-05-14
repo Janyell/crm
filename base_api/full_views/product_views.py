@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, render_to_response
 from datetime import datetime
 from base_api.full_views.order_views import right_money_format
@@ -47,11 +48,19 @@ def full_get_products(request):
     else:
         form = ProductForm()
     products = Products.objects.filter(is_deleted=0)
-    for product in products:
+    products_pages = Paginator(products, 10)
+    page = request.GET.get('page')
+    try:
+        product_list = products_pages.page(page)
+    except PageNotAnInteger:
+        product_list = products_pages.page(1)
+    except EmptyPage:
+        product_list = products_pages.page(products_pages.num_pages)
+    for product in product_list:
         product.price_right_format = right_money_format(product.price)
     product_edit_form = ProductEditForm()
     out.update({'page_title': "Продукты"})
-    out.update({'products': products})
+    out.update({'products': product_list})
     out.update({'product_form': form})
     out.update({'product_edit_form': product_edit_form})
     return render(request, 'get_products.html', out)

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.http import *
 from django.core.exceptions import ObjectDoesNotExist
@@ -345,7 +346,15 @@ def full_get_clients(request):
     else:
         out.update({'user_role': user_role})
     clients = Clients.objects.filter(is_deleted=0, is_interested=0)
-    for c in clients:
+    clients_pages = Paginator(clients, 10)
+    page = request.GET.get('page')
+    try:
+        client_list = clients_pages.page(page)
+    except PageNotAnInteger:
+        client_list = clients_pages.page(1)
+    except EmptyPage:
+        client_list = clients_pages.page(clients_pages.num_pages)
+    for c in client_list:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
         c.files = []
         if Client_Files.objects.filter(client_id=c.id).all() is not None:
@@ -355,7 +364,7 @@ def full_get_clients(request):
                     client_file.url = client_file.file.url
                     c.files.append(client_file)
     out.update({'page_title': "Клиенты"})
-    out.update({'clients': clients})
+    out.update({'clients': client_list})
     return render(request, 'get_clients.html', out)
 
 
@@ -374,7 +383,15 @@ def full_get_interested_clients(request):
     else:
         out.update({'user_role': user_role})
     clients = Clients.objects.filter(is_deleted=0)
-    for c in clients:
+    clients_pages = Paginator(clients, 10)
+    page = request.GET.get('page')
+    try:
+        client_list = clients_pages.page(page)
+    except PageNotAnInteger:
+        client_list = clients_pages.page(1)
+    except EmptyPage:
+        client_list = clients_pages.page(clients_pages.num_pages)
+    for c in client_list:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
         c.files = []
         if Client_Files.objects.filter(client_id=c.id).all() is not None:
@@ -384,5 +401,5 @@ def full_get_interested_clients(request):
                     client_file.url = client_file.file.url
                     c.files.append(client_file)
     out.update({'page_title': "Люди"})
-    out.update({'clients': clients})
+    out.update({'clients': client_list})
     return render(request, 'get_clients.html', out)

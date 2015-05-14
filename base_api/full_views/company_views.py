@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, render_to_response
 from datetime import datetime
 from base_api.models import *
@@ -87,8 +88,16 @@ def full_get_companies(request):
     else:
         out.update({'user_role': user_role})
     companies = Companies.objects.filter(is_deleted=0)
-    for c in companies:
+    companies_pages = Paginator(companies, 10)
+    page = request.GET.get('page')
+    try:
+        company_list = companies_pages.page(page)
+    except PageNotAnInteger:
+        company_list = companies_pages.page(1)
+    except EmptyPage:
+        company_list = companies_pages.page(companies_pages.num_pages)
+    for c in company_list:
         c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
     out.update({'page_title': "Компании"})
-    out.update({'companies': companies})
+    out.update({'companies': company_list})
     return render(request, 'get_companies.html', out)

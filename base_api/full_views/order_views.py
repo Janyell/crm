@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, render_to_response, redirect
 from datetime import datetime, date
@@ -513,6 +514,8 @@ def full_delete_order(request):
         return HttpResponseRedirect('/oops/')
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
+    if order.in_archive:
+        return HttpResponseRedirect('/orders/archive/')
     return HttpResponseRedirect('/orders/')
 
 
@@ -547,7 +550,15 @@ def full_get_orders(request):
     else:
         orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0).order_by('-order_status')
         out.update({'page_title': "Заказы"})
-    for order in orders:
+    orders_pages = Paginator(orders, 10)
+    page = request.GET.get('page')
+    try:
+        order_list = orders_pages.page(page)
+    except PageNotAnInteger:
+        order_list = orders_pages.page(1)
+    except EmptyPage:
+        order_list = orders_pages.page(orders_pages.num_pages)
+    for order in order_list:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
@@ -585,7 +596,7 @@ def full_get_orders(request):
                     order.files.append(order_file)
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
-    out.update({'orders': orders})
+    out.update({'orders': order_list})
     return render(request, 'get_orders.html', out)
 
 
@@ -604,7 +615,15 @@ def full_get_old_orders(request):
     else:
         out.update({'user_role': user_role})
     orders = Orders.objects.filter(is_deleted=0, in_archive=1, is_claim=0)
-    for order in orders:
+    orders_pages = Paginator(orders, 10)
+    page = request.GET.get('page')
+    try:
+        order_list = orders_pages.page(page)
+    except PageNotAnInteger:
+        order_list = orders_pages.page(1)
+    except EmptyPage:
+        order_list = orders_pages.page(orders_pages.num_pages)
+    for order in order_list:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
@@ -641,7 +660,7 @@ def full_get_old_orders(request):
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
     out.update({'page_title': "Архив заказов"})
-    out.update({'orders': orders})
+    out.update({'orders': order_list})
     return render(request, 'get_orders.html', out)
 
 
