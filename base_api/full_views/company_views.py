@@ -3,6 +3,7 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, render_to_response
 from datetime import datetime
+from base_api.constants import SORT_TYPE_FOR_COMPANY, DEFAULT_SORT_TYPE_FOR_COMPANY, DEFAULT_NUMBER_FOR_PAGE
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -87,8 +88,14 @@ def full_get_companies(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    companies = Companies.objects.filter(is_deleted=0)
-    companies_pages = Paginator(companies, 10)
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_COMPANY)
+    sort = SORT_TYPE_FOR_COMPANY.get(sort_key, DEFAULT_SORT_TYPE_FOR_COMPANY)
+    try:
+        companies = Companies.objects.filter(is_deleted=0).order_by(sort)
+    except TypeError:
+        companies = Companies.objects.filter(is_deleted=0).order_by(*sort)
+    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    companies_pages = Paginator(companies, number)
     page = request.GET.get('page')
     try:
         company_list = companies_pages.page(page)

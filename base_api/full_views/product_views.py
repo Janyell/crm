@@ -3,6 +3,7 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, render_to_response
 from datetime import datetime
+from base_api.constants import SORT_TYPE_FOR_PRODUCT, DEFAULT_SORT_TYPE_FOR_PRODUCT, DEFAULT_NUMBER_FOR_PAGE
 from base_api.full_views.order_views import right_money_format
 from base_api.models import *
 from base_api.form import *
@@ -47,8 +48,14 @@ def full_get_products(request):
             out.update({"error": 1})
     else:
         form = ProductForm()
-    products = Products.objects.filter(is_deleted=0)
-    products_pages = Paginator(products, 10)
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_PRODUCT)
+    sort = SORT_TYPE_FOR_PRODUCT.get(sort_key, DEFAULT_SORT_TYPE_FOR_PRODUCT)
+    try:
+        products = Products.objects.filter(is_deleted=0).order_by(sort)
+    except TypeError:
+        products = Products.objects.filter(is_deleted=0).order_by(*sort)
+    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    products_pages = Paginator(products, number)
     page = request.GET.get('page')
     try:
         product_list = products_pages.page(page)

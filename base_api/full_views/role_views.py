@@ -3,6 +3,7 @@
 from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from django.shortcuts import render, render_to_response
 from datetime import datetime
+from base_api.constants import SORT_TYPE_FOR_ROLE, DEFAULT_SORT_TYPE_FOR_ROLE, DEFAULT_NUMBER_FOR_PAGE
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -114,8 +115,14 @@ def full_get_roles(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    roles = Roles.objects.filter(is_deleted=0)
-    roles_pages = Paginator(roles, 10)
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_ROLE)
+    sort = SORT_TYPE_FOR_ROLE.get(sort_key, DEFAULT_SORT_TYPE_FOR_ROLE)
+    try:
+        roles = Roles.objects.filter(is_deleted=0).order_by(sort)
+    except TypeError:
+        roles = Roles.objects.filter(is_deleted=0).order_by(*sort)
+    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    roles_pages = Paginator(roles, number)
     page = request.GET.get('page')
     try:
         role_list = roles_pages.page(page)

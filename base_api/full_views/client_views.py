@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.http import *
 from django.core.exceptions import ObjectDoesNotExist
+from base_api.constants import SORT_TYPE_FOR_CLIENT, DEFAULT_SORT_TYPE_FOR_CLIENT, DEFAULT_NUMBER_FOR_PAGE
 
 from base_api.form import *
 
@@ -345,8 +346,14 @@ def full_get_clients(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    clients = Clients.objects.filter(is_deleted=0, is_interested=0)
-    clients_pages = Paginator(clients, 10)
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_CLIENT)
+    sort = SORT_TYPE_FOR_CLIENT.get(sort_key, DEFAULT_SORT_TYPE_FOR_CLIENT)
+    try:
+        clients = Clients.objects.filter(is_deleted=0, is_interested=0).order_by(sort)
+    except TypeError:
+        clients = Clients.objects.filter(is_deleted=0, is_interested=0).order_by(*sort)
+    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    clients_pages = Paginator(clients, number)
     page = request.GET.get('page')
     try:
         client_list = clients_pages.page(page)
@@ -382,8 +389,14 @@ def full_get_interested_clients(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    clients = Clients.objects.filter(is_deleted=0)
-    clients_pages = Paginator(clients, 10)
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_CLIENT)
+    sort = SORT_TYPE_FOR_CLIENT.get(sort_key, DEFAULT_SORT_TYPE_FOR_CLIENT)
+    try:
+        clients = Clients.objects.filter(is_deleted=0).order_by(sort)
+    except TypeError:
+        clients = Clients.objects.filter(is_deleted=0).order_by(*sort)
+    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    clients_pages = Paginator(clients, number)
     page = request.GET.get('page')
     try:
         client_list = clients_pages.page(page)
