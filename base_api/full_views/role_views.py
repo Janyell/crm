@@ -1,9 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from django.shortcuts import render, render_to_response
 from datetime import datetime
-from base_api.constants import SORT_TYPE_FOR_ROLE, DEFAULT_SORT_TYPE_FOR_ROLE, DEFAULT_NUMBER_FOR_PAGE
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -115,22 +113,8 @@ def full_get_roles(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_ROLE)
-    sort = SORT_TYPE_FOR_ROLE.get(sort_key, DEFAULT_SORT_TYPE_FOR_ROLE)
-    try:
-        roles = Roles.objects.filter(is_deleted=0).order_by(sort)
-    except TypeError:
-        roles = Roles.objects.filter(is_deleted=0).order_by(*sort)
-    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
-    roles_pages = Paginator(roles, number)
-    page = request.GET.get('page')
-    try:
-        role_list = roles_pages.page(page)
-    except PageNotAnInteger:
-        role_list = roles_pages.page(1)
-    except EmptyPage:
-        role_list = roles_pages.page(roles_pages.num_pages)
-    for r in role_list:
+    roles = Roles.objects.filter(is_deleted=0)
+    for r in roles:
         r.full_name = r.surname + ' ' + r.name + ' ' + r.patronymic
         if r.role == 1:
             r.role = "Менеджер"
@@ -139,5 +123,5 @@ def full_get_roles(request):
         elif r.role == 0:
             r.role = "Руководство"
     out.update({'page_title': "Роли"})
-    out.update({'roles': role_list})
+    out.update({'roles': roles})
     return render(request, 'get_roles.html', out)

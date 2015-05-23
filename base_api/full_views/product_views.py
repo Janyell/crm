@@ -1,9 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, render_to_response
 from datetime import datetime
-from base_api.constants import SORT_TYPE_FOR_PRODUCT, DEFAULT_SORT_TYPE_FOR_PRODUCT, DEFAULT_NUMBER_FOR_PAGE
 from base_api.full_views.order_views import right_money_format
 from base_api.models import *
 from base_api.form import *
@@ -48,26 +46,12 @@ def full_get_products(request):
             out.update({"error": 1})
     else:
         form = ProductForm()
-    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_PRODUCT)
-    sort = SORT_TYPE_FOR_PRODUCT.get(sort_key, DEFAULT_SORT_TYPE_FOR_PRODUCT)
-    try:
-        products = Products.objects.filter(is_deleted=0).order_by(sort)
-    except TypeError:
-        products = Products.objects.filter(is_deleted=0).order_by(*sort)
-    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
-    products_pages = Paginator(products, number)
-    page = request.GET.get('page')
-    try:
-        product_list = products_pages.page(page)
-    except PageNotAnInteger:
-        product_list = products_pages.page(1)
-    except EmptyPage:
-        product_list = products_pages.page(products_pages.num_pages)
-    for product in product_list:
+    products = Products.objects.filter(is_deleted=0)
+    for product in products:
         product.price_right_format = right_money_format(product.price)
     product_edit_form = ProductEditForm()
     out.update({'page_title': "Продукты"})
-    out.update({'products': product_list})
+    out.update({'products': products})
     out.update({'product_form': form})
     out.update({'product_edit_form': product_edit_form})
     return render(request, 'get_products.html', out)

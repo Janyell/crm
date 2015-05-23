@@ -1,9 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, render_to_response
 from datetime import datetime
-from base_api.constants import SORT_TYPE_FOR_COMPANY, DEFAULT_SORT_TYPE_FOR_COMPANY, DEFAULT_NUMBER_FOR_PAGE
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -88,23 +86,9 @@ def full_get_companies(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_COMPANY)
-    sort = SORT_TYPE_FOR_COMPANY.get(sort_key, DEFAULT_SORT_TYPE_FOR_COMPANY)
-    try:
-        companies = Companies.objects.filter(is_deleted=0).order_by(sort)
-    except TypeError:
-        companies = Companies.objects.filter(is_deleted=0).order_by(*sort)
-    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
-    companies_pages = Paginator(companies, number)
-    page = request.GET.get('page')
-    try:
-        company_list = companies_pages.page(page)
-    except PageNotAnInteger:
-        company_list = companies_pages.page(1)
-    except EmptyPage:
-        company_list = companies_pages.page(companies_pages.num_pages)
-    for c in company_list:
+    companies = Companies.objects.filter(is_deleted=0)
+    for c in companies:
         c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
     out.update({'page_title': "Компании"})
-    out.update({'companies': company_list})
+    out.update({'companies': companies})
     return render(request, 'get_companies.html', out)
