@@ -6,8 +6,24 @@
     <div class="container">
     <a href="{% url "analyze_products" %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }} {{ product_name }}</h2>
-        <form method="get" action="{% url "view_analyzed_product" %}" class="analyzed-product form-horizontal">
+        <form method="get" action="{% url "view_analyzed_product" %}" class="analyzed-product form-horizontal clearfix">
             <input type="hidden" class="analyzed-product__id" name="id" value="{{ request.GET.id }}" />
+            <div class="control-group analyzed-product__graphic">
+                <label class="control-label">
+                    Графики
+                </label>
+                <div class="controls">
+                    <label class="checkbox">
+                        <input type="checkbox" name="graphic[]" value="number"
+                               {% if number_data %}checked="checked"{% endif %} />
+                        Количество проданной продукции
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="graphic[]" value="sum" {% if sum_data %}checked="checked"{% endif %}/>
+                        Сумма проданной продукции
+                    </label>
+                </div>
+            </div>
             <div class="control-group">
                 <label class="control-label" for="selectPeriod">
                     Период
@@ -15,45 +31,75 @@
                 <div class="controls">
                     <select name="period" id="selectPeriod">
                         <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>Последний месяц</option>
-                        <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>Последний год</option>
+                        <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>По месяцам</option>
                         <option value="all"{% if request.GET.period == "all" %} selected="selected"{% endif %}>Весь период продаж</option>
                     </select>
                 </div>
             </div>
             <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
         </form>
-        <canvas id="analyzed-product-chart" width="940" height="400"></canvas>
-        <div class="chart-caption">
-            <div class="chart-caption__color chart-caption__color_first"></div>
-            Количество проданной продукции
+        {% if number_data or sum_data %}
+            <canvas id="analyzed-product-chart" width="940" height="400"></canvas>
+            {% if number_data %}
+                <div class="chart-caption">
+                    <div class="chart-caption__color chart-caption__color_first"></div>
+                    Количество проданной продукции
+                </div>
+            {% endif %}
+            {% if sum_data %}
+                <div class="chart-caption">
+                    <div class="chart-caption__color chart-caption__color_second"></div>
+                    Сумма проданной продукции
+                </div>
+            {% endif %}
+            <div class="analyzed-product__average-sum">
+                <h4>Средняя цена за период: {{ average_sum_right_format }} руб.</h4>
+            </div>
         </div>
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function(){
+                    var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
+                    var data = {
+                        labels: [
+                            {% if select_period %}
+                                {% for select_period__title in select_period %}
+                                    '{{ select_period__title }}',
+                                {% endfor %}
+                            {% endif %}],
+                        datasets: [
+                            {% if number_data %}
+                                {
+                                    label: "Количество проданной продукции",
+                                    fillColor: "rgba(220,220,220,0.2)",
+                                    strokeColor: "rgba(220,220,220,1)",
+                                    pointColor: "rgba(220,220,220,1)",
+                                    pointStrokeColor: "#fff",
+                                    pointHighlightFill: "#fff",
+                                    pointHighlightStroke: "rgba(220,220,220,1)",
+                                    data: [{{ number_data }}]
+                                },
+                            {% endif %}
+                            {% if sum_data %}
+                                {
+                                    label: "Сумма проданной продукции",
+                                    fillColor: "rgba(151,187,205,0.2)",
+                                    strokeColor: "rgba(151,187,205,1)",
+                                    pointColor: "rgba(151,187,205,1)",
+                                    pointStrokeColor: "#fff",
+                                    pointHighlightFill: "#fff",
+                                    pointHighlightStroke: "rgba(151,187,205,1)",
+                                    data: [{{ sum_data }}]
+                                },
+                            {% endif %}
+                        ]
+                    };
+                    var analyzedProductChart = new Chart(ctx).Line(data);
+                });
+            })(jQuery);
+        </script>
+    {% endif %}
+    <div class="center">
+        <span class="btn plus_period">Добавить период</span>
     </div>
-    <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
-                var data = {
-                    labels: [
-                        {% if select_period %}
-                            {% for select_period__title in select_period %}
-                                '{{ select_period__title }}',
-                            {% endfor %}
-                        {% endif %}],
-                    datasets: [
-                        {
-                            label: "Анализ продаж продукта",
-                            fillColor: "rgba(220,220,220,0.2)",
-                            strokeColor: "rgba(220,220,220,1)",
-                            pointColor: "rgba(220,220,220,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(220,220,220,1)",
-                            data: [{{ data }}]
-                        }
-                    ]
-                };
-                var analyzedProductChart = new Chart(ctx).Line(data);
-            });
-        })(jQuery);
-    </script>
 {% endblock %}

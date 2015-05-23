@@ -26,19 +26,40 @@
         </table>
     </div>
     <div class="modal hide fade" id="analyzed-product" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
-        <form method="get" action="{% url "view_analyzed_product" %}">
+        <form class="form-horizontal" method="get" action="{% url "view_analyzed_product" %}">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4> Выберите анализируемый период </h4>
+                <h3 class="center">Анализ продаж продукта</h3>
             </div>
             <div class="modal-body analyzed-product">
+                <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
                 <input type="hidden" class="analyzed-product__id" name="id" value="" />
-                <div class="center analyzed-product__period">
-                    <select name="period">
-                        <option value="month">Последний месяц</option>
-                        <option value="year">По месяцам</option>
-                        <option value="all">Весь период продаж</option>
-                    </select>
+                <div class="control-group analyzed-product__graphic">
+                    <label class="control-label">
+                        Графики
+                    </label>
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="graphic[]" value="number" />
+                            Количество проданной продукции
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="graphic[]" value="sum" />
+                            Сумма проданной продукции
+                        </label>
+                    </div>
+                </div>
+                <div class="control-group analyzed-product__period">
+                    <label class="control-label" for="inputPeriod">
+                        Период
+                    </label>
+                    <div class="controls">
+                        <select id="inputPeriod" name="period" class="select">
+                            <option value="month">Последний месяц</option>
+                            <option value="year">По месяцам</option>
+                            <option value="all">Весь период продаж</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -61,11 +82,11 @@
                 });
                  $('.analyze-button').bind('click', function(){
                     var id = $(this).attr('value');
-                    $('#analyzed-product .analyzed-product__id').attr('value',id);
+                    $('#analyzed-product').find('.analyzed-product__id').attr('value',id);
                 });
             });
             $(window).load(function() {
-                $("#analyze-product-table_filter input[type='search']").attr("placeholder", "Поиск");
+                $("#analyze-product-table_filter").find("input[type='search']").attr("placeholder", "Поиск");
             });
         })(jQuery);
     </script>

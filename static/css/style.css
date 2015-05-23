@@ -96,7 +96,8 @@ body {
 .select-product-table th:nth-child(2) {
     width: 85px;
 }
-.select-product__number {
+.select-product__number,
+.select-product__price {
     width: 71px;
 }
 .center {
@@ -224,7 +225,7 @@ select.hidden, div.hidden {
 .comment_highlighted {
     color: green;
 }
-.bar-chart {
+.bar-chart, .analyzed-product__average-sum {
     margin-top: 10px;
 }
 .file__link > .icon-file {

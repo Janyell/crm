@@ -95,6 +95,7 @@
                 <thead>
                     <tr>
                         <th>Продукция</th>
+                        <th>Цена</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -103,6 +104,7 @@
                         {% for product in order_form.products %}
                             <tr>
                                 <td>{{ product.title }}</td>
+                                <td>{{ product.price_right_format }}</td>
                                 <td>
                                     <span class="btn btn-success plus pull-right" data-productId="{{ product.pk }}">+</span>
                                 </td>
@@ -116,12 +118,14 @@
                     <thead>
                         <tr>
                             <th>Выбранная продукция <span class="required-input">*</span></th>
+                            <th>Цена</th>
                             <th>Количество</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="select-product-table__plus">
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td><span class="btn btn-success plus pull-right">+</span></td>
