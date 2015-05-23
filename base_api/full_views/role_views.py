@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from django.shortcuts import render, render_to_response
 from datetime import datetime
 from base_api.models import *
@@ -115,15 +114,7 @@ def full_get_roles(request):
     else:
         out.update({'user_role': user_role})
     roles = Roles.objects.filter(is_deleted=0)
-    roles_pages = Paginator(roles, 10)
-    page = request.GET.get('page')
-    try:
-        role_list = roles_pages.page(page)
-    except PageNotAnInteger:
-        role_list = roles_pages.page(1)
-    except EmptyPage:
-        role_list = roles_pages.page(roles_pages.num_pages)
-    for r in role_list:
+    for r in roles:
         r.full_name = r.surname + ' ' + r.name + ' ' + r.patronymic
         if r.role == 1:
             r.role = "Менеджер"
@@ -132,5 +123,5 @@ def full_get_roles(request):
         elif r.role == 0:
             r.role = "Руководство"
     out.update({'page_title': "Роли"})
-    out.update({'roles': role_list})
+    out.update({'roles': roles})
     return render(request, 'get_roles.html', out)

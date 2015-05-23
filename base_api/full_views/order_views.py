@@ -4,6 +4,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, render_to_response, redirect
 from datetime import datetime, date
+from base_api.constants import SORT_TYPE_FOR_ORDER, DEFAULT_SORT_TYPE_FOR_ORDER, DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE, \
+    DEFAULT_NUMBER_FOR_PAGE
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -532,13 +534,18 @@ def full_get_orders(request):
         out.update({'length': length})
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_ORDER)
+    sort = SORT_TYPE_FOR_ORDER.get(sort_key, DEFAULT_SORT_TYPE_FOR_ORDER)
     if 'client-id' in request.GET:
         client_id = request.GET['client-id']
         if Clients.objects.filter(id=client_id, is_deleted=0).count() != 1:
             out.update({'page_title': "Данного клиента не существует!"})
             return render(request, 'get_orders.html', out)
         client = Clients.objects.get(id=client_id, is_deleted=0)
-        orders = Orders.objects.filter(is_deleted=0, client=client, is_claim=0).order_by('-order_status')
+        try:
+            orders = Orders.objects.filter(is_deleted=0, client=client, is_claim=0).order_by(sort)
+        except TypeError:
+            orders = Orders.objects.filter(is_deleted=0, client=client, is_claim=0).order_by(*sort)
         out.update({'page_title': "История заказов "})
         out.update({'client_id': client_id})
         if client.organization == '':
@@ -548,9 +555,13 @@ def full_get_orders(request):
         out.update({'organization_or_full_name': client.organization_or_full_name})
         out.update({'client_id': client.id})
     else:
-        orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0).order_by('-order_status')
+        try:
+            orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0).order_by(sort)
+        except TypeError:
+            orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0).order_by(*sort)
         out.update({'page_title': "Заказы"})
-    orders_pages = Paginator(orders, 10)
+    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    orders_pages = Paginator(orders, number)
     page = request.GET.get('page')
     try:
         order_list = orders_pages.page(page)
@@ -614,8 +625,14 @@ def full_get_old_orders(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    orders = Orders.objects.filter(is_deleted=0, in_archive=1, is_claim=0)
-    orders_pages = Paginator(orders, 10)
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE)
+    sort = SORT_TYPE_FOR_ORDER.get(sort_key, DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE)
+    try:
+        orders = Orders.objects.filter(is_deleted=0, in_archive=1, is_claim=0).order_by(sort)
+    except TypeError:
+        orders = Orders.objects.filter(is_deleted=0, in_archive=1, is_claim=0).order_by(*sort)
+    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    orders_pages = Paginator(orders, number)
     page = request.GET.get('page')
     try:
         order_list = orders_pages.page(page)

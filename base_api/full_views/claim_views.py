@@ -3,6 +3,7 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, render_to_response
 from datetime import datetime
+from base_api.constants import DEFAULT_SORT_TYPE_FOR_CLAIM, SORT_TYPE_FOR_CLAIM, DEFAULT_NUMBER_FOR_PAGE
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -416,12 +417,14 @@ def full_get_claims(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    # if 'sort' in request.GET:
-    #     sort = request.GET['sort']
-    # else:
-    #     sort = id
-    orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=1)
-    orders_pages = Paginator(orders, 10)
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_CLAIM)
+    sort = SORT_TYPE_FOR_CLAIM.get(sort_key, DEFAULT_SORT_TYPE_FOR_CLAIM)
+    try:
+        orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=1).order_by(sort)
+    except TypeError:
+        orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=1).order_by(*sort)
+    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    orders_pages = Paginator(orders, number)
     page = request.GET.get('page')
     try:
         order_list = orders_pages.page(page)
