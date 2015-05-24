@@ -245,3 +245,6 @@ transform: translate(-300px, 0) scale(4); font-size: 23px; direction: ltr; curso
 .btn_finish {
     margin-top: 20px;
 }
+.changelist-file-uploader {
+    display: none;
+}
