@@ -352,7 +352,7 @@ def full_get_clients(request):
         clients = Clients.objects.filter(is_deleted=0, is_interested=0).order_by(sort)
     except TypeError:
         clients = Clients.objects.filter(is_deleted=0, is_interested=0).order_by(*sort)
-    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
     clients_pages = Paginator(clients, number)
     page = request.GET.get('page')
     try:
@@ -395,7 +395,7 @@ def full_get_interested_clients(request):
         clients = Clients.objects.filter(is_deleted=0).order_by(sort)
     except TypeError:
         clients = Clients.objects.filter(is_deleted=0).order_by(*sort)
-    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
     clients_pages = Paginator(clients, number)
     page = request.GET.get('page')
     try:

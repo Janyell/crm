@@ -560,7 +560,7 @@ def full_get_orders(request):
         except TypeError:
             orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0).order_by(*sort)
         out.update({'page_title': "Заказы"})
-    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
     orders_pages = Paginator(orders, number)
     page = request.GET.get('page')
     try:
@@ -631,7 +631,7 @@ def full_get_old_orders(request):
         orders = Orders.objects.filter(is_deleted=0, in_archive=1, is_claim=0).order_by(sort)
     except TypeError:
         orders = Orders.objects.filter(is_deleted=0, in_archive=1, is_claim=0).order_by(*sort)
-    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
     orders_pages = Paginator(orders, number)
     page = request.GET.get('page')
     try:
