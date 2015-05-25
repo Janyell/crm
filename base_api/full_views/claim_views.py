@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, render_to_response
 from datetime import datetime
 from base_api.constants import DEFAULT_SORT_TYPE_FOR_CLAIM, SORT_TYPE_FOR_CLAIM, DEFAULT_NUMBER_FOR_PAGE
+from base_api.full_views.order_views import right_money_format
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -78,6 +79,10 @@ def full_add_edit_claim(request):
                         name_of_pr = 'select-product__number_' + str(product.id)
                         count_of_products = request.POST[name_of_pr]
                         product.count_of_products = count_of_products
+                        price_of_pr = 'select-product__price_' + str(product.id)
+                        price_of_products = request.POST[price_of_pr]
+                        product.price = price_of_products
+                    product.price_right_format = right_money_format(product.price)
                 out.update({'order_form': form})
                 out.update({'page_title': "Редактирование заявки"})
                 return render(request, 'add_edit_order.html', out)
@@ -111,6 +116,10 @@ def full_add_edit_claim(request):
                             name_of_pr = 'select-product__number_' + str(product.id)
                             count_of_products = request.POST[name_of_pr]
                             product.count_of_products = count_of_products
+                            price_of_pr = 'select-product__price_' + str(product.id)
+                            price_of_products = request.POST[price_of_pr]
+                            product.price = price_of_products
+                        product.price_right_format = right_money_format(product.price)
                     out.update({'order_form': form})
                     out.update({'page_title': "Редактирование заявки"})
                     return render(request, 'add_edit_order.html', out)
@@ -172,31 +181,44 @@ def full_add_edit_claim(request):
                                 name_of_pr = 'select-product__number_' + str(product.id)
                                 count_of_products = request.POST[name_of_pr]
                                 product.count_of_products = count_of_products
+                                price_of_pr = 'select-product__price_' + str(product.id)
+                                price_of_products = request.POST[price_of_pr]
+                                product.price = price_of_products
+                            product.price_right_format = right_money_format(product.price)
                         out.update({'order_form': form})
                         out.update({'page_title': "Редактирование заказа"})
                         return render(request, 'add_edit_order.html', out)
                     else:
                         name_of_pr = 'select-product__number_' + id_of_pr
                         count_of_products = request.POST[name_of_pr]
+                        price_of_pr = 'select-product__price_' + id_of_pr
+                        price_of_products = request.POST[price_of_pr]
+                        product.price = price_of_products
                         if int(count_of_products) > 0:
-                            product = Products.objects.create(title=title_of_product)
+                            product = Products.objects.create(title=title_of_product, price=price_of_products)
                 else:
                     name_of_pr = 'select-product__number_' + id_of_pr
                     count_of_products = request.POST[name_of_pr]
+                    price_of_pr = 'select-product__price_' + id_of_pr
+                    price_of_products = request.POST[price_of_pr]
                     product = Products.objects.get(id=id_of_pr, is_deleted=0)
+                    product.price = price_of_products
+                    product.save(force_update=True)
                 if int(count_of_products) > 0:
                     if Order_Product.objects.filter(product_id=product.id, order_id=pk, is_deleted=0).count() != 0:
                         order_product = Order_Product.objects.get(product_id=product.id, order_id=pk, is_deleted=0)
                         new_order_product_link = Order_Product(id=order_product.id, order=new_claim, product=product,
                                                                order_date=datetime.now(),
-                                                               count_of_products=count_of_products)
+                                                               count_of_products=count_of_products,
+                                                               price=price_of_products)
                         new_order_product_link.save(force_update=True)
                         client.save(update_fields=["is_interested"])
                     else:
                         new_order_product_link = Order_Product.objects.create(order=new_claim,
                                                                               product=product,
                                                                               order_date=datetime.now(),
-                                                                              count_of_products=count_of_products)
+                                                                              count_of_products=count_of_products,
+                                                                              price=price_of_products)
                         client.save(update_fields=["is_interested"])
             if displacement == 1:
                 return HttpResponseRedirect('/claims/?displacement=1')
@@ -242,18 +264,28 @@ def full_add_edit_claim(request):
                                 name_of_pr = 'select-product__number_' + str(product.id)
                                 count_of_products = request.POST[name_of_pr]
                                 product.count_of_products = count_of_products
+                                price_of_pr = 'select-product__price_' + str(product.id)
+                                price_of_products = request.POST[price_of_pr]
+                                product.price = price_of_products
+                            product.price_right_format = right_money_format(product.price)
                         out.update({'order_form': form})
                         out.update({'page_title': "Добавление заказа"})
                         return render(request, 'add_edit_order.html', out)
                     else:
                         name_of_pr = 'select-product__number_' + id_of_pr
                         count_of_products = request.POST[name_of_pr]
+                        price_of_pr = 'select-product__price_' + id_of_pr
+                        price_of_products = request.POST[price_of_pr]
                         if int(count_of_products) > 0:
-                            product = Products.objects.create(title=title_of_product)
+                            product = Products.objects.create(title=title_of_product, price=price_of_products)
                 else:
                     name_of_pr = 'select-product__number_' + id_of_pr
                     count_of_products = request.POST[name_of_pr]
+                    price_of_pr = 'select-product__price_' + id_of_pr
+                    price_of_products = request.POST[price_of_pr]
                     product = Products.objects.get(id=id_of_pr, is_deleted=0)
+                    product.price = price_of_products
+                    product.save(force_update=True)
                 if int(count_of_products) > 0:
                     is_claim_create = True
                     if new_claim_was_not_created:
@@ -266,7 +298,8 @@ def full_add_edit_claim(request):
                                               brought_sum=brought_sum)
                     new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
                                                                           order_date=datetime.now(),
-                                                                          count_of_products=count_of_products)
+                                                                          count_of_products=count_of_products,
+                                                                          price=price_of_products)
                     client.save(update_fields=["is_interested"])
             if is_claim_create:
                 if 'only-save' in form.data:
@@ -290,6 +323,10 @@ def full_add_edit_claim(request):
                         name_of_pr = 'select-product__number_' + str(product.id)
                         count_of_products = request.POST[name_of_pr]
                         product.count_of_products = count_of_products
+                        price_of_pr = 'select-product__price_' + str(product.id)
+                        price_of_products = request.POST[price_of_pr]
+                        product.price = price_of_products
+                    product.price_right_format = right_money_format(product.price)
                 out.update({'error': 3})
                 out.update({'order_form': form})
                 out.update({'page_title': "Добавление заявки"})
@@ -315,6 +352,10 @@ def full_add_edit_claim(request):
                     name_of_pr = 'select-product__number_' + str(product.id)
                     count_of_products = request.POST[name_of_pr]
                     product.count_of_products = count_of_products
+                    price_of_pr = 'select-product__price_' + str(product.id)
+                    price_of_products = request.POST[price_of_pr]
+                    product.price = price_of_products
+                product.price_right_format = right_money_format(product.price)
             out.update({'error': 1})
             out.update({'order_form': form})
             out.update({'page_title': "Добавление заявки"})
@@ -338,6 +379,9 @@ def full_add_edit_claim(request):
                 if product.id in products_list:
                     product.count_of_products = Order_Product.objects.get(product_id=product.id,
                                                                           order_id=id_order, is_deleted=0).count_of_products
+                    product.price = Order_Product.objects.get(product_id=product.id,
+                                                              order_id=id_order, is_deleted=0).price
+                product.price_right_format = right_money_format(product.price)
             out.update({'order_form': form})
             out.update({'page_title': "Добавление заявки"})
         elif 'client-id' in request.GET:
@@ -348,6 +392,8 @@ def full_add_edit_claim(request):
             client = Clients.objects.get(id=client_id, is_deleted=0)
             form = ClaimsForm({'client': client})
             form.products = Products.objects.filter(is_deleted=0)
+            for product in form.products:
+                product.price_right_format = right_money_format(product.price)
             out.update({'order_form': form})
             out.update({'client_id': client_id})
             out.update({'page_title': "Добавление заявки"})
@@ -383,6 +429,9 @@ def full_add_edit_claim(request):
                 if product.id in products_list:
                     product.count_of_products = Order_Product.objects.get(product_id=product.id,
                                                                           order_id=id_order, is_deleted=0).count_of_products
+                    product.price = Order_Product.objects.get(product_id=product.id,
+                                                              order_id=id_order, is_deleted=0).price
+                product.price_right_format = right_money_format(product.price)
             out.update({'order_form': form})
             out.update({'page_title': "Редактирование заявки"})
         else:
@@ -391,6 +440,8 @@ def full_add_edit_claim(request):
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = ClaimsForm()
             form.products = Products.objects.filter(is_deleted=0)
+            for product in form.products:
+                product.price_right_format = right_money_format(product.price)
             out.update({'order_form': form})
             out.update({'page_title': "Добавление заявки"})
     organizations = []
