@@ -29,7 +29,7 @@
         {% if orders %}
             {% load bootstrap_pagination %}
             <div class="row-fluid">
-                <div class="span6">
+                <div class="span3">
                     <div class="dataTables_length">
                         <label>Показать
                             <select id="selectLength" name="length">
@@ -43,11 +43,22 @@
                     </div>
                 </div>
                 <div class="span6">
+                    <div class="manager">
+                        {% for manager in roles %}
+                            <label class="checkbox">
+                                <input type="checkbox" name="managers[]" class="managers" value="{{ manager.pk }}"
+                                    {% if manager.pk|upper in managers %} checked="checked"{% endif %} />
+                                {{ manager.username }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="span3">
                     {% if sources %}
                         <div class="source">
                             <select id="selectSource" name="source">
                                 {% for source in sources %}
-                                    <option value="{{ source.code }}"{% if request.GET.source == source.code %} selected="selected"{% endif %}>{{ source.name }}</option>
+                                    <option value="{{ source.code }}"{% if request.GET.source == source.code|urlencode:"" %} selected="selected"{% endif %}>{{ source.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -581,7 +592,7 @@
 
                 var $th_sorting = $('th.sortable');
 
-                $th_sorting.click (function(){
+                $th_sorting.click(function(){
                     var $this = $(this);
                     var value = $this.attr('value');
                     var url = get_url("sort") + "sort=" + value;
@@ -592,6 +603,10 @@
                         document.location.href = url + "_d";
                     }
                 });
+
+                var $managers = $('.managers');
+                $managers.change()
+
                 var $checkboxes_one = $('.checkbox_one');
 
                 if ($checkboxes_one.length == 0) {
