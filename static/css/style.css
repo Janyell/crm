@@ -269,3 +269,6 @@ th a {
 .form-massive {
     margin: 0;
 }
+div.source {
+    float: right;
+}
