@@ -104,7 +104,10 @@
                         {% for product in order_form.products %}
                             <tr>
                                 <td>{{ product.title }}</td>
-                                <td>{{ product.price_right_format }}</td>
+                                <td class="product-wrap">
+                                    {{ product.price_right_format }}
+                                    <div class="hidden">{{ product.price }}</div>
+                                </td>
                                 <td>
                                     <span class="btn btn-success plus pull-right" data-productId="{{ product.pk }}">+</span>
                                 </td>

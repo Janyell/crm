@@ -251,7 +251,8 @@ transform: translate(-300px, 0) scale(4); font-size: 23px; direction: ltr; curso
 .pagination {
     margin: 0;
 }
-#client-table_wrapper > .row-fluid {
+#client-table_wrapper > .row-fluid,
+#order-table_wrapper > .row-fluid {
     display: none;
 }
 th a {
@@ -264,4 +265,7 @@ th a {
     padding: 8px;
     float: left;
     margin-right: 20px;
+}
+.form-massive {
+    margin: 0;
 }

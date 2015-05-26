@@ -24,7 +24,7 @@
 			if ($( '.select-product_' + product_id ).size() != 0)
 				return;
             $price = $this.parent().prev();
-            product_price = $price.text();
+            product_price = $price.find('.hidden').text();
             if (!product_price) {
                 product_price = 0;
             }

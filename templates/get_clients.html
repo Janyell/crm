@@ -25,103 +25,102 @@
                     </label>
                 </div>
             </div>
-            <table class="table table-hover table-bordered" id="client-table">
-                <thead>
-                    <tr>
-                        <th>
-                        </th>
-                        <th class="sortable{% if not request.GET.sort or request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">
-                            Организация
-                        </th>
-                        <th class="sortable{% if request.GET.sort == "organization_phone" %} sorting_asc{% elif request.GET.sort == "organization_phone_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization_phone">
-                            Телефон организации
-                        </th>
-                        <th class="sortable{% if request.GET.sort == "name" %} sorting_asc{% elif request.GET.sort == "name_d" %} sorting_desc{% else %} sorting{% endif %}" value="name">
-                            Контактное лицо
-                        </th>
-                        <th class="sortable{% if request.GET.sort == "person_phone" %} sorting_asc{% elif request.GET.sort == "person_phone_d" %} sorting_desc{% else %} sorting{% endif %}" value="person_phone">
-                            Телефон контактного лица
-                        </th>
-                        <th class="sortable{% if request.GET.sort == "email" %} sorting_asc{% elif request.GET.sort == "email_d" %} sorting_desc{% else %} sorting{% endif %}" value="email">
-                            E-mail
-                        </th>
-                        {% if request.path == get_clients_url %}
-                            <th></th>
-                        {% endif %}
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for client in clients %}
+            <form class="form-horizontal form-massive" method="POST" action="{% url "massive_delete_clients" %}{% if request.path == get_interested_clients_url %}?is_interested=1{% endif %}">
+                <table class="table table-hover table-bordered" id="client-table">
+                    <thead>
                         <tr>
-                            <td>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="id[]" value="{{ client.pk }}"/>
-                                </label>
-                            </td>
-                            <td>
-                                {% if client.organization %}
-                                    {{ client.organization }}{% if client.organization_type %}, {{ client.organization_type }}{% endif %}</td>
-                                {% endif %}
-                            <td>{{ client.organization_phone }}</td>
-                            <td>{{ client.person_full_name }}</td>
-                            <td>{{ client.person_phone }}</td>
-                            <td>{{ client.email }}</td>
+                            <th>
+                            </th>
+                            <th class="sortable{% if not request.GET.sort or request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">
+                                Организация
+                            </th>
+                            <th class="sortable{% if request.GET.sort == "organization_phone" %} sorting_asc{% elif request.GET.sort == "organization_phone_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization_phone">
+                                Телефон организации
+                            </th>
+                            <th class="sortable{% if request.GET.sort == "name" %} sorting_asc{% elif request.GET.sort == "name_d" %} sorting_desc{% else %} sorting{% endif %}" value="name">
+                                Контактное лицо
+                            </th>
+                            <th class="sortable{% if request.GET.sort == "person_phone" %} sorting_asc{% elif request.GET.sort == "person_phone_d" %} sorting_desc{% else %} sorting{% endif %}" value="person_phone">
+                                Телефон контактного лица
+                            </th>
+                            <th class="sortable{% if request.GET.sort == "email" %} sorting_asc{% elif request.GET.sort == "email_d" %} sorting_desc{% else %} sorting{% endif %}" value="email">
+                                E-mail
+                            </th>
                             {% if request.path == get_clients_url %}
-                                <td><a class="btn" href="{% url "get_orders" %}?client-id={{ client.pk }}">Заказы</a></td>
+                                <th></th>
                             {% endif %}
-                            <td>
-                                {% if request.path == get_interested_clients_url %}
-                                    <a class="btn add-order-button" href="{% url "add_claim" %}?client-id={{ client.pk }}">Добавить заявку</a>
-                                {% else %}
-                                    <a class="btn add-order-button" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if client.files %}
-                                    <a class="btn files-button" data-toggle="modal" href="#view-client-files" value="
-                                        {% for file in client.files %}
-                                            <div class=&quot;file&quot;>
-                                                <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
-                                                    <i class=&quot;icon-file&quot;></i>{{ file.name }}
-                                                </a>
-                                            </div>
-                                        {% endfor %}
-                                    "><i class="icon-file"></i></a>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if request.path == get_interested_clients_url %}
-                                    <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}&is_interested=1"><i class="icon-pencil"></i></a>
-                                {% else %}
-                                    <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a>
-                                {% endif %}
-                            </td>
-                            <td><a class="btn delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
-                                <i class="icon-remove"></i></a>
-                            </td>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                            <tr>
+                                <td>
+                                    <label class="checkbox">
+                                        <input class="checkbox_one" type="checkbox" name="id[]" value="{{ client.pk }}"/>
+                                    </label>
+                                </td>
+                                <td>
+                                    {% if client.organization %}
+                                        {{ client.organization }}{% if client.organization_type %}, {{ client.organization_type }}{% endif %}</td>
+                                    {% endif %}
+                                <td>{{ client.organization_phone }}</td>
+                                <td>{{ client.person_full_name }}</td>
+                                <td>{{ client.person_phone }}</td>
+                                <td>{{ client.email }}</td>
+                                {% if request.path == get_clients_url %}
+                                    <td><a class="btn" href="{% url "get_orders" %}?client-id={{ client.pk }}">Заказы</a></td>
+                                {% endif %}
+                                <td>
+                                    {% if request.path == get_interested_clients_url %}
+                                        <a class="btn add-order-button" href="{% url "add_claim" %}?client-id={{ client.pk }}">Добавить заявку</a>
+                                    {% else %}
+                                        <a class="btn add-order-button" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if client.files %}
+                                        <a class="btn files-button" data-toggle="modal" href="#view-client-files" value="
+                                            {% for file in client.files %}
+                                                <div class=&quot;file&quot;>
+                                                    <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
+                                                        <i class=&quot;icon-file&quot;></i>{{ file.name }}
+                                                    </a>
+                                                </div>
+                                            {% endfor %}
+                                        "><i class="icon-file"></i></a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if request.path == get_interested_clients_url %}
+                                        <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}&is_interested=1"><i class="icon-pencil"></i></a>
+                                    {% else %}
+                                        <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a>
+                                    {% endif %}
+                                </td>
+                                <td><a class="btn delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
+                                    <i class="icon-remove"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
             <div class="row-fluid">
                 <div class="span6 action-bar">
                     <div class="action-bar__checkbox">
                         <label class="checkbox">
-                            <input type="checkbox" name="id[]" value="all"/> Для всех
+                            <input class="checkbox_all" type="checkbox"/> Для всех
                         </label>
                     </div>
                     <div class="action-bar__action">
-                        <a class="btn delete-multiple-button" data-toggle="modal" href="#delete-multiple-client">
+                        <a class="btn massive-delete-button">
                             <i class="icon-remove"></i>
                         </a>
                     </div>
-{#                            </td>#}
-{#                        </tr>#}
-{#                    </table>#}
                 </div>
                 <div class="span6">
                     <div class="dataTables_paginate paging_bootstrap pagination">
@@ -133,7 +132,7 @@
             <h5 class="center">Не было добавлено ни одного клиента</h5>
         {% endif %}
     </div>
-     <div class="modal hide fade" id="delete-client" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+     <div class="modal hide fade" id="delete-client" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">×</a>
             <h3>Вы уверены, что хотите удалить этого клиента?</h3>
@@ -153,6 +152,22 @@
             </div>
         </div>
         <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+    <div class="modal hide fade" id="massive-delete-client" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Вы уверены, что хотите удалить выделенных клиентов?</h3>
+        </div>
+        <div class="modal-body">
+            <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
+            <div class="center">
+                <input id="inputDelete" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="massive-delete__ok" class="btn btn-danger" disabled>Удалить</button>
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
@@ -187,7 +202,7 @@
                     return url;
                 }
 
-                 $('.delete-button').bind('click', function(){
+                $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
                     $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + page_length_sort);
                 });
@@ -229,6 +244,43 @@
                     else {
                         document.location.href = url + "_d";
                     }
+                });
+                var $checkboxes_one = $('.checkbox_one');
+                var $checkbox_all = $('.checkbox_all');
+                $checkbox_all.change(function() {
+                    if($(this).is(":checked")) {
+                        $checkboxes_one.prop('checked', true);
+                    }
+                    else {
+                        $checkboxes_one.prop('checked', false);
+                    }
+                });
+
+                $('.massive-delete-button').click(function(){
+                    var $checkboxes_checked = $(".checkbox_one:checked");
+                    var $checkboxes_checked_length = $checkboxes_checked.length;
+                    if ($checkboxes_checked_length == 1) {
+                        var id = $checkboxes_checked.val();
+                        $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + page_length_sort);
+                        $('#delete-client').modal('show');
+                    }
+                    else {
+                        if ($checkboxes_checked_length != 0) {
+                            $('#massive-delete-client').modal('show');
+                        }
+                    }
+                });
+
+                var $massive_delete_ok = $('#massive-delete__ok');
+                $('#inputDelete').change(function() {
+                    if($(this).val() == "УДАЛИТЬ") {
+                        $massive_delete_ok.prop( "disabled", false );
+                    } else {
+                        $massive_delete_ok.prop( "disabled", true );
+                    }
+                });
+                $massive_delete_ok.click(function(){
+                    $('.form-massive').submit();
                 });
             });
         })(jQuery);
