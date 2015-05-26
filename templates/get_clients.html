@@ -1,5 +1,4 @@
 {%extends "base.html"%}
-
 {%block content%}
     <div class="container container_full-width">
         <h2 class="center">{{ page_title }}</h2>
@@ -12,14 +11,40 @@
             <a href="{% url "add_client" %}" class="btn btn_add-client add-button">Добавить клиента</a>
         {% endif %}
         {% if clients %}
+            {% load bootstrap_pagination %}
+            <div class="row-fluid">
+                <div class="dataTables_length">
+                    <label>Показать
+                        <select id="selectLength" name="length">
+                            <option value="10"{% if request.GET.length == "10" %} selected="selected"{% endif %}>10</option>
+                            <option value="25"{% if request.GET.length == "25" %} selected="selected"{% endif %}>25</option>
+                            <option value="50"{% if request.GET.length == "50" %} selected="selected"{% endif %}>50</option>
+                            <option value="100"{% if request.GET.length == "100" %} selected="selected"{% endif %}>100</option>
+                        </select>
+                        записей
+                    </label>
+                </div>
+            </div>
             <table class="table table-hover table-bordered" id="client-table">
                 <thead>
                     <tr>
-                        <th>Организация</th>
-                        <th>Телефон организации</th>
-                        <th>Контактное лицо</th>
-                        <th>Телефон контактного лица</th>
-                        <th>E-mail</th>
+                        <th>
+                        </th>
+                        <th class="sortable{% if not request.GET.sort or request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">
+                            Организация
+                        </th>
+                        <th class="sortable{% if request.GET.sort == "organization_phone" %} sorting_asc{% elif request.GET.sort == "organization_phone_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization_phone">
+                            Телефон организации
+                        </th>
+                        <th class="sortable{% if request.GET.sort == "name" %} sorting_asc{% elif request.GET.sort == "name_d" %} sorting_desc{% else %} sorting{% endif %}" value="name">
+                            Контактное лицо
+                        </th>
+                        <th class="sortable{% if request.GET.sort == "person_phone" %} sorting_asc{% elif request.GET.sort == "person_phone_d" %} sorting_desc{% else %} sorting{% endif %}" value="person_phone">
+                            Телефон контактного лица
+                        </th>
+                        <th class="sortable{% if request.GET.sort == "email" %} sorting_asc{% elif request.GET.sort == "email_d" %} sorting_desc{% else %} sorting{% endif %}" value="email">
+                            E-mail
+                        </th>
                         {% if request.path == get_clients_url %}
                             <th></th>
                         {% endif %}
@@ -32,6 +57,11 @@
                 <tbody>
                     {% for client in clients %}
                         <tr>
+                            <td>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="id[]" value="{{ client.pk }}"/>
+                                </label>
+                            </td>
                             <td>
                                 {% if client.organization %}
                                     {{ client.organization }}{% if client.organization_type %}, {{ client.organization_type }}{% endif %}</td>
@@ -77,6 +107,28 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <div class="row-fluid">
+                <div class="span6 action-bar">
+                    <div class="action-bar__checkbox">
+                        <label class="checkbox">
+                            <input type="checkbox" name="id[]" value="all"/> Для всех
+                        </label>
+                    </div>
+                    <div class="action-bar__action">
+                        <a class="btn delete-multiple-button" data-toggle="modal" href="#delete-multiple-client">
+                            <i class="icon-remove"></i>
+                        </a>
+                    </div>
+{#                            </td>#}
+{#                        </tr>#}
+{#                    </table>#}
+                </div>
+                <div class="span6">
+                    <div class="dataTables_paginate paging_bootstrap pagination">
+                        {% bootstrap_paginate clients range=5 previous_label="← Предыдущая" next_label="Следующая →" %}
+                    </div>
+                </div>
+            </div>
         {% else %}
             <h5 class="center">Не было добавлено ни одного клиента</h5>
         {% endif %}
@@ -107,40 +159,76 @@
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
-                var $client_table = $("#client-table");
-                $client_table.dataTable({
-                    "language": {
-                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
-                    },
-                    "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 5, 6, 7, 8{% if request.path == get_clients_url %},9{% endif %} ] },
-                        { "bSearchable": false, "aTargets": [ 5, 6, 7, 8{% if request.path == get_clients_url %},9{% endif %} ] }
-                    ],
-                    {% if request.GET.length and start >= 0 %}
-                        "iDisplayLength": {{ request.GET.length }},
-                        "iDisplayStart": {{ start }}
-                    {% endif %}
-                });
-                var table = $client_table.DataTable();
+                var path = "{{ request.path }}";
+                var page = "{% if request.GET.page %}page={{ request.GET.page }}{% endif %}";
+                var length = "{% if request.GET.length %}length={{ request.GET.length }}{% endif %}";
+                var sort = "{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}";
+
+
+                function get_get_params() {
+                    var get_params = "";
+                    if (page) { get_params += "&" + page; }
+                    if (length) { get_params += "&" + length; }
+                    if (sort) { get_params += "&" + sort; }
+                    return get_params;
+                }
+
+                var page_length_sort = get_get_params();
+
+                function get_url(without_length) {
+                    var url = path + "?";
+                    if (page) { url += page + "&"; }
+                    if (without_length) {
+                        if (sort) { url += sort + "&";}
+                    }
+                    else {
+                        if (length) { url += length + "&"; }
+                    }
+                    return url;
+                }
+
                  $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
-                    $('#delete__ok').attr({'href': '{% url "delete_client" %}?id=' + id});
+                    $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + page_length_sort);
                 });
                 $(".edit-button").click(function() {
-                    var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') + page_length_sort);
                 });
                 $(".add-button").click(function() {
-                    var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') + "{% if request.path == get_interested_clients_url %}&{% else %}?{% endif %}page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') + {% if request.path == get_interested_clients_url %}page_length_sort{% else %}("?" + page_length_sort.slice(1)){% endif %});
                 });
                 $(".add-order-button").click(function() {
-                    var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') + page_length_sort);
                 });
                 $('.files-button').bind('click', function(){
                     var files = $(this).attr('value');
                     $('.files__data_modal').html(files);
+                });
+                var $select_length = $('#selectLength');
+
+                $select_length.change(function() {
+                    var value = $(this).val();
+                    {% if request.GET.length %}
+                        if (value != {{ request.GET.length }}) {
+                            document.location.href = get_url(true) + "length=" + value;
+                        }
+                    {% else %}
+                        document.location.href = get_url(true) + "length=" + value;
+                    {% endif %}
+                });
+
+                var $th_sorting = $('th.sortable');
+
+                $th_sorting.click (function(){
+                    var $this = $(this);
+                    var value = $this.attr('value');
+                    var url = get_url(false) + "sort=" + value;
+                    if ($this.hasClass('sorting') || $(this).hasClass('sorting_desc')) {
+                        document.location.href = url;
+                    }
+                    else {
+                        document.location.href = url + "_d";
+                    }
                 });
             });
         })(jQuery);

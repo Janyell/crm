@@ -13,17 +13,17 @@
         {% url 'edit_order' as edit_order_url %}
         <a href="
         {% if request.path == add_claim_url and client_id >= 0 %}
-            {% url "get_interested_clients" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
+            {% url "get_interested_clients" %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}
         {% elif request.GET.archive %}
-            {% url "get_old_orders" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
+            {% url "get_old_orders" %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}
         {% elif request.GET.history %}
-            {% url "get_orders" %}?client-id={{ client_id }}{% if request.GET.page and request.GET.length %}&page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
+            {% url "get_orders" %}?client-id={{ client_id }}{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}{% if request.GET.length %}&length={{ request.GET.length }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}
         {% elif request.path == add_order_url and client_id >= 0 %}
-            {% url "get_clients" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
+            {% url "get_clients" %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}
         {% elif request.path == add_claim_url or request.path == edit_claim_url %}
-            {% url "get_claims" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
+            {% url "get_claims" %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}
         {% else %}
-            {% url "get_orders" %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}
+            {% url "get_orders" %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}
         {% endif %}
         " class="btn">Назад</a>
         {% if request.path == edit_claim_url or request.path == edit_order_url %}

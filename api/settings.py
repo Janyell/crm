@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'mptt',
     'media_tree',
+    'bootstrap_pagination',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -66,7 +67,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'base_for_api',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': '123',
     }
 }
 
