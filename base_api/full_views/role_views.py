@@ -95,7 +95,8 @@ def full_delete_roles(request):
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     role = Roles.objects.get(pk=id)
-    role.delete()
+    role.is_deleted = 1
+    role.save(update_fields=["is_deleted"])
     get_params = '?'
     if 'page' in request.GET:
         page = int(request.GET['page'])

@@ -137,7 +137,8 @@ def massive_delete_roles(request):
     ids = request.POST.getlist('id[]')
     for id in ids:
         role = Roles.objects.get(pk=id)
-        role.delete()
+        role.is_deleted = 1
+        role.save(update_fields=["is_deleted"])
     get_params = '?'
     if 'page' in request.GET:
         page = int(request.GET['page'])
