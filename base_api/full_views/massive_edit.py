@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect
+from base_api.full_views.helper import get_request_param_as_string
 from base_api.models import Roles, Orders, Clients, Companies, Products
 
 
@@ -17,15 +18,7 @@ def massive_delete_orders(request):
         order.is_deleted = 1
         order.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     if 'archive' in request.POST:
         return HttpResponseRedirect('/orders/archive/' + get_params)
     return HttpResponseRedirect('/orders/' + get_params)
@@ -44,15 +37,7 @@ def massive_delete_claims(request):
         order.is_deleted = 1
         order.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     return HttpResponseRedirect('/claims/' + get_params)
 
 
@@ -67,15 +52,7 @@ def massive_delete_clients(request):
         client.is_deleted = 1
         client.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     if 'interested' in request.POST:
         return HttpResponseRedirect('/clients/interested/' + get_params)
     else:
@@ -94,15 +71,7 @@ def massive_delete_companies(request):
         company.is_deleted = 1
         company.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     return HttpResponseRedirect('/companies/' + get_params)
 
 
@@ -117,15 +86,7 @@ def massive_delete_products(request):
         product.is_deleted = 1
         product.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     return HttpResponseRedirect('/products/' + get_params)
 
 
@@ -140,15 +101,7 @@ def massive_delete_roles(request):
         role.is_deleted = 1
         role.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     return HttpResponseRedirect('/roles/' + get_params)
 
 
@@ -165,15 +118,7 @@ def massive_add_in_archive(request):
         order.in_archive = 1
         order.save(update_fields=["in_archive"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     return HttpResponseRedirect('/orders/' + get_params)
 
 
@@ -190,4 +135,6 @@ def massive_change_manager_in_order(request):
             return HttpResponseRedirect('/oops/')
         order.role = manager_id
         order.save(update_fields=["role"])
-    return HttpResponseRedirect('/orders/')
+    get_params = '?'
+    get_params += get_params + get_request_param_as_string(request)
+    return HttpResponseRedirect('/orders/' + get_paramsy)

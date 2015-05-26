@@ -3,6 +3,7 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from base_api.constants import DEFAULT_SORT_TYPE_FOR_CLAIM, SORT_TYPE_FOR_CLAIM, DEFAULT_NUMBER_FOR_PAGE
+from base_api.full_views.helper import get_request_param_as_string
 from base_api.full_views.order_views import right_money_format
 from base_api.form import *
 from django.http import *
@@ -217,9 +218,13 @@ def full_add_edit_claim(request):
                                                                               price=price_of_products)
                         client.save(update_fields=["is_interested"])
             if displacement == 1:
-                return HttpResponseRedirect('/claims/?displacement=1')
+                get_params = '&'
+                get_params += get_params + get_request_param_as_string(request)
+                return HttpResponseRedirect('/claims/?displacement=1' + get_params)
             else:
-                return HttpResponseRedirect('/claims/')
+                get_params = '?'
+                get_params += get_params + get_request_param_as_string(request)
+                return HttpResponseRedirect('/claims/' + get_params)
         if form.is_valid():
             client = form.cleaned_data['client']
             source = form.cleaned_data['source']
@@ -300,9 +305,13 @@ def full_add_edit_claim(request):
             if is_claim_create:
                 if 'only-save' in form.data:
                     if displacement == 1:
-                        return HttpResponseRedirect('/claims/?displacement=1')
+                        get_params = '&'
+                        get_params += get_params + get_request_param_as_string(request)
+                        return HttpResponseRedirect('/claims/?displacement=1' + get_params)
                     else:
-                        return HttpResponseRedirect('/claims/')
+                        get_params = '?'
+                        get_params += get_params + get_request_param_as_string(request)
+                        return HttpResponseRedirect('/claims/' + get_params)
                 else:
                     return HttpResponseRedirect('/uploads/order/?id=%s' % new_claim.id)
             else:
@@ -541,15 +550,7 @@ def full_delete_claim(request):
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     return HttpResponseRedirect('/claims/' + get_params)
 
 

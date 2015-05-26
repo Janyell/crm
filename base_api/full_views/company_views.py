@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, render_to_response
 from datetime import datetime
+from base_api.full_views.helper import get_request_param_as_string
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -18,6 +19,8 @@ def full_add_edit_company(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_params + get_request_param_as_string(request)
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if 'pk' in request.POST:
@@ -28,7 +31,7 @@ def full_add_edit_company(request):
             patronymic = request.POST['patronymic']
             new_company = Companies(id=id_company, title=title, last_name=last_name, name=name, patronymic=patronymic)
             new_company.save(force_update=True)
-            return HttpResponseRedirect('/companies/')
+            return HttpResponseRedirect('/companies/' + get_params)
         else:
             if form.is_valid():
                 title = form.cleaned_data['title']
@@ -38,7 +41,7 @@ def full_add_edit_company(request):
                 if Companies.objects.filter(title=title, is_deleted=0).count() == 0:
                     new_company = Companies.objects.create(title=title, last_name=last_name, name=name,
                                                            patronymic=patronymic)
-                    return HttpResponseRedirect('/companies/')
+                    return HttpResponseRedirect('/companies/' + get_params)
                 else:
                     out.update({"error": 1})
                     out.update({'page_title': "Добавление компании"})

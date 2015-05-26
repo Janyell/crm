@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, render_to_response
 from datetime import datetime
+from base_api.full_views.helper import get_request_param_as_string
 from base_api.full_views.order_views import right_money_format
 from base_api.models import *
 from base_api.form import *
@@ -20,15 +21,7 @@ def full_delete_product(request):
     product.is_deleted = 1
     product.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     return HttpResponseRedirect('/products/' + get_params)
 
 
@@ -46,12 +39,14 @@ def full_get_products(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_params + get_request_param_as_string(request)
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
             new_product = Products.objects.create(title=title)
-            return HttpResponseRedirect('/products/')
+            return HttpResponseRedirect('/products/' + get_params)
         else:
             out.update({"error": 1})
     else:
@@ -76,6 +71,8 @@ def full_edit_product(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_params + get_request_param_as_string(request)
     if request.method == 'POST':
         id = request.GET['id']
         product = Products.objects.get(id=id)
@@ -84,5 +81,5 @@ def full_edit_product(request):
         product.title = title
         product.price = price
         product.save(force_update=True)
-        return HttpResponseRedirect('/products/')
-    return HttpResponseRedirect('/products/')
+        return HttpResponseRedirect('/products/' + get_params)
+    return HttpResponseRedirect('/products/' + get_params)

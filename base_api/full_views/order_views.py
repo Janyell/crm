@@ -1,15 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.core.urlresolvers import reverse
-from django.shortcuts import render, render_to_response, redirect
-from datetime import datetime, date
+from django.shortcuts import render
+from datetime import date
 from base_api.constants import SORT_TYPE_FOR_ORDER, DEFAULT_SORT_TYPE_FOR_ORDER, DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE, \
     DEFAULT_NUMBER_FOR_PAGE
-from base_api.models import *
+from base_api.full_views.helper import get_request_param_as_string
 from base_api.form import *
 from django.http import *
-from django.contrib.auth import authenticate, login, logout
 import random
 import string
 
@@ -279,9 +277,11 @@ def full_add_edit_order(request):
                                                                               order_date=datetime.now(),
                                                                               count_of_products=count_of_products,
                                                                               price=price_of_products)
+            get_params = '?'
+            get_params += get_params + get_request_param_as_string(request)
             if new_order.in_archive == 1:
-                return HttpResponseRedirect('/orders/archive/')
-            return HttpResponseRedirect('/orders/')
+                return HttpResponseRedirect('/orders/archive/' + get_params)
+            return HttpResponseRedirect('/orders/' + get_params)
         if form.is_valid():
             client = form.cleaned_data['client']
             source = form.cleaned_data['source']
@@ -369,9 +369,13 @@ def full_add_edit_order(request):
                                                                           price=price_of_products)
             if is_order_create:
                 if 'only-save' in form.data:
-                    return HttpResponseRedirect('/orders/')
+                    get_params = '?'
+                    get_params += get_params + get_request_param_as_string(request)
+                    return HttpResponseRedirect('/orders/' + get_params)
                 else:
-                    return HttpResponseRedirect('/uploads/order/?id=%s' % new_order.id)
+                    get_params = '&'
+                    get_params += get_params + get_request_param_as_string(request)
+                    return HttpResponseRedirect('/uploads/order/?id=%s' % new_order.id + get_params)
             else:
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(
                                                 queryset=Companies.objects.filter(is_deleted=0), required=False)
@@ -572,15 +576,7 @@ def full_delete_order(request):
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     if order.in_archive:
         return HttpResponseRedirect('/orders/archive/' + get_params)
     return HttpResponseRedirect('/orders/' + get_params)
@@ -751,6 +747,8 @@ def full_edit_order_for_factory(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
+    get_params = '?'
+    get_params += get_params + get_request_param_as_string(request)
     if user_role != 2:
         return HttpResponseRedirect('/oops/')
     else:
@@ -777,9 +775,9 @@ def full_edit_order_for_factory(request):
             new_order.order_status = order_status
             new_order.ready_date = ready_date
             new_order.save(force_update=True)
-            return HttpResponseRedirect('/orders/')
+            return HttpResponseRedirect('/orders/' + get_params)
         else:
-            return HttpResponseRedirect('/orders')
+            return HttpResponseRedirect('/orders' + get_params)
     else:
         if 'id' in request.GET:
             id_order = request.GET['id']
@@ -791,7 +789,7 @@ def full_edit_order_for_factory(request):
             out.update({'unique_number': order.unique_number})
             out.update({'page_title': "Редактирование заказа"})
         else:
-            return HttpResponseRedirect('/orders/')
+            return HttpResponseRedirect('/orders/' + get_params)
     return render(request, 'edit_order_for_factory.html', out)
 
 
@@ -806,7 +804,9 @@ def full_add_in_archive(request):
         return HttpResponseRedirect('/oops/')
     order.in_archive = 1
     order.save(update_fields=["in_archive"])
-    return HttpResponseRedirect('/orders/')
+    get_params = '?'
+    get_params += get_params + get_request_param_as_string(request)
+    return HttpResponseRedirect('/orders/' + get_params)
 
 
 def full_delete_from_archive(request):
@@ -819,15 +819,7 @@ def full_delete_from_archive(request):
     order.in_archive = 0
     order.save(update_fields=["in_archive"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     return HttpResponseRedirect('/orders/archive/' + get_params)
 
 

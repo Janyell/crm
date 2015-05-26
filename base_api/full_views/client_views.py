@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from base_api.constants import SORT_TYPE_FOR_CLIENT, DEFAULT_SORT_TYPE_FOR_CLIENT, DEFAULT_NUMBER_FOR_PAGE
 
 from base_api.form import *
+from base_api.full_views.helper import get_request_param_as_string
 
 
 def full_add_edit_client(request):
@@ -151,9 +152,11 @@ def full_add_edit_client(request):
                 new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
                                                    "person_phone", "organization_phone", "email", "is_interested",
                                                    "organization_type"])
+                get_params = '?'
+                get_params += get_params + get_request_param_as_string(request)
                 if is_interested == 1:
-                    return HttpResponseRedirect('/clients/interested/')
-                return HttpResponseRedirect('/clients/')
+                    return HttpResponseRedirect('/clients/interested/' + get_params)
+                return HttpResponseRedirect('/clients/' + get_params)
             return HttpResponseRedirect('/clients/')
         else:
             if form.is_valid():
@@ -216,20 +219,22 @@ def full_add_edit_client(request):
                                                                 role=role, organization_type=organization_type)
                             return HttpResponseRedirect('/uploads/client/?id=%s' % new_client.pk)
                         elif 'only-save' in form.data:
+                            get_params = '?'
+                            get_params += get_params + get_request_param_as_string(request)
                             if is_interested == 1:
                                 new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                     patronymic=patronymic, person_phone=person_phone,
                                                                     organization_phone=organization_phone, email=email,
                                                                     creation_date=datetime.now(), is_interested=is_interested,
                                                                     role=role, organization_type=organization_type)
-                                return HttpResponseRedirect('/clients/interested/')
+                                return HttpResponseRedirect('/clients/interested/' + get_params)
                             else:
                                 new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                     patronymic=patronymic, person_phone=person_phone,
                                                                     organization_phone=organization_phone, email=email,
                                                                     creation_date=datetime.now(), role=role,
                                                                     organization_type=organization_type)
-                                return HttpResponseRedirect('/clients/')
+                                return HttpResponseRedirect('/clients/' + get_params)
                         # if 'save-and-add-order' in form.data:
                         else:
                             if is_interested == 1:
@@ -253,20 +258,22 @@ def full_add_edit_client(request):
                     return render(request, 'add_edit_client.html', out)
                 else:
                     if 'only-save' in form.data:
+                        get_params = '?'
+                        get_params += get_params + get_request_param_as_string(request)
                         if is_interested == 1:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
                                                                 creation_date=datetime.now(), is_interested=is_interested,
                                                                 role=role, organization_type=organization_type)
-                            return HttpResponseRedirect('/clients/interested/')
+                            return HttpResponseRedirect('/clients/interested/' + get_params)
                         else:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
                                                                 creation_date=datetime.now(), role=role,
                                                                 organization_type=organization_type)
-                            return HttpResponseRedirect('/clients/')
+                            return HttpResponseRedirect('/clients/' + get_params)
                     elif 'save-and-upload-file' in form.data:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
@@ -327,15 +334,7 @@ def full_delete_clients(request):
     client.is_deleted = 1
     client.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     if is_interested == 0:
         return HttpResponseRedirect('/clients/' + get_params)
     else:

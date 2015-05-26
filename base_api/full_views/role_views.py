@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, render_to_response
 from datetime import datetime
+from base_api.full_views.helper import get_request_param_as_string
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -18,6 +19,8 @@ def full_add_edit_role(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_params + get_request_param_as_string(request)
     if request.method == 'POST':
         form = RoleForm(request.POST)
         if 'pk' in request.POST:
@@ -36,7 +39,7 @@ def full_add_edit_role(request):
                     new_author.save()
                 else:
                     new_author.save(update_fields=["username", "role", "surname", "name", "patronymic"])
-                return HttpResponseRedirect('/roles/')
+                return HttpResponseRedirect('/roles/' + get_params)
             else:
                 exist_role = Roles.objects.get(username=username)
                 if str(exist_role.id) == id_role:
@@ -47,7 +50,7 @@ def full_add_edit_role(request):
                         new_author.save()
                     else:
                         new_author.save(update_fields=["username", "role", "surname", "name", "patronymic"])
-                    return HttpResponseRedirect('/roles/')
+                    return HttpResponseRedirect('/roles/' + get_params)
                 else:
                     out.update({"error": 1})
                     out.update({'page_title': "Редактирование роли"})
@@ -65,7 +68,7 @@ def full_add_edit_role(request):
                                                   role=role, surname=surname, name=name, patronymic=patronymic)
                 new_author.set_password(password)
                 new_author.save()
-                return HttpResponseRedirect('/roles/')
+                return HttpResponseRedirect('/roles/' + get_params)
             else:
                 username = request.POST['username']
                 if Roles.objects.filter(username=username).count() == 0:
@@ -98,15 +101,7 @@ def full_delete_roles(request):
     role.is_deleted = 1
     role.save(update_fields=["is_deleted"])
     get_params = '?'
-    if 'page' in request.GET:
-        page = int(request.GET['page'])
-        get_params += 'page=' + str(page) + '&'
-    if 'length' in request.GET:
-        length = int(request.GET['length'])
-        get_params += 'length=' + str(length) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
+    get_params += get_params + get_request_param_as_string(request)
     return HttpResponseRedirect('/roles/' + get_params)
 
 
