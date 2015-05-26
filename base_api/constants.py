@@ -12,24 +12,24 @@ SORT_TYPE_FOR_CLAIM = {
 DEFAULT_SORT_TYPE_FOR_CLAIM = 'order_date_d'
 
 SORT_TYPE_FOR_ORDER = {
-    'role': 'role__username',
-    'role_d': '-role__username',
-    'order_date': 'order_date',
-    'order_date_d': '-order_date',
-    'payment_date': 'payment_date',
-    'payment_date_d': '-payment_date',
-    'organization': ['client__organization', 'client__last_name', 'client__name', 'client__patronymic'],
-    'organization_d': ['-client__organization', '-client__last_name', '-client__name', '-client__patronymic'],
-    'company': 'company__title',
-    'company_d': '-company__title',
-    'ready_date': 'ready_date',
-    'ready_date_d': '-ready_date',
-    'city': 'city',
-    'city_d': '-city',
-    'order_status_d': '-order_status',
-    'pk': 'pk'
+    'role': ['-order_status', 'role__username'],
+    'role_d': ['-order_status', '-role__username'],
+    'order_date': ['-order_status', 'order_date'],
+    'order_date_d': ['-order_status', '-order_date'],
+    'payment_date': ['-order_status', 'payment_date'],
+    'payment_date_d': ['-order_status', '-payment_date'],
+    'organization': ['-order_status', 'client__organization', 'client__last_name', 'client__name', 'client__patronymic'],
+    'organization_d': ['-order_status', '-client__organization', '-client__last_name', '-client__name', '-client__patronymic'],
+    'company': ['-order_status', 'company__title'],
+    'company_d': ['-order_status', '-company__title'],
+    'ready_date': ['-order_status', 'ready_date'],
+    'ready_date_d': ['-order_status', '-ready_date'],
+    'city': ['-order_status', 'city'],
+    'city_d': ['-order_status', '-city'],
+    'order_status_d': ['-order_status', '-order_status'],
+    'pk': ['-order_status', 'pk']
 }
-DEFAULT_SORT_TYPE_FOR_ORDER = 'order_status_d'
+DEFAULT_SORT_TYPE_FOR_ORDER = 'ready_date'
 DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE = 'order_date_d'
 
 SORT_TYPE_FOR_CLIENT = {
@@ -45,7 +45,7 @@ SORT_TYPE_FOR_CLIENT = {
     'email_d': '-email',
     'pk': 'pk'
 }
-DEFAULT_SORT_TYPE_FOR_CLIENT = 'pk'
+DEFAULT_SORT_TYPE_FOR_CLIENT = 'organization'
 
 SORT_TYPE_FOR_PRODUCT = {
     'title': 'title',

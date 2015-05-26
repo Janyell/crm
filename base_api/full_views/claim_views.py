@@ -540,7 +540,17 @@ def full_delete_claim(request):
         return HttpResponseRedirect('/oops/')
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
-    return HttpResponseRedirect('/claims/')
+    get_params = '?'
+    if 'page' in request.GET:
+        page = int(request.GET['page'])
+        get_params += str(page) + '&'
+    if 'length' in request.GET:
+        length = int(request.GET['length'])
+        get_params += str(length) + '&'
+    if 'sort' in request.GET:
+        sort = int(request.GET['sort'])
+        get_params += str(sort) + '&'
+    return HttpResponseRedirect('/claims/' + get_params)
 
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
