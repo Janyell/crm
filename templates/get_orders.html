@@ -41,7 +41,7 @@
                     </label>
                 </div>
             </div>
-            <form class="form-horizontal form-massive" method="get" action="{% url "massive_delete_orders" %}">
+            <form class="form-horizontal form-massive" method="get" action="">
                 <table class="table table-hover table-bordered" id="order-table">
                     <thead>
                         <tr>
@@ -232,24 +232,26 @@
                 </table>
             </form>
             <div class="row-fluid">
-                <div class="span6 action-bar">
-                    <div class="action-bar__checkbox">
-                        <label class="checkbox">
-                            <input class="checkbox_all" type="checkbox"/> Для всех
-                        </label>
-                    </div>
-                    <div class="action-bar__action">
-                        {% if user_role == 0 %}
-                            <a class="btn change-manager-button">
-                                Сменить менеджера
+                <div class="span6">
+                    <div class="action-bar">
+                        <div class="action-bar__checkbox">
+                            <label class="checkbox">
+                                <input class="checkbox_all" type="checkbox"/> Для всех
+                            </label>
+                        </div>
+                        <div class="action-bar__action">
+                            {% if user_role == 0 %}
+                                <a class="btn change-manager-button">
+                                    Сменить менеджера
+                                </a>
+                            {% endif %}
+                            <a class="btn in-archive-button">
+                                В архив
                             </a>
-                        {% endif %}
-                        <a class="btn in-archive-button">
-                            В архив
-                        </a>
-                        <a class="btn massive-delete-button">
-                            <i class="icon-remove"></i>
-                        </a>
+                            <a class="btn massive-delete-button">
+                                <i class="icon-remove"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="span6">
@@ -535,42 +537,49 @@
                     }
                 });
                 var $checkboxes_one = $('.checkbox_one');
-                var $checkbox_all = $('.checkbox_all');
-                $checkbox_all.change(function() {
-                    if($(this).is(":checked")) {
-                        $checkboxes_one.prop('checked', true);
-                    }
-                    else {
-                        $checkboxes_one.prop('checked', false);
-                    }
-                });
 
-                $('.massive-delete-button').click(function(){
-                    var $checkboxes_checked = $(".checkbox_one:checked");
-                    var $checkboxes_checked_length = $checkboxes_checked.length;
-                    if ($checkboxes_checked_length == 1) {
-                        var id = $checkboxes_checked.val();
-                        $('#delete__ok').attr("href", '{% url "delete_order" %}?id=' + id + page_length_sort);
-                        $('#delete-order').modal('show');
-                    }
-                    else {
-                        if ($checkboxes_checked_length != 0) {
-                            $('#massive-delete-order').modal('show');
+                if ($checkboxes_one.length == 0) {
+                    $('.action-bar').css({display: "none"});
+                } else {
+                    var $checkbox_all = $('.checkbox_all');
+                    $checkbox_all.change(function() {
+                        if($(this).is(":checked")) {
+                            $checkboxes_one.prop('checked', true);
                         }
-                    }
-                });
+                        else {
+                            $checkboxes_one.prop('checked', false);
+                        }
+                    });
 
-                var $massive_delete_ok = $('#massive-delete__ok');
-                $('#inputDelete').change(function() {
-                    if($(this).val() == "УДАЛИТЬ") {
-                        $massive_delete_ok.prop( "disabled", false );
-                    } else {
-                        $massive_delete_ok.prop( "disabled", true );
-                    }
-                });
-                $massive_delete_ok.click(function(){
-                    $('.form-massive').submit();
-                });
+                    $('.massive-delete-button').click(function(){
+                        var $checkboxes_checked = $(".checkbox_one:checked");
+                        var $checkboxes_checked_length = $checkboxes_checked.length;
+                        if ($checkboxes_checked_length == 1) {
+                            var id = $checkboxes_checked.val();
+                            $('#delete__ok').attr("href", '{% url "delete_order" %}?id=' + id + page_length_sort);
+                            $('#delete-order').modal('show');
+                        }
+                        else {
+                            if ($checkboxes_checked_length != 0) {
+                                $('#massive-delete-order').modal('show');
+                            }
+                        }
+                    });
+
+                    var $massive_delete_ok = $('#massive-delete__ok');
+                    $('#inputDelete').change(function() {
+                        if($(this).val() == "УДАЛИТЬ") {
+                            $massive_delete_ok.prop( "disabled", false );
+                        } else {
+                            $massive_delete_ok.prop( "disabled", true );
+                        }
+                    });
+                    $massive_delete_ok.click(function(){
+                        $('.form-massive').submit();
+                    });
+
+
+                }
             });
         })(jQuery);
     </script>
