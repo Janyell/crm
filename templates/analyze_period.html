@@ -3,7 +3,7 @@
 {%block content%}
     <div class="container container_mini-width">
         <a href="{% url "analyst" %}" class="btn">Назад</a>
-        <div class="analyze-period__wrap">
+        <div class="analyze-period__wrap clearfix">
             <form method="get" action="{% url "analyze_period" %}" class="form-horizontal form-analyze">
                 <h2 class="center">{{ page_title }}</h2>
                 <h5>{{ error }}</h5>

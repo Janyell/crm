@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'mptt',
     'media_tree',
+    'bootstrap_pagination',
 )
 
 MIDDLEWARE_CLASSES = (

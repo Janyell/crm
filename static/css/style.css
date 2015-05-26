@@ -146,7 +146,7 @@ select.hidden, div.hidden {
     background-color: rgb(233,150,122);
 }
 .analyze-period__wrap {
-    height: 230px;
+    height: 335px;
 }
 #product-table_wrapper {
     margin-bottom: 40px;
@@ -247,4 +247,25 @@ transform: translate(-300px, 0) scale(4); font-size: 23px; direction: ltr; curso
 }
 .changelist-file-uploader {
     display: none;
+}
+.pagination {
+    margin: 0;
+}
+#client-table_wrapper > .row-fluid,
+#order-table_wrapper > .row-fluid {
+    display: none;
+}
+th a {
+    width: 100%;
+    height: 100%;
+    display: block;
+    color: inherit;
+}
+.action-bar__checkbox {
+    padding: 8px;
+    float: left;
+    margin-right: 20px;
+}
+.form-massive {
+    margin: 0;
 }

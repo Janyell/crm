@@ -27,182 +27,237 @@
             {% endif %}
         {% endif %}
         {% if orders %}
-        <table class="table table-hover table-bordered" id="order-table">
-            <thead>
-                <tr>
-                    <th>Менеджер</th>
-                    <th>Название организации</th>
-                    <th>Номер заказа</th>
-                    <th>Компания</th>
-                    <th>Номер счета</th>
-                    <th>Сумма счета</th>
-                    <th>Дата оплаты</th>
-                    <th>Продукция</th>
-                    <th>Статус</th>
-                    <th>Дата готовности</th>
-                    <th>Доставка город</th>
-                    <th>Комментарии</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th class="sorting_desc"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                    <tr{% if order.order_status|title == "Готов" %} class="tr_green"{% endif %}>
-                        <td>{{ order.role }}</td>
-                        <td>
-                            {% if user_role != 2 %}
-                                <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
-                                    <div class="get-client-info__head">
-                                        {% if order.client.organization %}
-                                            {{ order.client.organization }}{% if order.client.organization_type %}, {{ order.client.organization_type }}{% endif %}
-                                        {% else %}
-                                            {{ order.client.full_name }}
-                                        {% endif %}
-                                    </div>
-                                    <div class="hidden get-client-info__data">
-                                        <div class="client-data__full-name">{{ order.client.full_name }}</div>
-                                        <div class="client-data__contact-person-phone">{{ order.client.person_phone }}</div>
-                                        <div class="client-data__organization">
-                                            {% if order.client.organization %}
-                                                {{ order.client.organization }}{% if order.client.organization_type %}, {{ order.client.organization_type }}{% endif %}
-                                            {% endif %}
-                                        </div>
-                                        <div class="client-data__organization-phone">{{ order.client.organization_phone }}</div>
-                                        <div class="client-data__email">{{ order.client.email }}</div>
-                                    </div>
-                                </a>
-                            {% else %}
-                                {{ order.client.organization_or_full_name }}
-                            {% endif %}
-                        </td>
-                        <td>{{ order.unique_number }}</td>
-                        <td>{{ order.company.title }}</td>
-                        <td>{% if order.account_number != None %}
-                                {{ order.account_number }}
-                            {% endif %}
-                        </td>
-                        <td class="product-wrap">
-                            {% if order.bill_right_format != None %}
-                                {% if order.debt_right_format and order.debt_right_format != 0 %}
-                                    <a href="#bill-info" role="button" data-toggle="modal" class="get-bill-info red">
-                                        <div class="get-bill-info__head">
-                                            {{ order.bill_right_format }}
-                                        </div>
-                                        <div class="hidden get-bill-info__data">
-                                            <div class="bill-data__bill">{{ order.bill_right_format }}</div>
-                                            <div class="client-data__brought_sum">{{ order.brought_sum_right_format }}</div>
-                                            <div class="client-data__debt">{{ order.debt_right_format }}</div>
-                                        </div>
-                                    </a>
-                                {% elif order.debt_right_format == 0 %}
-                                    <span class="blue">
-                                        {{ order.bill_right_format }}
-                                    </span>
-                                {% else %}
-                                    {{ order.bill_right_format }}
-                                {% endif %}
-                            {% endif %}
-                        </td>
-                        <td>{% if order.payment_date != None %}
-                                {{ order.payment_date }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if order.products %}
-                                {% for product in order.products %}
-                                    <div class="product-wrap">
-                                        {{ product.product.title }} - {{ product.count_of_products }} шт.
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        </td>
-                        <td>{{ order.order_status }}
-                            {% if order.is_shipped %}
-                                {{ order.shipped_date }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if order.ready_date != None %}
-                                {{ order.ready_date }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if order.city != None %}
-                                {{ order.city }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if order.comment %}
-                                <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
-                                <a class="comment-button" data-toggle="modal" href="#view-order-comment"
-                                    value="{{ order.comment }}">...</a>
-                            {% endif %}
-                        </td>
-                        <td>
-                        {% if user_role == 0 %}
-                            {% url 'get_old_orders' as get_old_orders_url %}
-                            {% if request.path == get_old_orders_url %}
-                                <a class="btn" href="{% url "delete_from_archive" %}?id={{ order.pk }}">В заказы</a>
-                            {% else %}
-                                <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
-                            {% endif %}
-                        {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
-                            <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
-                        {% endif %}
-                        </td>
-                        <td>
-                            {% if order.files %}
-                                <a class="btn files-button" data-toggle="modal" href="#view-order-files" value="
-                                    {% for file in order.files %}
-                                        <div class=&quot;file&quot;>
-                                            <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
-                                                <i class=&quot;icon-file&quot;></i>{{ file.name }}
+            {% load bootstrap_pagination %}
+            <div class="row-fluid">
+                <div class="dataTables_length">
+                    <label>Показать
+                        <select id="selectLength" name="length">
+                            <option value="10"{% if request.GET.length == "10" %} selected="selected"{% endif %}>10</option>
+                            <option value="25"{% if request.GET.length == "25" %} selected="selected"{% endif %}>25</option>
+                            <option value="50"{% if request.GET.length == "50" %} selected="selected"{% endif %}>50</option>
+                            <option value="100"{% if request.GET.length == "100" %} selected="selected"{% endif %}>100</option>
+                        </select>
+                        записей
+                    </label>
+                </div>
+            </div>
+            <form class="form-horizontal form-massive" method="get" action="{% url "massive_delete_orders" %}">
+                <table class="table table-hover table-bordered" id="order-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="sortable{% if request.GET.sort == "role" %} sorting_asc{% elif request.GET.sort == "role_d" %} sorting_desc{% else %} sorting{% endif %}" value="role">Менеджер</th>
+                            <th class="sortable{% if request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">Название организации</th>
+                            <th>Номер заказа</th>
+                            <th class="sortable{% if request.GET.sort == "company" %} sorting_asc{% elif request.GET.sort == "company_d" %} sorting_desc{% else %} sorting{% endif %}" value="company">Компания</th>
+                            <th>Номер счета</th>
+                            <th>Сумма счета</th>
+                            <th class="sortable{% if request.GET.sort == "payment_date" %} sorting_asc{% elif request.GET.sort == "payment_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="payment_date">Дата оплаты</th>
+                            <th>Продукция</th>
+                            <th>Статус</th>
+                            <th class="sortable{% if not request.GET.sort or request.GET.sort == "ready_date" %} sorting_asc{% elif request.GET.sort == "ready_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="ready_date">Дата готовности</th>
+                            <th class="sortable{% if request.GET.sort == "city" %} sorting_asc{% elif request.GET.sort == "city_d" %} sorting_desc{% else %} sorting{% endif %}" value="city">Доставка город</th>
+                            <th>Комментарии</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th class="sorting_desc"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr{% if order.order_status|title == "Готов" %} class="tr_green"{% endif %}>
+                                <td>
+                                    {% if user_role == 0 %}
+                                        <label class="checkbox">
+                                            <input class="checkbox_one" type="checkbox" name="id[]" value="{{ client.pk }}"/>
+                                        </label>
+                                    {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                                        <label class="checkbox">
+                                            <input class="checkbox_one" type="checkbox" name="id[]" value="{{ client.pk }}"/>
+                                        </label>
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.role }}</td>
+                                <td>
+                                    {% if user_role != 2 %}
+                                        <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
+                                            <div class="get-client-info__head">
+                                                {% if order.client.organization %}
+                                                    {{ order.client.organization }}{% if order.client.organization_type %}, {{ order.client.organization_type }}{% endif %}
+                                                {% else %}
+                                                    {{ order.client.full_name }}
+                                                {% endif %}
+                                            </div>
+                                            <div class="hidden get-client-info__data">
+                                                <div class="client-data__full-name">{{ order.client.full_name }}</div>
+                                                <div class="client-data__contact-person-phone">{{ order.client.person_phone }}</div>
+                                                <div class="client-data__organization">
+                                                    {% if order.client.organization %}
+                                                        {{ order.client.organization }}{% if order.client.organization_type %}, {{ order.client.organization_type }}{% endif %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="client-data__organization-phone">{{ order.client.organization_phone }}</div>
+                                                <div class="client-data__email">{{ order.client.email }}</div>
+                                            </div>
+                                        </a>
+                                    {% else %}
+                                        {{ order.client.organization_or_full_name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.unique_number }}</td>
+                                <td>{{ order.company.title }}</td>
+                                <td>{% if order.account_number != None %}
+                                        {{ order.account_number }}
+                                    {% endif %}
+                                </td>
+                                <td class="product-wrap">
+                                    {% if order.bill_right_format != None %}
+                                        {% if order.debt_right_format and order.debt_right_format != 0 %}
+                                            <a href="#bill-info" role="button" data-toggle="modal" class="get-bill-info red">
+                                                <div class="get-bill-info__head">
+                                                    {{ order.bill_right_format }}
+                                                </div>
+                                                <div class="hidden get-bill-info__data">
+                                                    <div class="bill-data__bill">{{ order.bill_right_format }}</div>
+                                                    <div class="client-data__brought_sum">{{ order.brought_sum_right_format }}</div>
+                                                    <div class="client-data__debt">{{ order.debt_right_format }}</div>
+                                                </div>
                                             </a>
-                                        </div>
-                                    {% endfor %}
-                                "><i class="icon-file"></i></a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if user_role == 0 %}
-                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}{% if request.path == get_old_orders_url %}&archive=1{% endif %}"><i class="icon-pencil"></i></a>
-                            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
-                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
-                            {% elif user_role != 2 %}
-                                <a class="btn edit-button" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
-                            {% else %}
-                                <a class="btn edit-button" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if user_role == 0 %}
-                                <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
-                                    <i class="icon-remove"></i>
-                                </a>
-                            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
-                                <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
-                                    <i class="icon-remove"></i>
-                                </a>
-                            {% endif %}
-                        </td>
-                        <td> {{ order.order_date }}
-                        </td>
-                        <td>
-                            {% if order.order_status|title == "Готов" %}
-                                2
-{#                            {% elif order.ready_date == None %}#}
-{#                                1#}
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                                        {% elif order.debt_right_format == 0 %}
+                                            <span class="blue">
+                                                {{ order.bill_right_format }}
+                                            </span>
+                                        {% else %}
+                                            {{ order.bill_right_format }}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td>{% if order.payment_date != None %}
+                                        {{ order.payment_date }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if order.products %}
+                                        {% for product in order.products %}
+                                            <div class="product-wrap">
+                                                {{ product.product.title }} - {{ product.count_of_products }} шт.
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.order_status }}
+                                    {% if order.is_shipped %}
+                                        {{ order.shipped_date }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if order.ready_date != None %}
+                                        {{ order.ready_date }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if order.city != None %}
+                                        {{ order.city }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if order.comment %}
+                                        <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
+                                        <a class="comment-button" data-toggle="modal" href="#view-order-comment"
+                                            value="{{ order.comment }}">...</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                {% if user_role == 0 %}
+                                    {% url 'get_old_orders' as get_old_orders_url %}
+                                    {% if request.path == get_old_orders_url %}
+                                        <a class="btn" href="{% url "delete_from_archive" %}?id={{ order.pk }}">В заказы</a>
+                                    {% else %}
+                                        <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
+                                    {% endif %}
+                                {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                                    <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
+                                {% endif %}
+                                </td>
+                                <td>
+                                    {% if order.files %}
+                                        <a class="btn files-button" data-toggle="modal" href="#view-order-files" value="
+                                            {% for file in order.files %}
+                                                <div class=&quot;file&quot;>
+                                                    <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
+                                                        <i class=&quot;icon-file&quot;></i>{{ file.name }}
+                                                    </a>
+                                                </div>
+                                            {% endfor %}
+                                        "><i class="icon-file"></i></a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user_role == 0 %}
+                                        <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}{% if request.path == get_old_orders_url %}&archive=1{% endif %}"><i class="icon-pencil"></i></a>
+                                    {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                                        <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                    {% elif user_role != 2 %}
+                                        <a class="btn edit-button" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                    {% else %}
+                                        <a class="btn edit-button" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user_role == 0 %}
+                                        <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
+                                            <i class="icon-remove"></i>
+                                        </a>
+                                    {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                                        <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
+                                            <i class="icon-remove"></i>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <td> {{ order.order_date }}
+                                </td>
+                                <td>
+                                    {% if order.order_status|title == "Готов" %}
+                                        2
+        {#                            {% elif order.ready_date == None %}#}
+        {#                                1#}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+            <div class="row-fluid">
+                <div class="span6 action-bar">
+                    <div class="action-bar__checkbox">
+                        <label class="checkbox">
+                            <input class="checkbox_all" type="checkbox"/> Для всех
+                        </label>
+                    </div>
+                    <div class="action-bar__action">
+                        {% if user_role == 0 %}
+                            <a class="btn change-manager-button">
+                                Сменить менеджера
+                            </a>
+                        {% endif %}
+                        <a class="btn in-archive-button">
+                            В архив
+                        </a>
+                        <a class="btn massive-delete-button">
+                            <i class="icon-remove"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="span6">
+                    <div class="dataTables_paginate paging_bootstrap pagination">
+                        {% bootstrap_paginate orders range=5 previous_label="← Предыдущая" next_label="Следующая →" %}
+                    </div>
+                </div>
+            </div>
         {% else %}
             <h5 class="center">Нет ни одного текущего заказа</h5>
         {% endif %}
@@ -262,6 +317,22 @@
         </div>
         <div class="modal-footer">
             <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+    <div class="modal hide fade" id="massive-delete-order" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Вы уверены, что хотите удалить выделенные заказы?</h3>
+        </div>
+        <div class="modal-body">
+            <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
+            <div class="center">
+                <input id="inputDelete" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="massive-delete__ok" class="btn btn-danger" disabled>Удалить</button>
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
@@ -326,35 +397,63 @@
     </div>
     <script type="text/javascript">
         (function($){
-            $(document).ready(function(){
-                var $order_table = $("#order-table");
-                $order_table.dataTable({
-                    "language": {
-                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
-                    },
-                    "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16 ] },
-{#                        { "bSearchable": false, "aTargets": [ 11, 12, 13, 14, 15, 17 ] },#}
-                        { "sType": "de_datetime", "aTargets": [ 6, 9, 16 ] },
-                        {% if user_role == 2 %}
-                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 15, 16, 17]},
-                        {% endif %}
-                        { "bVisible": false,  "aTargets": [ 16, 17 ]}
-                    ],
-                    "order": [
-                        [ 17, 'desc' ],
-                        [ 9, 'asc' ]
-                    ],
-                    "aaSortingFixed": [
-                        [17, 'desc']
-                    ],
-                    "bFilter": false,
-                    {% if request.GET.length and start >= 0 %}
-                        "iDisplayLength": {{ request.GET.length }},
-                        "iDisplayStart": {{ start }}
+            var $order_table = $("#order-table");
+            $order_table.dataTable({
+                "language": {
+                    "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                },
+                "aoColumnDefs": [
+{#                    { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16 ] },#}
+{#                    { "bSearchable": false, "aTargets": [ 11, 12, 13, 14, 15, 17 ] },#}
+{#                    { "sType": "de_datetime", "aTargets": [ 6, 9, 16 ] },#}
+                    {% if user_role == 2 %}
+                        { "bVisible": false,  "aTargets": [ 4, 6, 13, 16, 17, 18]},
                     {% endif %}
-                });
-                var table = $order_table.DataTable();
+                    { "bVisible": false,  "aTargets": [ 17, 18 ]}
+                ],
+                "order": [
+                    [ 18, 'desc' ],
+                    [ 10, 'asc' ]
+                ],
+                "aaSortingFixed": [
+                    [18, 'desc']
+                ],
+                "bFilter": false,
+                "bSort": false,
+                "paging": false,
+                "bInfo": false
+            });
+               var table = $order_table.DataTable();
+
+            $(document).ready(function(){
+                var path = "{{ request.path }}";
+                var page = "{% if request.GET.page %}page={{ request.GET.page }}{% endif %}";
+                var length = "{% if request.GET.length %}length={{ request.GET.length }}{% endif %}";
+                var sort = "{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}";
+
+
+                function get_get_params() {
+                    var get_params = "";
+                    if (page) { get_params += "&" + page; }
+                    if (length) { get_params += "&" + length; }
+                    if (sort) { get_params += "&" + sort; }
+                    return get_params;
+                }
+
+                var page_length_sort = get_get_params();
+
+                function get_url(without_length) {
+                    var url = path + "?";
+                    if (page) { url += page + "&"; }
+                    if (without_length) {
+                        if (sort) { url += sort + "&";}
+                    }
+                    else {
+                        if (length) { url += length + "&"; }
+                    }
+                    return url;
+                }
+
                 $('.get-client-info').bind('click', function(){
                     var $client_info__data = $('#client-info').find('.modal-body');
                     var full_name = $(this).find('.client-data__full-name').text();
@@ -371,7 +470,7 @@
                 });
                 $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
-                    $('#delete__ok').attr({'href': '{% url "delete_order" %}?id=' + id});
+                    $('#delete__ok').attr({'href': '{% url "delete_order" %}?id=' + id + page_length_sort});
                 });
                 $('.comment-button').bind('click', function(){
                     var comment = $(this).attr('value');
@@ -395,12 +494,10 @@
                     $(this).text(comment);
                 });
                 $(".edit-button").click(function() {
-                    var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1"{% endif %} + "&page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1"{% endif %} + page_length_sort);
                 });
                 $(".add-button").click(function() {
-                    var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1"{% else %}+ "?"{% endif %} + "page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1&"{% else %}+ "?"{% endif %} + page_length_sort.slice(1));
                 });
                 $('.get-bill-info').bind('click', function(){
                     var $bill_info__data = $('#bill-info').find('.modal-body');
@@ -410,6 +507,69 @@
                     $bill_info__data.find('.bill-info__brought_sum > .bill-info__data').text(brought_sum);
                     var debt = $(this).find('.bill-data__debt').text();
                     $bill_info__data.find('.bill-info__debt > .bill-info__data').text(debt);
+                });
+                var $select_length = $('#selectLength');
+
+                $select_length.change(function() {
+                    var value = $(this).val();
+                    {% if request.GET.length %}
+                        if (value != {{ request.GET.length }}) {
+                            document.location.href = get_url(true) + "length=" + value;
+                        }
+                    {% else %}
+                        document.location.href = get_url(true) + "length=" + value;
+                    {% endif %}
+                });
+
+                var $th_sorting = $('th.sortable');
+
+                $th_sorting.click (function(){
+                    var $this = $(this);
+                    var value = $this.attr('value');
+                    var url = get_url(false) + "sort=" + value;
+                    if ($this.hasClass('sorting') || $(this).hasClass('sorting_desc')) {
+                        document.location.href = url;
+                    }
+                    else {
+                        document.location.href = url + "_d";
+                    }
+                });
+                var $checkboxes_one = $('.checkbox_one');
+                var $checkbox_all = $('.checkbox_all');
+                $checkbox_all.change(function() {
+                    if($(this).is(":checked")) {
+                        $checkboxes_one.prop('checked', true);
+                    }
+                    else {
+                        $checkboxes_one.prop('checked', false);
+                    }
+                });
+
+                $('.massive-delete-button').click(function(){
+                    var $checkboxes_checked = $(".checkbox_one:checked");
+                    var $checkboxes_checked_length = $checkboxes_checked.length;
+                    if ($checkboxes_checked_length == 1) {
+                        var id = $checkboxes_checked.val();
+                        $('#delete__ok').attr("href", '{% url "delete_order" %}?id=' + id + page_length_sort);
+                        $('#delete-order').modal('show');
+                    }
+                    else {
+                        if ($checkboxes_checked_length != 0) {
+                            $('#massive-delete-order').modal('show');
+                        }
+                    }
+                });
+
+                var $massive_delete_ok = $('#massive-delete__ok');
+                $('#inputDelete').change(function() {
+                    if($(this).val() == "УДАЛИТЬ") {
+                        $massive_delete_ok.prop( "disabled", false );
+                    } else {
+                        $massive_delete_ok.prop( "disabled", true );
+                    }
+                });
+                $massive_delete_ok.click(function(){
+                    $('.form-massive').submit();
                 });
             });
         })(jQuery);

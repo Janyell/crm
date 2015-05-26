@@ -5,7 +5,7 @@
     <a href="
     {% if request.GET.is_interested %}
         {% url "get_interested_clients" %}{% else %}
-        {% url "get_clients" %}{% endif %}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}" class="btn">Назад</a>
+        {% url "get_clients" %}{% endif %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}" class="btn">Назад</a>
     <h2 class="form-add__head">{{ page_title }}</h2>
         {% block request.GET.is_interested %}
             {% if request.GET.is_interested %}

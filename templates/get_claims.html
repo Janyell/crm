@@ -227,6 +227,7 @@
                     "order": [
                         [ 1, "desc" ]
                     ],
+                    "bFilter": false,
                     {% if request.GET.length and start >= 0 %}
                         "iDisplayLength": {{ request.GET.length }},
                         "iDisplayStart": {{ start }}

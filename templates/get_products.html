@@ -22,7 +22,7 @@
                     {% for product in products %}
                         <tr>
                             <td>{{ product.title }}</td>
-                            <td>{{ product.price_right_format }}</td>
+                            <td class="product-wrap">{{ product.price_right_format }}</td>
                             <td>
                                 <a class="btn btn-mini edit-button" data-toggle="modal" href="#edit-product" value="{{ product.pk }}">
                                     <i class="icon-pencil"></i>
