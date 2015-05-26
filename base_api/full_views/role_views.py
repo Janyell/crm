@@ -95,8 +95,19 @@ def full_delete_roles(request):
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     role = Roles.objects.get(pk=id)
-    role.delete()
-    return HttpResponseRedirect('/roles/')
+    role.is_deleted = 1
+    role.save(update_fields=["is_deleted"])
+    get_params = '?'
+    if 'page' in request.GET:
+        page = int(request.GET['page'])
+        get_params += 'page=' + str(page) + '&'
+    if 'length' in request.GET:
+        length = int(request.GET['length'])
+        get_params += 'length=' + str(length) + '&'
+    if 'sort' in request.GET:
+        sort = int(request.GET['sort'])
+        get_params += 'sort=' + str(sort) + '&'
+    return HttpResponseRedirect('/roles/' + get_params)
 
 
 def full_get_roles(request):

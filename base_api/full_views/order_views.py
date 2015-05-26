@@ -571,9 +571,19 @@ def full_delete_order(request):
         return HttpResponseRedirect('/oops/')
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
+    get_params = '?'
+    if 'page' in request.GET:
+        page = int(request.GET['page'])
+        get_params += 'page=' + str(page) + '&'
+    if 'length' in request.GET:
+        length = int(request.GET['length'])
+        get_params += 'length=' + str(length) + '&'
+    if 'sort' in request.GET:
+        sort = int(request.GET['sort'])
+        get_params += 'sort=' + str(sort) + '&'
     if order.in_archive:
-        return HttpResponseRedirect('/orders/archive/')
-    return HttpResponseRedirect('/orders/')
+        return HttpResponseRedirect('/orders/archive/' + get_params)
+    return HttpResponseRedirect('/orders/' + get_params)
 
 
 def full_get_orders(request):
@@ -808,7 +818,17 @@ def full_delete_from_archive(request):
     order = Orders.objects.get(pk=id, is_deleted=0)
     order.in_archive = 0
     order.save(update_fields=["in_archive"])
-    return HttpResponseRedirect('/orders/archive/')
+    get_params = '?'
+    if 'page' in request.GET:
+        page = int(request.GET['page'])
+        get_params += 'page=' + str(page) + '&'
+    if 'length' in request.GET:
+        length = int(request.GET['length'])
+        get_params += 'length=' + str(length) + '&'
+    if 'sort' in request.GET:
+        sort = int(request.GET['sort'])
+        get_params += 'sort=' + str(sort) + '&'
+    return HttpResponseRedirect('/orders/archive/' + get_params)
 
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
@@ -816,19 +836,21 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
 
 
 def right_money_format(bill):
-    orders_count_str = str(bill)
-    orders_count_str_reverse = orders_count_str[::-1]
-    orders_count_str_right_format = ''
-    for i in range(0, len(orders_count_str)/3 + 1):
-        j = 3
-        if i != (len(orders_count_str)/3):
-            orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                            orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
-        else:
-            if (len(orders_count_str) % 3) == 2:
+    if bill != 0:
+        orders_count_str = str(bill)
+        orders_count_str_reverse = orders_count_str[::-1]
+        orders_count_str_right_format = ''
+        for i in range(0, len(orders_count_str)/3 + 1):
+            j = 3
+            if i != (len(orders_count_str)/3):
                 orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                orders_count_str_reverse[i*j+1]
-            elif (len(orders_count_str) % 3) == 1:
-                orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
-    orders_count_str = orders_count_str_right_format[::-1]
-    return orders_count_str
+                                                orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+            else:
+                if (len(orders_count_str) % 3) == 2:
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                    orders_count_str_reverse[i*j+1]
+                elif (len(orders_count_str) % 3) == 1:
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+        orders_count_str = orders_count_str_right_format[::-1]
+        return orders_count_str
+    return ''

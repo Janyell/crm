@@ -326,10 +326,20 @@ def full_delete_clients(request):
     is_interested = client.is_interested
     client.is_deleted = 1
     client.save(update_fields=["is_deleted"])
+    get_params = '?'
+    if 'page' in request.GET:
+        page = int(request.GET['page'])
+        get_params += 'page=' + str(page) + '&'
+    if 'length' in request.GET:
+        length = int(request.GET['length'])
+        get_params += 'length=' + str(length) + '&'
+    if 'sort' in request.GET:
+        sort = int(request.GET['sort'])
+        get_params += 'sort=' + str(sort) + '&'
     if is_interested == 0:
-        return HttpResponseRedirect('/clients/')
+        return HttpResponseRedirect('/clients/' + get_params)
     else:
-        return HttpResponseRedirect('/clients/interested/')
+        return HttpResponseRedirect('/clients/interested/' + get_params)
 
 
 def full_get_clients(request):

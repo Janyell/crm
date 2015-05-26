@@ -19,7 +19,17 @@ def full_delete_product(request):
     product = Products.objects.get(pk=id)
     product.is_deleted = 1
     product.save(update_fields=["is_deleted"])
-    return HttpResponseRedirect('/products/')
+    get_params = '?'
+    if 'page' in request.GET:
+        page = int(request.GET['page'])
+        get_params += 'page=' + str(page) + '&'
+    if 'length' in request.GET:
+        length = int(request.GET['length'])
+        get_params += 'length=' + str(length) + '&'
+    if 'sort' in request.GET:
+        sort = int(request.GET['sort'])
+        get_params += 'sort=' + str(sort) + '&'
+    return HttpResponseRedirect('/products/' + get_params)
 
 
 def full_get_products(request):
