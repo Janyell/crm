@@ -157,6 +157,7 @@ class Order_Product(models.Model):
     is_deleted = models.BooleanField(default=0)
     order_date = UnixTimestampField(auto_created=True)
     count_of_products = models.IntegerField(default=0)
+    price = models.IntegerField(default=0, blank=True)
 
 
 class Order_Files(models.Model):
