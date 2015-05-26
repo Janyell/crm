@@ -607,10 +607,7 @@ def full_get_orders(request):
     if 'managers[]' in request.GET:
         managers = request.GET.getlist('managers[]')
         orders = orders.filter(role__in=managers)
-        selected_managers = []
-        for manager in managers:
-            selected_managers.append(Roles.objects.get(pk=manager))
-        out.update({'managers': selected_managers})
+        out.update({'managers': managers})
     if 'client-id' in request.GET:
         client_id = request.GET['client-id']
         if Clients.objects.filter(id=client_id, is_deleted=0).count() != 1:
@@ -711,10 +708,7 @@ def full_get_old_orders(request):
     if 'managers[]' in request.GET:
         managers = request.GET.getlist('managers[]')
         orders = orders.filter(role__in=managers)
-        selected_managers = []
-        for manager in managers:
-            selected_managers.append(Roles.objects.get(pk=manager))
-        out.update({'managers': selected_managers})
+        out.update({'managers': managers})
     try:
         orders = orders.order_by(sort)
     except TypeError:
