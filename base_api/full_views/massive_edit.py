@@ -19,13 +19,13 @@ def massive_delete_orders(request):
     get_params = '?'
     if 'page' in request.GET:
         page = int(request.GET['page'])
-        get_params += str(page) + '&'
+        get_params += 'page=' + str(page) + '&'
     if 'length' in request.GET:
         length = int(request.GET['length'])
-        get_params += str(length) + '&'
+        get_params += 'length=' + str(length) + '&'
     if 'sort' in request.GET:
         sort = int(request.GET['sort'])
-        get_params += str(sort) + '&'
+        get_params += 'sort=' + str(sort) + '&'
     if 'archive' in request.POST:
         return HttpResponseRedirect('/orders/archive/' + get_params)
     return HttpResponseRedirect('/orders/' + get_params)
@@ -46,13 +46,13 @@ def massive_delete_claims(request):
     get_params = '?'
     if 'page' in request.GET:
         page = int(request.GET['page'])
-        get_params += str(page) + '&'
+        get_params += 'page=' + str(page) + '&'
     if 'length' in request.GET:
         length = int(request.GET['length'])
-        get_params += str(length) + '&'
+        get_params += 'length=' + str(length) + '&'
     if 'sort' in request.GET:
         sort = int(request.GET['sort'])
-        get_params += str(sort) + '&'
+        get_params += 'sort=' + str(sort) + '&'
     return HttpResponseRedirect('/claims/' + get_params)
 
 
@@ -69,13 +69,13 @@ def massive_delete_clients(request):
     get_params = '?'
     if 'page' in request.GET:
         page = int(request.GET['page'])
-        get_params += str(page) + '&'
+        get_params += 'page=' + str(page) + '&'
     if 'length' in request.GET:
         length = int(request.GET['length'])
-        get_params += str(length) + '&'
+        get_params += 'length=' + str(length) + '&'
     if 'sort' in request.GET:
         sort = int(request.GET['sort'])
-        get_params += str(sort) + '&'
+        get_params += 'sort=' + str(sort) + '&'
     if 'interested' in request.POST:
         return HttpResponseRedirect('/clients/interested/' + get_params)
     else:
@@ -96,13 +96,13 @@ def massive_delete_companies(request):
     get_params = '?'
     if 'page' in request.GET:
         page = int(request.GET['page'])
-        get_params += str(page) + '&'
+        get_params += 'page=' + str(page) + '&'
     if 'length' in request.GET:
         length = int(request.GET['length'])
-        get_params += str(length) + '&'
+        get_params += 'length=' + str(length) + '&'
     if 'sort' in request.GET:
         sort = int(request.GET['sort'])
-        get_params += str(sort) + '&'
+        get_params += 'sort=' + str(sort) + '&'
     return HttpResponseRedirect('/companies/' + get_params)
 
 
@@ -119,13 +119,13 @@ def massive_delete_products(request):
     get_params = '?'
     if 'page' in request.GET:
         page = int(request.GET['page'])
-        get_params += str(page) + '&'
+        get_params += 'page=' + str(page) + '&'
     if 'length' in request.GET:
         length = int(request.GET['length'])
-        get_params += str(length) + '&'
+        get_params += 'length=' + str(length) + '&'
     if 'sort' in request.GET:
         sort = int(request.GET['sort'])
-        get_params += str(sort) + '&'
+        get_params += 'sort=' + str(sort) + '&'
     return HttpResponseRedirect('/products/' + get_params)
 
 
@@ -141,13 +141,13 @@ def massive_delete_roles(request):
     get_params = '?'
     if 'page' in request.GET:
         page = int(request.GET['page'])
-        get_params += str(page) + '&'
+        get_params += 'page=' + str(page) + '&'
     if 'length' in request.GET:
         length = int(request.GET['length'])
-        get_params += str(length) + '&'
+        get_params += 'length=' + str(length) + '&'
     if 'sort' in request.GET:
         sort = int(request.GET['sort'])
-        get_params += str(sort) + '&'
+        get_params += 'sort=' + str(sort) + '&'
     return HttpResponseRedirect('/roles/' + get_params)
 
 
@@ -166,13 +166,13 @@ def massive_add_in_archive(request):
     get_params = '?'
     if 'page' in request.GET:
         page = int(request.GET['page'])
-        get_params += str(page) + '&'
+        get_params += 'page=' + str(page) + '&'
     if 'length' in request.GET:
         length = int(request.GET['length'])
-        get_params += str(length) + '&'
+        get_params += 'length=' + str(length) + '&'
     if 'sort' in request.GET:
         sort = int(request.GET['sort'])
-        get_params += str(sort) + '&'
+        get_params += 'sort=' + str(sort) + '&'
     return HttpResponseRedirect('/orders/' + get_params)
 
 
