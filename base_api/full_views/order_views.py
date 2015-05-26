@@ -600,6 +600,13 @@ def full_get_orders(request):
     out.update({'user_role': user_role})
     sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_ORDER)
     sort = SORT_TYPE_FOR_ORDER.get(sort_key, DEFAULT_SORT_TYPE_FOR_ORDER)
+    orders = Orders.objects.filter(is_deleted=0, is_claim=0)
+    if 'source' in request.GET:
+        source = int(request.GET.get('source'))
+        orders = orders.filter(source=source)
+    if 'managers[]' in request.GET:
+        managers = request.GET.getlist('managers[]')
+        orders = orders.filter(role__in=managers)
     if 'client-id' in request.GET:
         client_id = request.GET['client-id']
         if Clients.objects.filter(id=client_id, is_deleted=0).count() != 1:
@@ -607,9 +614,9 @@ def full_get_orders(request):
             return render(request, 'get_orders.html', out)
         client = Clients.objects.get(id=client_id, is_deleted=0)
         try:
-            orders = Orders.objects.filter(is_deleted=0, client=client, is_claim=0).order_by(sort)
+            orders = orders.filter(client=client).order_by(sort)
         except TypeError:
-            orders = Orders.objects.filter(is_deleted=0, client=client, is_claim=0).order_by(*sort)
+            orders = orders.filter(client=client).order_by(*sort)
         out.update({'page_title': "История заказов "})
         out.update({'client_id': client_id})
         if client.organization == '':
@@ -620,9 +627,9 @@ def full_get_orders(request):
         out.update({'client_id': client.id})
     else:
         try:
-            orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0).order_by(sort)
+            orders = orders.filter(in_archive=0).order_by(sort)
         except TypeError:
-            orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=0).order_by(*sort)
+            orders = orders.filter(in_archive=0).order_by(*sort)
         out.update({'page_title': "Заказы"})
     number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
     orders_pages = Paginator(orders, number)
@@ -693,10 +700,17 @@ def full_get_old_orders(request):
         out.update({'user_role': user_role})
     sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE)
     sort = SORT_TYPE_FOR_ORDER.get(sort_key, DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE)
+    orders = Orders.objects.filter(is_deleted=0, is_claim=0, in_archive=1)
+    if 'source' in request.GET:
+        source = int(request.GET.get('source'))
+        orders = orders.filter(source=source)
+    if 'managers[]' in request.GET:
+        managers = request.GET.getlist('managers[]')
+        orders = orders.filter(role__in=managers)
     try:
-        orders = Orders.objects.filter(is_deleted=0, in_archive=1, is_claim=0).order_by(sort)
+        orders = orders.order_by(sort)
     except TypeError:
-        orders = Orders.objects.filter(is_deleted=0, in_archive=1, is_claim=0).order_by(*sort)
+        orders = orders.order_by(*sort)
     number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
     orders_pages = Paginator(orders, number)
     page = request.GET.get('page')
