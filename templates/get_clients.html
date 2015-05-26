@@ -25,7 +25,7 @@
                     </label>
                 </div>
             </div>
-            <form class="form-horizontal form-massive" method="POST" action="{% url "massive_delete_clients" %}{% if request.path == get_interested_clients_url %}?is_interested=1{% endif %}">
+            <form class="form-horizontal form-massive" method="POST" action="">
                 <table class="table table-hover table-bordered" id="client-table">
                     <thead>
                         <tr>
@@ -280,7 +280,7 @@
                     }
                 });
                 $massive_delete_ok.click(function(){
-                    $('.form-massive').submit();
+                    $('.form-massive').attr('action', '{% url "massive_delete_orders" %}{% if request.path == get_interested_clients_url %}?is_interested=1&{% else %}?{% endif %}' + page_length_sort.slice(1)).submit();
                 });
             });
         })(jQuery);

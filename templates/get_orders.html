@@ -41,7 +41,7 @@
                     </label>
                 </div>
             </div>
-            <form class="form-horizontal form-massive" method="get" action="">
+            <form class="form-horizontal form-massive" method="POST" action="">
                 <table class="table table-hover table-bordered" id="order-table">
                     <thead>
                         <tr>
@@ -241,11 +241,11 @@
                         </div>
                         <div class="action-bar__action">
                             {% if user_role == 0 %}
-                                <a class="btn change-manager-button">
+                                <a class="btn massive-change-manager-button">
                                     Сменить менеджера
                                 </a>
                             {% endif %}
-                            <a class="btn in-archive-button">
+                            <a class="btn massive-in-archive-button">
                                 В архив
                             </a>
                             <a class="btn massive-delete-button">
@@ -574,11 +574,14 @@
                             $massive_delete_ok.prop( "disabled", true );
                         }
                     });
+                    var $form = $('.form-massive');
                     $massive_delete_ok.click(function(){
-                        $('.form-massive').submit();
+                        $form.attr('action', '{% url "massive_delete_orders" %}?' + page_length_sort.slice(1)).submit();
                     });
-
-
+                    $('.massive-in-archive-button').click(function(){
+                        $form.attr('action', '{% url "massive_add_in_archive" %}?' + page_length_sort.slice(1)).submit();
+                    });
+                    $()
                 }
             });
         })(jQuery);
