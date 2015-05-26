@@ -128,13 +128,13 @@ def massive_change_manager_in_order(request):
     if Roles.objects.get(id=request.user.id).role == 2:
         return HttpResponseRedirect('/oops/')
     ids = request.POST.getlist('id[]')
-    manager_id = request.POST.get['manager_id']
+    manager_id = request.POST.get('manager_id')
     for id in ids:
         order = Orders.objects.get(pk=id, is_deleted=0)
         if str(request.user.username) != str(order.role) and Roles.objects.get(id=request.user.id).role != 0:
             return HttpResponseRedirect('/oops/')
-        order.role = manager_id
+        order.role = Roles.objects.get(id=manager_id)
         order.save(update_fields=["role"])
     get_params = '?'
     get_params += get_params + get_request_param_as_string(request)
-    return HttpResponseRedirect('/orders/' + get_paramsy)
+    return HttpResponseRedirect('/orders/' + get_params)

@@ -478,10 +478,21 @@ def full_get_claims(request):
         out.update({'user_role': user_role})
     sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_CLAIM)
     sort = SORT_TYPE_FOR_CLAIM.get(sort_key, DEFAULT_SORT_TYPE_FOR_CLAIM)
+    orders = Orders.objects.filter(is_deleted=0, is_claim=1, in_archive=0)
+    if 'source' in request.GET:
+        source = int(request.GET.get('source'))
+        orders = orders.filter(source=source)
+    if 'managers[]' in request.GET:
+        managers = request.GET.getlist('managers[]')
+        orders = orders.filter(role__in=managers)
+        selected_managers = []
+        for manager in managers:
+            selected_managers.append(Roles.objects.get(pk=manager))
+        out.update({'managers': selected_managers})
     try:
-        orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=1).order_by(sort)
+        orders = orders.order_by(sort)
     except TypeError:
-        orders = Orders.objects.filter(is_deleted=0, in_archive=0, is_claim=1).order_by(*sort)
+        orders = orders.order_by(*sort)
     number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
     orders_pages = Paginator(orders, number)
     page = request.GET.get('page')
