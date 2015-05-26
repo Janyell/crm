@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.shortcuts import render
 from datetime import date
 from base_api.constants import SORT_TYPE_FOR_ORDER, DEFAULT_SORT_TYPE_FOR_ORDER, DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE, \
@@ -586,6 +587,8 @@ def full_get_orders(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
+    out.update({'sources': ORDER_SOURCE_LIST})
+    out.update({'roles': Roles.objects.filter(Q(role=1) | Q(role=0)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])
         length = int(request.GET['length'])
@@ -676,6 +679,8 @@ def full_get_old_orders(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
+    out.update({'sources': ORDER_SOURCE_LIST})
+    out.update({'roles': Roles.objects.filter(Q(role=1) | Q(role=0)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])
         length = int(request.GET['length'])

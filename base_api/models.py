@@ -83,6 +83,33 @@ class Companies(models.Model):
     patronymic = models.CharField(max_length=50, null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
 
+EMAIL = 0
+CALL = 1
+SITE = 2
+ZT = 3
+AQB = 4
+HAH = 5
+LAND = 6
+TEND = 7
+ORDER_SOURCE_LIST = [
+    {'name': 'ЗТ',
+     'code': ZT},
+    {'name': 'AQB',
+     'code': AQB},
+    {'name': 'H-A-H',
+     'code': HAH},
+    {'name': 'Landing',
+     'code': LAND},
+    {'name': 'Тендер',
+     'code': TEND},
+    {'name': 'Электронная почта',
+     'code': EMAIL},
+    {'name': 'Звонок',
+     'code': CALL},
+    {'name': 'Заявка с сайта',
+     'code': SITE}
+]
+
 
 class Orders(models.Model):
     role = models.ForeignKey(Roles)
