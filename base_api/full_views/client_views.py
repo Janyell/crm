@@ -153,7 +153,7 @@ def full_add_edit_client(request):
                                                    "person_phone", "organization_phone", "email", "is_interested",
                                                    "organization_type"])
                 get_params = '?'
-                get_params += get_params + get_request_param_as_string(request)
+                get_params += get_request_param_as_string(request)
                 if is_interested == 1:
                     return HttpResponseRedirect('/clients/interested/' + get_params)
                 return HttpResponseRedirect('/clients/' + get_params)
@@ -220,7 +220,7 @@ def full_add_edit_client(request):
                             return HttpResponseRedirect('/uploads/client/?id=%s' % new_client.pk)
                         elif 'only-save' in form.data:
                             get_params = '?'
-                            get_params += get_params + get_request_param_as_string(request)
+                            get_params += get_request_param_as_string(request)
                             if is_interested == 1:
                                 new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                     patronymic=patronymic, person_phone=person_phone,
@@ -259,7 +259,7 @@ def full_add_edit_client(request):
                 else:
                     if 'only-save' in form.data:
                         get_params = '?'
-                        get_params += get_params + get_request_param_as_string(request)
+                        get_params += get_request_param_as_string(request)
                         if is_interested == 1:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                                 patronymic=patronymic, person_phone=person_phone,
@@ -334,7 +334,7 @@ def full_delete_clients(request):
     client.is_deleted = 1
     client.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     if is_interested == 0:
         return HttpResponseRedirect('/clients/' + get_params)
     else:

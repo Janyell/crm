@@ -20,7 +20,7 @@ def full_add_edit_company(request):
     else:
         out.update({'user_role': user_role})
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if 'pk' in request.POST:

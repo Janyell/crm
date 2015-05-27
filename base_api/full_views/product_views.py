@@ -21,7 +21,7 @@ def full_delete_product(request):
     product.is_deleted = 1
     product.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/products/' + get_params)
 
 
@@ -40,7 +40,7 @@ def full_get_products(request):
     else:
         out.update({'user_role': user_role})
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
@@ -72,7 +72,7 @@ def full_edit_product(request):
     else:
         out.update({'user_role': user_role})
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     if request.method == 'POST':
         id = request.GET['id']
         product = Products.objects.get(id=id)

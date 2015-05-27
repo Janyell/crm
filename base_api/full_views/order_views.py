@@ -279,7 +279,7 @@ def full_add_edit_order(request):
                                                                               count_of_products=count_of_products,
                                                                               price=price_of_products)
             get_params = '?'
-            get_params += get_params + get_request_param_as_string(request)
+            get_params += get_request_param_as_string(request)
             if new_order.in_archive == 1:
                 return HttpResponseRedirect('/orders/archive/' + get_params)
             return HttpResponseRedirect('/orders/' + get_params)
@@ -371,11 +371,11 @@ def full_add_edit_order(request):
             if is_order_create:
                 if 'only-save' in form.data:
                     get_params = '?'
-                    get_params += get_params + get_request_param_as_string(request)
+                    get_params += get_request_param_as_string(request)
                     return HttpResponseRedirect('/orders/' + get_params)
                 else:
                     get_params = '&'
-                    get_params += get_params + get_request_param_as_string(request)
+                    get_params += get_request_param_as_string(request)
                     return HttpResponseRedirect('/uploads/order/?id=%s' % new_order.id + get_params)
             else:
                 OrdersForm.base_fields['company'] = CompanyModelChoiceField(
@@ -577,7 +577,7 @@ def full_delete_order(request):
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     if order.in_archive:
         return HttpResponseRedirect('/orders/archive/' + get_params)
     return HttpResponseRedirect('/orders/' + get_params)
@@ -769,7 +769,7 @@ def full_edit_order_for_factory(request):
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     if user_role != 2:
         return HttpResponseRedirect('/oops/')
     else:
@@ -826,7 +826,7 @@ def full_add_in_archive(request):
     order.in_archive = 1
     order.save(update_fields=["in_archive"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/orders/' + get_params)
 
 
@@ -840,7 +840,7 @@ def full_delete_from_archive(request):
     order.in_archive = 0
     order.save(update_fields=["in_archive"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/orders/archive/' + get_params)
 
 

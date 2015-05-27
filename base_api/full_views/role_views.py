@@ -20,7 +20,7 @@ def full_add_edit_role(request):
     else:
         out.update({'user_role': user_role})
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     if request.method == 'POST':
         form = RoleForm(request.POST)
         if 'pk' in request.POST:
@@ -101,7 +101,8 @@ def full_delete_roles(request):
     role.is_deleted = 1
     role.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
+    print(get_params)
     return HttpResponseRedirect('/roles/' + get_params)
 
 

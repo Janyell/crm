@@ -18,7 +18,7 @@ def massive_delete_orders(request):
         order.is_deleted = 1
         order.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     if 'archive' in request.POST:
         return HttpResponseRedirect('/orders/archive/' + get_params)
     return HttpResponseRedirect('/orders/' + get_params)
@@ -37,7 +37,7 @@ def massive_delete_claims(request):
         order.is_deleted = 1
         order.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/claims/' + get_params)
 
 
@@ -52,7 +52,7 @@ def massive_delete_clients(request):
         client.is_deleted = 1
         client.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     if 'interested' in request.POST:
         return HttpResponseRedirect('/clients/interested/' + get_params)
     else:
@@ -71,7 +71,7 @@ def massive_delete_companies(request):
         company.is_deleted = 1
         company.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/companies/' + get_params)
 
 
@@ -86,7 +86,7 @@ def massive_delete_products(request):
         product.is_deleted = 1
         product.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/products/' + get_params)
 
 
@@ -101,7 +101,7 @@ def massive_delete_roles(request):
         role.is_deleted = 1
         role.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/roles/' + get_params)
 
 
@@ -118,7 +118,7 @@ def massive_add_in_archive(request):
         order.in_archive = 1
         order.save(update_fields=["in_archive"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/orders/' + get_params)
 
 
@@ -136,5 +136,5 @@ def massive_change_manager_in_order(request):
         order.role = Roles.objects.get(id=manager_id)
         order.save(update_fields=["role"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/orders/' + get_params)

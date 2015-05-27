@@ -220,11 +220,11 @@ def full_add_edit_claim(request):
                         client.save(update_fields=["is_interested"])
             if displacement == 1:
                 get_params = '&'
-                get_params += get_params + get_request_param_as_string(request)
+                get_params += get_request_param_as_string(request)
                 return HttpResponseRedirect('/claims/?displacement=1' + get_params)
             else:
                 get_params = '?'
-                get_params += get_params + get_request_param_as_string(request)
+                get_params += get_request_param_as_string(request)
                 return HttpResponseRedirect('/claims/' + get_params)
         if form.is_valid():
             client = form.cleaned_data['client']
@@ -307,11 +307,11 @@ def full_add_edit_claim(request):
                 if 'only-save' in form.data:
                     if displacement == 1:
                         get_params = '&'
-                        get_params += get_params + get_request_param_as_string(request)
+                        get_params += get_request_param_as_string(request)
                         return HttpResponseRedirect('/claims/?displacement=1' + get_params)
                     else:
                         get_params = '?'
-                        get_params += get_params + get_request_param_as_string(request)
+                        get_params += get_request_param_as_string(request)
                         return HttpResponseRedirect('/claims/' + get_params)
                 else:
                     return HttpResponseRedirect('/uploads/order/?id=%s' % new_claim.id)
@@ -561,7 +561,7 @@ def full_delete_claim(request):
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
     get_params = '?'
-    get_params += get_params + get_request_param_as_string(request)
+    get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/claims/' + get_params)
 
 
