@@ -26,10 +26,9 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-        {% if orders %}
-            {% load bootstrap_pagination %}
-            <div class="row-fluid">
-                <div class="span3">
+        <div class="row-fluid">
+            <div class="span3">
+                {% if orders %}
                     <div class="dataTables_length">
                         <label>Показать
                             <select id="selectLength" name="length">
@@ -41,30 +40,35 @@
                             записей
                         </label>
                     </div>
-                </div>
-                <div class="span6">
-                    <div class="manager">
-                        {% for manager in roles %}
+                {% endif %}
+            </div>
+            <div class="span6">
+                <div class="manager">
+                    {% for manager in roles %}
+                        <div class="span2">
                             <label class="checkbox">
                                 <input type="checkbox" name="managers[]" class="managers" value="{{ manager.pk }}"
                                     {% if manager.pk|upper in managers %} checked="checked"{% endif %} />
                                 {{ manager.username }}
                             </label>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="span3">
-                    {% if sources %}
-                        <div class="source">
-                            <select id="selectSource" name="source">
-                                {% for source in sources %}
-                                    <option value="{{ source.code }}"{% if request.GET.source == source.code|urlencode:"" %} selected="selected"{% endif %}>{{ source.name }}</option>
-                                {% endfor %}
-                            </select>
                         </div>
-                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
+            <div class="span3">
+                {% if sources %}
+                    <div class="source">
+                        <select id="selectSource" name="source">
+                            {% for source in sources %}
+                                <option value="{{ source.code }}"{% if request.GET.source == source.code|urlencode:"" %} selected="selected"{% endif %}>{{ source.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if orders %}
+            {% load bootstrap_pagination %}
             <form class="form-horizontal form-massive" method="POST">
                 <table class="table table-hover table-bordered" id="order-table">
                     <thead>
@@ -479,6 +483,12 @@
                 var length = "{% if request.GET.length %}length={{ request.GET.length }}{% endif %}";
                 var sort = "{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}";
                 var source = "{% if request.GET.source %}source={{ request.GET.source }}{% endif %}";
+                var managers = "";
+                {% if managers %}
+                    {% for manager in managers %}
+                        managers += "managers[]={{ manager }}&";
+                    {% endfor %}
+                {% endif %}
 
 
                 function get_get_params() {
@@ -487,11 +497,12 @@
                     if (length) { get_params += "&" + length; }
                     if (sort) { get_params += "&" + sort; }
                     if (source) { get_params += "&" + source; }
+                    if (managers) { get_params += "&" + managers; }
                     return get_params;
                 }
 
-                var page_length_sort_source = get_get_params();
-                var page_length_sort_source__slice = page_length_sort_source.slice(1);
+                var get_params = get_get_params();
+                var get_params__slice = get_params.slice(1);
 
                 function get_url(without) {
                     var url = path + "?";
@@ -499,15 +510,18 @@
                     if (without == "length") {
                         if (sort) { url += sort + "&";}
                         if (source) { url += source + "&";}
+                        if (managers) { url += managers;}
                     }
                     else {
                         if (without == "sort") {
                             if (length) { url += length + "&"; }
                             if (source) { url += source + "&";}
+                            if (managers) { url += managers;}
                         }
                         else {
                             if (length) { url += length + "&"; }
                             if (sort) { url += sort + "&";}
+                            if (managers) { url += managers;}
                         }
                     }
                     return url;
@@ -529,7 +543,7 @@
                 });
                 $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
-                    $('#delete__ok').attr({'href': '{% url "delete_order" %}?id=' + id + page_length_sort_source});
+                    $('#delete__ok').attr({'href': '{% url "delete_order" %}?id=' + id + get_params});
                 });
                 $('.comment-button').bind('click', function(){
                     var comment = $(this).attr('value');
@@ -553,10 +567,10 @@
                     $(this).text(comment);
                 });
                 $(".edit-button").click(function() {
-                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1"{% endif %} + page_length_sort_source);
+                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1"{% endif %} + get_params);
                 });
                 $(".add-button").click(function() {
-                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1&"{% else %}+ "?"{% endif %} + page_length_sort_source__slice);
+                    $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1&"{% else %}+ "?"{% endif %} + get_params__slice);
                 });
                 $('.get-bill-info').bind('click', function(){
                     var $bill_info__data = $('#bill-info').find('.modal-body');
@@ -604,8 +618,44 @@
                     }
                 });
 
+                function get_managers_url(value) {
+                    var url = path + "?";
+                    if (page) { url += page + "&"; }
+                    if (length) { url += length + "&"; }
+                    if (sort) { url += sort + "&";}
+                    if (source) { url += source + "&";}
+                    if (managers) {
+                        {% if managers %}
+                            {% for manager in managers %}
+                                if ("{{ manager }}" != value)
+                                url += "managers[]={{ manager }}&";
+                            {% endfor %}
+                        {% endif %}
+                    }
+                    return url;
+                }
+
                 var $managers = $('.managers');
-                $managers.change()
+                $managers.change(function(){
+                    var $this = $(this);
+                    var value = $this.attr('value');
+                    if ($this.is(":checked")) {
+                        var url = document.location.href;
+                        var q_ind = url.indexOf('?');
+                        if (q_ind == -1) { url += "?";}
+                        else {
+                            var a_ind = url.indexOf('&');
+                            if (q_ind != url.length - 1 && a_ind != url.length - 1) {
+                                url += "&";
+                            }
+                        }
+                        document.location.href = url + "managers[]=" + value;
+                    }
+                    else {
+                        document.location.href = get_managers_url(value);
+                    }
+                    console.log(document.location.href);
+                });
 
                 var $checkboxes_one = $('.checkbox_one');
 
@@ -627,7 +677,7 @@
                         var $checkboxes_checked_length = $checkboxes_checked.length;
                         if ($checkboxes_checked_length == 1) {
                             var id = $checkboxes_checked.val();
-                            $('#delete__ok').attr("href", '{% url "delete_order" %}?id=' + id + page_length_sort_source);
+                            $('#delete__ok').attr("href", '{% url "delete_order" %}?id=' + id + get_params);
                             $('#delete-order').modal('show');
                         }
                         else {
@@ -647,10 +697,10 @@
                     });
                     var $form = $('.form-massive');
                     $massive_delete_ok.click(function(){
-                        $form.attr('action', '{% url "massive_delete_orders" %}?' + page_length_sort_source__slice).submit();
+                        $form.attr('action', '{% url "massive_delete_orders" %}?' + get_params__slice).submit();
                     });
                     $('.massive-in-archive-button').click(function(){
-                        $form.attr('action', '{% url "massive_add_in_archive" %}?' + page_length_sort_source__slice).submit();
+                        $form.attr('action', '{% url "massive_add_in_archive" %}?' + get_params__slice).submit();
                     });
 
                     $('.massive-change-manager-button').click(function(){
@@ -660,7 +710,7 @@
                     });
                     $('#massive-change-manager__ok').click(function(){
                         var value = $('#selectRole').val();
-                        $form.append( '<input type="hidden" name="manager_id" value="' + value + '"/>').attr('action', '{% url "massive_change_manager_in_order" %}?' + page_length_sort_source__slice).submit();
+                        $form.append( '<input type="hidden" name="manager_id" value="' + value + '"/>').attr('action', '{% url "massive_change_manager_in_order" %}?' + get_params__slice).submit();
                     });
                 }
             });

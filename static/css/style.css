@@ -272,3 +272,6 @@ th a {
 div.source {
     float: right;
 }
+.manager > .span2 {
+    margin-left: inherit;
+}
