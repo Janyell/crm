@@ -13,4 +13,14 @@ def get_request_param_as_string(request):
     if 'sort' in request.GET:
         sort = int(request.GET['sort'])
         get_params += 'sort=' + str(sort) + '&'
+    if 'sort' in request.GET:
+        sort = int(request.GET['sort'])
+        get_params += 'sort=' + str(sort) + '&'
+    if 'managers[]' in request.GET:
+        managers = request.GET.getlist('managers[]')
+        for manager in managers:
+            get_params += 'managers[]=' + manager + '&'
+    if 'source' in request.GET:
+        source = int(request.GET.get('source'))
+        get_params += 'source=' + str(source) + '&'
     return get_params

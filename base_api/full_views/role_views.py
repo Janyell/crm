@@ -102,7 +102,6 @@ def full_delete_roles(request):
     role.save(update_fields=["is_deleted"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
-    print(get_params)
     return HttpResponseRedirect('/roles/' + get_params)
 
 

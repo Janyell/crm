@@ -83,6 +83,7 @@ class Companies(models.Model):
     patronymic = models.CharField(max_length=50, null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
 
+# ALL = -1
 EMAIL = 0
 CALL = 1
 SITE = 2
@@ -92,6 +93,8 @@ HAH = 5
 LAND = 6
 TEND = 7
 ORDER_SOURCE_LIST = [
+    # {'name': 'Все',
+    #  'code': ALL},
     {'name': 'ЗТ',
      'code': ZT},
     {'name': 'AQB',
