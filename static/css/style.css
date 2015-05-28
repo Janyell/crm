@@ -148,9 +148,6 @@ select.hidden, div.hidden {
 .analyze-period__wrap {
     height: 335px;
 }
-#product-table_wrapper {
-    margin-bottom: 40px;
-}
 .btn_add-client, .btn_add-order, .btn_add-claim, .btn_add-company, .btn_add-role{
     margin-bottom: 10px;
 }
@@ -252,7 +249,8 @@ transform: translate(-300px, 0) scale(4); font-size: 23px; direction: ltr; curso
     margin: 0;
 }
 #client-table_wrapper > .row-fluid,
-#order-table_wrapper > .row-fluid {
+#order-table_wrapper > .row-fluid,
+#claim-table_wrapper > .row-fluid {
     display: none;
 }
 th a {
@@ -274,4 +272,11 @@ div.source {
 }
 .manager > .span2 {
     margin-left: inherit;
+}
+.datatables_massive {
+    margin-top: -35px;
+}
+.datatables_massive_product {
+    margin-top: -35px;
+    margin-bottom: 40px;
 }

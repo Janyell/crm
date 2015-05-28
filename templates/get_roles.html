@@ -5,35 +5,58 @@
         <h2 class="center">{{ page_title }}</h2>
         <a href="{% url "add_role" %}" class="btn btn_add-role add-button">Добавить роль</a>
         {% if roles %}
-            <table class="table table-hover table-bordered" id="role-table">
-                <thead>
-                    <tr>
-                        <th>Роль</th>
-                        <th>Логин</th>
-                        <th>ФИО</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for role in roles %}
+            <form class="form-horizontal form-massive" method="POST">
+                <table class="table table-hover table-bordered" id="role-table">
+                    <thead>
                         <tr>
-                            <td>{{ role.role }}</td>
-                            <td>{{ role.username }}</td>
-                            <td>{{ role.full_name }}</td>
-                            <td><a class="btn btn-mini edit-button" href="{% url "edit_role" %}?id={{ role.pk }}"><i class="icon-pencil"></i></a></td>
-                            <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-role" value="{{ role.pk }}">
-                                <i class="icon-remove"></i></a>
-                            </td>
+                            <th></th>
+                            <th>Роль</th>
+                            <th>Логин</th>
+                            <th>ФИО</th>
+                            <th></th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for role in roles %}
+                            <tr>
+                                <td>
+                                    <label class="checkbox">
+                                        <input class="checkbox_one" type="checkbox" name="id[]" value="{{ role.pk }}"/>
+                                    </label>
+                                </td>
+                                <td>{{ role.role }}</td>
+                                <td>{{ role.username }}</td>
+                                <td>{{ role.full_name }}</td>
+                                <td><a class="btn btn-mini edit-button" href="{% url "edit_role" %}?id={{ role.pk }}"><i class="icon-pencil"></i></a></td>
+                                <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-role" value="{{ role.pk }}">
+                                    <i class="icon-remove"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+            <div class="row-fluid datatables_massive">
+                <div class="span6 action-bar">
+                    <div class="action-bar__checkbox">
+                        <label class="checkbox">
+                            <input class="checkbox_all" type="checkbox"/> Для всех
+                        </label>
+                    </div>
+                    <div class="action-bar__action">
+                        <a class="btn massive-delete-button">
+                            <i class="icon-remove"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         {% else %}
             <h5 class="center">Не было добавлено ни одной роли</h5>
         {% endif %}
     </div>
-    <div class="modal hide fade" id="delete-role" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+
+    <div class="modal hide fade" id="delete-role" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">×</a>
             <h3>Вы уверены, что хотите удалить эту роль?</h3>
@@ -43,6 +66,24 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+
+    <div class="modal hide fade" id="massive-delete-role" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Вы уверены, что хотите удалить выделенные роли?</h3>
+        </div>
+        <div class="modal-body">
+            <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
+            <div class="center">
+                <input id="inputDelete" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="massive-delete__ok" class="btn btn-danger" disabled>Удалить</button>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -52,9 +93,11 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 3, 4 ] },
-                        { "bSearchable": false, "aTargets": [ 3, 4 ] }
+                        { "bSortable": false, "aTargets": [0, 4, 5 ] },
+                        { "bSearchable": false, "aTargets": [0, 4, 5 ] }
                     ],
+                    "order": [1, 'asc' ],
+                    "bInfo": false,
                     {% if request.GET.length and start >= 0 %}
                         "iDisplayLength": {{ request.GET.length }},
                         "iDisplayStart": {{ start }}
@@ -63,7 +106,8 @@
                 var table = $role_table.DataTable();
                  $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
-                    $('#delete__ok').attr({'href': '{% url "delete_role" %}?id=' + id});
+                    var info = table.page.info();
+                    $('#delete__ok').attr({'href': '{% url "delete_role" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length});
                 });
                 $(".edit-button").click(function() {
                     var info = table.page.info();
@@ -72,6 +116,45 @@
                 $(".add-button").click(function() {
                     var info = table.page.info();
                     $(this).attr("href", $(this).attr('href') + "?page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                var $checkboxes_one = $('.checkbox_one');
+                var $checkbox_all = $('.checkbox_all');
+                $checkbox_all.change(function() {
+                    if($(this).is(":checked")) {
+                        $checkboxes_one.prop('checked', true);
+                    }
+                    else {
+                        $checkboxes_one.prop('checked', false);
+                    }
+                });
+
+                $('.massive-delete-button').click(function(){
+                    var $checkboxes_checked = $(".checkbox_one:checked");
+                    var $checkboxes_checked_length = $checkboxes_checked.length;
+                    if ($checkboxes_checked_length == 1) {
+                        var id = $checkboxes_checked.val();
+                        var info = table.page.info();
+                        $('#delete__ok').attr("href", '{% url "delete_role" %}?id=' + id + '&page=' + (info.page + 1) + '&length=' + info.length);
+                        $('#delete-role').modal('show');
+                    }
+                    else {
+                        if ($checkboxes_checked_length != 0) {
+                            $('#massive-delete-role').modal('show');
+                        }
+                    }
+                });
+
+                var $massive_delete_ok = $('#massive-delete__ok');
+                $('#inputDelete').change(function() {
+                    if($(this).val() == "УДАЛИТЬ") {
+                        $massive_delete_ok.prop( "disabled", false );
+                    } else {
+                        $massive_delete_ok.prop( "disabled", true );
+                    }
+                });
+                $massive_delete_ok.click(function(){
+                    var info = table.page.info();
+                    $('.form-massive').attr('action', '{% url "massive_delete_roles" %}?page=' + (info.page + 1) + '&length=' + info.length).submit();
                 });
             });
         })(jQuery);

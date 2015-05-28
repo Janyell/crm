@@ -59,6 +59,7 @@
                 {% if sources %}
                     <div class="source">
                         <select id="selectSource" name="source">
+                                <option value="all">Все источники</option>
                             {% for source in sources %}
                                 <option value="{{ source.code }}"{% if request.GET.source == source.code|urlencode:"" %} selected="selected"{% endif %}>{{ source.name }}</option>
                             {% endfor %}
@@ -273,9 +274,11 @@
                                     Сменить менеджера
                                 </a>
                             {% endif %}
-                            <a class="btn massive-in-archive-button">
-                                В архив
-                            </a>
+                            {% if request.path == get_orders_url %}
+                                <a class="btn massive-in-archive-button">
+                                    В архив
+                                </a>
+                            {% endif %}
                             <a class="btn massive-delete-button">
                                 <i class="icon-remove"></i>
                             </a>
@@ -449,35 +452,24 @@
     </div>
     <script type="text/javascript">
         (function($){
-            var $order_table = $("#order-table");
-            $order_table.dataTable({
-                "language": {
-                    "url": "{{ STATIC_URL }}language/ru_RU.txt"
-                },
-                "aoColumnDefs": [
-{#                    { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16 ] },#}
-{#                    { "bSearchable": false, "aTargets": [ 11, 12, 13, 14, 15, 17 ] },#}
-{#                    { "sType": "de_datetime", "aTargets": [ 6, 9, 16 ] },#}
-                    {% if user_role == 2 %}
-                        { "bVisible": false,  "aTargets": [0, 4, 6, 13, 16, 17, 18]},
-                    {% endif %}
-                    { "bVisible": false,  "aTargets": [ 17, 18 ]}
-                ],
-                "order": [
-                    [ 18, 'desc' ],
-                    [ 10, 'asc' ]
-                ],
-                "aaSortingFixed": [
-                    [18, 'desc']
-                ],
-                "bFilter": false,
-                "bSort": false,
-                "paging": false,
-                "bInfo": false
-            });
-               var table = $order_table.DataTable();
-
             $(document).ready(function(){
+                var $order_table = $("#order-table");
+                $order_table.dataTable({
+                    "language": {
+                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                    },
+                    "aoColumnDefs": [
+                        {% if user_role == 2 %}
+                            { "bVisible": false,  "aTargets": [0, 4, 6, 13, 16, 17, 18] },
+                        {% endif %}
+                        { "bVisible": false,  "aTargets": [ 17, 18 ]}
+                    ],
+                    "bFilter": false,
+                    "bSort": false,
+                    "paging": false,
+                    "bInfo": false
+                });
+
                 var path = "{{ request.path }}";
                 var page = "{% if request.GET.page %}page={{ request.GET.page }}{% endif %}";
                 var length = "{% if request.GET.length %}length={{ request.GET.length }}{% endif %}";
@@ -596,11 +588,18 @@
                 $('#selectSource').change(function() {
                     var value = $(this).val();
                     {% if request.GET.source %}
-                        if (value != {{ request.GET.source }}) {
-                            document.location.href = get_url("source") + "source=" + value;
+                        if (value == "all") {
+                            document.location.href = get_url("source");
+                        }
+                        else {
+                            if (value != {{ request.GET.source }}) {
+                                document.location.href = get_url("source") + "source=" + value;
+                            }
                         }
                     {% else %}
-                        document.location.href = get_url("source") + "source=" + value;
+                        if (value != "all") {
+                            document.location.href = get_url("source") + "source=" + value;
+                        }
                     {% endif %}
                 });
 
@@ -710,7 +709,7 @@
                     });
                     $('#massive-change-manager__ok').click(function(){
                         var value = $('#selectRole').val();
-                        $form.append( '<input type="hidden" name="manager_id" value="' + value + '"/>').attr('action', '{% url "massive_change_manager_in_order" %}?' + get_params__slice).submit();
+                        $form.append( '<input type="hidden" name="manager_id" value="' + value + '"/>{% if request.path == get_old_orders_url %}<input type="hidden" name="in_archive" value="1"/>{% endif %}').attr('action', '{% url "massive_change_manager_in_order" %}?' + get_params__slice).submit();
                     });
                 }
             });

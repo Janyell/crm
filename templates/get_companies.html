@@ -5,33 +5,56 @@
         <h2 class="center">{{ page_title }}</h2>
         <a href="{% url "add_company" %}" class="btn btn_add-company add-button">Добавить компанию</a>
         {% if companies %}
-            <table class="table table-hover table-bordered" id="company-table">
-                <thead>
-                    <tr>
-                        <th>Название</th>
-                        <th>ФИО директора</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for company in companies %}
+            <form class="form-horizontal form-massive" method="POST">
+                <table class="table table-hover table-bordered" id="company-table">
+                    <thead>
                         <tr>
-                            <td>{{ company.title }}</td>
-                            <td>{{ company.full_name }}</td>
-                            <td><a class="btn btn-mini edit-button" href="{% url "edit_company" %}?id={{ company.pk }}"><i class="icon-pencil"></i></a></td>
-                            <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-company" value="{{ company.pk }}">
-                                <i class="icon-remove"></i></a>
-                            </td>
+                            <th></th>
+                            <th>Название</th>
+                            <th>ФИО директора</th>
+                            <th></th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for company in companies %}
+                            <tr>
+                                <td>
+                                    <label class="checkbox">
+                                        <input class="checkbox_one" type="checkbox" name="id[]" value="{{ company.pk }}"/>
+                                    </label>
+                                </td>
+                                <td>{{ company.title }}</td>
+                                <td>{{ company.full_name }}</td>
+                                <td><a class="btn btn-mini edit-button" href="{% url "edit_company" %}?id={{ company.pk }}"><i class="icon-pencil"></i></a></td>
+                                <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-company" value="{{ company.pk }}">
+                                    <i class="icon-remove"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+            <div class="row-fluid datatables_massive">
+                <div class="span6 action-bar">
+                    <div class="action-bar__checkbox">
+                        <label class="checkbox">
+                            <input class="checkbox_all" type="checkbox"/> Для всех
+                        </label>
+                    </div>
+                    <div class="action-bar__action">
+                        <a class="btn massive-delete-button">
+                            <i class="icon-remove"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         {% else %}
            <h5 class="center">Не было добавлено ни одной компании</h5>
         {% endif %}
     </div>
-    <div class="modal hide fade" id="delete-company" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+
+    <div class="modal hide fade" id="delete-company" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">×</a>
             <h3>Вы уверены, что хотите удалить эту компанию?</h3>
@@ -41,6 +64,24 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+
+    <div class="modal hide fade" id="massive-delete-company" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Вы уверены, что хотите удалить выделенные компании?</h3>
+        </div>
+        <div class="modal-body">
+            <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
+            <div class="center">
+                <input id="inputDelete" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="massive-delete__ok" class="btn btn-danger" disabled>Удалить</button>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -50,9 +91,11 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 2, 3 ] },
-                        { "bSearchable": false, "aTargets": [ 2, 3 ] }
+                        { "bSortable": false, "aTargets": [ 0, 3, 4 ] },
+                        { "bSearchable": false, "aTargets": [ 0, 3, 4 ] }
                     ],
+                    "order": [1, 'asc' ],
+                    "bInfo": false,
                     {% if request.GET.length and start >= 0 %}
                         "iDisplayLength": {{ request.GET.length }},
                         "iDisplayStart": {{ start }}
@@ -70,6 +113,45 @@
                 $(".add-button").click(function() {
                     var info = table.page.info();
                     $(this).attr("href", $(this).attr('href') + "?page=" + (info.page + 1) + "&length=" + info.length);
+                });
+                var $checkboxes_one = $('.checkbox_one');
+                var $checkbox_all = $('.checkbox_all');
+                $checkbox_all.change(function() {
+                    if($(this).is(":checked")) {
+                        $checkboxes_one.prop('checked', true);
+                    }
+                    else {
+                        $checkboxes_one.prop('checked', false);
+                    }
+                });
+
+                $('.massive-delete-button').click(function(){
+                    var $checkboxes_checked = $(".checkbox_one:checked");
+                    var $checkboxes_checked_length = $checkboxes_checked.length;
+                    if ($checkboxes_checked_length == 1) {
+                        var id = $checkboxes_checked.val();
+                        var info = table.page.info();
+                        $('#delete__ok').attr("href", '{% url "delete_company" %}?id=' + id + '&page=' + (info.page + 1) + '&length=' + info.length);
+                        $('#delete-company').modal('show');
+                    }
+                    else {
+                        if ($checkboxes_checked_length != 0) {
+                            $('#massive-delete-company').modal('show');
+                        }
+                    }
+                });
+
+                var $massive_delete_ok = $('#massive-delete__ok');
+                $('#inputDelete').change(function() {
+                    if($(this).val() == "УДАЛИТЬ") {
+                        $massive_delete_ok.prop( "disabled", false );
+                    } else {
+                        $massive_delete_ok.prop( "disabled", true );
+                    }
+                });
+                $massive_delete_ok.click(function(){
+                    var info = table.page.info();
+                    $('.form-massive').attr('action', '{% url "massive_delete_companies" %}?page=' + (info.page + 1) + '&length=' + info.length).submit();
                 });
             });
         })(jQuery);

@@ -9,38 +9,61 @@
                 </div>
             {% endif %}
         {% if products %}
-            <table class="table table-hover table-bordered" id="product-table">
-                <thead>
-                    <tr>
-                        <th>Название</th>
-                        <th>Цена</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in products %}
+            <form class="form-horizontal form-massive" method="POST">
+                <table class="table table-hover table-bordered" id="product-table">
+                    <thead>
                         <tr>
-                            <td>{{ product.title }}</td>
-                            <td class="product-wrap">{{ product.price_right_format }}</td>
-                            <td>
-                                <a class="btn btn-mini edit-button" data-toggle="modal" href="#edit-product" value="{{ product.pk }}">
-                                    <i class="icon-pencil"></i>
-                                    <div class="hidden edit-product__data">
-                                        <div class="product-data__title">{{ product.title }}</div>
-                                        <div class="product-data__price">{{ product.price }}</div>
-                                    </div>
-                                </a>
-                            </td>
-                            <td>
-                                <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-product" value="{{ product.pk }}">
-                                    <i class="icon-remove"></i>
-                                </a>
-                            </td>
+                            <th></th>
+                            <th>Название</th>
+                            <th>Цена</th>
+                            <th></th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td>
+                                    <label class="checkbox">
+                                        <input class="checkbox_one" type="checkbox" name="id[]" value="{{ product.pk }}"/>
+                                    </label>
+                                </td>
+                                <td>{{ product.title }}</td>
+                                <td class="product-wrap">{{ product.price_right_format }}</td>
+                                <td>
+                                    <a class="btn btn-mini edit-button" data-toggle="modal" href="#edit-product" value="{{ product.pk }}">
+                                        <i class="icon-pencil"></i>
+                                        <div class="hidden edit-product__data">
+                                            <div class="product-data__title">{{ product.title }}</div>
+                                            <div class="product-data__price">{{ product.price }}</div>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-product" value="{{ product.pk }}">
+                                        <i class="icon-remove"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+            <div class="row-fluid datatables_massive_product">
+                <div class="span6 action-bar">
+                    <div class="action-bar__checkbox">
+                        <label class="checkbox">
+                            <input class="checkbox_all" type="checkbox"/> Для всех
+                        </label>
+                    </div>
+                    <div class="action-bar__action">
+                        <a class="btn massive-delete-button">
+                            <i class="icon-remove"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <div class="modal hide fade" id="delete-product" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
@@ -51,8 +74,26 @@
                     <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                 </div>
             </div>
+
+            <div class="modal hide fade" id="massive-delete-product" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>Вы уверены, что хотите удалить выделенные продукты?</h3>
+                </div>
+                <div class="modal-body">
+                    <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
+                    <div class="center">
+                        <input id="inputDelete" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="massive-delete__ok" class="btn btn-danger" disabled>Удалить</button>
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                </div>
+            </div>
+
             <div class="modal hide fade" id="edit-product" tabindex="-1" role="dialog" aria-hidden="true">
-                <form action="{% url "edit_product" %}" method="post" class="form-horizontal form-add_modal form-edit-product">
+                <form method="post" class="form-horizontal form-add_modal form-edit-product">
                     <div class="modal-header">
                         <a class="close" data-dismiss="modal">×</a>
                         <h3>Редактирование продукта</h3>
@@ -91,31 +132,82 @@
                     </div>
                 </form>
             </div>
+
             <script type="text/javascript">
                 (function($){
                     $(document).ready(function(){
-                        $("#product-table").dataTable({
+                        var $product_table = $("#product-table");
+                        $product_table.dataTable({
                             "language": {
                                 "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
                             },
                             "aoColumnDefs": [
-                                { "bSortable": false, "aTargets": [ 2, 3 ] },
-                                { "bSearchable": false, "aTargets": [ 2, 3 ] }
-                            ]
+                                { "bSortable": false, "aTargets": [0, 3, 4 ] },
+                                { "bSearchable": false, "aTargets": [0, 3, 4 ] }
+                            ],
+                            "order": [1, 'asc' ],
+                            "bInfo": false,
+                            {% if request.GET.length and start >= 0 %}
+                                "iDisplayLength": {{ request.GET.length }},
+                                "iDisplayStart": {{ start }}
+                            {% endif %}
                         });
+                        var table = $product_table.DataTable();
                         $('.delete-button').bind('click', function(){
                             var id = $(this).attr('value');
-                            $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id});
+                            var info = table.page.info();
+                            $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length});
                         });
                         var $form_edit_product = $('.form-edit-product');
                         $('.edit-button').bind('click', function(){
                             var id = $(this).attr('value');
-                            $form_edit_product.attr({'action': '{% url "edit_product" %}?id=' + id});
+                            var info = table.page.info();
+                            $form_edit_product.attr({'action': '{% url "edit_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length});
                             var $edit_product__data = $('#edit-product').find('.modal-body');
                             var title = $(this).find('.product-data__title').text();
                             $edit_product__data.find('#inputEditTitle').val(title);
                             var price = $(this).find('.product-data__price').text();
                             $edit_product__data.find('#inputEditPrice').val(price);
+                        });
+
+                        var $checkboxes_one = $('.checkbox_one');
+                        var $checkbox_all = $('.checkbox_all');
+                        $checkbox_all.change(function() {
+                            if($(this).is(":checked")) {
+                                $checkboxes_one.prop('checked', true);
+                            }
+                            else {
+                                $checkboxes_one.prop('checked', false);
+                            }
+                        });
+
+                        $('.massive-delete-button').click(function(){
+                            var $checkboxes_checked = $(".checkbox_one:checked");
+                            var $checkboxes_checked_length = $checkboxes_checked.length;
+                            if ($checkboxes_checked_length == 1) {
+                                var id = $checkboxes_checked.val();
+                                var info = table.page.info();
+                                $('#delete__ok').attr("href", '{% url "delete_product" %}?id=' + id + '&page=' + (info.page + 1) + '&length=' + info.length);
+                                $('#delete-product').modal('show');
+                            }
+                            else {
+                                if ($checkboxes_checked_length != 0) {
+                                    $('#massive-delete-product').modal('show');
+                                }
+                            }
+                        });
+
+                        var $massive_delete_ok = $('#massive-delete__ok');
+                        $('#inputDelete').change(function() {
+                            if($(this).val() == "УДАЛИТЬ") {
+                                $massive_delete_ok.prop( "disabled", false );
+                            } else {
+                                $massive_delete_ok.prop( "disabled", true );
+                            }
+                        });
+                        $massive_delete_ok.click(function(){
+                            var info = table.page.info();
+                            $('.form-massive').attr('action', '{% url "massive_delete_products" %}?page=' + (info.page + 1) + '&length=' + info.length).submit();
                         });
                     });
                 })(jQuery);
@@ -123,7 +215,7 @@
         {% else %}
            <h5 class="center">Не было добавлено ни одного продукта</h5>
         {% endif %}
-        <form action="{% url "get_products" %}" method="post" class="form-add form-horizontal">
+        <form action="{% url "get_products" %}" method="post" class="form-add form-horizontal form-add-product">
             <h5 class="form-add-heading">Для добавления продукции заполните, пожалуйста, следующую форму:</h5>
             <div class="control-group">
                 <label class="control-label" for="inputTitle">
@@ -148,8 +240,21 @@
                 </div>
             </div>
             <div class="form-add__submits">
-                <button type="submit" class="btn btn-primary">Добавить продукцию</button>
+                <button type="submit" id="add__ok" class="btn btn-primary">Добавить продукцию</button>
             </div>
         </form>
+        {% if products %}
+            <script type="text/javascript">
+                (function($){
+                    $(document).ready(function(){
+                        $('#add__ok').click(function() {
+                            var table = $("#product-table").DataTable();
+                            var info = table.page.info();
+                            $('.form-add-product').attr({'action': "{% url "get_products" %}?page=" + (info.page + 1) + "&length=" + info.length}).submit();
+                        });
+                    });
+                })(jQuery);
+            </script>
+        {% endif %}
     </div>
 {%endblock%}
