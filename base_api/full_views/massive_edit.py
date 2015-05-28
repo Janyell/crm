@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from base_api.full_views.helper import get_request_param_as_string
 from base_api.models import Roles, Orders, Clients, Companies, Products
 
@@ -19,8 +20,10 @@ def massive_delete_orders(request):
         order.save(update_fields=["is_deleted"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
-    if 'archive' in request.POST:
+    if 'in_archive' in request.POST:
         return HttpResponseRedirect('/orders/archive/' + get_params)
+    if 'is_claim' in request.POST:
+        return HttpResponseRedirect('/claims/' + get_params)
     return HttpResponseRedirect('/orders/' + get_params)
 
 
@@ -53,7 +56,7 @@ def massive_delete_clients(request):
         client.save(update_fields=["is_deleted"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
-    if 'interested' in request.POST:
+    if 'is_interested' in request.POST:
         return HttpResponseRedirect('/clients/interested/' + get_params)
     else:
         return HttpResponseRedirect('/clients/' + get_params)
@@ -137,4 +140,8 @@ def massive_change_manager_in_order(request):
         order.save(update_fields=["role"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
+    if 'in_archive' in request.POST:
+        return HttpResponseRedirect('/orders/archive/' + get_params)
+    if 'is_claim' in request.POST:
+        return HttpResponseRedirect('/claims/' + get_params)
     return HttpResponseRedirect('/orders/' + get_params)

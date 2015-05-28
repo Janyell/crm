@@ -463,7 +463,7 @@ def full_get_claims(request):
         return HttpResponseRedirect('/login/')
     out = {}
     out.update({'sources': ORDER_SOURCE_LIST})
-    out.update({'roles': Roles.objects.filter(Q(role=1) | Q(role=0)).all()})
+    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])
         length = int(request.GET['length'])
@@ -481,7 +481,8 @@ def full_get_claims(request):
     orders = Orders.objects.filter(is_deleted=0, is_claim=1, in_archive=0)
     if 'source' in request.GET:
         source = int(request.GET.get('source'))
-        orders = orders.filter(source=source)
+        if source != -1:
+            orders = orders.filter(source=source)
     if 'managers[]' in request.GET:
         managers = request.GET.getlist('managers[]')
         orders = orders.filter(role__in=managers)
@@ -490,7 +491,7 @@ def full_get_claims(request):
         orders = orders.order_by(sort)
     except TypeError:
         orders = orders.order_by(*sort)
-    number = request.GET.get('number', DEFAULT_NUMBER_FOR_PAGE)
+    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
     orders_pages = Paginator(orders, number)
     page = request.GET.get('page')
     try:
