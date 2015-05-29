@@ -13,118 +13,201 @@
         {% if user_role == 0 %}
             <a href="{% url "made_excel" %}" class="btn pull-right">Экспорт e-mail</a>
         {% endif %}
+        <div class="row-fluid">
+            <div class="span3">
+                {% if claims %}
+                    <div class="dataTables_length">
+                        <label>Показать
+                            <select id="selectLength" name="length">
+                                <option value="10"{% if request.GET.length == "10" %} selected="selected"{% endif %}>10</option>
+                                <option value="25"{% if request.GET.length == "25" %} selected="selected"{% endif %}>25</option>
+                                <option value="50"{% if request.GET.length == "50" %} selected="selected"{% endif %}>50</option>
+                                <option value="100"{% if request.GET.length == "100" %} selected="selected"{% endif %}>100</option>
+                            </select>
+                            записей
+                        </label>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="span6">
+                <div class="manager">
+                    {% for manager in roles %}
+                        <div class="span2">
+                            <label class="checkbox">
+                                <input type="checkbox" name="managers[]" class="managers" value="{{ manager.pk }}"
+                                    {% if manager.pk|upper in managers %} checked="checked"{% endif %} />
+                                {{ manager.username }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="span3">
+                {% if sources %}
+                    <div class="source">
+                        <select id="selectSource" name="source">
+                                <option value="all">Все источники</option>
+                            {% for source in sources %}
+                                <option value="{{ source.code }}"{% if request.GET.source == source.code|urlencode:"" %} selected="selected"{% endif %}>{{ source.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
         {% if claims %}
-        <table class="table table-hover table-bordered" id="claim-table">
-            <thead>
-                <tr>
-                    <th>Менеджер</th>
-                    <th>Дата заявки</th>
-                    <th>Название организации</th>
-                    <th>Компания</th>
-                    <th>Номер счета</th>
-                    <th>Сумма счета</th>
-                    <th>Продукция</th>
-                    <th>Статус</th>
-                    <th>Комментарии</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for claim in claims %}
+        {% load bootstrap_pagination %}
+        <form class="form-horizontal form-massive" method="POST">
+            <table class="table table-hover table-bordered" id="claim-table">
+                <thead>
                     <tr>
-                        <td>{{ claim.role }}</td>
-                        <td>{{ claim.order_date }}</td>
-                        <td>
-                            <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
-                                <div class="get-client-info__head">
-                                    {% if claim.client.organization %}
-                                        {{ claim.client.organization }}{% if claim.client.organization_type %}, {{ claim.client.organization_type }}{% endif %}
-                                    {% else %}
-                                        {{ claim.client.full_name }}
-                                    {% endif %}
-                                </div>
-                                <div class="hidden get-client-info__data">
-                                    <div class="client-data__full-name">{{ claim.client.full_name }}</div>
-                                    <div class="client-data__contact-person-phone">{{ claim.client.person_phone }}</div>
-                                    <div class="client-data__organization">
+                        <th></th>
+                        <th class="sortable{% if request.GET.sort == "role" %} sorting_asc{% elif request.GET.sort == "role_d" %} sorting_desc{% else %} sorting{% endif %}" value="role">Менеджер</th>
+                        <th class="sortable{% if request.GET.sort == "order_date" %} sorting_asc{% elif not request.GET.sort or request.GET.sort == "order_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="order_date">Дата заявки</th>
+                        <th class="sortable{% if request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">Название организации</th>
+                        <th class="sortable{% if request.GET.sort == "company" %} sorting_asc{% elif request.GET.sort == "company_d" %} sorting_desc{% else %} sorting{% endif %}" value="company">Компания</th>
+                        <th>Номер счета</th>
+                        <th>Сумма счета</th>
+                        <th>Продукция</th>
+                        <th>Статус</th>
+                        <th>Комментарии</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for claim in claims %}
+                        <tr>
+                            <td>
+                                {% if user_role == 0 %}
+                                    <label class="checkbox">
+                                        <input class="checkbox_one" type="checkbox" name="id[]" value="{{ claim.pk }}"/>
+                                    </label>
+                                {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                                    <label class="checkbox">
+                                        <input class="checkbox_one" type="checkbox" name="id[]" value="{{ claim.pk }}"/>
+                                    </label>
+                                {% endif %}
+                            </td>
+                            <td>{{ claim.role }}</td>
+                            <td>{{ claim.order_date }}</td>
+                            <td>
+                                <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
+                                    <div class="get-client-info__head">
                                         {% if claim.client.organization %}
                                             {{ claim.client.organization }}{% if claim.client.organization_type %}, {{ claim.client.organization_type }}{% endif %}
+                                        {% else %}
+                                            {{ claim.client.full_name }}
                                         {% endif %}
                                     </div>
-                                    <div class="client-data__organization-phone">{{ claim.client.organization_phone }}</div>
-                                    <div class="client-data__email">{{ claim.client.email }}</div>
-                                </div>
-                            </a>
-                        </td>
-                        <td>{{ claim.company.title }}</td>
-                        <td>{% if claim.account_number != None %}
-                                {{ claim.account_number }}
-                            {% endif %}
-                        </td>
-                        <td>{% if claim.bill != None %}
-                                {{ claim.bill }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if claim.products %}
-                                {% for product in claim.products %}
-                                    <div class="product-wrap">
-                                        {{ product.product.title }} - {{ product.count_of_products }} шт.
+                                    <div class="hidden get-client-info__data">
+                                        <div class="client-data__full-name">{{ claim.client.full_name }}</div>
+                                        <div class="client-data__contact-person-phone">{{ claim.client.person_phone }}</div>
+                                        <div class="client-data__organization">
+                                            {% if claim.client.organization %}
+                                                {{ claim.client.organization }}{% if claim.client.organization_type %}, {{ claim.client.organization_type }}{% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="client-data__organization-phone">{{ claim.client.organization_phone }}</div>
+                                        <div class="client-data__email">{{ claim.client.email }}</div>
                                     </div>
-                                {% endfor %}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if claim.bill_status != None %}
-                                {{ claim.bill_status }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if claim.comment %}
-                                <span class="claim-comment{% if claim.role|urlencode:"" == user.username|urlencode:"" and not claim.is_comment_my %} comment_highlighted{% endif %}">{{ claim.comment }}</span>
-                                <a class="comment-button" data-toggle="modal" href="#view-claim-comment"
-                                    value="{{ claim.comment }}">...</a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if claim.files %}
-                                <a class="btn btn-mini files-button" data-toggle="modal" href="#view-claim-files" value="
-                                    {% for file in claim.files %}
-                                        <div class=&quot;file&quot;>
-                                            <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
-                                                <i class=&quot;icon-file&quot;></i>{{ file.name }}
-                                            </a>
+                                </a>
+                            </td>
+                            <td>{{ claim.company.title }}</td>
+                            <td>{% if claim.account_number != None %}
+                                    {{ claim.account_number }}
+                                {% endif %}
+                            </td>
+                            <td>{% if claim.bill != None %}
+                                    {{ claim.bill }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if claim.products %}
+                                    {% for product in claim.products %}
+                                        <div class="product-wrap">
+                                            {{ product.product.title }} - {{ product.count_of_products }} шт.
                                         </div>
                                     {% endfor %}
-                                "><i class="icon-file"></i></a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if user_role == 0 %}
-                                <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
-                             {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
-                            {% else %}
-                                <a class="btn btn-mini edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if user_role == 0 %}
-                                <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
-                                    <i class="icon-remove"></i>
-                                </a>
-                            {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
-                                    <i class="icon-remove"></i>
-                                </a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if claim.bill_status != None %}
+                                    {{ claim.bill_status }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if claim.comment %}
+                                    <span class="claim-comment{% if claim.role|urlencode:"" == user.username|urlencode:"" and not claim.is_comment_my %} comment_highlighted{% endif %}">{{ claim.comment }}</span>
+                                    <a class="comment-button" data-toggle="modal" href="#view-claim-comment"
+                                        value="{{ claim.comment }}">...</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if claim.files %}
+                                    <a class="btn btn-mini files-button" data-toggle="modal" href="#view-claim-files" value="
+                                        {% for file in claim.files %}
+                                            <div class=&quot;file&quot;>
+                                                <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
+                                                    <i class=&quot;icon-file&quot;></i>{{ file.name }}
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    "><i class="icon-file"></i></a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user_role == 0 %}
+                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                 {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
+                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                {% else %}
+                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user_role == 0 %}
+                                    <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
+                                        <i class="icon-remove"></i>
+                                    </a>
+                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
+                                    <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
+                                        <i class="icon-remove"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="action-bar">
+                    <div class="action-bar__checkbox">
+                        <label class="checkbox">
+                            <input class="checkbox_all" type="checkbox"/> Для всех
+                        </label>
+                    </div>
+                    <div class="action-bar__action">
+                        {% if user_role == 0 %}
+                            <a class="btn massive-change-manager-button">
+                                Сменить менеджера
+                            </a>
+                        {% endif %}
+                        <a class="btn massive-delete-button">
+                            <i class="icon-remove"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
+                <div class="dataTables_paginate paging_bootstrap pagination">
+                    {% bootstrap_paginate claims range=5 previous_label="← Предыдущая" next_label="Следующая →" %}
+                </div>
+            </div>
+        </div>
         {% else %}
             <h5 class="center">Нет ни одной текущей заявки</h5>
         {% endif %}
@@ -211,6 +294,44 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    <div class="modal hide fade" id="massive-delete-claim" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Вы уверены, что хотите удалить выделенные заявки?</h3>
+        </div>
+        <div class="modal-body">
+            <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
+            <div class="center">
+                <input id="inputDelete" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="massive-delete__ok" class="btn btn-danger" disabled>Удалить</button>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+    <div class="modal hide fade" id="massive-change-manager" tabindex="-1" role="dialog" aria-labelledby="ChangeManagerLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3 class="center">Смена менеджера</h3>
+        </div>
+        <div class="modal-body">
+            <h5 class="form-add__please">Пожалуйста, выберите менеджера:</h5>
+            <div class="center">
+                {% if roles %}
+                    <select id="selectRole" name="role">
+                        {% for role in roles %}
+                            <option value="{{ role.pk }}">{{ role.username }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="massive-change-manager__ok" class="btn btn-primary">Сохранить</button>
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -219,21 +340,60 @@
                     "language": {
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
-                    "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [ 4, 5, 6, 7, 8, 9, 10, 11 ] },
-                        { "bSearchable": false, "aTargets": [ 9, 10, 11 ] },
-                        { "sType": "de_datetime", "aTargets": [ 1 ] }
-                    ],
-                    "order": [
-                        [ 1, "desc" ]
-                    ],
                     "bFilter": false,
-                    {% if request.GET.length and start >= 0 %}
-                        "iDisplayLength": {{ request.GET.length }},
-                        "iDisplayStart": {{ start }}
-                    {% endif %}
+                    "bSort": false,
+                    "paging": false,
+                    "bInfo": false
                 });
-                var table = $claim_table.DataTable();
+
+                var path = "{{ request.path }}";
+                var page = "{% if request.GET.page %}page={{ request.GET.page }}{% endif %}";
+                var length = "{% if request.GET.length %}length={{ request.GET.length }}{% endif %}";
+                var sort = "{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}";
+                var source = "{% if request.GET.source %}source={{ request.GET.source }}{% endif %}";
+                var managers = "";
+                {% if managers %}
+                    {% for manager in managers %}
+                        managers += "managers[]={{ manager }}&";
+                    {% endfor %}
+                {% endif %}
+
+                function get_get_params() {
+                    var get_params = "";
+                    if (page) { get_params += "&" + page; }
+                    if (length) { get_params += "&" + length; }
+                    if (sort) { get_params += "&" + sort; }
+                    if (source) { get_params += "&" + source; }
+                    if (managers) { get_params += "&" + managers; }
+                    return get_params;
+                }
+
+                var get_params = get_get_params();
+                var get_params__slice = get_params.slice(1);
+
+                function get_url(without) {
+                    var url = path + "?";
+                    if (page) { url += page + "&"; }
+                    if (without == "length") {
+                        if (sort) { url += sort + "&";}
+                        if (source) { url += source + "&";}
+                        if (managers) { url += managers;}
+                    }
+                    else {
+                        if (without == "sort") {
+                            if (length) { url += length + "&"; }
+                            if (source) { url += source + "&";}
+                            if (managers) { url += managers;}
+                        }
+                        else {
+                            if (length) { url += length + "&"; }
+                            if (sort) { url += sort + "&";}
+                            if (managers) { url += managers;}
+                        }
+                    }
+                    return url;
+                }
+
                 $('.get-client-info').bind('click', function(){
                     var $client_info__data = $('#client-info').find('.modal-body');
                     var full_name = $(this).find('.client-data__full-name').text();
@@ -250,7 +410,7 @@
                 });
                 $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
-                    $('#delete__ok').attr({'href': '{% url "delete_claim" %}?id=' + id});
+                    $('#delete__ok').attr({'href': '{% url "delete_claim" %}?id=' + id + get_params});
                 });
                 $('.comment-button').bind('click', function(){
                     var comment = $(this).attr('value');
@@ -278,14 +438,149 @@
                     $('#registration').modal('toggle');
                 });
                 $(".edit-button").click(function() {
-                    var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') + "&page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') + get_params);
                 });
                 $(".add-button").click(function() {
-                    var info = table.page.info();
-                    $(this).attr("href", $(this).attr('href') + "?page=" + (info.page + 1) + "&length=" + info.length);
+                    $(this).attr("href", $(this).attr('href') + "?" + get_params__slice);
+                });
+                $('#selectLength').change(function() {
+                    var value = $(this).val();
+                    {% if request.GET.length %}
+                        if (value != {{ request.GET.length }}) {
+                            document.location.href = get_url("length") + "length=" + value;
+                        }
+                    {% else %}
+                        document.location.href = get_url("length") + "length=" + value;
+                    {% endif %}
                 });
 
+                $('#selectSource').change(function() {
+                    var value = $(this).val();
+                    {% if request.GET.source %}
+                        if (value == "all") {
+                            document.location.href = get_url("source");
+                        }
+                        else {
+                            if (value != {{ request.GET.source }}) {
+                                document.location.href = get_url("source") + "source=" + value;
+                            }
+                        }
+                    {% else %}
+                        if (value != "all") {
+                            document.location.href = get_url("source") + "source=" + value;
+                        }
+                    {% endif %}
+                });
+
+                var $th_sorting = $('th.sortable');
+
+                $th_sorting.click(function(){
+                    var $this = $(this);
+                    var value = $this.attr('value');
+                    var url = get_url("sort") + "sort=" + value;
+                    if ($this.hasClass('sorting') || $(this).hasClass('sorting_desc')) {
+                        document.location.href = url;
+                    }
+                    else {
+                        document.location.href = url + "_d";
+                    }
+                });
+
+                function get_managers_url(value) {
+                    var url = path + "?";
+                    if (page) { url += page + "&"; }
+                    if (length) { url += length + "&"; }
+                    if (sort) { url += sort + "&";}
+                    if (source) { url += source + "&";}
+                    if (managers) {
+                        {% if managers %}
+                            {% for manager in managers %}
+                                if ("{{ manager }}" != value)
+                                url += "managers[]={{ manager }}&";
+                            {% endfor %}
+                        {% endif %}
+                    }
+                    return url;
+                }
+
+                var $managers = $('.managers');
+                $managers.change(function(){
+                    var $this = $(this);
+                    var value = $this.attr('value');
+                    if ($this.is(":checked")) {
+                        var url = document.location.href;
+                        var q_ind = url.indexOf('?');
+                        if (q_ind == -1) { url += "?";}
+                        else {
+                            var a_ind = url.indexOf('&');
+                            if (q_ind != url.length - 1 && a_ind != url.length - 1) {
+                                url += "&";
+                            }
+                        }
+                        document.location.href = url + "managers[]=" + value;
+                    }
+                    else {
+                        document.location.href = get_managers_url(value);
+                    }
+                    console.log(document.location.href);
+                });
+
+                var $checkboxes_one = $('.checkbox_one');
+
+                if ($checkboxes_one.length == 0) {
+                    $('.action-bar').css({display: "none"});
+                } else {
+                    var $checkbox_all = $('.checkbox_all');
+                    $checkbox_all.change(function() {
+                        if($(this).is(":checked")) {
+                            $checkboxes_one.prop('checked', true);
+                        }
+                        else {
+                            $checkboxes_one.prop('checked', false);
+                        }
+                    });
+
+                    $('.massive-delete-button').click(function(){
+                        var $checkboxes_checked = $(".checkbox_one:checked");
+                        var $checkboxes_checked_length = $checkboxes_checked.length;
+                        if ($checkboxes_checked_length == 1) {
+                            var id = $checkboxes_checked.val();
+                            $('#delete__ok').attr("href", '{% url "delete_claim" %}?id=' + id + get_params);
+                            $('#delete-claim').modal('show');
+                        }
+                        else {
+                            if ($checkboxes_checked_length != 0) {
+                                $('#massive-delete-claim').modal('show');
+                            }
+                        }
+                    });
+
+                    var $massive_delete_ok = $('#massive-delete__ok');
+                    $('#inputDelete').change(function() {
+                        if($(this).val() == "УДАЛИТЬ") {
+                            $massive_delete_ok.prop( "disabled", false );
+                        } else {
+                            $massive_delete_ok.prop( "disabled", true );
+                        }
+                    });
+                    var $form = $('.form-massive');
+                    $massive_delete_ok.click(function(){
+                        $form.attr('action', '{% url "massive_delete_claims" %}?' + get_params__slice).submit();
+                    });
+                    $('.massive-in-archive-button').click(function(){
+                        $form.attr('action', '{% url "massive_add_in_archive" %}?' + get_params__slice).submit();
+                    });
+
+                    $('.massive-change-manager-button').click(function(){
+                        if ($(".checkbox_one:checked").length != 0) {
+                            $('#massive-change-manager').modal('show');
+                        }
+                    });
+                    $('#massive-change-manager__ok').click(function(){
+                        var value = $('#selectRole').val();
+                        $form.append( '<input type="hidden" name="manager_id" value="' + value + '"/><input type="hidden" name="is_claim" value="1"/>').attr('action', '{% url "massive_change_manager_in_order" %}?' + get_params__slice).submit();
+                    });
+                }
             });
         })(jQuery);
     </script>

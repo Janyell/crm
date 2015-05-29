@@ -11,21 +11,13 @@
         {% url 'edit_claim' as edit_claim_url %}
         {% url 'add_order' as add_order_url %}
         {% url 'edit_order' as edit_order_url %}
-        <a href="
-        {% if request.path == add_claim_url and client_id >= 0 %}
-            {% url "get_interested_clients" %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}
-        {% elif request.GET.archive %}
-            {% url "get_old_orders" %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}
-        {% elif request.GET.history %}
-            {% url "get_orders" %}?client-id={{ client_id }}{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}{% if request.GET.length %}&length={{ request.GET.length }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}
-        {% elif request.path == add_order_url and client_id >= 0 %}
-            {% url "get_clients" %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}
-        {% elif request.path == add_claim_url or request.path == edit_claim_url %}
-            {% url "get_claims" %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}
-        {% else %}
-            {% url "get_orders" %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}
-        {% endif %}
-        " class="btn">Назад</a>
+        <a href="{% if request.path == add_claim_url and client_id >= 0 %}
+            {% url "get_interested_clients" %}{% elif request.GET.archive %}
+            {% url "get_old_orders" %}{% elif request.GET.history %}
+            {% url "get_orders" %}?client-id={{ client_id }}{% elif request.path == add_order_url and client_id >= 0 %}
+            {% url "get_clients" %}{% elif request.path == add_claim_url or request.path == edit_claim_url %}
+            {% url "get_claims" %}{% else %}
+            {% url "get_orders" %}{% endif %}" class="btn back-button">Назад</a>
         {% if request.path == edit_claim_url or request.path == edit_order_url %}
             <a href="
             {% if request.path == edit_claim_url %}
@@ -34,7 +26,7 @@
                 {% url "add_order" %}?copy={{ request.GET.id }}" class="btn pull-right">Копировать заказ
             {% endif %}</a>
         {% endif %}
-        <form class="form-horizontal form-add form-add-order" method="post" action="">
+        <form class="form-horizontal form-add form-add-order" method="post">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
             {% if error == 1 %}
@@ -417,6 +409,48 @@
                     }
                     else {
                         $brought_sum.css({'display': 'none'});
+                    }
+                });
+
+                function get_get_params() {
+                    var need_get_params = ['page', 'length', 'sort', 'source', 'managers'];
+                    var get_params = "";
+                    var is_get_param = false;
+                    var all_get_params = window.location.search.substring(1).split("&");
+                    for (var i = 0; i < all_get_params.length; ++i) {
+                        for (var j = 0; j < need_get_params.length; ++j) {
+                            if (all_get_params[i].indexOf(need_get_params[j]) != -1) {
+                                is_get_param = true;
+                                break;
+                            }
+                        }
+                        if (is_get_param) {
+                            get_params += "&" + all_get_params[i];
+                        }
+                    }
+                   return get_params;
+                }
+
+                var get_params = get_get_params();
+
+                $('.form-add-order').submit(function(){
+                    var $this = $(this);
+                    var action = $this.attr('action');
+                    if (action.indexOf('?') != -1) {
+                        $this.attr('action', action + get_params);
+                    }
+                    else {
+                        $this.attr('action', action + "?" + get_params.slice(1));
+                    }
+                });
+                $('.back-button').click(function(){
+                    var $this = $(this);
+                    var href = $this.attr('href');
+                    if (href.indexOf('?') != -1) {
+                        $this.attr('href', href + get_params);
+                    }
+                    else {
+                        $this.attr('href', href + "?" + get_params.slice(1));
                     }
                 });
 

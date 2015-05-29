@@ -5,20 +5,20 @@
     <a href="
     {% if request.GET.is_interested %}
         {% url "get_interested_clients" %}{% else %}
-        {% url "get_clients" %}{% endif %}?{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}{% if request.GET.length %}length={{ request.GET.length }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}" class="btn">Назад</a>
+        {% url "get_clients" %}{% endif %}" class="btn back-button">Назад</a>
     <h2 class="form-add__head">{{ page_title }}</h2>
         {% block request.GET.is_interested %}
             {% if request.GET.is_interested %}
                 {% if request.GET.id %}
-                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?is_interested=1&id={{ request.GET.id }}{% if request.GET.page and request.GET.length %}&page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}">
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?is_interested=1&id={{ request.GET.id }}">
                 {% else %}
-                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?is_interested=1{% if request.GET.page and request.GET.length %}&page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}">
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?is_interested=1">
                 {% endif %}
             {% else %}
                 {% if request.GET.id %}
-                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?id={{ request.GET.id }}{% if request.GET.page and request.GET.length %}&page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}">
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}?id={{ request.GET.id }}">
                 {% else %}
-                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}{% if request.GET.page and request.GET.length %}?page={{ request.GET.page }}&length={{ request.GET.length }}{% endif %}">
+                    <form class="form-horizontal form-add form-add-client" method="post" action="{{ request.path }}">
                 {% endif %}
             {% endif %}
         {% endblock %}
@@ -249,6 +249,42 @@
                     'data-provide': "typeahead",
                     'data-items': "10",
                     'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
+                });
+
+                function get_get_params() {
+                    var need_get_params = ['page', 'length', 'sort'];
+                    var get_params = "";
+                    var is_get_param = false;
+                    var all_get_params = window.location.search.substring(1).split("&");
+                    for (var i = 0; i < all_get_params.length; ++i) {
+                        for (var j = 0; j < need_get_params.length; ++j) {
+                            if (all_get_params[i].indexOf(need_get_params[j]) != -1) {
+                                is_get_param = true;
+                                break;
+                            }
+                        }
+                        if (is_get_param) {
+                            get_params += "&" + all_get_params[i];
+                        }
+                    }
+                   return get_params;
+                }
+
+                var get_params = get_get_params();
+
+                $('.form-add-client').submit(function(){
+                    var $this = $(this);
+                    var action = $this.attr('action');
+                    if (action.indexOf('?') != -1) {
+                        $this.attr('action', action + get_params);
+                    }
+                    else {
+                        $this.attr('action', action + "?" + get_params.slice(1));
+                    }
+                });
+                $('.back-button').click(function(){
+                    var $this = $(this);
+                    $this.attr('href', $this.attr('href') + "?" + get_params.slice(1)); {# only in this case! #}
                 });
                 {% if request.path == edit_client_url %}
                     var $manage_attachments = $("#manage-attachments");

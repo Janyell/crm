@@ -188,7 +188,7 @@
                     return get_params;
                 }
 
-                var page_length_sort = get_get_params();
+                var get_params = get_get_params();
 
                 function get_url(without_length) {
                     var url = path + "?";
@@ -204,16 +204,16 @@
 
                 $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
-                    $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + page_length_sort);
+                    $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + get_params);
                 });
                 $(".edit-button").click(function() {
-                    $(this).attr("href", $(this).attr('href') + page_length_sort);
+                    $(this).attr("href", $(this).attr('href') + get_params);
                 });
                 $(".add-button").click(function() {
-                    $(this).attr("href", $(this).attr('href') + {% if request.path == get_interested_clients_url %}page_length_sort{% else %}("?" + page_length_sort.slice(1)){% endif %});
+                    $(this).attr("href", $(this).attr('href') + {% if request.path == get_interested_clients_url %}get_params{% else %}("?" + get_params.slice(1)){% endif %});
                 });
                 $(".add-order-button").click(function() {
-                    $(this).attr("href", $(this).attr('href') + page_length_sort);
+                    $(this).attr("href", $(this).attr('href') + get_params);
                 });
                 $('.files-button').bind('click', function(){
                     var files = $(this).attr('value');
@@ -261,7 +261,7 @@
                     var $checkboxes_checked_length = $checkboxes_checked.length;
                     if ($checkboxes_checked_length == 1) {
                         var id = $checkboxes_checked.val();
-                        $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + page_length_sort);
+                        $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + get_params);
                         $('#delete-client').modal('show');
                     }
                     else {
@@ -280,7 +280,7 @@
                     }
                 });
                 $massive_delete_ok.click(function(){
-                    $('.form-massive').attr('action', '{% url "massive_delete_orders" %}{% if request.path == get_interested_clients_url %}?is_interested=1&{% else %}?{% endif %}' + page_length_sort.slice(1)).submit();
+                    $('.form-massive').append( '{% if request.path == get_interested_clients_url %}<input type="hidden" name="is_interested" value="1"/>{% endif %}').attr('action', '{% url "massive_delete_clients" %}{% if request.path == get_interested_clients_url %}?is_interested=1&{% else %}?{% endif %}' + get_params.slice(1)).submit();
                 });
             });
         })(jQuery);
