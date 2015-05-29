@@ -3,6 +3,8 @@
 import json
 from django.shortcuts import render, render_to_response
 from datetime import datetime
+import djangosphinx
+from djangosphinx.apis.api275 import SPH_MATCH_EXTENDED
 from api.settings import MEDIA_ROOT
 from base_api.full_views.analyze_debtors import full_analyze_debtors
 from base_api.full_views.attach import *
@@ -403,7 +405,205 @@ def get_documents(request):
 
 
 def search(request):
-    return render(request, 'search.html')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2 or user_role == 1:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+        out.update({'user': Roles.objects.get(id=request.user.id)})
+    if 'search' in request.GET:
+        search_word = request.GET['search'] + '*'
+    else:
+        search_word = u'*'
+    order_list = list(Orders.search.query(search_word).filter(is_deleted=0, is_claim=0, in_archive=0))
+    all_clients = list(Clients.search.query(search_word))
+    orders_from_fk = []
+    for client in all_clients:
+        for order in Orders.objects.filter(client=client.id, is_deleted=0, is_claim=0, in_archive=0).all():
+            orders_from_fk.append(order)
+    all_companies = list(Companies.search.query(search_word))
+    for company in all_companies:
+        for order in Orders.objects.filter(company=company.id, is_deleted=0, is_claim=0, in_archive=0).all():
+            orders_from_fk.append(order)
+    order_list += orders_from_fk
+    for order in order_list:
+        if order.client.organization == '':
+            order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        else:
+            order.client.organization_or_full_name = order.client.organization
+        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
+        products_list = []
+        for pr in prs:
+            products_list.append(pr)
+        order.products = products_list
+        if order.order_status == 0:
+            order.order_status = 'В производстве'
+        elif order.order_status == 1:
+            order.order_status = 'Отгружен'
+            if order.shipped_date is not None:
+                order.is_shipped = 1
+                order.shipped_date = date(order.shipped_date.year, order.shipped_date.month, order.shipped_date.day)
+        elif order.order_status == 2:
+            order.order_status = 'Готов'
+        else:
+            order.order_status = ''
+        if order.bill is not None:
+            order.bill_right_format = right_money_format(order.bill)
+        order.brought_sum_right_format = 0
+        order.debt_right_format = 0
+        if order.brought_sum is not None and order.bill is not None:
+            order.brought_sum_right_format = right_money_format(order.brought_sum)
+            order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
+        order.files = []
+        if Order_Files.objects.filter(order_id=order.id).all() is not None:
+            for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                if order_file.file is not None and order_file.file != '':
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    order.files.append(order_file)
+
+    archive_order_list = list(Orders.search.query(search_word).filter(is_deleted=0, is_claim=0, in_archive=1))
+    all_clients = list(Clients.search.query(search_word))
+    orders_from_fk = []
+    for client in all_clients:
+        for order in Orders.objects.filter(client=client.id, is_deleted=0, is_claim=0, in_archive=1).all():
+            orders_from_fk.append(order)
+    all_companies = list(Companies.search.query(search_word))
+    for company in all_companies:
+        for order in Orders.objects.filter(company=company.id, is_deleted=0, is_claim=0, in_archive=1).all():
+            orders_from_fk.append(order)
+    archive_order_list += orders_from_fk
+    for order in archive_order_list:
+        if order.client.organization == '':
+            order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        else:
+            order.client.organization_or_full_name = order.client.organization
+        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
+        products_list = []
+        for pr in prs:
+            products_list.append(pr)
+        order.products = products_list
+        if order.order_status == 0:
+            order.order_status = 'В производстве'
+        elif order.order_status == 1:
+            order.order_status = 'Отгружен'
+            if order.shipped_date is not None:
+                order.is_shipped = 1
+                order.shipped_date = date(order.shipped_date.year, order.shipped_date.month, order.shipped_date.day)
+        elif order.order_status == 2:
+            order.order_status = 'Готов'
+        else:
+            order.order_status = ''
+        if order.bill is not None:
+            order.bill_right_format = right_money_format(order.bill)
+        order.brought_sum_right_format = 0
+        order.debt_right_format = 0
+        if order.brought_sum is not None and order.bill is not None:
+            order.brought_sum_right_format = right_money_format(order.brought_sum)
+            order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
+        order.files = []
+        if Order_Files.objects.filter(order_id=order.id).all() is not None:
+            for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                if order_file.file is not None and order_file.file != '':
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    order.files.append(order_file)
+
+    claim_list = list(Orders.search.query(search_word).filter(is_deleted=0, is_claim=1, in_archive=0))
+    all_clients = list(Clients.search.query(search_word))
+    orders_from_fk = []
+    for client in all_clients:
+        for order in Orders.objects.filter(client=client.id, is_deleted=0, is_claim=1, in_archive=0).all():
+            orders_from_fk.append(order)
+    all_companies = list(Companies.search.query(search_word))
+    for company in all_companies:
+        for order in Orders.objects.filter(company=company.id, is_deleted=0, is_claim=1, in_archive=0).all():
+            orders_from_fk.append(order)
+    claim_list += orders_from_fk
+    for order in claim_list:
+        if order.client.organization == '':
+            order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        else:
+            order.client.organization_or_full_name = order.client.organization
+        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
+        products_list = []
+        for pr in prs:
+            products_list.append(pr)
+        order.products = products_list
+        if order.bill_status == 0:
+            order.bill_status = 'Выставлен'
+        elif order.bill_status == 1:
+            order.bill_status = 'Нужна доплата'
+        elif order.bill_status == 2:
+            order.bill_status = 'Оплачен'
+        else:
+            order.bill_status = ''
+        if order.bill != None:
+            orders_count_str = str(order.bill)
+            orders_count_str_reverse = orders_count_str[::-1]
+            orders_count_str_right_format = ''
+            for i in range(0, len(orders_count_str)/3 + 1):
+                j = 3
+                if i != (len(orders_count_str)/3):
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+                else:
+                    if (len(orders_count_str) % 3) == 2:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                        orders_count_str_reverse[i*j+1]
+                    elif (len(orders_count_str) % 3) == 1:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+            orders_count_str = orders_count_str_right_format[::-1]
+            order.bill = orders_count_str
+        order.files = []
+        if Order_Files.objects.filter(order_id=order.id).all() is not None:
+            for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                if order_file.file:
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    order.files.append(order_file)
+
+    client_list = list(Clients.search.query(search_word).filter(is_deleted=0, is_interested=0))
+    for c in client_list:
+        c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
+        c.files = []
+        if Client_Files.objects.filter(client_id=c.id).all() is not None:
+            for client_file in Client_Files.objects.filter(client_id=c.id).all():
+                if client_file.file is not None and client_file.file != '':
+                    client_file.name = client_file.title
+                    client_file.url = client_file.file.url
+                    c.files.append(client_file)
+
+    interested_client_list = list(Clients.search.query(search_word).filter(is_deleted=0, is_interested=1))
+    for c in interested_client_list:
+        c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
+        c.files = []
+        if Client_Files.objects.filter(client_id=c.id).all() is not None:
+            for client_file in Client_Files.objects.filter(client_id=c.id).all():
+                if client_file.file is not None and client_file.file != '':
+                    client_file.name = client_file.title
+                    client_file.url = client_file.file.url
+                    c.files.append(client_file)
+    if client_list or interested_client_list or order_list or archive_order_list or claim_list:
+        out.update({'search_results': 1})
+    out.update({'page_title': "Клиенты"})
+    out.update({'clients': client_list})
+    out.update({'interested_clients': interested_client_list})
+    out.update({'orders': order_list})
+    out.update({'old_orders': archive_order_list})
+    out.update({'claims': claim_list})
+    return render(request, 'search.html', out)
 
 
 def fix_file_nodes(request):

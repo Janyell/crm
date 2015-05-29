@@ -61,6 +61,8 @@ class Roles(User):
     is_deleted = models.BooleanField(default=0)
     objects = UserManager()
 
+    search = SphinxSearch()
+
 
 class Clients(models.Model):
     name = models.CharField(max_length=25, null=True, blank=True)
@@ -76,6 +78,8 @@ class Clients(models.Model):
     role = models.ForeignKey(Roles, null=True, blank=True)
     organization_type = models.CharField(max_length=255, blank=True, default='')
 
+    search = SphinxSearch()
+
 
 class Companies(models.Model):
     title = models.CharField(max_length=250)
@@ -85,6 +89,7 @@ class Companies(models.Model):
     is_deleted = models.BooleanField(default=0)
 
     search = SphinxSearch()
+
 
 # ALL = -1
 EMAIL = 0
@@ -176,6 +181,8 @@ class Orders(models.Model):
     is_comment_my = models.BooleanField(default=1)
     shipped_date = UnixTimestampField(blank=True, null=True)
     brought_sum = models.IntegerField(null=True, blank=True)
+
+    search = SphinxSearch()
 
 
 class Products(models.Model):
