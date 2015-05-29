@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'mptt',
     'media_tree',
     'bootstrap_pagination',
+    'djangosphinx',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -203,3 +204,18 @@ MULTIUPLOADER_FORMS_SETTINGS = {
 }
 
 MEDIA_TREE_UPLOAD_SUBDIR = 'uploads'
+
+
+SPHINX_API_VERSION = 0x116
+SPHINX_PORT = 9312
+SPHINX_SERVER = '127.0.0.1'
+
+SPHINX_ROOT = '/var/sphinx-search/'
+
+SPHINX_CONFIG_TEMPLATE = 'conf/sphinx.html'
+DATABASE_ENGINE = 'mysql'
+DATABASE_HOST = 'localhost'
+DATABASE_PORT = '5432'
+DATABASE_NAME = 'base_for_api'
+DATABASE_USER = 'root'
+DATABASE_PASSWORD = ''

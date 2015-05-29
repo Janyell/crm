@@ -99,7 +99,9 @@ def full_get_companies(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    companies = Companies.objects.filter(is_deleted=0)
+    # companies = Companies.search.query(u'ООО').filter(is_deleted=0)
+    # companies = Companies.objects.filter(is_deleted=0)
+    companies = list(Companies.search.query(u'ХИТ*').filter(is_deleted=0))
     for c in companies:
         c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
     out.update({'page_title': "Компании"})

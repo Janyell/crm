@@ -4,6 +4,7 @@ from django.db import models
 from datetime import datetime
 from time import strftime
 from django.contrib.auth.models import User, UserManager
+from djangosphinx.models import SphinxSearch
 from media_tree.models import FileNode
 
 
@@ -82,6 +83,8 @@ class Companies(models.Model):
     last_name = models.CharField(max_length=50, null=True, blank=True)
     patronymic = models.CharField(max_length=50, null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
+
+    search = SphinxSearch()
 
 # ALL = -1
 EMAIL = 0
