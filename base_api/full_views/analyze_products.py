@@ -68,7 +68,7 @@ def full_view_analyzed_product(request):
         # по часам
         if start_period == end_period:
             for i in range(24):
-                period.append(i+1)
+                period.append(str(i+1) + ':00')
                 amount.append(0)
                 sum_of_pr.append(0)
             for pr in product_in_orders:
@@ -82,7 +82,6 @@ def full_view_analyzed_product(request):
                     data_year = data[:4]
                     data_hour = data[:13]
                     data_hour = data_hour[-2:]
-                    print(data_hour)
                     if data_year == current_year and data_mounth == current_mounth and data_day == current_day:
                         amount[int(data_hour) - 1] = int(amount[int(data_hour) - 1] + pr.count_of_products)
                         sum_of_pr[int(data_hour) - 1] = int(sum_of_pr[int(data_hour) - 1] + pr.count_of_products * pr.price)
@@ -107,19 +106,25 @@ def full_view_analyzed_product(request):
                         all_amount = all_amount + pr.count_of_products
             period_str = period
         else:
-            r = relativedelta.relativedelta(end_period_time, start_period_time)
-            for i in range(r.months + 1):
-                period.append(month_delta(start_period_time, i))
+            end_year = str(end_period_time)[:4]
+            start_year = str(start_period_time)[:4]
+            end_month = str(end_period_time)[:7][-2:]
+            start_month = str(start_period_time)[:7][-2:]
+            month_count = (int(end_year) - int(start_year))*12 + int(end_month) - int(start_month) + 1
+            for i in range(month_count):
+                period.append(str(month_delta(start_period_time, i))[:-3])
                 amount.append(0)
                 sum_of_pr.append(0)
-            print(period)
             for pr in product_in_orders:
                 order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
                 if order and order.order_status == 1:
                     data = order.order_date.date()
+                    now_year = str(data)[:4]
+                    now_month = str(data)[:7][-2:]
                     if start_period_time <= data and data <= end_period_time:
-                        amount[(data - start_period_time).days] = int(amount[(data - start_period_time).days] + pr.count_of_products)
-                        sum_of_pr[(data - start_period_time).days] = int(sum_of_pr[(data - start_period_time).days] + pr.count_of_products * pr.price)
+                        count = (int(now_year) - int(start_year))*12 + int(now_month) - int(start_month)
+                        amount[count] = int(amount[count] + pr.count_of_products)
+                        sum_of_pr[count] = int(sum_of_pr[count] + pr.count_of_products * pr.price)
                         all_sum = all_sum + pr.count_of_products * pr.price
                         all_amount = all_amount + pr.count_of_products
             period_str = period
