@@ -283,3 +283,6 @@ div.source {
 .new-period {
     margin-bottom: 30px;
 }
+.search-query {
+    width:180px;
+}
