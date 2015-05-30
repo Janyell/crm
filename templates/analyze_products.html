@@ -17,56 +17,13 @@
                         <tr>
                             <td>{{ product.title }}</td>
                             <td>
-                                <a class="btn analyze-button" data-toggle="modal" href="#analyzed-product" value="{{ product.pk }}">Анализировать</a>
+                                <a class="btn analyze-button" data-toggle="modal" href="{% url "view_analyzed_product" %}?id={{ product.pk }}">Анализировать</a>
                             </td>
                         </tr>
                     {% endfor %}
                 {% endif %}
             </tbody>
         </table>
-    </div>
-    <div class="modal hide fade" id="analyzed-product" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
-        <form class="form-horizontal" method="get" action="{% url "view_analyzed_product" %}">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="center">Анализ продаж продукта</h3>
-            </div>
-            <div class="modal-body analyzed-product">
-                <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
-                <input type="hidden" class="analyzed-product__id" name="id" value="" />
-                <div class="control-group analyzed-product__graphic">
-                    <label class="control-label">
-                        Графики
-                    </label>
-                    <div class="controls">
-                        <label class="checkbox">
-                            <input type="checkbox" name="graphic[]" value="number" />
-                            Количество проданной продукции
-                        </label>
-                        <label class="checkbox">
-                            <input type="checkbox" name="graphic[]" value="sum" />
-                            Сумма проданной продукции
-                        </label>
-                    </div>
-                </div>
-                <div class="control-group analyzed-product__period">
-                    <label class="control-label" for="inputPeriod">
-                        Период
-                    </label>
-                    <div class="controls">
-                        <select id="inputPeriod" name="period" class="select">
-                            <option value="month">Последний месяц</option>
-                            <option value="year">По месяцам</option>
-                            <option value="all">Весь период продаж</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <input type="submit" class="btn btn-primary" value="Анализировать"/>
-                <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-            </div>
-        </form>
     </div>
     <script type="text/javascript">
         (function($){
@@ -79,10 +36,6 @@
                         { "bSortable": false, "aTargets": [ 1 ] },
                         { "bSearchable": false, "aTargets": [ 1 ] }
                     ]
-                });
-                 $('.analyze-button').bind('click', function(){
-                    var id = $(this).attr('value');
-                    $('#analyzed-product').find('.analyzed-product__id').attr('value',id);
                 });
             });
             $(window).load(function() {
