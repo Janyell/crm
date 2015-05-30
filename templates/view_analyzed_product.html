@@ -37,7 +37,7 @@
             </form>
             {% if number_data or sum_data %}
                 <div class="new-graphic">
-                    <canvas id="analyzed-product-chart" width="940" height="400"></canvas>
+                    <canvas id="analyzed-product-chart-{{ i }}" width="940" height="400"></canvas>
                     {% if number_data %}
                         <div class="chart-caption">
                             <div class="chart-caption__color chart-caption__color_first"></div>
@@ -58,7 +58,7 @@
                     <script type="text/javascript">
                         (function($){
                             $(document).ready(function(){
-                                var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
+                                var ctx = document.getElementById("analyzed-product-chart-{{ i }}").getContext("2d");
                                 var data = {
                                     labels: [
                                         {% if select_period %}
@@ -121,9 +121,11 @@
                         }
                     });
                 }
+                var i = 0;
                 function set_submit_handler(_this) {
                     $(_this).find($('.analyzed-product')).on('submit', function (e) {
                         e.preventDefault();
+                        $(this).append( '<input type="hidden" name="i" value="' + i++ + '"/>');
                         var formdata = false;
                         if (window.FormData) {
                             formdata = new FormData($(this)[0]);
@@ -148,7 +150,6 @@
                     });
                 }
                 set_daterangepicker(this);
-                var i = 0;
                 set_submit_handler(this);
                 var new_period_url = "{% url "view_analyzed_product" %}?id={{ request.GET.id }}";
                 var $plus_period = $('.plus_period');
