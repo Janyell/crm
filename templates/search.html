@@ -105,9 +105,9 @@
                                         </td>
                                         <td>
                                         {% if user_role == 0 %}
-                                             <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
+                                             <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}&search={{ request.GET.search }}">В архив</a>
                                         {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
-                                            <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
+                                            <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}&search={{ request.GET.search }}">В архив</a>
                                         {% endif %}
                                         </td>
                                         <td>
@@ -256,7 +256,7 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <a class="btn" href="{% url "delete_from_archive" %}?id={{ order.pk }}">В заказы</a>
+                                            <a class="btn" href="{% url "delete_from_archive" %}?id={{ order.pk }}&search={{ request.GET.search }}">В заказы</a>
                                         </td>
                                         <td>
                                             {% if order.files %}
