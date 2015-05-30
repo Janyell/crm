@@ -50,52 +50,54 @@
                             Сумма проданной продукции
                         </div>
                     {% endif %}
-                    <div class="analyzed-product__average-sum">
-                        <h4>Средняя цена за период: {{ average_sum_right_format }} руб.</h4>
-                    </div>
+                    {% if average_sum_right_format %}
+                        <div class="analyzed-product__average-sum">
+                            <h4>Средняя цена за период: {{ average_sum_right_format }} руб.</h4>
+                        </div>
+                    {% endif %}
+                    <script type="text/javascript">
+                        (function($){
+                            $(document).ready(function(){
+                                var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
+                                var data = {
+                                    labels: [
+                                        {% if select_period %}
+                                            {% for select_period__title in select_period %}
+                                                '{{ select_period__title }}',
+                                            {% endfor %}
+                                        {% endif %}],
+                                    datasets: [
+                                        {% if number_data %}
+                                            {
+                                                label: "Количество проданной продукции",
+                                                fillColor: "rgba(220,220,220,0.2)",
+                                                strokeColor: "rgba(220,220,220,1)",
+                                                pointColor: "rgba(220,220,220,1)",
+                                                pointStrokeColor: "#fff",
+                                                pointHighlightFill: "#fff",
+                                                pointHighlightStroke: "rgba(220,220,220,1)",
+                                                data: [{{ number_data }}]
+                                            },
+                                        {% endif %}
+                                        {% if sum_data %}
+                                            {
+                                                label: "Сумма проданной продукции",
+                                                fillColor: "rgba(151,187,205,0.2)",
+                                                strokeColor: "rgba(151,187,205,1)",
+                                                pointColor: "rgba(151,187,205,1)",
+                                                pointStrokeColor: "#fff",
+                                                pointHighlightFill: "#fff",
+                                                pointHighlightStroke: "rgba(151,187,205,1)",
+                                                data: [{{ sum_data }}]
+                                            },
+                                        {% endif %}
+                                    ]
+                                };
+                                var analyzedProductChart = new Chart(ctx).Line(data);
+                            });
+                        })(jQuery);
+                    </script>
                 </div>
-                <script type="text/javascript">
-                    (function($){
-                        $(document).ready(function(){
-                            var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
-                            var data = {
-                                labels: [
-                                    {% if select_period %}
-                                        {% for select_period__title in select_period %}
-                                            '{{ select_period__title }}',
-                                        {% endfor %}
-                                    {% endif %}],
-                                datasets: [
-                                    {% if number_data %}
-                                        {
-                                            label: "Количество проданной продукции",
-                                            fillColor: "rgba(220,220,220,0.2)",
-                                            strokeColor: "rgba(220,220,220,1)",
-                                            pointColor: "rgba(220,220,220,1)",
-                                            pointStrokeColor: "#fff",
-                                            pointHighlightFill: "#fff",
-                                            pointHighlightStroke: "rgba(220,220,220,1)",
-                                            data: [{{ number_data }}]
-                                        },
-                                    {% endif %}
-                                    {% if sum_data %}
-                                        {
-                                            label: "Сумма проданной продукции",
-                                            fillColor: "rgba(151,187,205,0.2)",
-                                            strokeColor: "rgba(151,187,205,1)",
-                                            pointColor: "rgba(151,187,205,1)",
-                                            pointStrokeColor: "#fff",
-                                            pointHighlightFill: "#fff",
-                                            pointHighlightStroke: "rgba(151,187,205,1)",
-                                            data: [{{ sum_data }}]
-                                        },
-                                    {% endif %}
-                                ]
-                            };
-                            var analyzedProductChart = new Chart(ctx).Line(data);
-                        });
-                    })(jQuery);
-                </script>
             {% endif %}
         </div>
         <div class="center">
@@ -135,16 +137,19 @@
                             processData: false,
                             contentType: false,
                             success: function (data, status) {
-                                $("<div class='new-graphic__wrap'></div>").insertAfter($_this).load( new_period_url + ' .new-graphic', function() {
-                                });
+                                var $next = $_this.next();
+                                if ($next.attr('class') != 'new-graphic__wrap') {
+                                    $next = $("<div class='new-graphic__wrap'></div>").insertAfter($_this);
+                                }
+                                $next.html($('.new-graphic', data));
                             }
                         });
                         return false;
                     });
                 }
                 set_daterangepicker(this);
-{#                set_submit_handler(this);#}
                 var i = 0;
+                set_submit_handler(this);
                 var new_period_url = "{% url "view_analyzed_product" %}?id={{ request.GET.id }}";
                 var $plus_period = $('.plus_period');
                 var $plus_period_parent = $plus_period.parent();
