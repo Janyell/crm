@@ -105,23 +105,23 @@ def full_view_analyzed_product(request):
                         all_amount = all_amount + pr.count_of_products
             period_str = period
 
-        # по месяцам
-        start_period_time = datetime.strptime(start_period, "%Y-%m-%d").date()
-        end_period_time = datetime.strptime(end_period, "%Y-%m-%d").date()
-        for i in range((end_period_time - start_period_time).mo + 1):
-            period.append(start_period_time + timedelta(days=i))
-            amount.append(0)
-            sum_of_pr.append(0)
-        for pr in product_in_orders:
-            order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
-            if order and order.bill_status == 2:
-                data = order.order_date.date()
-                if start_period_time < data and data < end_period_time:
-                    amount[(data - start_period_time).days] = int(amount[(data - start_period_time).days] + pr.count_of_products)
-                    sum_of_pr[(data - start_period_time).days] = sum_of_pr[(data - start_period_time).days] + pr.count_of_products * pr.price
-                    all_sum = all_sum + pr.count_of_products * pr.price
-                    all_amount = all_amount + pr.count_of_products
-        period_str = period
+        # # по месяцам
+        # start_period_time = datetime.strptime(start_period, "%Y-%m-%d").date()
+        # end_period_time = datetime.strptime(end_period, "%Y-%m-%d").date()
+        # for i in range((end_period_time - start_period_time).mo + 1):
+        #     period.append(start_period_time + timedelta(days=i))
+        #     amount.append(0)
+        #     sum_of_pr.append(0)
+        # for pr in product_in_orders:
+        #     order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
+        #     if order and order.bill_status == 2:
+        #         data = order.order_date.date()
+        #         if start_period_time < data and data < end_period_time:
+        #             amount[(data - start_period_time).days] = int(amount[(data - start_period_time).days] + pr.count_of_products)
+        #             sum_of_pr[(data - start_period_time).days] = sum_of_pr[(data - start_period_time).days] + pr.count_of_products * pr.price
+        #             all_sum = all_sum + pr.count_of_products * pr.price
+        #             all_amount = all_amount + pr.count_of_products
+        # period_str = period
 
         amount_str = str(amount)[1:-1]
         sum_str = str(sum_of_pr)[1:-1]
