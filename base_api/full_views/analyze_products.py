@@ -49,6 +49,8 @@ def full_view_analyzed_product(request):
     else:
         type_of_graphic = []
     if request.method == 'POST':
+        i = request.POST['i']
+        out.update({'i': i})
         current_time = str(end_period)
         current_day = current_time[-2:]
         current_mounth = current_time[5:]
