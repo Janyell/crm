@@ -249,9 +249,21 @@ def edit_order_for_other_managers(request):
             new_order.is_comment_my = is_comment_my
             new_order.comment = comment
             new_order.save(force_update=True)
-            return HttpResponseRedirect('/orders/')
+            get_params = '?'
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params += 'search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
+            get_params += get_request_param_as_string(request)
+            return HttpResponseRedirect('/orders/' + get_params)
         else:
-            return HttpResponseRedirect('/orders')
+            get_params = '?'
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params += 'search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
+            get_params += get_request_param_as_string(request)
+            return HttpResponseRedirect('/orders/' + get_params)
     else:
         if 'id' in request.GET:
             id_order = request.GET['id']
@@ -261,7 +273,13 @@ def edit_order_for_other_managers(request):
             out.update({'order_form': form})
             out.update({'page_title': "Редактирование заказа"})
         else:
-            return HttpResponseRedirect('/orders/')
+            get_params = '?'
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params += 'search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
+            get_params += get_request_param_as_string(request)
+            return HttpResponseRedirect('/orders/' + get_params)
     return render(request, 'edit_order_for_other_managers.html', out)
 
 
@@ -285,9 +303,21 @@ def edit_claim_for_other_managers(request):
                 is_comment_my = True
             new_order.is_comment_my = is_comment_my
             new_order.save(force_update=True)
-            return HttpResponseRedirect('/claims/')
+            get_params = '?'
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params += 'search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
+            get_params += get_request_param_as_string(request)
+            return HttpResponseRedirect('/claims/' + get_params)
         else:
-            return HttpResponseRedirect('/claims')
+            get_params = '?'
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params += 'search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
+            get_params += get_request_param_as_string(request)
+            return HttpResponseRedirect('/claims/' + get_params)
     else:
         if 'id' in request.GET:
             id_order = request.GET['id']
@@ -297,7 +327,13 @@ def edit_claim_for_other_managers(request):
             out.update({'order_form': form})
             out.update({'page_title': "Редактирование заявки"})
         else:
-            return HttpResponseRedirect('/claims/')
+            get_params = '?'
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params += 'search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
+            get_params += get_request_param_as_string(request)
+            return HttpResponseRedirect('/claims/' + get_params)
     return render(request, 'edit_order_for_other_managers.html', out)
 
 
@@ -414,11 +450,8 @@ def search(request):
         start = (page - 1) * length
         out.update({'start': start})
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2 or user_role == 1:
-        return HttpResponseRedirect('/oops/')
-    else:
-        out.update({'user_role': user_role})
-        out.update({'user': Roles.objects.get(id=request.user.id)})
+    out.update({'user_role': user_role})
+    out.update({'user': Roles.objects.get(id=request.user.id)})
     if 'search' in request.GET:
         search_word = request.GET['search'] + '*'
     else:

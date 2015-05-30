@@ -45,7 +45,8 @@ def full_get_products(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
-            new_product = Products.objects.create(title=title)
+            price = form.cleaned_data['price']
+            new_product = Products.objects.create(title=title, price=price)
             return HttpResponseRedirect('/products/' + get_params)
         else:
             out.update({"error": 1})

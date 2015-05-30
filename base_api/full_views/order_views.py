@@ -685,6 +685,7 @@ def full_get_orders(request):
         if order.brought_sum is not None and order.bill is not None:
             order.brought_sum_right_format = right_money_format(order.brought_sum)
             order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
+            print(order.bill_right_format, order.debt_right_format)
         order.files = []
         if Order_Files.objects.filter(order_id=order.id).all() is not None:
             for order_file in Order_Files.objects.filter(order_id=order.id).all():
@@ -784,8 +785,6 @@ def full_edit_order_for_factory(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    get_params = '?'
-    get_params += get_request_param_as_string(request)
     if user_role != 2:
         return HttpResponseRedirect('/oops/')
     else:
@@ -812,8 +811,20 @@ def full_edit_order_for_factory(request):
             new_order.order_status = order_status
             new_order.ready_date = ready_date
             new_order.save(force_update=True)
+            get_params = '?'
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params += 'search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
+            get_params += get_request_param_as_string(request)
             return HttpResponseRedirect('/orders/' + get_params)
         else:
+            get_params = '?'
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params += 'search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
+            get_params += get_request_param_as_string(request)
             return HttpResponseRedirect('/orders' + get_params)
     else:
         if 'id' in request.GET:
@@ -826,6 +837,12 @@ def full_edit_order_for_factory(request):
             out.update({'unique_number': order.unique_number})
             out.update({'page_title': "Редактирование заказа"})
         else:
+            get_params = '?'
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params += 'search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
+            get_params += get_request_param_as_string(request)
             return HttpResponseRedirect('/orders/' + get_params)
     return render(request, 'edit_order_for_factory.html', out)
 

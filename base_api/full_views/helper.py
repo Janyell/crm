@@ -11,10 +11,7 @@ def get_request_param_as_string(request):
         length = int(request.GET['length'])
         get_params += 'length=' + str(length) + '&'
     if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
-        get_params += 'sort=' + str(sort) + '&'
-    if 'sort' in request.GET:
-        sort = int(request.GET['sort'])
+        sort = request.GET['sort']
         get_params += 'sort=' + str(sort) + '&'
     if 'managers[]' in request.GET:
         managers = request.GET.getlist('managers[]')

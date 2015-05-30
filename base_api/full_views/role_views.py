@@ -64,8 +64,9 @@ def full_add_edit_role(request):
                 patronymic = form.cleaned_data['patronymic']
 
                 new_author = Roles.objects.create(username=username,
-                                                  is_staff=0, is_active=1, date_joined=datetime.now(),
-                                                  role=role, surname=surname, name=name, patronymic=patronymic)
+                                                  is_staff=1, is_active=1, date_joined=datetime.now(),
+                                                  role=role, surname=surname, name=name, patronymic=patronymic,
+                                                  is_superuser=True)
                 new_author.set_password(password)
                 new_author.save()
                 return HttpResponseRedirect('/roles/' + get_params)
