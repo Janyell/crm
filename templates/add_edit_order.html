@@ -11,7 +11,8 @@
         {% url 'edit_claim' as edit_claim_url %}
         {% url 'add_order' as add_order_url %}
         {% url 'edit_order' as edit_order_url %}
-        <a href="{% if request.path == add_claim_url and client_id >= 0 %}
+        <a href="{% if request.GET.search %}
+            {% url "search" %}{% elif request.path == add_claim_url and client_id >= 0 %}
             {% url "get_interested_clients" %}{% elif request.GET.archive %}
             {% url "get_old_orders" %}{% elif request.GET.history %}
             {% url "get_orders" %}?client-id={{ client_id }}{% elif request.path == add_order_url and client_id >= 0 %}
@@ -413,7 +414,7 @@
                 });
 
                 function get_get_params() {
-                    var need_get_params = ['page', 'length', 'sort', 'source', 'managers'];
+                    var need_get_params = ['page', 'length', 'sort', 'source', 'managers', 'search'];
                     var get_params = "";
                     var is_get_param = false;
                     var all_get_params = window.location.search.substring(1).split("&");

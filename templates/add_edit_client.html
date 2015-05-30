@@ -2,8 +2,8 @@
 
 {%block content%}
     <div class="container">
-    <a href="
-    {% if request.GET.is_interested %}
+    <a href="{% if request.GET.search %}
+        {% url "search" %}{% elif request.GET.is_interested %}
         {% url "get_interested_clients" %}{% else %}
         {% url "get_clients" %}{% endif %}" class="btn back-button">Назад</a>
     <h2 class="form-add__head">{{ page_title }}</h2>
@@ -22,7 +22,8 @@
                 {% endif %}
             {% endif %}
         {% endblock %}
-            <div class="in-modal">
+
+        <div class="in-modal">
             <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
             {% if error == 1 %}
                 <div class="text-error text-error_one">
@@ -252,7 +253,7 @@
                 });
 
                 function get_get_params() {
-                    var need_get_params = ['page', 'length', 'sort'];
+                    var need_get_params = ['page', 'length', 'sort', 'search'];
                     var get_params = "";
                     var is_get_param = false;
                     var all_get_params = window.location.search.substring(1).split("&");

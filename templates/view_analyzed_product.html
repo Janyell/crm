@@ -6,100 +6,155 @@
     <div class="container">
     <a href="{% url "analyze_products" %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }} {{ product_name }}</h2>
-        <form method="get" action="{% url "view_analyzed_product" %}" class="analyzed-product form-horizontal clearfix">
-            <input type="hidden" class="analyzed-product__id" name="id" value="{{ request.GET.id }}" />
-            <div class="control-group analyzed-product__graphic">
-                <label class="control-label">
-                    Графики
-                </label>
-                <div class="controls">
-                    <label class="checkbox">
-                        <input type="checkbox" name="graphic[]" value="number"
-                               {% if number_data %}checked="checked"{% endif %} />
-                        Количество проданной продукции
+        <div class="new-period">
+            <form method="post" action="{% url "view_analyzed_product" %}?id={{ request.GET.id }}" class="analyzed-product form-horizontal clearfix">
+                <input type="hidden" class="analyzed-product__id" name="id" value="{{ request.GET.id }}" />
+                <div class="control-group analyzed-product__graphic">
+                    <label class="control-label">
+                        Графики
                     </label>
-                    <label class="checkbox">
-                        <input type="checkbox" name="graphic[]" value="sum" {% if sum_data %}checked="checked"{% endif %}/>
-                        Сумма проданной продукции
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="graphic[]" value="number"
+                                   {% if number_data %}checked="checked"{% endif %} />
+                            Количество проданной продукции
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="graphic[]" value="sum" {% if sum_data %}checked="checked"{% endif %} />
+                            Сумма проданной продукции
+                        </label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">
+                        Период
                     </label>
+                    <div class="controls">
+                        <input type="text" name="period" class="period" placeholder="ГГГГ-ММ-ДД - ГГГГ-ММ-ДД" required/>
+                    </div>
                 </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="selectPeriod">
-                    Период
-                </label>
-                <div class="controls">
-                    <select name="period" id="selectPeriod">
-                        <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>Последний месяц</option>
-                        <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>По месяцам</option>
-                        <option value="all"{% if request.GET.period == "all" %} selected="selected"{% endif %}>Весь период продаж</option>
-                    </select>
+                <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
+            </form>
+            {% if number_data or sum_data %}
+                <div class="new-graphic">
+                    <canvas id="analyzed-product-chart" width="940" height="400"></canvas>
+                    {% if number_data %}
+                        <div class="chart-caption">
+                            <div class="chart-caption__color chart-caption__color_first"></div>
+                            Количество проданной продукции
+                        </div>
+                    {% endif %}
+                    {% if sum_data %}
+                        <div class="chart-caption">
+                            <div class="chart-caption__color chart-caption__color_second"></div>
+                            Сумма проданной продукции
+                        </div>
+                    {% endif %}
+                    <div class="analyzed-product__average-sum">
+                        <h4>Средняя цена за период: {{ average_sum_right_format }} руб.</h4>
+                    </div>
                 </div>
-            </div>
-            <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
-        </form>
-        {% if number_data or sum_data %}
-            <canvas id="analyzed-product-chart" width="940" height="400"></canvas>
-            {% if number_data %}
-                <div class="chart-caption">
-                    <div class="chart-caption__color chart-caption__color_first"></div>
-                    Количество проданной продукции
-                </div>
+                <script type="text/javascript">
+                    (function($){
+                        $(document).ready(function(){
+                            var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
+                            var data = {
+                                labels: [
+                                    {% if select_period %}
+                                        {% for select_period__title in select_period %}
+                                            '{{ select_period__title }}',
+                                        {% endfor %}
+                                    {% endif %}],
+                                datasets: [
+                                    {% if number_data %}
+                                        {
+                                            label: "Количество проданной продукции",
+                                            fillColor: "rgba(220,220,220,0.2)",
+                                            strokeColor: "rgba(220,220,220,1)",
+                                            pointColor: "rgba(220,220,220,1)",
+                                            pointStrokeColor: "#fff",
+                                            pointHighlightFill: "#fff",
+                                            pointHighlightStroke: "rgba(220,220,220,1)",
+                                            data: [{{ number_data }}]
+                                        },
+                                    {% endif %}
+                                    {% if sum_data %}
+                                        {
+                                            label: "Сумма проданной продукции",
+                                            fillColor: "rgba(151,187,205,0.2)",
+                                            strokeColor: "rgba(151,187,205,1)",
+                                            pointColor: "rgba(151,187,205,1)",
+                                            pointStrokeColor: "#fff",
+                                            pointHighlightFill: "#fff",
+                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                            data: [{{ sum_data }}]
+                                        },
+                                    {% endif %}
+                                ]
+                            };
+                            var analyzedProductChart = new Chart(ctx).Line(data);
+                        });
+                    })(jQuery);
+                </script>
             {% endif %}
-            {% if sum_data %}
-                <div class="chart-caption">
-                    <div class="chart-caption__color chart-caption__color_second"></div>
-                    Сумма проданной продукции
-                </div>
-            {% endif %}
-            <div class="analyzed-product__average-sum">
-                <h4>Средняя цена за период: {{ average_sum_right_format }} руб.</h4>
-            </div>
         </div>
-        <script type="text/javascript">
-            (function($){
-                $(document).ready(function(){
-                    var ctx = document.getElementById("analyzed-product-chart").getContext("2d");
-                    var data = {
-                        labels: [
-                            {% if select_period %}
-                                {% for select_period__title in select_period %}
-                                    '{{ select_period__title }}',
-                                {% endfor %}
-                            {% endif %}],
-                        datasets: [
-                            {% if number_data %}
-                                {
-                                    label: "Количество проданной продукции",
-                                    fillColor: "rgba(220,220,220,0.2)",
-                                    strokeColor: "rgba(220,220,220,1)",
-                                    pointColor: "rgba(220,220,220,1)",
-                                    pointStrokeColor: "#fff",
-                                    pointHighlightFill: "#fff",
-                                    pointHighlightStroke: "rgba(220,220,220,1)",
-                                    data: [{{ number_data }}]
-                                },
-                            {% endif %}
-                            {% if sum_data %}
-                                {
-                                    label: "Сумма проданной продукции",
-                                    fillColor: "rgba(151,187,205,0.2)",
-                                    strokeColor: "rgba(151,187,205,1)",
-                                    pointColor: "rgba(151,187,205,1)",
-                                    pointStrokeColor: "#fff",
-                                    pointHighlightFill: "#fff",
-                                    pointHighlightStroke: "rgba(151,187,205,1)",
-                                    data: [{{ sum_data }}]
-                                },
-                            {% endif %}
-                        ]
-                    };
-                    var analyzedProductChart = new Chart(ctx).Line(data);
-                });
-            })(jQuery);
-        </script>
-    {% endif %}
-    <div class="center">
-        <span class="btn plus_period">Добавить период</span>
+        <div class="center">
+            <span class="btn plus_period">Добавить период</span>
+        </div>
     </div>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function() {
+                function set_daterangepicker(_this) {
+                    moment.locale('ru');
+                    $(_this).find($('.period')).daterangepicker({
+                        format: 'YYYY-MM-DD',
+                        ranges: {
+                            'Сегодня': [moment(), moment()],
+                            'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                            'Неделя': [moment().subtract(6, 'days'), moment()],
+                            'Месяц': [moment().subtract(29, 'days'), moment()],
+                            'Квартал': [moment().subtract(3, 'month'), moment()],
+                            'Год': [moment().subtract(12, 'month'), moment()]
+                        }
+                    });
+                }
+                function set_submit_handler(_this) {
+                    $(_this).find($('.analyzed-product')).on('submit', function (e) {
+                        e.preventDefault();
+                        var formdata = false;
+                        if (window.FormData) {
+                            formdata = new FormData($(this)[0]);
+                        }
+                        var $_this = $(this);
+                        $.ajax({
+                            type: $(this).attr('method'),
+                            url: this.action,
+                            data: formdata ? formdata : $(this).serialize(),
+                            context: this,
+                            processData: false,
+                            contentType: false,
+                            success: function (data, status) {
+                                $("<div class='new-graphic__wrap'></div>").insertAfter($_this).load( new_period_url + ' .new-graphic', function() {
+                                });
+                            }
+                        });
+                        return false;
+                    });
+                }
+                set_daterangepicker(this);
+                set_submit_handler(this);
+                var i = 0;
+                var new_period_url = "{% url "view_analyzed_product" %}?id={{ request.GET.id }}";
+                var $plus_period = $('.plus_period');
+                var $plus_period_parent = $plus_period.parent();
+                $plus_period.click(function() {
+                    $("<div class='new-period__wrap'></div>").insertBefore($plus_period_parent).load( new_period_url + ' .new-period', function() {
+                        set_daterangepicker(this);
+                        set_submit_handler(this);
+                    });
+                });
+            });
+        })(jQuery);
+       </script>
 {% endblock %}
