@@ -1,13 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from calendar import monthrange
+from dateutil import relativedelta
 from django.shortcuts import render, render_to_response
 from datetime import datetime, timedelta
 from base_api.full_views.order_views import right_money_format
-from base_api.models import *
 from base_api.form import *
 from django.http import *
-from django.contrib.auth import authenticate, login, logout
-from django.core.exceptions import ObjectDoesNotExist
 
 
 def full_analyze_products(request):
@@ -81,7 +80,7 @@ def full_view_analyzed_product(request):
                     data_hour = data_hour[-2:]
                     if data_year == current_year and data_mounth == current_mounth and data_day == current_day:
                         amount[int(data_hour) - 1] = int(amount[int(data_hour) - 1] + pr.count_of_products)
-                        sum_of_pr[int(data_hour) - 1] = sum_of_pr[int(data_hour) - 1] + pr.count_of_products * pr.price
+                        sum_of_pr[int(data_hour) - 1] = int(sum_of_pr[int(data_hour) - 1] + pr.count_of_products * pr.price)
                         all_sum = all_sum + pr.count_of_products * pr.price
                         all_amount = all_amount + pr.count_of_products
             period_str = period
@@ -100,28 +99,31 @@ def full_view_analyzed_product(request):
                     data = order.order_date.date()
                     if start_period_time < data and data < end_period_time:
                         amount[(data - start_period_time).days] = int(amount[(data - start_period_time).days] + pr.count_of_products)
-                        sum_of_pr[(data - start_period_time).days] = sum_of_pr[(data - start_period_time).days] + pr.count_of_products * pr.price
+                        sum_of_pr[(data - start_period_time).days] = int(sum_of_pr[(data - start_period_time).days] + pr.count_of_products * pr.price)
                         all_sum = all_sum + pr.count_of_products * pr.price
                         all_amount = all_amount + pr.count_of_products
             period_str = period
 
-        # # по месяцам
-        # start_period_time = datetime.strptime(start_period, "%Y-%m-%d").date()
-        # end_period_time = datetime.strptime(end_period, "%Y-%m-%d").date()
-        # for i in range((end_period_time - start_period_time).mo + 1):
-        #     period.append(start_period_time + timedelta(days=i))
-        #     amount.append(0)
-        #     sum_of_pr.append(0)
-        # for pr in product_in_orders:
-        #     order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
-        #     if order and order.bill_status == 2:
-        #         data = order.order_date.date()
-        #         if start_period_time < data and data < end_period_time:
-        #             amount[(data - start_period_time).days] = int(amount[(data - start_period_time).days] + pr.count_of_products)
-        #             sum_of_pr[(data - start_period_time).days] = sum_of_pr[(data - start_period_time).days] + pr.count_of_products * pr.price
-        #             all_sum = all_sum + pr.count_of_products * pr.price
-        #             all_amount = all_amount + pr.count_of_products
-        # period_str = period
+        # по месяцам
+        start_period_time = datetime.strptime(start_period, "%Y-%m-%d").date()
+        end_period_time = datetime.strptime(end_period, "%Y-%m-%d").date()
+        if (end_period_time - start_period_time).days >= 61:
+            r = relativedelta.relativedelta(start_period_time, end_period_time)
+            for i in range(r.months):
+                period.append(month_delta(start_period_time, i))
+                amount.append(0)
+                sum_of_pr.append(0)
+            print(period)
+            for pr in product_in_orders:
+                order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
+                if order and order.bill_status == 2:
+                    data = order.order_date.date()
+                    if start_period_time < data and data < end_period_time:
+                        amount[(data - start_period_time).days] = int(amount[(data - start_period_time).days] + pr.count_of_products)
+                        sum_of_pr[(data - start_period_time).days] = int(sum_of_pr[(data - start_period_time).days] + pr.count_of_products * pr.price)
+                        all_sum = all_sum + pr.count_of_products * pr.price
+                        all_amount = all_amount + pr.count_of_products
+            period_str = period
 
         amount_str = str(amount)[1:-1]
         sum_str = str(sum_of_pr)[1:-1]
@@ -135,6 +137,7 @@ def full_view_analyzed_product(request):
             out.update({'number_data': amount_str})
         if 'sum' in type_of_graphic:
             out.update({'sum_data': sum_str})
+            print(sum_str)
         out.update({'period': type_of_period})
         out.update({'graphic': type_of_graphic})
         out.update({'average_sum_right_format': average_sum_right_format})
@@ -145,8 +148,21 @@ def full_view_analyzed_product(request):
     return render(request, 'view_analyzed_product.html', out)
 
 
+def month_diff(d1, d2):
+    delta = 0
+    while True:
+        mdays = monthrange(d1.year, d1.month)[1]
+        d1 += timedelta(days=mdays)
+        if d1 <= d2:
+            delta += 1
+        else:
+            break
+    return delta
+
+
 def month_delta(date, delta):
     m, y = (date.month+delta) % 12, date.year + ((date.month)+delta-1) // 12
     if not m: m = 12
-    d = min(date.day, [31, 29 if y%4==0 and not y%400==0 else 28,31,30,31,30,31,31,30,31,30,31][m-1])
+    d = min(date.day, [31,
+        29 if y%4==0 and not y%400==0 else 28,31,30,31,30,31,31,30,31,30,31][m-1])
     return date.replace(day=d,month=m, year=y)
