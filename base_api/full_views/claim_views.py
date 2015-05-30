@@ -32,7 +32,10 @@ def full_add_edit_claim(request):
             claim = Orders.objects.get(id=pk)
             source = request.POST['source']
             comment = request.POST['comment']
-            brought_sum = request.POST['brought_sum']
+            try:
+                brought_sum = int(request.POST['brought_sum'])
+            except Exception:
+                brought_sum = None
             if request.POST['company'] != '':
                 id_company = int(request.POST['company'])
                 company = Companies.objects.get(id=id_company, is_deleted=0)
@@ -218,6 +221,10 @@ def full_add_edit_claim(request):
                                                                               count_of_products=count_of_products,
                                                                               price=price_of_products)
                         client.save(update_fields=["is_interested"])
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params = '?search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
             if displacement == 1:
                 get_params = '&'
                 get_params += get_request_param_as_string(request)
@@ -234,7 +241,10 @@ def full_add_edit_claim(request):
             company = form.cleaned_data['company']
             comment = form.cleaned_data['comment']
             bill = form.cleaned_data['bill']
-            brought_sum = form.cleaned_data['brought_sum']
+            try:
+                brought_sum = int(request.POST['brought_sum'])
+            except Exception:
+                brought_sum = None
             bill_status = form.cleaned_data['bill_status']
             displacement = 0
             if bill_status == 1 or bill_status == 2:
@@ -562,6 +572,10 @@ def full_delete_claim(request):
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
     get_params = '?'
+    if 'search' in request.GET:
+        search = request.GET.get('search')
+        get_params += 'search=' + unicode(search)
+        return HttpResponseRedirect('/search/' + get_params)
     get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/claims/' + get_params)
 

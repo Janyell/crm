@@ -153,6 +153,10 @@ def full_add_edit_client(request):
                                                    "person_phone", "organization_phone", "email", "is_interested",
                                                    "organization_type"])
                 get_params = '?'
+                if 'search' in request.GET:
+                    search = request.GET.get('search')
+                    get_params += 'search=' + unicode(search)
+                    return HttpResponseRedirect('/search/' + get_params)
                 get_params += get_request_param_as_string(request)
                 if is_interested == 1:
                     return HttpResponseRedirect('/clients/interested/' + get_params)
@@ -334,6 +338,10 @@ def full_delete_clients(request):
     client.is_deleted = 1
     client.save(update_fields=["is_deleted"])
     get_params = '?'
+    if 'search' in request.GET:
+        search = request.GET.get('search')
+        get_params += 'search=' + unicode(search)
+        return HttpResponseRedirect('/search/' + get_params)
     get_params += get_request_param_as_string(request)
     if is_interested == 0:
         return HttpResponseRedirect('/clients/' + get_params)

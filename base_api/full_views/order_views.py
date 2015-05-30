@@ -78,7 +78,10 @@ def full_add_edit_order(request):
                 ready_date = None
             comment = request.POST['comment']
             city = request.POST['city']
-            brought_sum = request.POST['brought_sum']
+            try:
+                brought_sum = int(request.POST['brought_sum'])
+            except Exception:
+                brought_sum = None
             account_number = request.POST['account_number']
             if 'role' in request.POST:
                 role = request.POST['role']
@@ -279,6 +282,10 @@ def full_add_edit_order(request):
                                                                               count_of_products=count_of_products,
                                                                               price=price_of_products)
             get_params = '?'
+            if 'search' in request.GET:
+                search = request.GET.get('search')
+                get_params += 'search=' + unicode(search)
+                return HttpResponseRedirect('/search/' + get_params)
             get_params += get_request_param_as_string(request)
             if new_order.in_archive == 1:
                 return HttpResponseRedirect('/orders/archive/' + get_params)
@@ -292,7 +299,10 @@ def full_add_edit_order(request):
             payment_date = form.cleaned_data['payment_date']
             order_status = form.cleaned_data['order_status']
             bill_status = form.cleaned_data['bill_status']
-            brought_sum = form.cleaned_data['brought_sum']
+            try:
+                brought_sum = int(request.POST['brought_sum'])
+            except Exception:
+                brought_sum = None
             shipped_date = None
             if order_status == 1:
                 shipped_date = form.cleaned_data['shipped_date']
@@ -577,6 +587,10 @@ def full_delete_order(request):
     order.is_deleted = 1
     order.save(update_fields=["is_deleted"])
     get_params = '?'
+    if 'search' in request.GET:
+        search = request.GET.get('search')
+        get_params += 'search=' + unicode(search)
+        return HttpResponseRedirect('/search/' + get_params)
     get_params += get_request_param_as_string(request)
     if order.in_archive:
         return HttpResponseRedirect('/orders/archive/' + get_params)
@@ -828,6 +842,10 @@ def full_add_in_archive(request):
     order.in_archive = 1
     order.save(update_fields=["in_archive"])
     get_params = '?'
+    if 'search' in request.GET:
+        search = request.GET.get('search')
+        get_params += 'search=' + unicode(search)
+        return HttpResponseRedirect('/search/' + get_params)
     get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/orders/' + get_params)
 
@@ -842,6 +860,10 @@ def full_delete_from_archive(request):
     order.in_archive = 0
     order.save(update_fields=["in_archive"])
     get_params = '?'
+    if 'search' in request.GET:
+        search = request.GET.get('search')
+        get_params += 'search=' + unicode(search)
+        return HttpResponseRedirect('/search/' + get_params)
     get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/orders/archive/' + get_params)
 
