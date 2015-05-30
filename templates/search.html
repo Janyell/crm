@@ -125,13 +125,13 @@
                                         </td>
                                         <td>
                                             {% if user_role == 0 %}
-                                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
-                                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             {% elif user_role != 2 %}
-                                                <a class="btn edit-button" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn edit-button" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             {% else %}
-                                                <a class="btn edit-button" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn edit-button" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             {% endif %}
                                         </td>
                                         <td>
@@ -273,13 +273,13 @@
                                         </td>
                                         <td>
                                             {% if user_role == 0 %}
-                                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}&archive=1&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}&archive=1&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
-                                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             {% elif user_role != 2 %}
-                                                <a class="btn edit-button" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn edit-button" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             {% else %}
-                                                <a class="btn edit-button" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn edit-button" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             {% endif %}
                                         </td>
                                         <td>
@@ -395,11 +395,11 @@
                                             </td>
                                             <td>
                                                 {% if user_role == 0 %}
-                                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                                  {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                                 {% else %}
-                                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                                 {% endif %}
                                             </td>
                                             <td>
@@ -466,7 +466,7 @@
                                                 {% endif %}
                                             </td>
                                             <td>
-                                                <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             </td>
                                             <td><a class="btn delete-client-button" data-toggle="modal" href="#delete" value="{{ client.pk }}">
                                                 <i class="icon-remove"></i></a>
@@ -522,7 +522,7 @@
                                                 {% endif %}
                                             </td>
                                             <td>
-                                                <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}&is_interested=1&seacrh={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}&is_interested=1&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             </td>
                                             <td><a class="btn delete-client-button" data-toggle="modal" href="#delete" value="{{ client.pk }}">
                                                 <i class="icon-remove"></i></a>
@@ -698,7 +698,7 @@
                                 $('.delete-order-button').bind('click', function(){
                                     $("#delete").find("h3").text("Вы уверены, что хотите удалить этот заказ?");
                                     var id = $(this).attr('value');
-                                    $delete_ok.attr({'href': '{% url "delete_order" %}?id=' + id + '&seacrh={{ request.GET.search }}'});
+                                    $delete_ok.attr({'href': '{% url "delete_order" %}?id=' + id + '&search={{ request.GET.search }}'});
                                 });
                                 $('.comment-order-button').bind('click', function(){
                                     $("#view-info").find("h3").text("Комментарий к заказу");
@@ -715,7 +715,7 @@
                                 $('.delete-claim-button').bind('click', function(){
                                     $("#delete").find("h3").text("Вы уверены, что хотите удалить эту заявку?");
                                     var id = $(this).attr('value');
-                                    $delete_ok.attr({'href': '{% url "delete_claim" %}?id=' + id + '&seacrh={{ request.GET.search }}'});
+                                    $delete_ok.attr({'href': '{% url "delete_claim" %}?id=' + id + '&search={{ request.GET.search }}'});
                                 });
                                 $('.comment-claim-button').bind('click', function(){
                                     $("#view-info").find("h3").text("Комментарий к заявке");
@@ -732,7 +732,7 @@
                                 $('.delete-client-button').bind('click', function(){
                                     $("#delete").find("h3").text("Вы уверены, что хотите удалить этого клиента?");
                                     var id = $(this).attr('value');
-                                    $delete_ok.attr({'href': '{% url "delete_claim" %}?id=' + id + '&seacrh={{ request.GET.search }}'});
+                                    $delete_ok.attr({'href': '{% url "delete_claim" %}?id=' + id + '&search={{ request.GET.search }}'});
                                 });
                                 $('.files-client-button').bind('click', function(){
                                     $("#view-info").find("h3").text("Прикрепленные к клиенту файлы");
