@@ -37,8 +37,16 @@ def full_view_analyzed_product(request):
     else:
         out.update({'user_role': user_role})
     product_id = request.GET['id']
-    type_of_period = request.GET['period']
-    type_of_graphic = request.GET.getlist('graphic[]')
+    if 'period' in request.POST:
+        print(xcfvgbh)
+    if 'period' in request.GET:
+        type_of_period = request.GET['period']
+    else:
+        type_of_period = None
+    if 'graphic[]' in request.GET:
+        type_of_graphic = request.GET.getlist('graphic[]')
+    else:
+        type_of_graphic = []
     current_time = str(datetime.now())
     current_mounth = current_time[5:]
     current_mounth = current_mounth[:2]
@@ -47,6 +55,7 @@ def full_view_analyzed_product(request):
     product_name = analyzed_product.title
     product_in_orders = Order_Product.objects.filter(product_id=product_id, is_deleted=0)
     period = []
+    period_str = ''
     amount = []
     sum_of_pr = []
     all_sum = 0
@@ -169,7 +178,10 @@ def full_view_analyzed_product(request):
         sum_of_pr = sum_of_pr[::-1]
     amount_str = str(amount)[1:-1]
     sum_str = str(sum_of_pr)[1:-1]
-    average_sum = all_sum / all_amount
+    if all_amount == 0:
+        average_sum = 0
+    else:
+        average_sum = all_sum / all_amount
     average_sum_right_format = right_money_format(average_sum)
     out.update({'page_title': "Анализ продаж продукта"})
     out.update({'select_period': period_str})
