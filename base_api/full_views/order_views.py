@@ -683,19 +683,19 @@ def full_get_orders(request):
         order.brought_sum_right_format = 0
         order.debt_right_format = 0
         order.is_in_debt = False
-        order.is_full_pay = False
+        if order.bill_status == 2:
+            order.is_full_pay = True
+        else:
+            order.is_full_pay = False
         if order.brought_sum is not None and order.bill is not None:
             if (order.bill - order.brought_sum) > 0:
                 order.is_in_debt = True
-                order.is_full_pay = False
             else:
                 order.is_in_debt = False
-                order.is_full_pay = True
-            if order.bill_status == 3:
-                order.is_in_debt = False
-                order.is_full_pay = False
             order.brought_sum_right_format = right_money_format(order.brought_sum)
             order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
+        if order.is_full_pay or order.bill_status == 3:
+            order.is_in_debt = False
         order.files = []
         if Order_Files.objects.filter(order_id=order.id).all() is not None:
             for order_file in Order_Files.objects.filter(order_id=order.id).all():
@@ -776,17 +776,15 @@ def full_get_old_orders(request):
         order.brought_sum_right_format = 0
         order.debt_right_format = 0
         order.is_in_debt = False
-        order.is_full_pay = False
+        if order.bill_status == 2:
+            order.is_full_pay = True
+        else:
+            order.is_full_pay = False
         if order.brought_sum is not None and order.bill is not None:
             if (order.bill - order.brought_sum) > 0:
                 order.is_in_debt = True
-                order.is_full_pay = False
             else:
                 order.is_in_debt = False
-                order.is_full_pay = True
-            if order.bill_status == 3:
-                order.is_in_debt = False
-                order.is_full_pay = False
             order.brought_sum_right_format = right_money_format(order.brought_sum)
             order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
         order.files = []
