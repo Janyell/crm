@@ -2,7 +2,9 @@
 
 {%block content%}
     <div class="container">
-        <a href="{% url "get_orders" %}" class="btn">Назад</a>
+        <a href="{% if request.GET.search %}
+            {% url "search" %}{% else %}
+            {% url "get_orders" %}{% endif %}" class="btn back-button">Назад</a>
         <form class="form-horizontal form-add form-add-order" method="post" action="">
             <h2 class="form-add__head">{{ page_title }}</h2>
             {% if request.GET.id %}
@@ -77,6 +79,38 @@
                     language: 'ru',
                     pickTime: false,
                     weekStart: 1
+                });
+                function get_get_params() {
+                    var need_get_params = ['page', 'length', 'sort', 'source', 'managers', 'search'];
+                    var get_params = "";
+                    var is_get_param = false;
+                    var all_get_params = window.location.search.substring(1).split("&");
+                    for (var i = 0; i < all_get_params.length; ++i) {
+                        for (var j = 0; j < need_get_params.length; ++j) {
+                            if (all_get_params[i].indexOf(need_get_params[j]) != -1) {
+                                is_get_param = true;
+                                break;
+                            }
+                        }
+                        if (is_get_param) {
+                            get_params += "&" + all_get_params[i];
+                        }
+                    }
+                   return get_params;
+                }
+
+                var get_params = get_get_params();
+
+                $('.form-add-order').submit(function(){
+                    var $this = $(this);
+                    var action = $this.attr('action');
+                    $this.attr('action', action + "?" + get_params.slice(1));
+
+                });
+                $('.back-button').click(function(){
+                    var $this = $(this);
+                    var href = $this.attr('href');
+                    $this.attr('href', href + "?" + get_params.slice(1));
                 });
             });
         })(jQuery);

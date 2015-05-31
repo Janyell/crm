@@ -84,7 +84,7 @@
                                     <label class="checkbox">
                                         <input class="checkbox_one" type="checkbox" name="id[]" value="{{ claim.pk }}"/>
                                     </label>
-                                {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
                                     <label class="checkbox">
                                         <input class="checkbox_one" type="checkbox" name="id[]" value="{{ claim.pk }}"/>
                                     </label>

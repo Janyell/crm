@@ -144,18 +144,18 @@
                                 </td>
                                 <td class="product-wrap">
                                     {% if order.bill_right_format != None %}
-                                        {% if order.debt_right_format and order.debt_right_format != 0 %}
+                                        {% if is_in_debt %}
                                             <a href="#bill-info" role="button" data-toggle="modal" class="get-bill-info red">
                                                 <div class="get-bill-info__head">
                                                     {{ order.bill_right_format }}
                                                 </div>
                                                 <div class="hidden get-bill-info__data">
                                                     <div class="bill-data__bill">{{ order.bill_right_format }}</div>
-                                                    <div class="client-data__brought_sum">{{ order.brought_sum_right_format }}</div>
-                                                    <div class="client-data__debt">{{ order.debt_right_format }}</div>
+                                                    <div class="bill-data__brought_sum">{{ order.brought_sum_right_format }}</div>
+                                                    <div class="bill-data__debt">{{ order.debt_right_format }}</div>
                                                 </div>
                                             </a>
-                                        {% elif order.debt_right_format == 0 %}
+                                        {% elif is_full_pay %}
                                             <span class="blue">
                                                 {{ order.bill_right_format }}
                                             </span>
@@ -203,12 +203,12 @@
                                 {% if user_role == 0 %}
                                     {% url 'get_old_orders' as get_old_orders_url %}
                                     {% if request.path == get_old_orders_url %}
-                                        <a class="btn" href="{% url "delete_from_archive" %}?id={{ order.pk }}">В заказы</a>
+                                        <a class="btn archive-button" href="{% url "delete_from_archive" %}?id={{ order.pk }}">В заказы</a>
                                     {% else %}
-                                        <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
+                                        <a class="btn archive-button" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
                                     {% endif %}
                                 {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
-                                    <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
+                                    <a class="btn archive-button" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
                                 {% endif %}
                                 </td>
                                 <td>
@@ -564,12 +564,15 @@
                 $(".add-button").click(function() {
                     $(this).attr("href", $(this).attr('href') {% if client_id %}+ "&history=1&"{% else %}+ "?"{% endif %} + get_params__slice);
                 });
+                $(".archive-button").click(function() {
+                    $(this).attr("href", $(this).attr('href') + get_params);
+                });
                 $('.get-bill-info').bind('click', function(){
                     var $bill_info__data = $('#bill-info').find('.modal-body');
                     var bill = $(this).find('.bill-data__bill').text();
                     $bill_info__data.find('.bill-info__bill > .bill-info__data').text(bill);
                     var brought_sum = $(this).find('.bill-data__brought_sum').text();
-                    $bill_info__data.find('.bill-info__brought_sum > .bill-info__data').text(brought_sum);
+                    $bill_info__data.find('.bill-info__brought-sum > .bill-info__data').text(brought_sum);
                     var debt = $(this).find('.bill-data__debt').text();
                     $bill_info__data.find('.bill-info__debt > .bill-info__data').text(debt);
                 });
