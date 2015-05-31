@@ -493,7 +493,18 @@ def search(request):
             order.bill_right_format = right_money_format(order.bill)
         order.brought_sum_right_format = 0
         order.debt_right_format = 0
+        order.is_in_debt = False
+        order.is_full_pay = False
         if order.brought_sum is not None and order.bill is not None:
+            if (order.bill - order.brought_sum) > 0:
+                order.is_in_debt = True
+                order.is_full_pay = False
+            else:
+                order.is_in_debt = False
+                order.is_full_pay = True
+            if order.bill_status == 3:
+                order.is_in_debt = False
+                order.is_full_pay = False
             order.brought_sum_right_format = right_money_format(order.brought_sum)
             order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
         order.files = []
