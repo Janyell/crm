@@ -505,6 +505,8 @@ def search(request):
                 order.is_in_debt = False
             order.brought_sum_right_format = right_money_format(order.brought_sum)
             order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
+        if order.is_full_pay or order.bill_status == 3:
+            order.is_in_debt = False
         order.files = []
         if Order_Files.objects.filter(order_id=order.id).all() is not None:
             for order_file in Order_Files.objects.filter(order_id=order.id).all():
