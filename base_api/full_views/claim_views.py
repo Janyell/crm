@@ -527,6 +527,8 @@ def full_get_claims(request):
             order.bill_status = 'Нужна доплата'
         elif order.bill_status == 2:
             order.bill_status = 'Оплачен'
+        elif order.bill_status == 4:
+            order.bill_status = 'Устно'
         else:
             order.bill_status = ''
         if order.bill != None:
@@ -557,6 +559,7 @@ def full_get_claims(request):
     out.update({'user_role': user_role})
     out.update({'page_title': "Заявки"})
     out.update({'claims': order_list})
+    out.update({'count': orders.count()})
     return render(request, 'get_claims.html', out)
 
 

@@ -706,6 +706,7 @@ def full_get_orders(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'orders': order_list})
+    out.update({'count': orders.count()})
     return render(request, 'get_orders.html', out)
 
 
@@ -798,6 +799,7 @@ def full_get_old_orders(request):
                     order.files.append(order_file)
     out.update({'page_title': "Архив заказов"})
     out.update({'orders': order_list})
+    out.update({'count': orders.count()})
     return render(request, 'get_orders.html', out)
 
 

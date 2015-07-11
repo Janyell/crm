@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from calendar import monthrange
-from dateutil import relativedelta
 from django.shortcuts import render, render_to_response
 from datetime import datetime, timedelta
 from base_api.full_views.order_views import right_money_format
