@@ -60,6 +60,7 @@ def full_get_products(request):
     out.update({'products': products})
     out.update({'product_form': form})
     out.update({'product_edit_form': product_edit_form})
+    out.update({'count': products.count()})
     return render(request, 'get_products.html', out)
 
 

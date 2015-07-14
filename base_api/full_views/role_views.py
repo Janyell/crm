@@ -131,4 +131,5 @@ def full_get_roles(request):
             r.role = "Руководство"
     out.update({'page_title': "Роли"})
     out.update({'roles': roles})
+    out.update({'count': roles.count()})
     return render(request, 'get_roles.html', out)

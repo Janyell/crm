@@ -104,4 +104,5 @@ def full_get_companies(request):
         c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
     out.update({'page_title': "Компании"})
     out.update({'companies': companies})
+    out.update({'count': companies.count()})
     return render(request, 'get_companies.html', out)

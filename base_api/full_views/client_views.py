@@ -389,6 +389,7 @@ def full_get_clients(request):
                     c.files.append(client_file)
     out.update({'page_title': "Клиенты"})
     out.update({'clients': client_list})
+    out.update({'count': clients.count()})
     return render(request, 'get_clients.html', out)
 
 
@@ -432,4 +433,5 @@ def full_get_interested_clients(request):
                     c.files.append(client_file)
     out.update({'page_title': "Люди"})
     out.update({'clients': client_list})
+    out.update({'count': clients.count()})
     return render(request, 'get_clients.html', out)
