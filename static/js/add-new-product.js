@@ -69,7 +69,7 @@
             var number = $this.find('.select-product__number').val();
             sum += price * number;
         });
-        $('#inputBroughtSum').val(sum);
+        $('#inputBill').val(sum);
     }
     $(document).on('change', '.select-product__price',function() {
        countSum();
