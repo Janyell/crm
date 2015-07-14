@@ -40,14 +40,14 @@
 			product_title = '<input type="text" class="select-product__title" name="select-product__title_' + product_id + '" placeholder="Другое">';
             add_product_select_selected_option(product_id);
 		}
-		$('.select-product-table__plus').before('<tr class="select-product_' + product_id + '">' +
+		$('.select-product-table__plus').before('<tr class="select-product select-product_' + product_id + '">' +
 			'<td>' + product_title + '</td>' +
             '<td><input type="number" min="0" value="'+ product_price +'" step="1" class="select-product__price" name="select-product__price_' + product_id + '" /></td>' +
 			'<td><input type="number" min="0" value="'+ number +'" step="1" class="select-product__number" name="select-product__number_' + product_id + '" /></td>' +
 			'<td><span class="btn btn-danger minus pull-right" data-productId="' + product_id + '">-</span></td>' +
 		'</tr>'
 		);
-
+        countSum();
 	});
 	$(document).on('click', '.minus', function(){
 		var product_id = $(this).attr('data-productId');
@@ -58,5 +58,23 @@
 			remove_product_select_option(product_id);
 		}
 		$( '.select-product_' + product_id).remove();
+        countSum();
 	});
+    function countSum() {
+        var $products = $('.select-product-table tr.select-product');
+        var sum = 0;
+        $products.each(function () {
+            var $this = $(this);
+            var price = $this.find('.select-product__price').val();
+            var number = $this.find('.select-product__number').val();
+            sum += price * number;
+        });
+        $('#inputBroughtSum').val(sum);
+    }
+    $(document).on('change', '.select-product__price',function() {
+       countSum();
+    });
+    $(document).on('change', '.select-product__number',function() {
+       countSum();
+    });
 })(jQuery);

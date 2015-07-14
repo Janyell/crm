@@ -260,9 +260,16 @@ th a {
     color: inherit;
 }
 .action-bar__checkbox {
-    padding: 8px;
+    padding: 5px 0 0 8px;
     float: left;
     margin-right: 20px;
+}
+.record-number {
+    padding: 5px 0 0 0;
+    text-align: center;
+}
+.record-number-wrap {
+    margin-left: 0 !important;
 }
 .form-massive {
     margin: 0;

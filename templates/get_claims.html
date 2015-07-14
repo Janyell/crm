@@ -183,7 +183,7 @@
             </table>
         </form>
         <div class="row-fluid">
-            <div class="span6">
+            <div class="span5">
                 <div class="action-bar">
                     <div class="action-bar__checkbox">
                         <label class="checkbox">
@@ -202,7 +202,12 @@
                     </div>
                 </div>
             </div>
-            <div class="span6">
+            <div class="span2 record-number-wrap">
+                <div class="record-number">
+                    Количество заявок: {{ count }}
+                </div>
+            </div>
+            <div class="span5">
                 <div class="dataTables_paginate paging_bootstrap pagination">
                     {% bootstrap_paginate claims range=5 previous_label="← Предыдущая" next_label="Следующая →" %}
                 </div>

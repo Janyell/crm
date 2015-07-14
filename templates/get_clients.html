@@ -110,7 +110,7 @@
                 </table>
             </form>
             <div class="row-fluid">
-                <div class="span6 action-bar">
+                <div class="span5 action-bar">
                     <div class="action-bar__checkbox">
                         <label class="checkbox">
                             <input class="checkbox_all" type="checkbox"/> Для всех
@@ -122,7 +122,12 @@
                         </a>
                     </div>
                 </div>
-                <div class="span6">
+                <div class="span2 record-number-wrap">
+                    <div class="record-number">
+                        Количество клиентов: {{ count }}
+                    </div>
+                </div>
+                <div class="span5">
                     <div class="dataTables_paginate paging_bootstrap pagination">
                         {% bootstrap_paginate clients range=5 previous_label="← Предыдущая" next_label="Следующая →" %}
                     </div>
