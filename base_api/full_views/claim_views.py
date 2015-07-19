@@ -288,6 +288,8 @@ def full_add_edit_claim(request):
                         count_of_products = request.POST[name_of_pr]
                         price_of_pr = 'select-product__price_' + id_of_pr
                         price_of_products = request.POST[price_of_pr]
+                        if not price_of_products:
+                            price_of_products = 0
                         if int(count_of_products) > 0:
                             product = Products.objects.create(title=title_of_product, price=price_of_products)
                 else:
@@ -295,9 +297,12 @@ def full_add_edit_claim(request):
                     count_of_products = request.POST[name_of_pr]
                     price_of_pr = 'select-product__price_' + id_of_pr
                     price_of_products = request.POST[price_of_pr]
-                    product = Products.objects.get(id=id_of_pr, is_deleted=0)
-                    product.price = price_of_products
-                    product.save(force_update=True)
+                    try:
+                        product = Products.objects.get(id=id_of_pr, is_deleted=0)
+                        product.price = price_of_products
+                        product.save(force_update=True)
+                    except Exception:
+                        price_of_products = 0
                 if int(count_of_products) > 0:
                     is_claim_create = True
                     if new_claim_was_not_created:

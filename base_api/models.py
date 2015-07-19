@@ -149,7 +149,7 @@ class Orders(models.Model):
     bill = models.IntegerField(null=True, blank=True)
     payment_date = UnixTimestampField(blank=True, null=True)
     IN_PRODUCTION = 0
-    SHIPPED = 1
+    SHIPPED = -1
     READY = 2
     ORDER_STATUS_CHOICES = (
         (IN_PRODUCTION, 'В производстве'),
@@ -173,7 +173,8 @@ class Orders(models.Model):
     ready_date = UnixTimestampField(blank=True, null=True)
     comment = models.TextField(null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
-    order_date = UnixTimestampField(auto_created=True)
+    order_date = UnixTimestampField(default=datetime.now())
+    # order_date = UnixTimestampField(auto_created=True)
     city = models.CharField(max_length=256, null=True, blank=True)
     in_archive = models.BooleanField(default=0)
     account_number = models.CharField(max_length=50, null=True, blank=True)

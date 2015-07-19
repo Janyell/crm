@@ -354,6 +354,8 @@ def full_add_edit_order(request):
                         price_of_pr = 'select-product__price_' + id_of_pr
                         price_of_products = request.POST[price_of_pr]
                         product.price = price_of_products
+                        if not price_of_products:
+                            price_of_products = 0
                         if int(count_of_products) > 0:
                             product = Products.objects.create(title=title_of_product, price=price_of_products)
                 else:
@@ -361,9 +363,12 @@ def full_add_edit_order(request):
                     count_of_products = request.POST[name_of_pr]
                     price_of_pr = 'select-product__price_' + id_of_pr
                     price_of_products = request.POST[price_of_pr]
-                    product = Products.objects.get(id=id_of_pr, is_deleted=0)
-                    product.price = price_of_products
-                    product.save(force_update=True)
+                    try:
+                        product = Products.objects.get(id=id_of_pr, is_deleted=0)
+                        product.price = price_of_products
+                        product.save(force_update=True)
+                    except Exception:
+                        price_of_products = 0
                 if int(count_of_products) > 0:
                     is_order_create = True
                     if new_order_was_not_created:
@@ -669,7 +674,7 @@ def full_get_orders(request):
         order.products = products_list
         if order.order_status == 0:
             order.order_status = 'В производстве'
-        elif order.order_status == 1:
+        elif order.order_status == -1:
             order.order_status = 'Отгружен'
             if order.shipped_date is not None:
                 order.is_shipped = 1
@@ -763,7 +768,7 @@ def full_get_old_orders(request):
         order.products = products_list
         if order.order_status == 0:
             order.order_status = 'В производстве'
-        elif order.order_status == 1:
+        elif order.order_status == -1:
             order.order_status = 'Отгружен'
             if order.shipped_date is not None:
                 order.is_shipped = 1

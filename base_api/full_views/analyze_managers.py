@@ -96,7 +96,10 @@ def full_analyze_managers(request):
                     sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
                 for order in calls_orders:
-                    data = str(order.order_date)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                    else:
+                        data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_day = data[8:]
@@ -105,7 +108,10 @@ def full_analyze_managers(request):
                     if data_year == current_year and data_mounth == current_mounth:
                         number_call_data_count[int(data_day) - 1] += 1
                 for order in bill_orders:
-                    data = str(order.order_date)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                    else:
+                        data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_day = data[8:]
@@ -128,14 +134,20 @@ def full_analyze_managers(request):
                             sum_shipped_data_count[int(data_day) - 1] += int(order.bill)
                 period_str = period
                 for order in sources_orders:
-                    data = str(order.order_date)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                    else:
+                        data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
                     if data_year == current_year and data_mounth == current_mounth and (order.source - 3) >= 0:
                         sources_orders_count[order.source - 3] += 1
                 for order in sources_claims:
-                    data = str(order.order_date)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                    else:
+                        data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
@@ -162,14 +174,20 @@ def full_analyze_managers(request):
                     sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
                 for order in calls_orders:
-                    data = str(order.order_date)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                    else:
+                        data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
                     if data_year == current_year:
                         number_call_data_count[int(data_mounth) - 1] += 1
                 for order in bill_orders:
-                    data = str(order.order_date)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                    else:
+                        data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
@@ -178,7 +196,10 @@ def full_analyze_managers(request):
                         if order.bill is not None:
                             sum_bill_data_count[int(data_mounth) - 1] += int(order.bill)
                 for order in shipped_orders:
-                    data = str(order.shipped_date)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                    else:
+                        data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
@@ -200,14 +221,20 @@ def full_analyze_managers(request):
                 period_str.append('Ноябрь')
                 period_str.append('Декабрь')
                 for order in sources_orders:
-                    data = str(order.order_date)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                    else:
+                        data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
                     if data_year == current_year and (order.source - 3) >= 0:
                         sources_orders_count[order.source - 3] += 1
                 for order in sources_claims:
-                    data = str(order.order_date)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                    else:
+                        data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
@@ -260,7 +287,10 @@ def full_analyze_managers(request):
                 #     sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
                 for order in calls_orders:
                     if order.order_date is not None:
-                        data = str(order.order_date)
+                        if order.shipped_date:
+                            data = str(order.shipped_date)
+                        else:
+                            data = str(order.order_date)
                         data_mounth = data[5:]
                         data_mounth = data_mounth[:2]
                         data_year = data[:4]
@@ -269,7 +299,10 @@ def full_analyze_managers(request):
                         i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
                         number_call_data_count[i] += 1
                 for order in bill_orders:
-                    data = str(order.order_date)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                    else:
+                        data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]

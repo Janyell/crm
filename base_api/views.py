@@ -480,7 +480,7 @@ def search(request):
         order.products = products_list
         if order.order_status == 0:
             order.order_status = 'В производстве'
-        elif order.order_status == 1:
+        elif order.order_status == -1:
             order.order_status = 'Отгружен'
             if order.shipped_date is not None:
                 order.is_shipped = 1
@@ -539,7 +539,7 @@ def search(request):
         order.products = products_list
         if order.order_status == 0:
             order.order_status = 'В производстве'
-        elif order.order_status == 1:
+        elif order.order_status == -1:
             order.order_status = 'Отгружен'
             if order.shipped_date is not None:
                 order.is_shipped = 1
