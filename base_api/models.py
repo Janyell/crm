@@ -189,6 +189,7 @@ class Orders(models.Model):
 class Products(models.Model):
     title = models.CharField(max_length=255)
     price = models.IntegerField(default=0, blank=True)
+    is_active = models.BooleanField(default=1)
     is_deleted = models.BooleanField(default=0)
 
 

@@ -46,7 +46,8 @@ def full_get_products(request):
         if form.is_valid():
             title = form.cleaned_data['title']
             price = form.cleaned_data['price']
-            new_product = Products.objects.create(title=title, price=price)
+            is_active = form.cleaned_data['is_active']
+            new_product = Products.objects.create(title=title, price=price, is_active=is_active)
             return HttpResponseRedirect('/products/' + get_params)
         else:
             out.update({"error": 1})
@@ -80,8 +81,10 @@ def full_edit_product(request):
         product = Products.objects.get(id=id)
         title = request.POST['title']
         price = request.POST['price']
+        is_active = request.POST['is_active']
         product.title = title
         product.price = price
+        product.is_active = is_active
         product.save(force_update=True)
         return HttpResponseRedirect('/products/' + get_params)
     return HttpResponseRedirect('/products/' + get_params)

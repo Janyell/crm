@@ -186,7 +186,8 @@ class ProductForm(ModelForm):
         widgets = {
             'title': TextInput(attrs={'id': "inputTitle",
                                       'required': 1}),
-            'price': NumberInput(attrs={'id': "inputPrice"})
+            'price': NumberInput(attrs={'id': "inputPrice"}),
+            'is_active': NullBooleanSelect(attrs={'id': "selectIsActive"})
         }
 
 
@@ -197,7 +198,8 @@ class ProductEditForm(ModelForm):
         widgets = {
             'title': TextInput(attrs={'id': "inputEditTitle",
                                       'required': 1}),
-            'price': NumberInput(attrs={'id': "inputEditPrice"})
+            'price': NumberInput(attrs={'id': "inputEditPrice"}),
+            'is_active': NullBooleanSelect(attrs={'id': "selectIsActive"})
         }
 
 

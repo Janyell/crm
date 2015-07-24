@@ -145,3 +145,33 @@ def massive_change_manager_in_order(request):
     if 'is_claim' in request.POST:
         return HttpResponseRedirect('/claims/' + get_params)
     return HttpResponseRedirect('/orders/' + get_params)
+
+
+def massive_deactivate_product(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        product = Products.objects.get(pk=id, is_deleted=0)
+        product.is_active = 0
+        product.save(update_fields=["is_active"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/products/' + get_params)
+
+
+def massive_activate_product(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        product = Products.objects.get(pk=id, is_deleted=0)
+        product.is_active = 1
+        product.save(update_fields=["is_active"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/products/' + get_params)
