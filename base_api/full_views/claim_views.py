@@ -73,7 +73,7 @@ def full_add_edit_claim(request):
                     form = ClaimsForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                    'comment': comment, 'brought_sum': brought_sum})
-                form.products = Products.objects.filter(is_deleted=0)
+                form.products = Products.objects.filter(is_deleted=0, is_active=1)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
                     if str(product.id) in products_list:
@@ -110,7 +110,7 @@ def full_add_edit_claim(request):
                         form = ClaimsForm({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                        'comment': comment, 'brought_sum': brought_sum})
-                    form.products = Products.objects.filter(is_deleted=0)
+                    form.products = Products.objects.filter(is_deleted=0, is_active=1)
                     products_list = request.POST.getlist('products[]')
                     for product in form.products:
                         if str(product.id) in products_list:
@@ -175,7 +175,7 @@ def full_add_edit_claim(request):
                             form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
                                            'comment': comment, 'brought_sum': brought_sum})
-                        form.products = Products.objects.filter(is_deleted=0)
+                        form.products = Products.objects.filter(is_deleted=0, is_active=1)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
                             if str(product.id) in products_list:
@@ -269,7 +269,7 @@ def full_add_edit_claim(request):
                         form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
                                            'comment': comment, 'brought_sum': brought_sum})
-                        form.products = Products.objects.filter(is_deleted=0)
+                        form.products = Products.objects.filter(is_deleted=0, is_active=1)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
                             if str(product.id) in products_list:
@@ -337,7 +337,7 @@ def full_add_edit_claim(request):
                 form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                    'bill_status': bill_status, 'account_number': account_number,
                                    'comment': comment, 'brought_sum': brought_sum})
-                form.products = Products.objects.filter(is_deleted=0)
+                form.products = Products.objects.filter(is_deleted=0, is_active=1)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
                     if str(product.id) in products_list:
@@ -366,7 +366,7 @@ def full_add_edit_claim(request):
             form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                'bill_status': bill_status, 'account_number': account_number,
                                'comment': comment, 'brought_sum': brought_sum})
-            form.products = Products.objects.filter(is_deleted=0)
+            form.products = Products.objects.filter(is_deleted=0, is_active=1)
             products_list = request.POST.getlist('products[]')
             for product in form.products:
                 if str(product.id) in products_list:
@@ -391,7 +391,7 @@ def full_add_edit_claim(request):
             form = ClaimsForm({'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum})
-            form.products = Products.objects.filter(is_deleted=0)
+            form.products = Products.objects.filter(is_deleted=0, is_active=1)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
             for pr in order_products:
@@ -412,7 +412,7 @@ def full_add_edit_claim(request):
             client_id = request.GET['client-id']
             client = Clients.objects.get(id=client_id, is_deleted=0)
             form = ClaimsForm({'client': client})
-            form.products = Products.objects.filter(is_deleted=0)
+            form.products = Products.objects.filter(is_deleted=0, is_active=1)
             for product in form.products:
                 product.price_right_format = right_money_format(product.price)
             out.update({'order_form': form})
@@ -441,7 +441,7 @@ def full_add_edit_claim(request):
                 form = ClaimsForm({'client': claim.client, 'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum})
-            form.products = Products.objects.filter(is_deleted=0)
+            form.products = Products.objects.filter(is_deleted=0, is_active=1)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
             for pr in order_products:
@@ -460,7 +460,7 @@ def full_add_edit_claim(request):
                                                                         required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = ClaimsForm()
-            form.products = Products.objects.filter(is_deleted=0)
+            form.products = Products.objects.filter(is_deleted=0, is_active=1)
             for product in form.products:
                 product.price_right_format = right_money_format(product.price)
             out.update({'order_form': form})

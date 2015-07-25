@@ -428,6 +428,30 @@ def made_excel(request):
     return HttpResponseRedirect(Order_Files.objects.get(id=1).file.url)
 
 
+def made_excel_products(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role != 0:
+        return HttpResponseRedirect('/oops/')
+    filename = MEDIA_ROOT + '/' + str('uploads/products.xlsx')
+    wb = openpyxl.load_workbook(filename=filename)
+    sheet = wb['list']
+    products = Products.objects.filter(is_deleted=0).all()
+    row_index = 1
+    sheet.cell(row=row_index, column=1).value = "Id"
+    sheet.cell(row=row_index, column=2).value = "Название"
+    for product in products:
+        row_index += 1
+        column_index = 1
+        sheet.cell(row=row_index, column=column_index).value = product.id
+        column_index += 1
+        sheet.cell(row=row_index, column=column_index).value = product.title
+    # сохраняем данные
+    wb.save(filename)
+    return HttpResponseRedirect('/')
+
+
 def analyze_debtors(request):
     return full_analyze_debtors(request)
 
