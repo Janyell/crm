@@ -72,7 +72,7 @@ def full_view_analyzed_product(request):
                 sum_of_pr.append(0)
             for pr in product_in_orders:
                 order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
-                if order and order.order_status == 1:
+                if order and order.order_status == -1:
                     data = str(order.order_date)
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
@@ -96,7 +96,7 @@ def full_view_analyzed_product(request):
                 sum_of_pr.append(0)
             for pr in product_in_orders:
                 order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
-                if order and order.order_status == 1:
+                if order and order.order_status == -1:
                     data = order.order_date.date()
                     if start_period_time <= data and data <= end_period_time:
                         amount[(data - start_period_time).days] = int(amount[(data - start_period_time).days] + pr.count_of_products)
@@ -116,7 +116,7 @@ def full_view_analyzed_product(request):
                 sum_of_pr.append(0)
             for pr in product_in_orders:
                 order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
-                if order and order.order_status == 1:
+                if order and order.order_status == -1:
                     data = order.order_date.date()
                     now_year = str(data)[:4]
                     now_month = str(data)[:7][-2:]

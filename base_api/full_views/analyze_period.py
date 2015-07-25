@@ -35,7 +35,7 @@ def full_analyze_period(request):
             orders = Order_Product.objects.filter(is_deleted=0)\
                                             .filter(order__order_date__gte=since_date)\
                                             .filter(order__order_date__lte=until_date)\
-                                            .filter(Q(order__order_status=1) | Q(order__order_status=2))\
+                                            .filter(Q(order__order_status=-1) | Q(order__order_status=2))\
                                             .values("product__title")\
                                             .annotate(number=Sum('count_of_products'))\
                                             .order_by()

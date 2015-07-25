@@ -85,13 +85,13 @@ def full_analyze_managers(request):
                         number_bill_data_count.append(0)
                 if manager_id == 'all':
                     calls_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0) | Q(bill_status=4)).filter(is_deleted=0)
-                    shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
+                    shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=-1)
                     bill_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0)).filter(is_deleted=0)
                     sources_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(is_deleted=0, is_claim=1)
                 else:
                     calls_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0) | Q(bill_status=4)).filter(role_id=manager.id, is_deleted=0)
-                    shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=1)
+                    shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=-1)
                     bill_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0)).filter(role_id=manager.id, is_deleted=0)
                     sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
@@ -163,13 +163,13 @@ def full_analyze_managers(request):
                     number_bill_data_count.append(0)
                 if manager_id == 'all':
                     calls_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0) | Q(bill_status=4)).filter(is_deleted=0)
-                    shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
+                    shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=-1)
                     bill_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0)).filter(is_deleted=0)
                     sources_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(is_deleted=0, is_claim=1)
                 else:
                     calls_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0) | Q(bill_status=4)).filter(role_id=manager.id, is_deleted=0)
-                    shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=1)
+                    shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=-1)
                     bill_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0)).filter(role_id=manager.id, is_deleted=0)
                     sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)
@@ -261,13 +261,13 @@ def full_analyze_managers(request):
                     number_bill_data_count.append(0)
                 if manager_id == 'all':
                     calls_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0) | Q(bill_status=4)).filter(is_deleted=0)
-                    shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
+                    shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=-1)
                     bill_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0)).filter(is_deleted=0)
                     sources_orders = Orders.objects.filter(is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(is_deleted=0, is_claim=1)
                 else:
                     calls_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0) | Q(bill_status=4)).filter(role_id=manager.id, is_deleted=0)
-                    shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=1)
+                    shipped_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0, order_status=-1)
                     bill_orders = Orders.objects.filter(Q(bill_status=0) | Q(order_status=0)).filter(role_id=manager.id, is_deleted=0)
                     sources_orders = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=0)
                     sources_claims = Orders.objects.filter(role_id=manager.id, is_deleted=0, is_claim=1)

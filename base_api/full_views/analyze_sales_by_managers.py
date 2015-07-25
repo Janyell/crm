@@ -51,7 +51,7 @@ def full_analyze_sales_by_managers(request):
                     number_bill_data_count.append(0)
             clients_orders = Clients.objects.filter(is_deleted=0, is_interested=1)
             calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
-            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
+            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=-1)
             bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
             for order in clients_orders:
                 data = str(order.creation_date)
@@ -98,7 +98,7 @@ def full_analyze_sales_by_managers(request):
                 number_bill_data_count.append(0)
             clients_orders = Clients.objects.filter(is_deleted=0, is_interested=1)
             calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
-            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
+            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=-1)
             bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
             for order in clients_orders:
                 data = str(order.creation_date)
@@ -156,7 +156,7 @@ def full_analyze_sales_by_managers(request):
                 number_bill_data_count.append(0)
             clients_orders = Clients.objects.filter(is_deleted=0, is_interested=1)
             calls_orders = Orders.objects.filter(client__is_interested=0, is_deleted=0, is_claim=0)
-            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=1)
+            shipped_orders = Orders.objects.filter(is_deleted=0, is_claim=0, order_status=-1)
             bill_orders = Orders.objects.filter(is_deleted=0, is_claim=1)
             for order in clients_orders:
                 if order.creation_date is not None:
