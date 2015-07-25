@@ -548,7 +548,7 @@ def full_add_edit_order(request):
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
                                'brought_sum': order.brought_sum})
-            form.products = Products.objects.filter(is_deleted=0, is_active=1)
+            form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
             for pr in order_products:

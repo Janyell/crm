@@ -441,7 +441,7 @@ def full_add_edit_claim(request):
                 form = ClaimsForm({'client': claim.client, 'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum})
-            form.products = Products.objects.filter(is_deleted=0, is_active=1)
+            form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
             for pr in order_products:
