@@ -146,13 +146,11 @@ def full_analyze_managers(request):
                 for order in sources_claims:
                     if order.shipped_date:
                         data = str(order.shipped_date)
-                    else:
-                        data = str(order.order_date)
-                    data_mounth = data[5:]
-                    data_mounth = data_mounth[:2]
-                    data_year = data[:4]
-                    if data_year == current_year and data_mounth == current_mounth and (order.source - 3) >= 0:
-                        sources_claims_count[order.source - 3] += 1
+                        data_mounth = data[5:]
+                        data_mounth = data_mounth[:2]
+                        data_year = data[:4]
+                        if data_year == current_year and data_mounth == current_mounth and (order.source - 3) >= 0:
+                            sources_claims_count[order.source - 3] += 1
             elif type_of_period == 'year':
                 for i in range(12):
                     period.append(i+1)
@@ -198,15 +196,13 @@ def full_analyze_managers(request):
                 for order in shipped_orders:
                     if order.shipped_date:
                         data = str(order.shipped_date)
-                    else:
-                        data = str(order.order_date)
-                    data_mounth = data[5:]
-                    data_mounth = data_mounth[:2]
-                    data_year = data[:4]
-                    if data_year == current_year:
-                        number_shipped_data_count[int(data_mounth) - 1] += 1
-                        if order.bill is not None:
-                            sum_shipped_data_count[int(data_mounth) - 1] += int(order.bill)
+                        data_mounth = data[5:]
+                        data_mounth = data_mounth[:2]
+                        data_year = data[:4]
+                        if data_year == current_year:
+                            number_shipped_data_count[int(data_mounth) - 1] += 1
+                            if order.bill is not None:
+                                sum_shipped_data_count[int(data_mounth) - 1] += int(order.bill)
                 period_str = []
                 period_str.append('Январь')
                 period_str.append('Февраль')
@@ -313,16 +309,17 @@ def full_analyze_managers(request):
                     if order.bill is not None:
                         sum_bill_data_count[i] += int(order.bill)
                 for order in shipped_orders:
-                    data = str(order.shipped_date)
-                    data_mounth = data[5:]
-                    data_mounth = data_mounth[:2]
-                    data_year = data[:4]
-                    data_year_and_mounth = data[:7]
-                    current_year_and_mounth = current_year + '-' + current_mounth
-                    i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
-                    number_shipped_data_count[i] += 1
-                    if order.bill is not None:
-                        sum_shipped_data_count[i] += int(order.bill)
+                    if order.shipped_date:
+                        data = str(order.shipped_date)
+                        data_mounth = data[5:]
+                        data_mounth = data_mounth[:2]
+                        data_year = data[:4]
+                        data_year_and_mounth = data[:7]
+                        current_year_and_mounth = current_year + '-' + current_mounth
+                        i = (int(current_year) - int(data_year)) * 12 + int(current_mounth) - int(data_mounth)
+                        number_shipped_data_count[i] += 1
+                        if order.bill is not None:
+                            sum_shipped_data_count[i] += int(order.bill)
                 period_str = []
                 for i in range(amount_of_period):
                     if ((i+int(first_data_mounth)-1) % 12) == 1:
