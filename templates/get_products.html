@@ -33,9 +33,9 @@
                                 <td class="product-wrap">{{ product.price_right_format }}</td>
                                 <td>
                                     {% if product.is_active == True %}
-                                        активный
+                                        Активный
                                     {% else %}
-                                        неактивный
+                                        Неактивный
                                     {% endif %}
                                 </td>
                                 <td>
@@ -134,6 +134,14 @@
                             </label>
                             <div class="controls">
                                 {{ product_edit_form.price }}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="inputEditPrice">
+                                Статус
+                            </label>
+                            <div class="controls">
+                                {{ product_edit_form.is_active }}
                             </div>
                         </div>
                         <div class="form-add__tips">
