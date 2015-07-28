@@ -137,6 +137,7 @@
                         <option value="{{ product.pk }}"
                             {% if product.count_of_products %}
                                 data-number="{{ product.count_of_products }}"
+                                data-price="{{ product.price }}"
                                 selected="selected"
                             {% endif %}
                         >
@@ -384,8 +385,15 @@
                 });
                 {% endif %}
                 $('select.product-select option:selected').each(function() {
-                    var product_id = $(this).attr('value');
-                    $('.plus[data-productId="' + product_id + '"]').click();
+                    var $this = $(this);
+                    var product_id = $this.attr('value');
+                    var $plus = $('.plus[data-productId="' + product_id + '"]');
+                    if ($plus.length) {
+                        $plus.click();
+                    }
+                    else {
+                        $this.click();
+                    }
                 });
 
                 var $select_client = $('#id_client');

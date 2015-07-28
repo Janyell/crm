@@ -44,6 +44,7 @@
                                         <div class="hidden edit-product__data">
                                             <div class="product-data__title">{{ product.title }}</div>
                                             <div class="product-data__price">{{ product.price }}</div>
+                                            <div class="product-data__status">{% if product.is_active == True %}1{% else %}0{% endif %}</div>
                                         </div>
                                     </a>
                                 </td>
@@ -195,6 +196,8 @@
                             $edit_product__data.find('#inputEditTitle').val(title);
                             var price = $(this).find('.product-data__price').text();
                             $edit_product__data.find('#inputEditPrice').val(price);
+                            var status = $(this).find('.product-data__status').text();
+                            $edit_product__data.find('#selectIsActive').val(status);
                         });
 
                         var $checkboxes_one = $('.checkbox_one');

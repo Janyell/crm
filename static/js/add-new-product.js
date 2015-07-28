@@ -77,4 +77,18 @@
     $(document).on('change', '.select-product__number',function() {
        countSum();
     });
+	function addProductToSelectTable(id, title, price, number) {
+		$('.select-product-table__plus').before('<tr class="select-product select-product_' + id + '">' +
+			'<td>' + title + '</td>' +
+            '<td><input type="number" min="0" value="'+ price +'" step="1" class="select-product__price" name="select-product__price_' + id + '" /></td>' +
+			'<td><input type="number" min="0" value="'+ number +'" step="1" class="select-product__number" name="select-product__number_' + id + '" /></td>' +
+			'<td><span class="btn btn-danger minus pull-right" data-productId="' + id + '">-</span></td>' +
+		'</tr>'
+		);
+        countSum();
+	}
+	$(document).on('click', 'select.product-select option', function() {
+		var $this = $(this);
+		addProductToSelectTable($this.attr('value'), $this.text(), $this.attr('data-number'), $this.attr('data-price'));
+	});
 })(jQuery);
