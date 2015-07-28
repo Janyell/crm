@@ -189,7 +189,6 @@ class ProductForm(ModelForm):
             'title': TextInput(attrs={'id': "inputTitle",
                                       'required': 1}),
             'price': NumberInput(attrs={'id': "inputPrice"}),
-            'is_active': Select(attrs={'id': "selectIsActive"}, choices=PRODUCT_STATUS_FOR_PRODUCT),
         }
 
 
