@@ -146,11 +146,13 @@ def full_analyze_managers(request):
                 for order in sources_claims:
                     if order.shipped_date:
                         data = str(order.shipped_date)
-                        data_mounth = data[5:]
-                        data_mounth = data_mounth[:2]
-                        data_year = data[:4]
-                        if data_year == current_year and data_mounth == current_mounth and (order.source - 3) >= 0:
-                            sources_claims_count[order.source - 3] += 1
+                    else:
+                        data = str(order.order_date)
+                    data_mounth = data[5:]
+                    data_mounth = data_mounth[:2]
+                    data_year = data[:4]
+                    if data_year == current_year and data_mounth == current_mounth and (order.source - 3) >= 0:
+                        sources_claims_count[order.source - 3] += 1
             elif type_of_period == 'year':
                 for i in range(12):
                     period.append(i+1)

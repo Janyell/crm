@@ -13,6 +13,8 @@ BILL_STATUS_CHOICES_FOR_CLAIM = (('0', 'Выставлен'),
 BILL_STATUS_CHOICES_FOR_ORDER = (('1', 'Нужна доплата'),
                                  ('3', 'Отсрочка платежа'),
                                  ('2', 'Оплачен'))
+PRODUCT_STATUS_FOR_PRODUCT = (('1', 'Активный'),
+                              ('0', 'Неактивный'))
 
 
 class CompanyModelChoiceField(ModelChoiceField):
@@ -187,7 +189,7 @@ class ProductForm(ModelForm):
             'title': TextInput(attrs={'id': "inputTitle",
                                       'required': 1}),
             'price': NumberInput(attrs={'id': "inputPrice"}),
-            'is_active': NullBooleanSelect(attrs={'id': "selectIsActive"})
+            'is_active': Select(attrs={'id': "selectIsActive"}, choices=PRODUCT_STATUS_FOR_PRODUCT),
         }
 
 
@@ -199,7 +201,7 @@ class ProductEditForm(ModelForm):
             'title': TextInput(attrs={'id': "inputEditTitle",
                                       'required': 1}),
             'price': NumberInput(attrs={'id': "inputEditPrice"}),
-            'is_active': NullBooleanSelect(attrs={'id': "selectIsActive"})
+            'is_active': Select(attrs={'id': "selectIsActive"}, choices=PRODUCT_STATUS_FOR_PRODUCT),
         }
 
 
