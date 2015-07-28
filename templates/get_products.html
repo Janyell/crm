@@ -1,7 +1,7 @@
 {%extends "base.html"%}
 
 {%block content%}
-    <div class="container container_mini-width">
+    <div class="container">
         <h2 class="center">{{ page_title }}</h2>
             {% if error == 1 %}
                 <div class="text-error">
@@ -16,6 +16,7 @@
                             <th></th>
                             <th>Название</th>
                             <th>Цена</th>
+                            <th>Статус</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -30,6 +31,13 @@
                                 </td>
                                 <td>{{ product.title }}</td>
                                 <td class="product-wrap">{{ product.price_right_format }}</td>
+                                <td>
+                                    {% if product.is_active == True %}
+                                        активный
+                                    {% else %}
+                                        неактивный
+                                    {% endif %}
+                                </td>
                                 <td>
                                     <a class="btn btn-mini edit-button" data-toggle="modal" href="#edit-product" value="{{ product.pk }}">
                                         <i class="icon-pencil"></i>
@@ -50,13 +58,19 @@
                 </table>
             </form>
             <div class="row-fluid datatables_massive_product">
-                <div class="span4 action-bar">
+                <div class="span6 action-bar">
                     <div class="action-bar__checkbox">
                         <label class="checkbox">
                             <input class="checkbox_all" type="checkbox"/> Для всех
                         </label>
                     </div>
                     <div class="action-bar__action">
+                        <a class="btn massive-activate-button">
+                            Активировать
+                        </a>
+                        <a class="btn massive-deactivate-button">
+                            Деактивировать
+                        </a>
                         <a class="btn massive-delete-button">
                             <i class="icon-remove"></i>
                         </a>
@@ -147,8 +161,8 @@
                                 "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
                             },
                             "aoColumnDefs": [
-                                { "bSortable": false, "aTargets": [0, 3, 4 ] },
-                                { "bSearchable": false, "aTargets": [0, 3, 4 ] }
+                                { "bSortable": false, "aTargets": [0, 4, 5 ] },
+                                { "bSearchable": false, "aTargets": [0, 4, 5 ] }
                             ],
                             "order": [1, 'asc' ],
                             "bInfo": false,
@@ -201,7 +215,7 @@
                                 }
                             }
                         });
-
+                        var $form = $('.form-massive');
                         var $massive_delete_ok = $('#massive-delete__ok');
                         $('#inputDelete').change(function() {
                             if($(this).val() == "УДАЛИТЬ") {
@@ -212,7 +226,15 @@
                         });
                         $massive_delete_ok.click(function(){
                             var info = table.page.info();
-                            $('.form-massive').attr('action', '{% url "massive_delete_products" %}?page=' + (info.page + 1) + '&length=' + info.length).submit();
+                            $form.attr('action', '{% url "massive_delete_products" %}?page=' + (info.page + 1) + '&length=' + info.length).submit();
+                        });
+                        $('.massive-activate-button').click(function(){
+                            var info = table.page.info();
+                            $form.attr('action', '{% url "massive_activate_product" %}?page=' + (info.page + 1) + '&length=' + info.length).submit();
+                        });
+                        $('.massive-deactivate-button').click(function(){
+                            var info = table.page.info();
+                            $form.attr('action', '{% url "massive_deactivate_product" %}?page=' + (info.page + 1) + '&length=' + info.length).submit();
                         });
                     });
                 })(jQuery);

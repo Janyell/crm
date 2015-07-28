@@ -95,16 +95,18 @@
                 <tbody>
                     {% if order_form.products %}
                         {% for product in order_form.products %}
-                            <tr>
-                                <td>{{ product.title }}</td>
-                                <td class="product-wrap">
-                                    {{ product.price_right_format }}
-                                    <div class="hidden">{{ product.price }}</div>
-                                </td>
-                                <td>
-                                    <span class="btn btn-success plus pull-right" data-productId="{{ product.pk }}">+</span>
-                                </td>
-                            </tr>
+                            {% if product.is_active == True %}
+                                <tr>
+                                    <td>{{ product.title }}</td>
+                                    <td class="product-wrap">
+                                        {{ product.price_right_format }}
+                                        <div class="hidden">{{ product.price }}</div>
+                                    </td>
+                                    <td>
+                                        <span class="btn btn-success plus pull-right" data-productId="{{ product.pk }}">+</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
                 </tbody>
