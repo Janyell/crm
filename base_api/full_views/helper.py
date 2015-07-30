@@ -20,4 +20,7 @@ def get_request_param_as_string(request):
     if 'source' in request.GET:
         source = int(request.GET.get('source'))
         get_params += 'source=' + str(source) + '&'
+    if 'search' in request.GET:
+        search = unicode(request.GET['search'])
+        get_params += 'search=' + unicode(search) + '&'
     return get_params
