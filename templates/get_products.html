@@ -177,20 +177,24 @@
                             "bInfo": false,
                             {% if request.GET.length and start >= 0 %}
                                 "iDisplayLength": {{ request.GET.length }},
-                                "iDisplayStart": {{ start }}
+                                "iDisplayStart": {{ start }},
+                            {% endif %}
+                            {% if request.GET.search %}
+                                "oSearch": {"sSearch": "{{ request.GET.search }}"}
                             {% endif %}
                         });
                         var table = $product_table.DataTable();
+                        var $filter_input = $('#product-table_filter').find('input');
                         $('.delete-button').bind('click', function(){
                             var id = $(this).attr('value');
                             var info = table.page.info();
-                            $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length});
+                            $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
                         });
                         var $form_edit_product = $('.form-edit-product');
                         $('.edit-button').bind('click', function(){
                             var id = $(this).attr('value');
                             var info = table.page.info();
-                            $form_edit_product.attr({'action': '{% url "edit_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length});
+                            $form_edit_product.attr({'action': '{% url "edit_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
                             var $edit_product__data = $('#edit-product').find('.modal-body');
                             var title = $(this).find('.product-data__title').text();
                             $edit_product__data.find('#inputEditTitle').val(title);
@@ -237,15 +241,15 @@
                         });
                         $massive_delete_ok.click(function(){
                             var info = table.page.info();
-                            $form.attr('action', '{% url "massive_delete_products" %}?page=' + (info.page + 1) + '&length=' + info.length).submit();
+                            $form.attr('action', '{% url "massive_delete_products" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
                         $('.massive-activate-button').click(function(){
                             var info = table.page.info();
-                            $form.attr('action', '{% url "massive_activate_product" %}?page=' + (info.page + 1) + '&length=' + info.length).submit();
+                            $form.attr('action', '{% url "massive_activate_product" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
                         $('.massive-deactivate-button').click(function(){
                             var info = table.page.info();
-                            $form.attr('action', '{% url "massive_deactivate_product" %}?page=' + (info.page + 1) + '&length=' + info.length).submit();
+                            $form.attr('action', '{% url "massive_deactivate_product" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
                     });
                 })(jQuery);
@@ -287,8 +291,9 @@
                     $(document).ready(function(){
                         $('#add__ok').click(function() {
                             var table = $("#product-table").DataTable();
+                            var $filter_input = $('#product-table_filter').find('input');
                             var info = table.page.info();
-                            $('.form-add-product').attr({'action': "{% url "get_products" %}?page=" + (info.page + 1) + "&length=" + info.length}).submit();
+                            $('.form-add-product').attr({'action': "{% url "get_products" %}?page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()}).submit();
                         });
                     });
                 })(jQuery);
