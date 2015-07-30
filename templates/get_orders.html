@@ -202,7 +202,7 @@
                                 <td>
                                 {% if user_role == 0 %}
                                     {% url 'get_old_orders' as get_old_orders_url %}
-                                    {% if request.path == get_old_orders_url %}
+                                    {% if request.path == get_old_orders_url or client_id and order.in_archive %}
                                         <a class="btn archive-button" href="{% url "delete_from_archive" %}?id={{ order.pk }}">В заказы</a>
                                     {% else %}
                                         <a class="btn archive-button" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
@@ -490,6 +490,7 @@
 
                 function get_get_params() {
                     var get_params = "";
+                    {% if client_id %}get_params += "&client-id={{ client_id  }}";{% endif %}
                     if (page) { get_params += "&" + page; }
                     if (length) { get_params += "&" + length; }
                     if (sort) { get_params += "&" + sort; }
@@ -661,7 +662,6 @@
                     else {
                         document.location.href = get_managers_url(value);
                     }
-                    console.log(document.location.href);
                 });
 
                 var $checkboxes_one = $('.checkbox_one');
