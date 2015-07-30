@@ -10,6 +10,9 @@ def get_request_param_as_string(request):
     if 'length' in request.GET:
         length = int(request.GET['length'])
         get_params += 'length=' + str(length) + '&'
+    if 'client-id' in request.GET:
+        client_id = int(request.GET['client-id'])
+        get_params += 'client-id=' + str(client_id) + '&'
     if 'sort' in request.GET:
         sort = request.GET['sort']
         get_params += 'sort=' + str(sort) + '&'

@@ -910,6 +910,8 @@ def full_delete_from_archive(request):
         get_params += 'search=' + unicode(search)
         return HttpResponseRedirect('/search/' + get_params)
     get_params += get_request_param_as_string(request)
+    if 'client-id' in request.GET:
+        return HttpResponseRedirect('/orders/' + get_params)
     return HttpResponseRedirect('/orders/archive/' + get_params)
 
 
