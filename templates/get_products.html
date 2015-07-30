@@ -184,17 +184,20 @@
                             {% endif %}
                         });
                         var table = $product_table.DataTable();
-                        var $filter_input = $('#product-table_filter').find('input');
                         $('.delete-button').bind('click', function(){
                             var id = $(this).attr('value');
                             var info = table.page.info();
+                            var $filter_input = $('#product-table_filter').find('input');
                             $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
                         });
+
                         var $form_edit_product = $('.form-edit-product');
                         $('.edit-button').bind('click', function(){
                             var id = $(this).attr('value');
                             var info = table.page.info();
+                            var $filter_input = $('#product-table_filter').find('input');
                             $form_edit_product.attr({'action': '{% url "edit_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
+                            console.log($filter_input);
                             var $edit_product__data = $('#edit-product').find('.modal-body');
                             var title = $(this).find('.product-data__title').text();
                             $edit_product__data.find('#inputEditTitle').val(title);
@@ -241,14 +244,17 @@
                         });
                         $massive_delete_ok.click(function(){
                             var info = table.page.info();
+                            var $filter_input = $('#product-table_filter').find('input');
                             $form.attr('action', '{% url "massive_delete_products" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
                         $('.massive-activate-button').click(function(){
                             var info = table.page.info();
+                            var $filter_input = $('#product-table_filter').find('input');
                             $form.attr('action', '{% url "massive_activate_product" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
                         $('.massive-deactivate-button').click(function(){
                             var info = table.page.info();
+                            var $filter_input = $('#product-table_filter').find('input');
                             $form.attr('action', '{% url "massive_deactivate_product" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
                     });
@@ -291,8 +297,8 @@
                     $(document).ready(function(){
                         $('#add__ok').click(function() {
                             var table = $("#product-table").DataTable();
-                            var $filter_input = $('#product-table_filter').find('input');
                             var info = table.page.info();
+                            var $filter_input = $('#product-table_filter').find('input');
                             $('.form-add-product').attr({'action': "{% url "get_products" %}?page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()}).submit();
                         });
                     });

@@ -5,7 +5,7 @@
         {% url 'get_orders' as get_orders_url %}
         {% url 'index' as index_url %}
         {% if request.path == get_orders_url or request.path == index_url %}
-            {% if user_role == 0 %}
+            {% if user_role == 0 and not client_id %}
                 <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
             {% endif %}
         {% endif %}
