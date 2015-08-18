@@ -89,6 +89,6 @@
 	}
 	$(document).on('click', 'select.product-select option', function() {
 		var $this = $(this);
-		addProductToSelectTable($this.attr('value'), $this.text(), $this.attr('data-number'), $this.attr('data-price'));
+		addProductToSelectTable($this.attr('value'), $this.text(), $this.attr('data-price'), $this.attr('data-number'));
 	});
 })(jQuery);
