@@ -186,11 +186,17 @@ class Orders(models.Model):
     search = SphinxSearch()
 
 
+class ProductGroups(models.Model):
+    title = models.CharField(max_length=255)
+    is_deleted = models.BooleanField(default=0)
+
+
 class Products(models.Model):
     title = models.CharField(max_length=255)
     price = models.IntegerField(default=0, blank=True)
     is_active = models.BooleanField(default=1)
     is_deleted = models.BooleanField(default=0)
+    group = models.ForeignKey(ProductGroups, null=True)
 
 
 class Order_Product(models.Model):

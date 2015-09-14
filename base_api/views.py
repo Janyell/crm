@@ -8,6 +8,7 @@ from djangosphinx.apis.api275 import SPH_MATCH_EXTENDED
 from api.settings import MEDIA_ROOT
 from base_api.full_views.analyze_debtors import full_analyze_debtors
 from base_api.full_views.attach import *
+from base_api.full_views.kp_model import full_generate_kp
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -694,3 +695,19 @@ def fix_file_nodes(request):
     for file in files:
         save_file_in_node(file)
     return HttpResponseRedirect('/')
+
+
+def generate_kp(request):
+    return full_generate_kp(request)
+
+
+def get_product_groups(request):
+    return full_get_product_groups(request)
+
+
+def delete_product_group(request):
+    return full_delete_product_group(request)
+
+
+def edit_product_group(request):
+    return full_edit_product_group(request)

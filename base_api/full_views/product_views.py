@@ -25,6 +25,20 @@ def full_delete_product(request):
     return HttpResponseRedirect('/products/' + get_params)
 
 
+def full_delete_product_group(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops/')
+    id = request.GET['id']
+    product_group = ProductGroups.objects.get(pk=id)
+    product_group.is_deleted = 1
+    product_group.save(update_fields=["is_deleted"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/product_groups/' + get_params)
+
+
 def full_get_products(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
@@ -64,6 +78,40 @@ def full_get_products(request):
     return render(request, 'get_products.html', out)
 
 
+def full_get_product_groups(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    if request.method == 'POST':
+        form = ProductGroupForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            new_product_group = ProductGroups.objects.create(title=title)
+            return HttpResponseRedirect('/product_groups/' + get_params)
+        else:
+            out.update({"error": 1})
+    else:
+        form = ProductGroupForm()
+    product_groups = ProductGroups.objects.filter(is_deleted=0)
+    out.update({'page_title': "Группы товаров"})
+    out.update({'product_groups': product_groups})
+    out.update({'product_group_form': form})
+    out.update({'count': product_groups.count()})
+    return render(request, 'get_product_groups.html', out)
+
+
 def full_edit_product(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
@@ -87,3 +135,24 @@ def full_edit_product(request):
         product.save()
         return HttpResponseRedirect('/products/' + get_params)
     return HttpResponseRedirect('/products/' + get_params)
+
+
+def full_edit_product_group(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    if request.method == 'POST':
+        id = request.GET['id']
+        product_group = ProductGroups.objects.get(id=id)
+        title = request.POST['title']
+        product_group.title = title
+        product_group.save()
+        return HttpResponseRedirect('/product_groups/' + get_params)
+    return HttpResponseRedirect('/product_groups/' + get_params)

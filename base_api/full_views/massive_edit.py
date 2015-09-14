@@ -3,7 +3,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from base_api.full_views.helper import get_request_param_as_string
-from base_api.models import Roles, Orders, Clients, Companies, Products
+from base_api.models import Roles, Orders, Clients, Companies, Products, ProductGroups
 
 
 def massive_delete_orders(request):
@@ -172,6 +172,22 @@ def massive_activate_product(request):
         product = Products.objects.get(pk=id, is_deleted=0)
         product.is_active = 1
         product.save(update_fields=["is_active"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/products/' + get_params)
+
+
+def massive_change_product_group(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    group_id = request.POST.get('group_id')
+    for id in ids:
+        product = Products.objects.get(pk=id, is_deleted=0)
+        product.group = ProductGroups.objects.get(id=group_id)
+        product.save(update_fields=["group"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/products/' + get_params)
