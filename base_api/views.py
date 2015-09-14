@@ -184,6 +184,10 @@ def analyze_period(request):
     return full_analyze_period(request)
 
 
+def analyze_period_product_groups(request):
+    return full_analyze_period_product_groups(request)
+
+
 def json_response(func):
     """
     A decorator thats takes a view response and turns it
