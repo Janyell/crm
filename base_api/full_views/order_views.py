@@ -712,6 +712,8 @@ def full_get_orders(request):
     out.update({'user_role': user_role})
     out.update({'orders': order_list})
     out.update({'count': orders.count()})
+    # IN_PRODUCTION status = 0
+    out.update({'count_in_production': orders.filter(order_status=0).count()})
     return render(request, 'get_orders.html', out)
 
 
