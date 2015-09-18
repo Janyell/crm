@@ -90,7 +90,7 @@ urlpatterns = patterns('',
                        url(r'^fix_bd_org_type/$',  'base_api.views.fix_bd_org_type', name='fix_bd_org_type'),
                        url(r'^fix_file_nodes/$',  'base_api.views.fix_file_nodes', name='fix_file_nodes'),
                        url(r'^search/$',  'base_api.views.search', name='search'),
-                       url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", mimetype="text/plain")),
+                       url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")),
                        url(r'^admin/', include(admin.site.urls)),
                        # url(r'', 'base_api.views.page_not_found', name='404'),
 )

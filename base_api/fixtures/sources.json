@@ -1,0 +1,74 @@
+[
+  {
+    "pk": 1,
+    "model": "base_api.sources",
+    "fields": {
+      "title": "Звонок",
+      "is_active": true,
+      "is_deleted": true
+    }
+  },
+  {
+    "pk": 2,
+    "model": "base_api.sources",
+    "fields": {
+      "title": "Заявка с сайта",
+      "is_active": true,
+      "is_deleted": true
+    }
+  },
+  {
+    "pk": 3,
+    "model": "base_api.sources",
+    "fields": {
+      "title": "ЗТ",
+      "is_active": true,
+      "is_deleted": true
+    }
+  },
+  {
+    "pk": 4,
+    "model": "base_api.sources",
+    "fields": {
+      "title": "AQB",
+      "is_active": true,
+      "is_deleted": true
+    }
+  },
+  {
+    "pk": 5,
+    "model": "base_api.sources",
+    "fields": {
+      "title": "H-A-H",
+      "is_active": true,
+      "is_deleted": true
+    }
+  },
+  {
+    "pk": 6,
+    "model": "base_api.sources",
+    "fields": {
+      "title": "Landing",
+      "is_active": true,
+      "is_deleted": true
+    }
+  },
+  {
+    "pk": 7,
+    "model": "base_api.sources",
+    "fields": {
+      "title": "Тендер",
+      "is_active": true,
+      "is_deleted": true
+    }
+  },
+  {
+    "pk": 8,
+    "model": "base_api.sources",
+    "fields": {
+      "title": "Электронная почта",
+      "is_active": true,
+      "is_deleted": true
+    }
+  }
+]

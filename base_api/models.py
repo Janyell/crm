@@ -92,7 +92,7 @@ class Companies(models.Model):
 
 
 # ALL = -1
-EMAIL = 0
+EMAIL = 0 # поменять на 8? на 10? 0 ведь нельзя записать в таблицу
 CALL = 1
 SITE = 2
 ZT = 3
@@ -122,6 +122,12 @@ ORDER_SOURCE_LIST = [
 ]
 
 
+class Sources(models.Model):
+    title = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=1)
+    is_deleted = models.BooleanField(default=0)
+
+
 class Orders(models.Model):
     role = models.ForeignKey(Roles)
     EMAIL = 0
@@ -142,7 +148,8 @@ class Orders(models.Model):
         (CALL, 'Звонок'),
         (SITE, 'Заявка с сайта'),
     )
-    source = models.IntegerField(choices=ORDER_SOURCE_CHOICES, default=ZT)
+    # source = models.IntegerField(choices=ORDER_SOURCE_CHOICES, default=ZT)
+    source = models.ForeignKey(Sources)
     client = models.ForeignKey(Clients)
     unique_number = models.CharField(max_length=50, unique=True)
     company = models.ForeignKey(Companies, null=True, blank=True)
@@ -220,4 +227,3 @@ class Client_Files(models.Model):
     title = models.CharField(max_length=50, null=False, blank=True)
     file = models.FileField(upload_to="uploads/", null=True, blank=True)
     file_node = models.ForeignKey(FileNode, null=True, blank=True)
-
