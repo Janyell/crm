@@ -58,9 +58,13 @@ def full_add_edit_claim(request):
                 if user_role == 0:
                     ClaimsFormForAdmins.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)
+                    ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
                 else:
                     ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)
+                    ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
                 if user_role == 0:
                     ClaimsFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 else:
@@ -95,9 +99,13 @@ def full_add_edit_claim(request):
                     if user_role == 0:
                         ClaimsFormForAdmins.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                                 required=False)
+                        ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
                     else:
                         ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                                 required=False)
+                        ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
                     if user_role == 0:
                         ClaimsFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                     else:
@@ -160,9 +168,13 @@ def full_add_edit_claim(request):
                         if user_role == 0:
                             ClaimsFormForAdmins.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                                     required=False)
+                            ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
                         else:
                             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                                     required=False)
+                            ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
                         if user_role == 0:
                             ClaimsFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         else:
@@ -265,6 +277,8 @@ def full_add_edit_claim(request):
                         out.update({"error": 2})
                         ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                                     required=False)
+                        ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
                         ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
@@ -333,6 +347,8 @@ def full_add_edit_claim(request):
             else:
                 ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=False)
+                ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
                 ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                    'bill_status': bill_status, 'account_number': account_number,
@@ -362,6 +378,8 @@ def full_add_edit_claim(request):
             account_number = request.POST['account_number']
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
+            ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                'bill_status': bill_status, 'account_number': account_number,
@@ -387,6 +405,8 @@ def full_add_edit_claim(request):
             claim = Orders.objects.get(pk=id_order, is_deleted=0, is_claim=1)
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
+            ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = ClaimsForm({'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
@@ -408,6 +428,8 @@ def full_add_edit_claim(request):
         elif 'client-id' in request.GET:
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
+            ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_id = request.GET['client-id']
             client = Clients.objects.get(id=client_id, is_deleted=0)
@@ -425,9 +447,13 @@ def full_add_edit_claim(request):
             if user_role == 0:
                 ClaimsFormForAdmins.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
+                ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
             else:
                 ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
+                ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
             if user_role == 0:
                 ClaimsFormForAdmins.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             else:
@@ -458,6 +484,8 @@ def full_add_edit_claim(request):
         else:
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
+            ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1), required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = ClaimsForm()
             form.products = Products.objects.filter(is_deleted=0)
@@ -477,7 +505,7 @@ def full_get_claims(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
-    out.update({'sources': ORDER_SOURCE_LIST})
+    out.update({'sources': Sources.objects.filter(is_deleted=0)})
     out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])

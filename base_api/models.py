@@ -92,34 +92,34 @@ class Companies(models.Model):
 
 
 # ALL = -1
-EMAIL = 0 # поменять на 8? на 10? 0 ведь нельзя записать в таблицу
-CALL = 1
-SITE = 2
-ZT = 3
-AQB = 4
-HAH = 5
-LAND = 6
-TEND = 7
-ORDER_SOURCE_LIST = [
-    # {'name': 'Все',
-    #  'code': ALL},
-    {'name': 'ЗТ',
-     'code': ZT},
-    {'name': 'AQB',
-     'code': AQB},
-    {'name': 'H-A-H',
-     'code': HAH},
-    {'name': 'Landing',
-     'code': LAND},
-    {'name': 'Тендер',
-     'code': TEND},
-    {'name': 'Электронная почта',
-     'code': EMAIL},
-    {'name': 'Звонок',
-     'code': CALL},
-    {'name': 'Заявка с сайта',
-     'code': SITE}
-]
+# EMAIL = 0  # поменять на 8? на 10? 0 ведь нельзя записать в таблицу
+# CALL = 1
+# SITE = 2
+# ZT = 3
+# AQB = 4
+# HAH = 5
+# LAND = 6
+# TEND = 7
+# ORDER_SOURCE_LIST = [
+#     # {'name': 'Все',
+#     #  'code': ALL},
+#     {'name': 'ЗТ',
+#      'code': ZT},
+#     {'name': 'AQB',
+#      'code': AQB},
+#     {'name': 'H-A-H',
+#      'code': HAH},
+#     {'name': 'Landing',
+#      'code': LAND},
+#     {'name': 'Тендер',
+#      'code': TEND},
+#     {'name': 'Электронная почта',
+#      'code': EMAIL},
+#     {'name': 'Звонок',
+#      'code': CALL},
+#     {'name': 'Заявка с сайта',
+#      'code': SITE}
+# ]
 
 
 class Sources(models.Model):
@@ -130,24 +130,24 @@ class Sources(models.Model):
 
 class Orders(models.Model):
     role = models.ForeignKey(Roles)
-    EMAIL = 0
-    CALL = 1
-    SITE = 2
-    ZT = 3
-    AQB = 4
-    HAH = 5
-    LAND = 6
-    TEND = 7
-    ORDER_SOURCE_CHOICES = (
-        (ZT, 'ЗТ'),
-        (AQB, 'AQB'),
-        (HAH, 'H-A-H'),
-        (LAND, 'Landing'),
-        (TEND, 'Тендер'),
-        (EMAIL, 'Электронная почта'),
-        (CALL, 'Звонок'),
-        (SITE, 'Заявка с сайта'),
-    )
+    # EMAIL = 0
+    # CALL = 1
+    # SITE = 2
+    # ZT = 3
+    # AQB = 4
+    # HAH = 5
+    # LAND = 6
+    # TEND = 7
+    # ORDER_SOURCE_CHOICES = (
+    #     (ZT, 'ЗТ'),
+    #     (AQB, 'AQB'),
+    #     (HAH, 'H-A-H'),
+    #     (LAND, 'Landing'),
+    #     (TEND, 'Тендер'),
+    #     (EMAIL, 'Электронная почта'),
+    #     (CALL, 'Звонок'),
+    #     (SITE, 'Заявка с сайта'),
+    # )
     # source = models.IntegerField(choices=ORDER_SOURCE_CHOICES, default=ZT)
     source = models.ForeignKey(Sources)
     client = models.ForeignKey(Clients)

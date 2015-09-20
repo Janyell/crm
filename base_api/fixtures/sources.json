@@ -5,7 +5,7 @@
     "fields": {
       "title": "Звонок",
       "is_active": true,
-      "is_deleted": true
+      "is_deleted": false
     }
   },
   {
@@ -14,7 +14,7 @@
     "fields": {
       "title": "Заявка с сайта",
       "is_active": true,
-      "is_deleted": true
+      "is_deleted": false
     }
   },
   {
@@ -23,7 +23,7 @@
     "fields": {
       "title": "ЗТ",
       "is_active": true,
-      "is_deleted": true
+      "is_deleted": false
     }
   },
   {
@@ -32,7 +32,7 @@
     "fields": {
       "title": "AQB",
       "is_active": true,
-      "is_deleted": true
+      "is_deleted": false
     }
   },
   {
@@ -41,7 +41,7 @@
     "fields": {
       "title": "H-A-H",
       "is_active": true,
-      "is_deleted": true
+      "is_deleted": false
     }
   },
   {
@@ -50,7 +50,7 @@
     "fields": {
       "title": "Landing",
       "is_active": true,
-      "is_deleted": true
+      "is_deleted": false
     }
   },
   {
@@ -59,7 +59,7 @@
     "fields": {
       "title": "Тендер",
       "is_active": true,
-      "is_deleted": true
+      "is_deleted": false
     }
   },
   {
@@ -68,7 +68,7 @@
     "fields": {
       "title": "Электронная почта",
       "is_active": true,
-      "is_deleted": true
+      "is_deleted": false
     }
   }
 ]

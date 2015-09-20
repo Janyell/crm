@@ -48,8 +48,8 @@ def full_analyze_managers(request):
             number_call_data_count = []
             number_shipped_data_count = []
             number_bill_data_count = []
-            sources_orders_count = [0, 0, 0, 0, 0]
-            sources_claims_count = [0, 0, 0, 0, 0]
+            sources_orders_count = [0] * Sources.objects.filter(is_active=1).count()
+            sources_claims_count = [0] * Sources.objects.filter(is_active=1).count()
             if type_of_period == 'month':
                 month_date = request.GET['month-date']
                 out.update({'month_date': month_date})
@@ -141,8 +141,8 @@ def full_analyze_managers(request):
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
-                    if data_year == current_year and data_mounth == current_mounth and (order.source - 3) >= 0:
-                        sources_orders_count[order.source - 3] += 1
+                    if data_year == current_year and data_mounth == current_mounth and (order.source.id - 3) >= 0:
+                        sources_orders_count[order.source.id - 3] += 1
                 for order in sources_claims:
                     if order.shipped_date:
                         data = str(order.shipped_date)
@@ -151,8 +151,8 @@ def full_analyze_managers(request):
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
-                    if data_year == current_year and data_mounth == current_mounth and (order.source - 3) >= 0:
-                        sources_claims_count[order.source - 3] += 1
+                    if data_year == current_year and data_mounth == current_mounth and (order.source.id - 3) >= 0:
+                        sources_claims_count[order.source.id - 3] += 1
             elif type_of_period == 'year':
                 for i in range(12):
                     period.append(i+1)
@@ -226,8 +226,8 @@ def full_analyze_managers(request):
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
-                    if data_year == current_year and (order.source - 3) >= 0:
-                        sources_orders_count[order.source - 3] += 1
+                    if data_year == current_year and (order.source.id - 3) >= 0:
+                        sources_orders_count[order.source.id - 3] += 1
                 for order in sources_claims:
                     if order.shipped_date:
                         data = str(order.shipped_date)
@@ -236,8 +236,8 @@ def full_analyze_managers(request):
                     data_mounth = data[5:]
                     data_mounth = data_mounth[:2]
                     data_year = data[:4]
-                    if data_year == current_year and (order.source - 3) >= 0:
-                        sources_claims_count[order.source - 3] += 1
+                    if data_year == current_year and (order.source.id - 3) >= 0:
+                        sources_claims_count[order.source.id - 3] += 1
             elif type_of_period == 'all':
                 # if manager_id == 'all':
                 #     first_manager_id = Roles.objects.all().filter(role=1)
@@ -349,11 +349,11 @@ def full_analyze_managers(request):
                     elif ((i+int(first_data_mounth)-1) % 12) == 0:
                         period_str.append('Декабрь')
                 for order in sources_orders:
-                    if (order.source - 3) >= 0:
-                        sources_orders_count[order.source - 3] += 1
+                    if (order.source.id - 3) >= 0:
+                        sources_orders_count[order.source.id - 3] += 1
                 for order in sources_claims:
-                    if (order.source - 3) >= 0:
-                        sources_claims_count[order.source - 3] += 1
+                    if (order.source.id - 3) >= 0:
+                        sources_claims_count[order.source.id - 3] += 1
                 sum_bill_data_count = sum_bill_data_count[::-1]
                 sum_shipped_data_count = sum_shipped_data_count[::-1]
                 number_call_data_count = number_call_data_count[::-1]
@@ -384,6 +384,7 @@ def full_analyze_managers(request):
             out.update({'select_period': period_str})
         out.update({'period': type_of_period})
         out.update({'analyzed_managers': analyzed_managers})
+        out.update({'sources': Sources.objects.filter(is_active=1).all()})
         out.update({'graphic': type_of_graphic})
         out.update({'id': managers_id})
     out.update({'page_title': "Анализ работы менеджеров"})

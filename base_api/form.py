@@ -15,9 +15,16 @@ BILL_STATUS_CHOICES_FOR_ORDER = (('1', 'Нужна доплата'),
                                  ('2', 'Оплачен'))
 PRODUCT_STATUS_FOR_PRODUCT = (('1', 'Активный'),
                               ('0', 'Неактивный'))
+SOURCE_STATUS = (('1', 'Активный'),
+                 ('0', 'Неактивный'))
 
 
 class CompanyModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.title
+
+
+class SourceModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.title
 
@@ -235,4 +242,15 @@ class UploadFileForClientForm(ModelForm):
             'title': TextInput(attrs={'id': "inputTitle",
                                       'placeholder': "Название"}),
             'file': FileInput(),
+        }
+
+
+class SourceForm(ModelForm):
+    class Meta:
+        model = Sources
+        exclude = ['is_deleted']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputEditTitle",
+                                      'required': 1}),
+            'is_active': Select(attrs={'id': "selectIsActive"}, choices=SOURCE_STATUS),
         }
