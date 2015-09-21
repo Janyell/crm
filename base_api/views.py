@@ -701,6 +701,20 @@ def fix_file_nodes(request):
     return HttpResponseRedirect('/')
 
 
+def fix_cities(request):
+    cities_list = list(Cities.objects.values_list('name', flat=True))
+    orders = Orders.objects.all()
+    for order in orders:
+        if order.city_old:
+            if order.city_old not in cities_list:
+                city = Cities.objects.create(name=order.city_old)
+                cities_list.append(order.city_old)
+            else:
+                city = Cities.objects.filter(name=order.city_old).first()
+            order.city = city
+    return HttpResponseRedirect('/')
+
+
 def generate_kp(request):
     return full_generate_kp(request)
 
