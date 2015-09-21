@@ -29,6 +29,11 @@ class SourceModelChoiceField(ModelChoiceField):
         return obj.title
 
 
+class CityModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.name
+
+
 class ClientModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         if obj.organization == '':
@@ -121,8 +126,8 @@ orders_form_widgets = {
                                      'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
     'order_status': Select(attrs={'id': "selectStatus"}),
     'bill_status': Select(attrs={'id': "selectBillStatus"}, choices=BILL_STATUS_CHOICES_FOR_ORDER),
-    'city': TextInput(attrs={'id': "inputCity",
-                             'placeholder': "Город"}),
+    'city': Select(attrs={'id': "selectCity",
+                          'placeholder': "Город"}),
     'comment': Textarea(attrs={'id': "inputComment",
                                'placeholder': "Комментарии"}),
     'source': Select(attrs={'id': "selectSource", 'required': 1}),
@@ -160,8 +165,8 @@ claims_form_widgets = {
                                      'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
     'order_status': Select(attrs={'id': "selectStatus"}),
     'bill_status': Select(attrs={'id': "selectBillStatus"}, choices=BILL_STATUS_CHOICES_FOR_CLAIM),
-    'city': TextInput(attrs={'id': "inputCity",
-                             'placeholder': "Город"}),
+    'city': Select(attrs={'id': "selectCity",
+                          'placeholder': "Город"}),
     'comment': Textarea(attrs={'id': "inputComment",
                                'placeholder': "Комментарии"}),
     'source': Select(attrs={'id': "selectSource", 'required': 1}),
@@ -220,6 +225,15 @@ class ProductGroupForm(ModelForm):
         widgets = {
             'title': TextInput(attrs={'id': "inputTitle",
                                       'required': 1}),
+        }
+
+
+class CityForm(ModelForm):
+    class Meta:
+        model = Cities
+        widgets = {
+            'name': TextInput(attrs={'id': "inputName",
+                                     'required': 1}),
         }
 
 

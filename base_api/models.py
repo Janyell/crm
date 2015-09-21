@@ -128,6 +128,10 @@ class Sources(models.Model):
     is_deleted = models.BooleanField(default=0)
 
 
+class Cities(models.Model):
+    name = models.CharField(max_length=255)
+
+
 class Orders(models.Model):
     role = models.ForeignKey(Roles)
     # EMAIL = 0
@@ -182,7 +186,8 @@ class Orders(models.Model):
     is_deleted = models.BooleanField(default=0)
     order_date = UnixTimestampField(default=datetime.now())
     # order_date = UnixTimestampField(auto_created=True)
-    city = models.CharField(max_length=256, null=True, blank=True)
+    city_old = models.CharField(max_length=256, null=True, blank=True)
+    city = models.ForeignKey(Cities, null=True, blank=True)
     in_archive = models.BooleanField(default=0)
     account_number = models.CharField(max_length=50, null=True, blank=True)
     is_claim = models.BooleanField(default=0)
