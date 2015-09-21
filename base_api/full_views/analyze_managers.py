@@ -48,8 +48,8 @@ def full_analyze_managers(request):
             number_call_data_count = []
             number_shipped_data_count = []
             number_bill_data_count = []
-            sources_orders_count = [0] * Sources.objects.filter(is_active=1).count()
-            sources_claims_count = [0] * Sources.objects.filter(is_active=1).count()
+            sources_orders_count = [0] * Sources.objects.all().count()
+            sources_claims_count = [0] * Sources.objects.all().count()
             if type_of_period == 'month':
                 month_date = request.GET['month-date']
                 out.update({'month_date': month_date})
@@ -384,7 +384,7 @@ def full_analyze_managers(request):
             out.update({'select_period': period_str})
         out.update({'period': type_of_period})
         out.update({'analyzed_managers': analyzed_managers})
-        out.update({'sources': Sources.objects.filter(is_active=1).all()})
+        out.update({'sources': Sources.objects.all()})
         out.update({'graphic': type_of_graphic})
         out.update({'id': managers_id})
     out.update({'page_title': "Анализ работы менеджеров"})
