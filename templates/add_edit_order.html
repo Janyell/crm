@@ -182,6 +182,30 @@
                 </div>
                 {% else %}
                 <div class="control-group">
+                    <label class="control-label" for="selectStatus">
+                        Статус заказа
+                    </label>
+                    <div class="controls">
+                        {{ order_form.order_status }}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="selectBillStatus">
+                        Статус оплаты
+                    </label>
+                    <div class="controls">
+                        {{ order_form.bill_status }}
+                    </div>
+                </div>
+                <div class="control-group brought-sum hide">
+                    <label class="control-label" for="inputBroughtSum">
+                        Внесена сумма
+                    </label>
+                    <div class="controls">
+                        {{ order_form.brought_sum }}
+                    </div>
+                </div>
+                <div class="control-group">
                     <label class="control-label" for="inputPaymentDate">
                         Дата оплаты
                     </label>
@@ -221,30 +245,6 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="selectStatus">
-                        Статус заказа
-                    </label>
-                    <div class="controls">
-                        {{ order_form.order_status }}
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="selectBillStatus">
-                        Статус оплаты
-                    </label>
-                    <div class="controls">
-                        {{ order_form.bill_status }}
-                    </div>
-                </div>
-                <div class="control-group brought-sum hide">
-                    <label class="control-label" for="inputBroughtSum">
-                        Внесена сумма
-                    </label>
-                    <div class="controls">
-                        {{ order_form.brought_sum }}
-                    </div>
-                </div>
-                <div class="control-group">
                     <label class="control-label" for="inputCity">
                         Доставка (город)
                     </label>
@@ -279,6 +279,32 @@
                             <a class="btn" data-toggle="modal" href="#manage-attachments">Управление файлами</a>
                         </div>
                     </div>
+                {% endif %}
+                {% if request.path == edit_claim_url %}
+                    {% block related_with %}
+                        <div class="control-group">
+                            <label class="control-label">
+                                Заявка связана с
+                            </label>
+                            <div class="controls">
+                                {{ order_form.client_related_with }}
+                                {{ order_form.client }}
+                            </div>
+                        </div>
+
+                        <script type="text/javascript">
+                            (function($){
+                                $(document).ready(function(){
+                                    var $select_client_related_with = $('#client_related-with');
+                                    $select_client_related_with.attr({
+                                        'data-live-search': "true",
+                                        'data-size': "10"
+                                    });
+                                    $select_client_related_with.selectpicker();
+                                });
+                            })(jQuery);
+                        </script>
+                    {% endblock related_with %}
                 {% endif %}
                 <div class="form-add__tips">
                     <div class="form-add-tips__tip">
@@ -382,6 +408,25 @@
                     language: 'ru',
                     pickTime: false,
                     weekStart: 1
+                });
+                {# При проставлении статуса «отгружен» не давать сохранить без заполнения поля «даты отгрузки» #}
+                var $shipped_date = $('#inputShippedDate');
+                var $shipped_date_label = $("label[for=\"inputShippedDate\"]");
+                var shipped_date_label_text = $shipped_date_label.text();
+                var $select_status = $('#selectStatus');
+                if ($select_status.val() == 1) {
+                    $shipped_date.prop("required", true);
+                    $shipped_date_label.html(shipped_date_label_text + "<span class=\"required-input\">*</span>");
+                }
+                $select_status.change(function() {
+                    if ($(this).val() == 1) {
+                        $shipped_date.prop("required", true);
+                        $shipped_date_label.html(shipped_date_label_text + "<span class=\"required-input\">*</span>");
+                    }
+                    else {
+                       $shipped_date.prop("required", false);
+                        $shipped_date_label.html(shipped_date_label_text);
+                    }
                 });
                 {% endif %}
                 $('select.product-select option:selected').each(function() {

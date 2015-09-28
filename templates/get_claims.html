@@ -48,7 +48,7 @@
                         <select id="selectSource" name="source">
                                 <option value="all">Все источники</option>
                             {% for source in sources %}
-                                <option value="{{ source.code }}"{% if request.GET.source == source.code|urlencode:"" %} selected="selected"{% endif %}>{{ source.name }}</option>
+                                <option value="{{ source.pk }}"{% if request.GET.source == source.pk|urlencode:"" %} selected="selected"{% endif %}>{{ source.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -119,14 +119,14 @@
                                     {{ claim.account_number }}
                                 {% endif %}
                             </td>
-                            <td>{% if claim.bill != None %}
+                            <td class="no-wrap">{% if claim.bill != None %}
                                     {{ claim.bill }}
                                 {% endif %}
                             </td>
                             <td>
                                 {% if claim.products %}
                                     {% for product in claim.products %}
-                                        <div class="product-wrap">
+                                        <div class="no-wrap">
                                             {{ product.product.title }} - {{ product.count_of_products }} шт.
                                         </div>
                                     {% endfor %}

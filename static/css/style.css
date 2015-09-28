@@ -231,7 +231,7 @@ select.hidden, div.hidden {
 .tr_green {
     background-color: #E7FFE7;
 }
-.product-wrap {
+.no-wrap {
     white-space: nowrap;
 }
 .btn-file { position: relative; overflow: hidden; margin-right: 4px; }
