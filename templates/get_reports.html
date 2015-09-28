@@ -1,0 +1,61 @@
+{%extends "get_orders.html"%}
+
+{% block navigation-bar %}{% endblock %}
+
+{% block get-reports__period-form %}
+    <form class="form-horizontal form-add form-get-reports" method="get" action="{{ request.path }}">
+        <h5 class="form-add-heading">Пожалуйста, выберите период:</h5>
+        <div class="control-group">
+            <label class="control-label" for="inputMonthDate">
+                Месяц
+                <span class="required-input">*</span>
+            </label>
+            <div class="controls">
+                <div id="monthDate" class="input-append">
+                    <input type="text" id="inputMonthDate" class="datetime" placeholder="ГГГГ-ММ" name="month-date" value="{{ month_date }}" />
+                    <span class="add-on">
+                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-add__tips">
+            <div class="form-add-tips__tip">
+                <span class="required-input">*</span> -  поле обязательно для заполнения
+            </div>
+        </div>
+        <div class="form-add__submits">
+            <button type="submit" class="btn btn-primary">Показать отчет</button>
+        </div>
+    </form>
+    {% block get-reports__period-form__script %}
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function() {
+                    var $month_date = $('#monthDate');
+                    $month_date.datetimepicker({
+                        format: 'yyyy-MM',
+                        language: 'ru',
+                        pickTime: false,
+                        viewMode: "months",
+                        minViewMode: "months"
+                    });
+                });
+            })(jQuery);
+        </script>
+    {% endblock get-reports__period-form__script %}
+{% endblock %}
+
+{% block add-bar %}{% endblock %}
+
+{% block manager-checkboxes %}{% endblock %}
+
+{% block get-reports__sum-number %}
+    <div class="row-fluid">
+        <div class="record-number">
+            Всего отгружено на сумму {{ shipped_sum }} руб.
+        </div>
+    </div>
+{% endblock %}
+
+{% block get-reports__shipped %}отгруженного{% endblock %}

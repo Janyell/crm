@@ -729,3 +729,11 @@ def delete_product_group(request):
 
 def edit_product_group(request):
     return full_edit_product_group(request)
+
+
+def get_settings(request):
+    return render(request, 'get_settings.html')
+
+
+def get_reports(request):
+    return render(request,'get_reports.html')

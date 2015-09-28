@@ -1,31 +1,39 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 
 {%block content%}
     <div class="container container_full-width">
         {% url 'get_orders' as get_orders_url %}
         {% url 'index' as index_url %}
-        {% if request.path == get_orders_url or request.path == index_url %}
-            {% if user_role == 0 and not client_id %}
-                <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
-            {% endif %}
-        {% endif %}
         {% url 'get_old_orders' as get_old_orders_url %}
-        {% if request.path == get_old_orders_url %}
-        <a href="{% url "get_orders" %}" class="btn">Перейти к заказам</a>
-        {% endif %}
+        {% block navigation-bar %}
+            {% if request.path == get_orders_url or request.path == index_url %}
+                {% if user_role == 0 and not client_id %}
+                    <a href="{% url "get_old_orders" %}" class="btn">Перейти в архив</a>
+                {% endif %}
+            {% endif %}
+            {% if request.path == get_old_orders_url %}
+            <a href="{% url "get_orders" %}" class="btn">Перейти к заказам</a>
+            {% endif %}
+        {% endblock navigation-bar %}
         <h2 class="center">{{ page_title }}{{ organization_or_full_name }}</h2>
-        {% if request.path == get_orders_url or request.path == index_url  %}
-            {% if user_role != 2 %}
-                {% if client_id %}
-                    <a href="{% url "add_order" %}?client-id={{ client_id }}" class="btn btn_add-order add-button">Добавить заказ</a>
-                {% else %}
-                    <a href="{% url "add_order" %}" class="btn btn_add-order add-button">Добавить заказ</a>
-                    {% if user_role == 0 %}
-                        <a href="{% url "made_excel" %}" class="btn pull-right">Экспорт e-mail</a>
+        {% if request.path == get_orders_url %}
+            <div class="center in-production-number">Заказов в производстве: {{ count_in_production }}</div>
+        {% endif %}
+        {% block get-reports__period-form %}{% endblock %}
+        {% block add-bar %}
+            {% if request.path == get_orders_url or request.path == index_url  %}
+                {% if user_role != 2 %}
+                    {% if client_id %}
+                        <a href="{% url "add_order" %}?client-id={{ client_id }}" class="btn btn_add-order add-button">Добавить заказ</a>
+                    {% else %}
+                        <a href="{% url "add_order" %}" class="btn btn_add-order add-button">Добавить заказ</a>
+                        {% if user_role == 0 %}
+                            <a href="{% url "made_excel" %}" class="btn pull-right">Экспорт e-mail</a>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             {% endif %}
-        {% endif %}
+        {% endblock add-bar %}
         <div class="row-fluid">
             <div class="span3">
                 {% if orders %}
@@ -43,17 +51,19 @@
                 {% endif %}
             </div>
             <div class="span6">
-                <div class="manager">
-                    {% for manager in roles %}
-                        <div class="span2">
-                            <label class="checkbox">
-                                <input type="checkbox" name="managers[]" class="managers" value="{{ manager.pk }}"
-                                    {% if manager.pk|upper in managers %} checked="checked"{% endif %} />
-                                {{ manager.username }}
-                            </label>
-                        </div>
-                    {% endfor %}
-                </div>
+                {% block manager-checkboxes %}
+                    <div class="manager">
+                        {% for manager in roles %}
+                            <div class="span2">
+                                <label class="checkbox">
+                                    <input type="checkbox" name="managers[]" class="managers" value="{{ manager.pk }}"
+                                        {% if manager.pk|upper in managers %} checked="checked"{% endif %} />
+                                    {{ manager.username }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endblock manager-checkboxes %}
             </div>
             <div class="span3">
                 {% if sources %}
@@ -61,13 +71,14 @@
                         <select id="selectSource" name="source">
                                 <option value="all">Все источники</option>
                             {% for source in sources %}
-                                <option value="{{ source.code }}"{% if request.GET.source == source.code|urlencode:"" %} selected="selected"{% endif %}>{{ source.name }}</option>
+                                <option value="{{ source.pk }}"{% if request.GET.source == source.pk|urlencode:"" %} selected="selected"{% endif %}>{{ source.title }}</option>
                             {% endfor %}
                         </select>
                     </div>
                 {% endif %}
             </div>
         </div>
+        {% block table %}
         {% if orders %}
             {% load bootstrap_pagination %}
             <form class="form-horizontal form-massive" method="POST">
@@ -142,7 +153,7 @@
                                         {{ order.account_number }}
                                     {% endif %}
                                 </td>
-                                <td class="product-wrap">
+                                <td class="no-wrap">
                                     {% if order.bill_right_format != None %}
                                         {% if is_in_debt.is_in_debt %}
                                             <a href="#bill-info" role="button" data-toggle="modal" class="get-bill-info red">
@@ -171,7 +182,7 @@
                                 <td>
                                     {% if order.products %}
                                         {% for product in order.products %}
-                                            <div class="product-wrap">
+                                            <div class="no-wrap">
                                                 {{ product.product.title }} - {{ product.count_of_products }} шт.
                                             </div>
                                         {% endfor %}
@@ -251,8 +262,6 @@
                                 <td>
                                     {% if order.order_status|title == "Готов" %}
                                         2
-        {#                            {% elif order.ready_date == None %}#}
-        {#                                1#}
                                     {% endif %}
                                 </td>
                             </tr>
@@ -296,9 +305,11 @@
                     </div>
                 </div>
             </div>
+            {% block get-reports__sum-number %}{% endblock %}
         {% else %}
-            <h5 class="center">Нет ни одного текущего заказа</h5>
+            <h5 class="center">Нет ни одного {% block get-reports__shipped %}текущего{% endblock %} заказа</h5>
         {% endif %}
+        {% endblock table %}
     </div>
 
     {% if user_role != 2 %}
