@@ -245,11 +245,15 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="inputCity">
+                    <label class="control-label" for="id_city">
                         Доставка (город)
                     </label>
                     <div class="controls">
                         {{ order_form.city }}
+                        <label for="inputCity" class="label_between">
+                            или добавьте новый город
+                        </label>
+                        <input id="inputCity" type="text" name="newCity"  placeholder="Название нового города"/>
                     </div>
                 </div>
                 {% endif %}
@@ -262,7 +266,7 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="selectSource">
+                    <label class="control-label" for="id_source">
                         Источник
                         <span class="required-input">*</span>
                     </label>
@@ -391,43 +395,57 @@
                     ]
                 });
                 {% if request.path != add_claim_url and request.path != edit_claim_url %}
-                $('#paymentDate').datetimepicker({
-                    format: 'yyyy-MM-dd hh:mm:ss',
-                    language: 'ru',
-                    pickSeconds: false,
-                    weekStart: 1
-                });
-                $('#readyDate').datetimepicker({
-                    format: 'yyyy-MM-dd hh:mm:ss',
-                    language: 'ru',
-                    pickSeconds: false,
-                    weekStart: 1
-                });
-                $('#shippedDate').datetimepicker({
-                    format: 'yyyy-MM-dd',
-                    language: 'ru',
-                    pickTime: false,
-                    weekStart: 1
-                });
-                {# При проставлении статуса «отгружен» не давать сохранить без заполнения поля «даты отгрузки» #}
-                var $shipped_date = $('#inputShippedDate');
-                var $shipped_date_label = $("label[for=\"inputShippedDate\"]");
-                var shipped_date_label_text = $shipped_date_label.text();
-                var $select_status = $('#selectStatus');
-                if ($select_status.val() == 1) {
-                    $shipped_date.prop("required", true);
-                    $shipped_date_label.html(shipped_date_label_text + "<span class=\"required-input\">*</span>");
-                }
-                $select_status.change(function() {
-                    if ($(this).val() == 1) {
+                    $('#paymentDate').datetimepicker({
+                        format: 'yyyy-MM-dd hh:mm:ss',
+                        language: 'ru',
+                        pickSeconds: false,
+                        weekStart: 1
+                    });
+                    $('#readyDate').datetimepicker({
+                        format: 'yyyy-MM-dd hh:mm:ss',
+                        language: 'ru',
+                        pickSeconds: false,
+                        weekStart: 1
+                    });
+                    $('#shippedDate').datetimepicker({
+                        format: 'yyyy-MM-dd',
+                        language: 'ru',
+                        pickTime: false,
+                        weekStart: 1
+                    });
+                    {# При проставлении статуса «отгружен» не давать сохранить без заполнения поля «даты отгрузки» #}
+                    var $shipped_date = $('#inputShippedDate');
+                    var $shipped_date_label = $("label[for=\"inputShippedDate\"]");
+                    var shipped_date_label_text = $shipped_date_label.text();
+                    var $select_status = $('#selectStatus');
+                    if ($select_status.val() == 1) {
                         $shipped_date.prop("required", true);
                         $shipped_date_label.html(shipped_date_label_text + "<span class=\"required-input\">*</span>");
                     }
-                    else {
-                       $shipped_date.prop("required", false);
-                        $shipped_date_label.html(shipped_date_label_text);
-                    }
-                });
+                    $select_status.change(function() {
+                        if ($(this).val() == 1) {
+                            $shipped_date.prop("required", true);
+                            $shipped_date_label.html(shipped_date_label_text + "<span class=\"required-input\">*</span>");
+                        }
+                        else {
+                           $shipped_date.prop("required", false);
+                            $shipped_date_label.html(shipped_date_label_text);
+                        }
+                    });
+                    {# selectCity #}
+                    var $select_city = $('#id_city');
+                    $select_city.attr({
+                        'data-live-search': "true",
+                        'data-size': "10"
+                    });
+                    {# Первыми (после пустого -----) поставить записи с определенными value (Челябинск, Москва, Самовывоз) #}
+                    var $select_city__empty_option = $select_city.find('option[value=""]');
+                    var values = [123, 124, 125]; {# Самовывоз, Москва, Челябинск #}
+                    values.forEach(function(item) {
+                        $select_city__empty_option.after($select_city.find('option[value='+ item +']'));
+                    });
+                    $select_city.selectpicker();
+
                 {% endif %}
                 $('select.product-select option:selected').each(function() {
                     var $this = $(this);
@@ -467,6 +485,11 @@
                         $brought_sum.css({'display': 'none'});
                     }
                 });
+
+                {#id_source -> required + первый option сделать disabled #}
+                var $select_source = $('#id_source');
+                $select_source.prop("required", true);
+                $select_source.find('option:first').prop("disabled", true);
 
                 function get_get_params() {
                     var need_get_params = ['page', 'length', 'sort', 'source', 'managers', 'search'];
