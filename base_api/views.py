@@ -702,16 +702,28 @@ def fix_file_nodes(request):
 
 
 def fix_cities(request):
+    # filename = MEDIA_ROOT + '/' + str('uploads/city.xlsx')
+    # wb = openpyxl.load_workbook(filename=filename)
+    # sheet = wb['list']
+    # column_index = 4
+    # for row_index in xrange(2, 10971):
+    #     city = Cities.objects.create(name=sheet.cell(row=row_index, column=column_index).value)
+    #     row_index += 1
+
     cities_list = list(Cities.objects.values_list('name', flat=True))
+    for city in cities_list:
+        city.lower()
     orders = Orders.objects.all()
     for order in orders:
         if order.city_old:
-            if order.city_old not in cities_list:
+            order.city_old = order.city_old.strip()
+            if order.city_old.lower() not in cities_list:
                 city = Cities.objects.create(name=order.city_old)
-                cities_list.append(order.city_old)
+                cities_list.append(order.city_old.lower())
             else:
                 city = Cities.objects.filter(name=order.city_old).first()
             order.city = city
+            order.save(update_fields=["city"])
     return HttpResponseRedirect('/')
 
 
