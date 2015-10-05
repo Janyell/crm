@@ -160,7 +160,7 @@ class Orders(models.Model):
     bill = models.IntegerField(null=True, blank=True)
     payment_date = UnixTimestampField(blank=True, null=True)
     IN_PRODUCTION = 0
-    SHIPPED = 1
+    SHIPPED = -1
     READY = 2
     ORDER_STATUS_CHOICES = (
         (IN_PRODUCTION, 'В производстве'),
