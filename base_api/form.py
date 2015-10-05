@@ -214,7 +214,7 @@ class ProductEditForm(ModelForm):
                                       'required': 1}),
             'price': NumberInput(attrs={'id': "inputEditPrice"}),
             'is_active': Select(attrs={'id': "selectIsActive"}, choices=PRODUCT_STATUS_FOR_PRODUCT),
-            'group': Select(attrs={'id': "selectGroup", 'required': 1, 'class': 'selectpicker'}),
+            'group': Select(attrs={'id': "selectEditGroup", 'required': 1, 'class': 'selectpicker'}),
         }
 
 
@@ -223,7 +223,17 @@ class ProductGroupForm(ModelForm):
         model = ProductGroups
         exclude = ['is_deleted']
         widgets = {
-            'title': TextInput(attrs={'id': "inputTitle",
+            'title': TextInput(attrs={'id': "inputGroupTitle",
+                                      'required': 1}),
+        }
+
+
+class ProductGroupEditForm(ModelForm):
+    class Meta:
+        model = ProductGroups
+        exclude = ['is_deleted']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputEditGroupTitle",
                                       'required': 1}),
         }
 

@@ -1,6 +1,6 @@
-{%extends "base.html"%}
+{% extends "get_product_groups.html" %}
 
-{%block content%}
+{% block products %}
     <div class="container">
         <h2 class="center">{{ page_title }}</h2>
             {% if error == 1 %}
@@ -14,6 +14,7 @@
                     <thead>
                         <tr>
                             <th></th>
+                            <th>Группа</th>
                             <th>Название</th>
                             <th>Цена</th>
                             <th>Статус</th>
@@ -29,6 +30,7 @@
                                         <input class="checkbox_one" type="checkbox" name="id[]" value="{{ product.pk }}"/>
                                     </label>
                                 </td>
+                                <td>{{ product.group.title }}</td>
                                 <td>{{ product.title }}</td>
                                 <td class="no-wrap">{{ product.price_right_format }}</td>
                                 <td>
@@ -42,6 +44,7 @@
                                     <a class="btn btn-mini edit-button" data-toggle="modal" href="#edit-product" value="{{ product.pk }}">
                                         <i class="icon-pencil"></i>
                                         <div class="hidden edit-product__data">
+                                            <div class="product-data__group">{{ product.group }}</div>
                                             <div class="product-data__title">{{ product.title }}</div>
                                             <div class="product-data__price">{{ product.price }}</div>
                                             <div class="product-data__status">{% if product.is_active == True %}1{% else %}0{% endif %}</div>
@@ -58,14 +61,17 @@
                     </tbody>
                 </table>
             </form>
-            <div class="row-fluid datatables_massive_product">
-                <div class="span6 action-bar">
+            <div class="row-fluid datatables_massive datatables_massive_product">
+                <div class="span8 action-bar">
                     <div class="action-bar__checkbox">
                         <label class="checkbox">
                             <input class="checkbox_all" type="checkbox"/> Для всех
                         </label>
                     </div>
                     <div class="action-bar__action">
+                        <a class="btn massive-change-product-group-button">
+                            Сменить группу
+                        </a>
                         <a class="btn massive-activate-button">
                             Активировать
                         </a>
@@ -77,10 +83,8 @@
                         </a>
                     </div>
                 </div>
-                <div class="span2 record-number-wrap">
-                    <div class="record-number">
-                        Всего: {{ count }}
-                    </div>
+                <div class="record-number">
+                    Всего продуктов: {{ count }}
                 </div>
             </div>
 
@@ -121,6 +125,15 @@
                     <div class="modal-body">
                         <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
                         <div class="control-group">
+                            <label class="control-label" for="selectEditGroup">
+                                Группа
+                                <span class="required-input">*</span>
+                            </label>
+                            <div class="controls">
+                                {{ product_edit_form.group }}
+                            </div>
+                        </div>
+                        <div class="control-group">
                             <label class="control-label" for="inputEditTitle">
                                 Название
                                 <span class="required-input">*</span>
@@ -147,7 +160,7 @@
                         </div>
                         <div class="form-add__tips">
                             <div class="form-add-tips__tip">
-                                <span class="required-input">*</span> - поле, обязательное для заполнения
+                                <span class="required-input">*</span> - поля, обязательные для заполнения
                             </div>
                         </div>
                     </div>
@@ -160,111 +173,42 @@
                     </div>
                 </form>
             </div>
-
-            <script type="text/javascript">
-                (function($){
-                    $(document).ready(function(){
-                        var $product_table = $("#product-table");
-                        $product_table.dataTable({
-                            "language": {
-                                "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
-                            },
-                            "aoColumnDefs": [
-                                { "bSortable": false, "aTargets": [0, 4, 5 ] },
-                                { "bSearchable": false, "aTargets": [0, 4, 5 ] }
-                            ],
-                            "order": [1, 'asc' ],
-                            "bInfo": false,
-                            {% if request.GET.length and start >= 0 %}
-                                "iDisplayLength": {{ request.GET.length }},
-                                "iDisplayStart": {{ start }},
-                            {% endif %}
-                            {% if request.GET.search %}
-                                "oSearch": {"sSearch": "{{ request.GET.search }}"}
-                            {% endif %}
-                        });
-                        var table = $product_table.DataTable();
-                        $('.delete-button').bind('click', function(){
-                            var id = $(this).attr('value');
-                            var info = table.page.info();
-                            var $filter_input = $('#product-table_filter').find('input');
-                            $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
-                        });
-
-                        var $form_edit_product = $('.form-edit-product');
-                        $('.edit-button').bind('click', function(){
-                            var id = $(this).attr('value');
-                            var info = table.page.info();
-                            var $filter_input = $('#product-table_filter').find('input');
-                            $form_edit_product.attr({'action': '{% url "edit_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
-                            console.log($filter_input);
-                            var $edit_product__data = $('#edit-product').find('.modal-body');
-                            var title = $(this).find('.product-data__title').text();
-                            $edit_product__data.find('#inputEditTitle').val(title);
-                            var price = $(this).find('.product-data__price').text();
-                            $edit_product__data.find('#inputEditPrice').val(price);
-                            var status = $(this).find('.product-data__status').text();
-                            $edit_product__data.find('#selectIsActive').val(status);
-                        });
-
-                        var $checkboxes_one = $('.checkbox_one');
-                        var $checkbox_all = $('.checkbox_all');
-                        $checkbox_all.change(function() {
-                            if($(this).is(":checked")) {
-                                $checkboxes_one.prop('checked', true);
-                            }
-                            else {
-                                $checkboxes_one.prop('checked', false);
-                            }
-                        });
-
-                        $('.massive-delete-button').click(function(){
-                            var $checkboxes_checked = $(".checkbox_one:checked");
-                            var $checkboxes_checked_length = $checkboxes_checked.length;
-                            if ($checkboxes_checked_length == 1) {
-                                var id = $checkboxes_checked.val();
-                                var info = table.page.info();
-                                $('#delete__ok').attr("href", '{% url "delete_product" %}?id=' + id + '&page=' + (info.page + 1) + '&length=' + info.length);
-                                $('#delete-product').modal('show');
-                            }
-                            else {
-                                if ($checkboxes_checked_length != 0) {
-                                    $('#massive-delete-product').modal('show');
-                                }
-                            }
-                        });
-                        var $form = $('.form-massive');
-                        var $massive_delete_ok = $('#massive-delete__ok');
-                        $('#inputDelete').change(function() {
-                            if($(this).val() == "УДАЛИТЬ") {
-                                $massive_delete_ok.prop( "disabled", false );
-                            } else {
-                                $massive_delete_ok.prop( "disabled", true );
-                            }
-                        });
-                        $massive_delete_ok.click(function(){
-                            var info = table.page.info();
-                            var $filter_input = $('#product-table_filter').find('input');
-                            $form.attr('action', '{% url "massive_delete_products" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
-                        });
-                        $('.massive-activate-button').click(function(){
-                            var info = table.page.info();
-                            var $filter_input = $('#product-table_filter').find('input');
-                            $form.attr('action', '{% url "massive_activate_product" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
-                        });
-                        $('.massive-deactivate-button').click(function(){
-                            var info = table.page.info();
-                            var $filter_input = $('#product-table_filter').find('input');
-                            $form.attr('action', '{% url "massive_deactivate_product" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
-                        });
-                    });
-                })(jQuery);
-            </script>
+            <div class="modal hide fade" id="massive-change-product-group" tabindex="-1" role="dialog" aria-labelledby="ChangeProductGroupLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3 class="center">Смена группы товаров</h3>
+                </div>
+                <div class="modal-body">
+                    <h5 class="form-add__please">Пожалуйста, выберите группу товаров:</h5>
+                    <div class="center">
+                        {% if product_groups %}
+                            <select id="selectProductGroup" name="productGroup">
+                                {% for product_group in product_groups %}
+                                    <option value="{{ product_group.pk }}">{{ product_group.title }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="massive-change-product-group__ok" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                </div>
+            </div>
         {% else %}
            <h5 class="center">Не было добавлено ни одного продукта</h5>
         {% endif %}
         <form action="{% url "get_products" %}" method="post" class="form-add form-horizontal form-add-product">
             <h5 class="form-add-heading">Для добавления продукции заполните, пожалуйста, следующую форму:</h5>
+            <div class="control-group">
+                <label class="control-label" for="selectGroup">
+                    Группа
+                    <span class="required-input">*</span>
+                </label>
+                <div class="controls">
+                    {{ product_form.group }}
+                </div>
+            </div>
             <div class="control-group">
                 <label class="control-label" for="inputTitle">
                     Название
@@ -284,26 +228,148 @@
             </div>
             <div class="form-add__tips">
                 <div class="form-add-tips__tip">
-                    <span class="required-input">*</span> - поле, обязательное для заполнения
+                    <span class="required-input">*</span> - поля, обязательные для заполнения
                 </div>
             </div>
             <div class="form-add__submits">
                 <button type="submit" id="add__ok" class="btn btn-primary">Добавить продукцию</button>
             </div>
         </form>
-        {% if products %}
-            <script type="text/javascript">
-                (function($){
-                    $(document).ready(function(){
-                        $('#add__ok').click(function() {
-                            var table = $("#product-table").DataTable();
+    </div>
+{% endblock %}
+
+{% block products__script %}
+    {% if products %}
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function(){
+                    var $product_table = $("#product-table");
+                    $product_table.dataTable({
+                        "language": {
+                            "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
+                        },
+                        "aoColumnDefs": [
+                            { "bSortable": false, "aTargets": [0, 5, 6 ] },
+                            { "bSearchable": false, "aTargets": [0, 5, 6 ] }
+                        ],
+                        "order": [2, 'asc' ],
+                        "bInfo": false,
+                        {% if request.GET.length and start >= 0 %}
+                            "iDisplayLength": {{ request.GET.length }},
+                            "iDisplayStart": {{ start }},
+                        {% endif %}
+                        {% if request.GET.search %}
+                            "oSearch": {"sSearch": "{{ request.GET.search }}"}
+                        {% endif %}
+                    });
+                    var table = $product_table.DataTable();
+                    $('.delete-button').bind('click', function(){
+                        var id = $(this).attr('value');
+                        var info = table.page.info();
+                        var $filter_input = $('#product-table_filter').find('input');
+                        $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
+                    });
+
+                    var $form_edit_product = $('.form-edit-product');
+                    $('.edit-button').bind('click', function(){
+                        var id = $(this).attr('value');
+                        var info = table.page.info();
+                        var $filter_input = $('#product-table_filter').find('input');
+                        $form_edit_product.attr({'action': '{% url "edit_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
+                        var $edit_product__data = $('#edit-product').find('.modal-body');
+                        var group = $(this).find('.product-data__group').text();
+                        $edit_product__data.find('#selectEditGroup').val(group);
+                        var title = $(this).find('.product-data__title').text();
+                        $edit_product__data.find('#inputEditTitle').val(title);
+                        var price = $(this).find('.product-data__price').text();
+                        $edit_product__data.find('#inputEditPrice').val(price);
+                        var status = $(this).find('.product-data__status').text();
+                        $edit_product__data.find('#selectIsActive').val(status);
+                    });
+
+                    var $checkboxes_one = $('.checkbox_one');
+                    var $checkbox_all = $('.checkbox_all');
+                    $checkbox_all.change(function() {
+                        if($(this).is(":checked")) {
+                            $checkboxes_one.prop('checked', true);
+                        }
+                        else {
+                            $checkboxes_one.prop('checked', false);
+                        }
+                    });
+
+                    $('.massive-delete-button').click(function(){
+                        var $checkboxes_checked = $(".checkbox_one:checked");
+                        var $checkboxes_checked_length = $checkboxes_checked.length;
+                        if ($checkboxes_checked_length == 1) {
+                            var id = $checkboxes_checked.val();
                             var info = table.page.info();
                             var $filter_input = $('#product-table_filter').find('input');
-                            $('.form-add-product').attr({'action': "{% url "get_products" %}?page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()}).submit();
-                        });
+                            $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
+                            $('#delete-product').modal('show');
+                        }
+                        else {
+                            if ($checkboxes_checked_length != 0) {
+                                $('#massive-delete-product').modal('show');
+                            }
+                        }
                     });
-                })(jQuery);
-            </script>
-        {% endif %}
-    </div>
+                    var $form = $('.form-massive');
+                    var $massive_delete_ok = $('#massive-delete__ok');
+                    $('#inputDelete').change(function() {
+                        if($(this).val() == "УДАЛИТЬ") {
+                            $massive_delete_ok.prop( "disabled", false );
+                        } else {
+                            $massive_delete_ok.prop( "disabled", true );
+                        }
+                    });
+                    $massive_delete_ok.click(function(){
+                        var info = table.page.info();
+                        var $filter_input = $('#product-table_filter').find('input');
+                        $form.attr('action', '{% url "massive_delete_products" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
+                    });
+                    $('.massive-activate-button').click(function(){
+                        var info = table.page.info();
+                        var $filter_input = $('#product-table_filter').find('input');
+                        $form.attr('action', '{% url "massive_activate_product" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
+                    });
+                    $('.massive-deactivate-button').click(function(){
+                        var info = table.page.info();
+                        var $filter_input = $('#product-table_filter').find('input');
+                        $form.attr('action', '{% url "massive_deactivate_product" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
+                    });
+                    $('.massive-change-product-group-button').click(function(){
+                        if ($(".checkbox_one:checked").length != 0) {
+                            $('#massive-change-product-group').modal('show');
+                        }
+                    });
+                    $('#massive-change-product-group__ok').click(function(){
+                        var info = table.page.info();
+                        var $filter_input = $('#product-table_filter').find('input');
+                        var value = $('#selectProductGroup').val();
+                        $form.append( '<input type="hidden" name="product-group_id" value="' + value + '"/>').attr('action', '{% url "massive_change_product_group" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
+                    });
+                    var $select_group_massive = $('#selectProductGroup');
+                    $select_group_massive.attr({
+                        'data-live-search': "true",
+                        'data-size': "10"
+                    });
+                    $select_group_massive.selectpicker();
+
+                    $('#add__ok').click(function() {
+                        var table = $("#product-table").DataTable();
+                        var info = table.page.info();
+                        var $filter_input = $('#product-table_filter').find('input');
+                        $('.form-add-product').attr({'action': "{% url "get_products" %}?page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()}).submit();
+                    });
+                    var $select_group = $('#selectGroup');
+                    $select_group.attr({
+                        'data-live-search': "true",
+                        'data-size': "10"
+                    });
+                    $select_group.selectpicker();
+                });
+            })(jQuery);
+        </script>
+    {% endif %}
 {%endblock%}

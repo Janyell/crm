@@ -1,0 +1,24 @@
+{% extends "analyze_period.html" %}
+
+{% block period__count %}{% endblock %}
+
+{% block analyze-table %}
+    {% if analysed_data %}
+        <table class="table table-hover table-bordered" id="analyze-table">
+            <thead>
+                <tr>
+                    <th>Доставка(город)</th>
+                    <th>Количество заказов, шт.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for city in analysed_data %}
+                    <tr>
+                        <td>{{ city.city_name }}</td>
+                        <td>{{ city.number }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock analyze-table %}

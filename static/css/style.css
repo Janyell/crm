@@ -280,12 +280,11 @@ div.source {
 .manager > .span2 {
     margin-left: inherit;
 }
-.datatables_massive {
-    margin-top: -35px;
-}
 .datatables_massive_product {
-    margin-top: -35px;
     margin-bottom: 40px;
+}
+.datatables_massive > .action-bar {
+    margin-top: -35px;
 }
 .new-period {
     margin-bottom: 30px;
@@ -295,4 +294,10 @@ div.source {
 }
 .label_between {
     padding-top: 5px;
+}
+.form-add-product-group {
+    margin-top: 40px;
+}
+.pg_header {
+    margin-top: 40px;
 }

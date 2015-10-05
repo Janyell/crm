@@ -191,3 +191,7 @@ def massive_change_product_group(request):
     get_params = '?'
     get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/products/' + get_params)
+
+
+def massive_delete_product_groups(request):
+    pass

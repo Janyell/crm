@@ -4,7 +4,7 @@
     <div class="container container_mini-width">
         <a href="{% url "analyst" %}" class="btn">Назад</a>
         <div class="analyze-period__wrap clearfix">
-            <form method="get" action="{% url "analyze_period" %}" class="form-horizontal form-analyze">
+            <form method="get" action="" class="form-horizontal form-analyze">
                 <h2 class="center">{{ page_title }}</h2>
                 <h5>{{ error }}</h5>
                 <div class="control-group">
@@ -33,47 +33,51 @@
                         </div>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="inputCount">
-                        Подсчет по
-                    </label>
-                    <div class="controls">
-                        <label class="radio">
-                            <input type="radio" id="inputCount" name="count" class="count" value="shipped" checked />
-                            Отгружено
+                {% block period__count %}
+                    <div class="control-group">
+                        <label class="control-label" for="inputCount">
+                            Подсчет по
                         </label>
-                        <label class="radio">
-                            <input type="radio" name="count" class="count" value="made-claims" {% if request.GET.count == "made-claims" %} checked {% endif %} />
-                            Подано заявок
-                        </label>
+                        <div class="controls">
+                            <label class="radio">
+                                <input type="radio" id="inputCount" name="count" class="count" value="shipped" checked />
+                                Отгружено
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="count" class="count" value="made-claims" {% if request.GET.count == "made-claims" %} checked {% endif %} />
+                                Подано заявок
+                            </label>
+                        </div>
                     </div>
-                </div>
+                {% endblock period__count %}
                 <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
             </form>
         </div>
-        {% if analysed_data %}
-            <table class="table table-hover table-bordered" id="analyze-period-table">
-                <thead>
-                    <tr>
-                        <th>Продукция</th>
-                        <th>Количество, шт</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in analysed_data %}
+        {% block analyze-table %}
+            {% if analysed_data %}
+                <table class="table table-hover table-bordered" id="analyze-table">
+                    <thead>
                         <tr>
-                            <td>{{ product.product__title }}</td>
-                            <td>{{ product.number }}</td>
+                            <th>Продукция</th>
+                            <th>Количество, шт.</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
+                    </thead>
+                    <tbody>
+                        {% for product in analysed_data %}
+                            <tr>
+                                <td>{{ product.product__title }}</td>
+                                <td>{{ product.number }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        {% endblock analyze-table %}
     </div>
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
-                $("#analyze-period-table").dataTable({
+                $("#analyze-table").dataTable({
                     "language": {
                         "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
                     }
@@ -90,7 +94,7 @@
                 });
             });
             $(window).load(function() {
-                $("#analyze-period-table_filter input[type='search']").attr("placeholder", "Поиск");
+                $("#analyze-table_filter").find("input[type='search']").attr("placeholder", "Поиск");
             });
         })(jQuery);
     </script>

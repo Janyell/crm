@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block content %}
+    {%  block products  %}{% endblock %}
+    {# Группы продуктов #}
+    {% block product-groups %}
+        <div class="container container_mini-width">
+            <h3 class="center pg_header">Группы товаров</h3>
+            {% if error == 2 %}
+                <div class="text-error">
+                    Такая группа уже существует!
+                </div>
+            {% endif %}
+        {% if product_groups %}
+            <form class="form-horizontal form-pg-massive" method="POST">
+                <table class="table table-hover table-bordered" id="product-group-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Название</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product_group in product_groups %}
+                            <tr>
+                                <td>
+                                    <label class="checkbox">
+                                        <input class="pg-checkbox_one" type="checkbox" name="id[]" value="{{ product_group.pk }}"/>
+                                    </label>
+                                </td>
+                                <td>{{ product_group.title }}</td>
+                                <td>
+                                    <a class="btn btn-mini edit-pg-button" data-toggle="modal" href="#edit-product-group" value="{{ product_group.pk }}">
+                                        <i class="icon-pencil"></i>
+                                        <div class="hidden edit-product-group__data">
+                                            <div class="product-group-data__title">{{ product_group.title }}</div>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-mini delete-pg-button" data-toggle="modal" href="#delete-product-group" value="{{ product_group.pk }}">
+                                        <i class="icon-remove"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+            <div class="row-fluid datatables_massive datatables_massive_product">
+                <div class="span6 action-bar">
+                    <div class="action-bar__checkbox">
+                        <label class="checkbox">
+                            <input class="pg-checkbox_all" type="checkbox"/> Для всех
+                        </label>
+                    </div>
+                    <div class="action-bar__action">
+                        <a class="btn massive-delete-pg-button">
+                            <i class="icon-remove"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="record-number">
+                    Всего групп товаров: {{ count }}
+                </div>
+            </div>
+
+            <div class="modal hide fade" id="delete-product-group" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>Вы уверены, что хотите удалить эту группу товаров?</h3>
+                </div>
+                <div class="modal-footer">
+                    <a id="delete-pg__ok" class="btn btn-danger">Удалить</a>
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                </div>
+            </div>
+
+            <div class="modal hide fade" id="massive-delete-product-group" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>Вы уверены, что хотите удалить выделенные группы товаров?</h3>
+                </div>
+                <div class="modal-body">
+                    <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
+                    <div class="center">
+                        <input id="inputDeletePg" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="massive-delete-pg__ok" class="btn btn-danger" disabled>Удалить</button>
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                </div>
+            </div>
+
+            <div class="modal hide fade" id="edit-product-group" tabindex="-1" role="dialog" aria-hidden="true">
+                <form method="post" class="form-horizontal form-add_modal form-edit-product">
+                    <div class="modal-header">
+                        <a class="close" data-dismiss="modal">×</a>
+                        <h3>Редактирование группы товарова</h3>
+                    </div>
+                    <div class="modal-body">
+                        <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
+                        <div class="control-group">
+                            <label class="control-label" for="inputEditGroupTitle">
+                                Название
+                                <span class="required-input">*</span>
+                            </label>
+                            <div class="controls">
+                                {{ product_group_edit_form.title }}
+                            </div>
+                        </div>
+                        <div class="form-add__tips">
+                            <div class="form-add-tips__tip">
+                                <span class="required-input">*</span> - поле, обязательное для заполнения
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-add__submits">
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                            <button type="reset" class="btn">Очистить</button>
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <script type="text/javascript">
+                (function($){
+                    $(document).ready(function(){
+                        var $product_group_table = $("#product-group-table");
+                        $product_group_table.dataTable({
+                            "language": {
+                                "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
+                            },
+                            "aoColumnDefs": [
+                                { "bSortable": false, "aTargets": [0, 2, 3 ] },
+                                { "bSearchable": false, "aTargets": [0, 2, 3 ] }
+                            ],
+                            "order": [1, 'asc' ],
+                            "bInfo": false,
+                            {% if request.GET.pg_length and pg_start >= 0 %}
+                                "iDisplayLength": {{ request.GET.pg_length }},
+                                "iDisplayStart": {{ pg_start }},
+                            {% endif %}
+                            {% if request.GET.pg_search %}
+                                "oSearch": {"sSearch": "{{ request.GET.pg_search }}"}
+                            {% endif %}
+                        });
+                        var table = $product_group_table.DataTable();
+                        $('.delete-pg-button').bind('click', function(){
+                            var id = $(this).attr('value');
+                            var info = table.page.info();
+                            var $filter_input = $('#product-group-table_filter').find('input');
+                            $('#delete-pg__ok').attr({'href': '{% url "delete_product_group" %}?id=' + id + "&pg_page=" + (info.page + 1) + "&pg_length=" + info.length + "&pg_search=" + $filter_input.val()});
+                        });
+
+                        var $form_edit_product_group = $('.form-edit-product-group');
+                        $('.edit-pg-button').bind('click', function(){
+                            var id = $(this).attr('value');
+                            var info = table.page.info();
+                            var $filter_input = $('#product-group-table_filter').find('input');
+                            $form_edit_product_group.attr({'action': '{% url "edit_product_group" %}?id=' + id + "&pg_page=" + (info.page + 1) + "&pg_length=" + info.length + "&pg_search=" + $filter_input.val()});
+                            var $edit_product_group__data = $('#edit-product-group').find('.modal-body');
+                            var title = $(this).find('.product-group-data__title').text();
+                            $edit_product_group__data.find('#inputEditGroupTitle').val(title);
+                        });
+
+                        var $checkboxes_one = $('.pg-checkbox_one');
+                        var $checkbox_all = $('.pg-checkbox_all');
+                        $checkbox_all.change(function() {
+                            if($(this).is(":checked")) {
+                                $checkboxes_one.prop('checked', true);
+                            }
+                            else {
+                                $checkboxes_one.prop('checked', false);
+                            }
+                        });
+
+                        $('.massive-delete-pg-button').click(function(){
+                            var $checkboxes_checked = $('.pg-checkbox_one:checked');
+                            var $checkboxes_checked_length = $checkboxes_checked.length;
+                            if ($checkboxes_checked_length == 1) {
+                                var id = $checkboxes_checked.val();
+                                var info = table.page.info();
+                                var $filter_input = $('#product-group-table_filter').find('input');
+                                $('#delete-pg__ok').attr({'href': '{% url "delete_product_group" %}?id=' + id + "&pg_page=" + (info.page + 1) + "&pg_length=" + info.length + "&pg_search=" + $filter_input.val()});
+                                $('#delete-product').modal('show');
+                            }
+                            else {
+                                if ($checkboxes_checked_length != 0) {
+                                    $('#massive-delete-pg-product').modal('show');
+                                }
+                            }
+                        });
+                        var $form = $('.pg-form-massive');
+                        var $massive_delete_ok = $('#massive-delete-pg__ok');
+                        $('#inputDeletePg').change(function() {
+                            if($(this).val() == "УДАЛИТЬ") {
+                                $massive_delete_ok.prop( "disabled", false );
+                            } else {
+                                $massive_delete_ok.prop( "disabled", true );
+                            }
+                        });
+                        $massive_delete_ok.click(function(){
+                            var info = table.page.info();
+                            var $filter_input = $('#product-table_filter').find('input');
+                            $form.attr('action', '{% url "massive_delete_product_groups" %}?pg_page=' + (info.page + 1) + '&pg_length=' + info.length + "&pg_search=" + $filter_input.val()).submit();
+                        });
+                    });
+                })(jQuery);
+            </script>
+        {% else %}
+           <h5 class="center">Не было добавлено ни одной группы товаров</h5>
+        {% endif %}
+        </div>
+        <div class="container">
+        <form action="{% url "get_product_groups" %}" method="post" class="form-add form-horizontal form-add-product-group">
+            <h5 class="form-add-heading">Для добавления группы товаров заполните, пожалуйста, следующую форму:</h5>
+            <div class="control-group">
+                <label class="control-label" for="inputGroupTitle">
+                    Название
+                    <span class="required-input">*</span>
+                </label>
+                <div class="controls">
+                    {{ product_group_form.title }}
+                </div>
+            </div>
+            <div class="form-add__tips">
+                <div class="form-add-tips__tip">
+                    <span class="required-input">*</span> - поле, обязательное для заполнения
+                </div>
+            </div>
+            <div class="form-add__submits">
+                <button type="submit" id="add-group__ok" class="btn btn-primary">Добавить группу товаров</button>
+            </div>
+        </form>
+        {% if product_groups %}
+            <script type="text/javascript">
+                (function($){
+                    $(document).ready(function(){
+                        var table = $("#product-group-table").DataTable();
+                        $('#add-group__ok').click(function() {
+                            var info = table.page.info();
+                            var $filter_input = $('#product-group-table_filter').find('input');
+                            $('.form-add-product-group').attr({'action': "{% url "get_product_groups" %}?page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()}).submit();
+                        });
+                    });
+                })(jQuery);
+            </script>
+        {% endif %}
+    </div>
+    {% endblock product-groups %}
+    {% block products__script %}{% endblock %}
+    {% block product-groups__script %}{% endblock %}
+{% endblock %}

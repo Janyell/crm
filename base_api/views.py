@@ -737,3 +737,7 @@ def get_settings(request):
 
 def get_reports(request):
     return render(request,'get_reports.html')
+
+
+def analyze_cities(request):
+    return render(request, 'analyze_cities.html')
