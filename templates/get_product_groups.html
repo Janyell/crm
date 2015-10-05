@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-    {%  block products  %}{% endblock %}
     {# Группы продуктов #}
     {% block product-groups %}
         <div class="container container_mini-width">
-            <h3 class="center pg_header">Группы товаров</h3>
-            {% if error == 2 %}
+            <a href="{% url "get_products" %}" class="btn">Перейти в продукты</a>
+            <h3 class="center">Группы товаров</h3>
+            {% if error == 1 %}
                 <div class="text-error">
                     Такая группа уже существует!
                 </div>
@@ -98,7 +98,7 @@
                 <form method="post" class="form-horizontal form-add_modal form-edit-product">
                     <div class="modal-header">
                         <a class="close" data-dismiss="modal">×</a>
-                        <h3>Редактирование группы товарова</h3>
+                        <h3>Редактирование группы товаров</h3>
                     </div>
                     <div class="modal-body">
                         <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
@@ -141,12 +141,12 @@
                             ],
                             "order": [1, 'asc' ],
                             "bInfo": false,
-                            {% if request.GET.pg_length and pg_start >= 0 %}
-                                "iDisplayLength": {{ request.GET.pg_length }},
-                                "iDisplayStart": {{ pg_start }},
+                            {% if request.GET.length and start >= 0 %}
+                                "iDisplayLength": {{ request.GET.length }},
+                                "iDisplayStart": {{ start }},
                             {% endif %}
-                            {% if request.GET.pg_search %}
-                                "oSearch": {"sSearch": "{{ request.GET.pg_search }}"}
+                            {% if request.GET.search %}
+                                "oSearch": {"sSearch": "{{ request.GET.search }}"}
                             {% endif %}
                         });
                         var table = $product_group_table.DataTable();
@@ -154,7 +154,7 @@
                             var id = $(this).attr('value');
                             var info = table.page.info();
                             var $filter_input = $('#product-group-table_filter').find('input');
-                            $('#delete-pg__ok').attr({'href': '{% url "delete_product_group" %}?id=' + id + "&pg_page=" + (info.page + 1) + "&pg_length=" + info.length + "&pg_search=" + $filter_input.val()});
+                            $('#delete-pg__ok').attr({'href': '{% url "delete_product_group" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
                         });
 
                         var $form_edit_product_group = $('.form-edit-product-group');
@@ -162,7 +162,7 @@
                             var id = $(this).attr('value');
                             var info = table.page.info();
                             var $filter_input = $('#product-group-table_filter').find('input');
-                            $form_edit_product_group.attr({'action': '{% url "edit_product_group" %}?id=' + id + "&pg_page=" + (info.page + 1) + "&pg_length=" + info.length + "&pg_search=" + $filter_input.val()});
+                            $form_edit_product_group.attr({'action': '{% url "edit_product_group" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
                             var $edit_product_group__data = $('#edit-product-group').find('.modal-body');
                             var title = $(this).find('.product-group-data__title').text();
                             $edit_product_group__data.find('#inputEditGroupTitle').val(title);
@@ -186,12 +186,12 @@
                                 var id = $checkboxes_checked.val();
                                 var info = table.page.info();
                                 var $filter_input = $('#product-group-table_filter').find('input');
-                                $('#delete-pg__ok').attr({'href': '{% url "delete_product_group" %}?id=' + id + "&pg_page=" + (info.page + 1) + "&pg_length=" + info.length + "&pg_search=" + $filter_input.val()});
-                                $('#delete-product').modal('show');
+                                $('#delete-pg__ok').attr({'href': '{% url "delete_product_group" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
+                                $('#delete-product-group').modal('show');
                             }
                             else {
                                 if ($checkboxes_checked_length != 0) {
-                                    $('#massive-delete-pg-product').modal('show');
+                                    $('#massive-delete-product-group').modal('show');
                                 }
                             }
                         });
@@ -207,7 +207,7 @@
                         $massive_delete_ok.click(function(){
                             var info = table.page.info();
                             var $filter_input = $('#product-table_filter').find('input');
-                            $form.attr('action', '{% url "massive_delete_product_groups" %}?pg_page=' + (info.page + 1) + '&pg_length=' + info.length + "&pg_search=" + $filter_input.val()).submit();
+                            $form.attr('action', '{% url "massive_delete_product_groups" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
                     });
                 })(jQuery);
@@ -215,8 +215,6 @@
         {% else %}
            <h5 class="center">Не было добавлено ни одной группы товаров</h5>
         {% endif %}
-        </div>
-        <div class="container">
         <form action="{% url "get_product_groups" %}" method="post" class="form-add form-horizontal form-add-product-group">
             <h5 class="form-add-heading">Для добавления группы товаров заполните, пожалуйста, следующую форму:</h5>
             <div class="control-group">
@@ -253,6 +251,5 @@
         {% endif %}
     </div>
     {% endblock product-groups %}
-    {% block products__script %}{% endblock %}
     {% block product-groups__script %}{% endblock %}
 {% endblock %}

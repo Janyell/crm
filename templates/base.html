@@ -69,7 +69,7 @@
                                 <li class={% navactive request 'get_interested_clients' %}>
                                     <a href="{% url "get_interested_clients" %}">Люди</a>
                                 </li>
-                                <li class={% navactive request 'get_products' %}>
+                                <li class={% navactive request 'get_products get_product_groups' %}>
                                     <a href="{% url "get_products" %}">Продукты</a>
                                 </li>
                                 {% if user_role == 0 %}

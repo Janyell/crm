@@ -271,7 +271,7 @@ th a {
 .record-number-wrap {
     margin-left: 0 !important;
 }
-.form-massive {
+.form-massive, .form-pg-massive {
     margin: 0;
 }
 div.source {
@@ -294,10 +294,4 @@ div.source {
 }
 .label_between {
     padding-top: 5px;
-}
-.form-add-product-group {
-    margin-top: 40px;
-}
-.pg_header {
-    margin-top: 40px;
 }

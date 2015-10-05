@@ -14,7 +14,13 @@
             <tbody>
                 {% for city in analysed_data %}
                     <tr>
-                        <td>{{ city.city_name }}</td>
+                        <td>
+                            {% if city.city__name != None%}
+                                {{ city.city__name }}
+                            {% else %}
+                                Не указано
+                            {% endif %}
+                        </td>
                         <td>{{ city.number }}</td>
                     </tr>
                 {% endfor %}

@@ -201,7 +201,7 @@ class ProductForm(ModelForm):
             'title': TextInput(attrs={'id': "inputTitle",
                                       'required': 1}),
             'price': NumberInput(attrs={'id': "inputPrice"}),
-            'group': Select(attrs={'id': "selectGroup", 'required': 1, 'class': 'selectpicker'}),
+            'group': Select(attrs={'id': "selectAddGroup", 'required': 1, 'class': 'selectpicker'}),
         }
 
 
