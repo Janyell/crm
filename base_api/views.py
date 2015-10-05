@@ -91,7 +91,7 @@ def analyst(request):
     else:
         out.update({'user_role': user_role})
         out.update({'page_title': "Аналитика"})
-    return render(request, 'index.html', out)
+    return render(request, 'analyst/index.html', out)
 
 
 def log_in(request):
@@ -285,7 +285,7 @@ def edit_order_for_other_managers(request):
                 return HttpResponseRedirect('/search/' + get_params)
             get_params += get_request_param_as_string(request)
             return HttpResponseRedirect('/orders/' + get_params)
-    return render(request, 'edit_order_for_other_managers.html', out)
+    return render(request, 'order_claim/edit_order_for_other_managers.html', out)
 
 
 def edit_claim_for_other_managers(request):
@@ -339,7 +339,7 @@ def edit_claim_for_other_managers(request):
                 return HttpResponseRedirect('/search/' + get_params)
             get_params += get_request_param_as_string(request)
             return HttpResponseRedirect('/claims/' + get_params)
-    return render(request, 'edit_order_for_other_managers.html', out)
+    return render(request, 'order_claim/edit_order_for_other_managers.html', out)
 
 
 def get_claims(request):
@@ -465,8 +465,8 @@ def edit_product(request):
     return full_edit_product(request)
 
 
-def get_documents(request):
-    return render(request, 'get_documents.html')
+# def get_documents(request):
+#     return render(request, 'get_documents.html')
 
 
 def search(request):
@@ -744,7 +744,7 @@ def edit_product_group(request):
 
 
 def get_settings(request):
-    return render(request, 'get_settings.html')
+    return render(request, 'setting/get_settings.html')
 
 
 def get_reports(request):
@@ -752,4 +752,12 @@ def get_reports(request):
 
 
 def analyze_cities(request):
-    return render(request, 'analyze_cities.html')
+    return render(request, 'analyst/analyze_cities.html')
+
+
+def analyze_product_groups(request):
+    return render(request, 'analyst/analyze_product_groups.html')
+
+
+def view_analyzed_product_group(request):
+    return render_to_response('analyst/view_analyzed_product.html')

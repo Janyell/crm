@@ -38,7 +38,9 @@
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <a class="brand" href="{% if user_role != 0 %}{% url "get_orders" %}{% else %}{% url "index" %}{% endif %}">"Триумф"</a>
+                    {% if user_role != 0 %}
+                        <a class="brand" href="{% if user_role != 0 %}{% url "get_orders" %}{% else %}{% url "index" %}{% endif %}">"Триумф"</a>
+                    {% endif %}
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
                             {{ user.username }}
@@ -58,7 +60,7 @@
                                 </li>
                             {% endif %}
                             {% if user_role == 0 %}
-                                <li class={% navactive request 'analyst analyze_products view_analyzed_product analyze_managers analyze_period analyze_debtors analyze_cities' %}>
+                                <li class={% navactive request 'analyst analyze_products view_analyzed_product analyze_product_groups view_analyzed_product_group analyze_managers analyze_period analyze_period_product_groups analyze_debtors analyze_cities' %}>
                                     <a href="{% url "analyst" %}">Аналитика</a>
                                 </li>
                             {% endif %}
@@ -83,6 +85,11 @@
                                 <li class={% navactive request 'get_documents' %}>
                                     <a href="{% url "index" %}admin/media_tree/filenode/">Документы</a>
                                 </li>
+                                {% if user_role == 0 %}{# только для менеджеров #}
+                                    <li class={% navactive request 'get_settings get_sources' %}>
+                                        <a href="{% url "get_settings" %}">Настройки</a>
+                                    </li>
+                                {% endif %}
                             {% endif %}
                             {% if user_role == 1 %}{# только для менеджеров #}
                                 <li class={% navactive request 'get_reports' %}>

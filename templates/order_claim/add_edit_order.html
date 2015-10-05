@@ -1,4 +1,4 @@
-{%extends "base.html"%}
+{%extends "base.html" %}
 
 {%block content%}
     <div class="container container_fixed_width">
@@ -285,30 +285,7 @@
                     </div>
                 {% endif %}
                 {% if request.path == edit_claim_url %}
-                    {% block related_with %}
-                        <div class="control-group">
-                            <label class="control-label">
-                                Заявка связана с
-                            </label>
-                            <div class="controls">
-                                {{ order_form.client_related_with }}
-                                {{ order_form.client }}
-                            </div>
-                        </div>
-
-                        <script type="text/javascript">
-                            (function($){
-                                $(document).ready(function(){
-                                    var $select_client_related_with = $('#client_related-with');
-                                    $select_client_related_with.attr({
-                                        'data-live-search': "true",
-                                        'data-size': "10"
-                                    });
-                                    $select_client_related_with.selectpicker();
-                                });
-                            })(jQuery);
-                        </script>
-                    {% endblock related_with %}
+                    {% include "order_claim/modules/edit_claim.html" %}
                 {% endif %}
                 <div class="form-add__tips">
                     <div class="form-add-tips__tip">
@@ -440,7 +417,7 @@
                     });
                     {# Первыми (после пустого -----) поставить записи с определенными value (Челябинск, Москва, Самовывоз) #}
                     var $select_city__empty_option = $select_city.find('option[value=""]');
-                    var values = [123, 124, 125]; {# Самовывоз, Москва, Челябинск #}
+                    var values = [19, 14, 10]; {# Самовывоз, Москва, Челябинск #}
                     values.forEach(function(item) {
                         $select_city__empty_option.after($select_city.find('option[value='+ item +']'));
                     });

@@ -89,7 +89,7 @@ def full_add_edit_role(request):
             form = RoleForm()
             out.update({'page_title': "Добавление роли"})
     out.update({'role_form': form})
-    return render(request, "add_edit_role.html", out)
+    return render(request, "role/add_edit_role.html", out)
 
 
 def full_delete_roles(request):
@@ -132,4 +132,4 @@ def full_get_roles(request):
     out.update({'page_title': "Роли"})
     out.update({'roles': roles})
     out.update({'count': roles.count()})
-    return render(request, 'get_roles.html', out)
+    return render(request, 'role/get_roles.html', out)

@@ -94,7 +94,7 @@ def full_add_edit_claim(request):
                     product.price_right_format = right_money_format(product.price)
                 out.update({'order_form': form})
                 out.update({'page_title': "Редактирование заявки"})
-                return render(request, 'add_edit_order.html', out)
+                return render(request, 'order_claim/add_edit_order.html', out)
             if request.POST['bill'] != '':
                 try:
                     bill = int(request.POST['bill'])
@@ -139,7 +139,7 @@ def full_add_edit_claim(request):
                         product.price_right_format = right_money_format(product.price)
                     out.update({'order_form': form})
                     out.update({'page_title': "Редактирование заявки"})
-                    return render(request, 'add_edit_order.html', out)
+                    return render(request, 'order_claim/add_edit_order.html', out)
             else:
                 bill = None
             new_claim = Orders.objects.get(id=pk, is_deleted=0, is_claim=1)
@@ -212,7 +212,7 @@ def full_add_edit_claim(request):
                             product.price_right_format = right_money_format(product.price)
                         out.update({'order_form': form})
                         out.update({'page_title': "Редактирование заказа"})
-                        return render(request, 'add_edit_order.html', out)
+                        return render(request, 'order_claim/add_edit_order.html', out)
                     else:
                         name_of_pr = 'select-product__number_' + id_of_pr
                         count_of_products = request.POST[name_of_pr]
@@ -310,7 +310,7 @@ def full_add_edit_claim(request):
                             product.price_right_format = right_money_format(product.price)
                         out.update({'order_form': form})
                         out.update({'page_title': "Добавление заказа"})
-                        return render(request, 'add_edit_order.html', out)
+                        return render(request, 'order_claim/add_edit_order.html', out)
                     else:
                         name_of_pr = 'select-product__number_' + id_of_pr
                         count_of_products = request.POST[name_of_pr]
@@ -526,7 +526,7 @@ def full_add_edit_claim(request):
         if organization.organization != "":
             organizations.append(organization.organization)
     out.update({'organizations': organizations})
-    return render(request, 'add_edit_order.html', out)
+    return render(request, 'order_claim/add_edit_order.html', out)
 
 
 def full_get_claims(request):
@@ -621,7 +621,7 @@ def full_get_claims(request):
     out.update({'page_title': "Заявки"})
     out.update({'claims': order_list})
     out.update({'count': orders.count()})
-    return render(request, 'get_claims.html', out)
+    return render(request, 'order_claim/get_claims.html', out)
 
 
 def full_delete_claim(request):

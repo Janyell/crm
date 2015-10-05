@@ -53,7 +53,7 @@ def full_get_sources(request):
     out.update({'sources': sources})
     out.update({'source_form': form})
     out.update({'count': sources.count()})
-    return render(request, 'get_sources.html', out)
+    return render(request, 'setting/get_sources.html', out)
 
 
 def full_edit_source(request):

@@ -28,4 +28,4 @@ def full_analyze_debtors(request):
             order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
     out.update({'page_title': "Должники"})
     out.update({'debts': orders})
-    return render(request, 'analyze_debtors.html', out)
+    return render(request, 'analyst/analyze_debtors.html', out)

@@ -1,0 +1,16 @@
+{% extends "analyst/analyze_products.html" %}
+
+{% block entities_title %}Группа товаров{% endblock %}
+
+{% block entities_content %}
+    {% if product_groups %}
+        {% for entity in product_groups %}
+            <tr>
+                <td>{{ entity.title }}</td>
+                <td>
+                    <a class="btn analyze-button" data-toggle="modal" href="{% url "view_analyzed_product_group" %}?id={{ entity.pk }}">Анализировать</a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

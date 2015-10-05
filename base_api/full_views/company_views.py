@@ -59,7 +59,7 @@ def full_add_edit_company(request):
             form = CompanyForm()
             out.update({'page_title': "Добавление компании"})
     out.update({'company_form': form})
-    return render(request, 'add_edit_company.html', out)
+    return render(request, 'company/add_edit_company.html', out)
 
 
 def full_delete_company(request):
@@ -105,4 +105,4 @@ def full_get_companies(request):
     out.update({'page_title': "Компании"})
     out.update({'companies': companies})
     out.update({'count': companies.count()})
-    return render(request, 'get_companies.html', out)
+    return render(request, 'company/get_companies.html', out)

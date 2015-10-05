@@ -1,4 +1,4 @@
-{%extends "base.html"%}
+{%extends "base.html" %}
 
 {%block content%}
     <script src="{{ STATIC_URL }}js/Chart.min.js"></script>
@@ -6,7 +6,7 @@
     <div class="container">
     <a href="{% url "analyst" %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }}</h2>
-        <form method="get" action="{% url "analyze_sales_by_managers" %}" class="analyze-sales-by-managers form-horizontal">
+        <form method="get" action="{% url "analyze_total_sales" %}" class="analyze-total-sales form-horizontal">
             <div class="control-group">
                 <label class="control-label" for="selectPeriod">
                     Период
@@ -22,23 +22,19 @@
             <input class="btn btn-primary pull-right" type="submit" value="Анализировать" />
         </form>
         {% if select_period %}
-            <canvas id="analyze-sales-by-managers-chart" width="940" height="400"></canvas>
+            <canvas id="analyze-total-sales-chart" width="940" height="400"></canvas>
             <div class="chart-caption">
                 <div class="chart-caption__color chart-caption__color_first"></div>
-                Поступило звонков
+                Cумма выставленных счетов
             </div>
             <div class="chart-caption">
                 <div class="chart-caption__color chart-caption__color_second"></div>
-                Выставлено счетов
-            </div>
-            <div class="chart-caption">
-                <div class="chart-caption__color chart-caption__color_third"></div>
-                Отгружено
+                Cумма отгрузок
             </div>
             <script type="text/javascript">
                 (function($){
                     $(document).ready(function(){
-                        var ctx = document.getElementById("analyze-sales-by-managers-chart").getContext("2d");
+                        var ctx = document.getElementById("analyze-total-sales-chart").getContext("2d");
                         var data = {
                             labels: [
                                 {% if select_period %}
@@ -48,33 +44,23 @@
                                 {% endif %}],
                             datasets: [
                                 {
-                                    label: "Воронка продаж по менеджерам: поступило звонков",
+                                    label: "Воронка продаж общая: сумма выставленных счетов",
                                     fillColor: "rgba(220,220,220,0.2)",
                                     strokeColor: "rgba(220,220,220,1)",
                                     pointColor: "rgba(220,220,220,1)",
                                     pointStrokeColor: "#fff",
                                     pointHighlightFill: "#fff",
                                     pointHighlightStroke: "rgba(220,220,220,1)",
-                                    data: [{{ call_data }}]
+                                    data: [{{ bill_data }}]
                                 },
                                 {
-                                    label: "Воронка продаж по менеджерам: выставлено счетов",
+                                    label: "Воронка продаж общая: сумма отгрузок",
                                     fillColor: "rgba(151,187,205,0.2)",
                                     strokeColor: "rgba(151,187,205,1)",
                                     pointColor: "rgba(151,187,205,1)",
                                     pointStrokeColor: "#fff",
                                     pointHighlightFill: "#fff",
                                     pointHighlightStroke: "rgba(151,187,205,1)",
-                                    data: [{{ bill_data }}]
-                                },
-                                {
-                                    label: "Воронка продаж по менеджерам: отгружено",
-                                    fillColor: "rgba(148,204,167,0.2)",
-                                    strokeColor: "rgba(148,204,167,1)",
-                                    pointColor: "rgba(148,204,167,1)",
-                                    pointStrokeColor: "#fff",
-                                    pointHighlightFill: "#fff",
-                                    pointHighlightStroke: "rgba(148,204,167,1)",
                                     data: [{{ shipped_data }}]
                                 }
                             ]

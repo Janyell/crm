@@ -27,7 +27,7 @@ def full_analyze_city(request):
             user_role = Roles.objects.get(id=request.user.id).role
             out.update({'user_role': user_role})
             out.update({'page_title': 'Анализ продаж по городам за период'})
-            return render(request, 'analyze_city_period.html.html', out)
+            return render(request, 'analyst/analyze_cities.html', out)
         if count_for == 'shipped':
             orders = Orders.objects.filter(is_deleted=0)\
                                             .filter(order_date__gte=since_date)\
@@ -52,4 +52,4 @@ def full_analyze_city(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'page_title': 'Анализ продаж по городам за период'})
-    return render(request, 'analyze_city_period.html', out)
+    return render(request, 'analyst/analyze_cities.html', out)

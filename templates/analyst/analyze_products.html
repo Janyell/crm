@@ -1,0 +1,48 @@
+{%extends "base.html" %}
+
+{%block content%}
+    <div class="container container_mini-width">
+    <a href="{% url "analyst" %}" class="btn">Назад</a>
+        <h2 class="center">{{ page_title }}</h2>
+        <table class="table table-hover table-bordered" id="analyze-table">
+            <thead>
+                <tr>
+                    <th>{% block entities_title %}Продукция{% endblock %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% block entities_content %}
+                    {% if products %}
+                        {% for entity in products %}
+                            <tr>
+                                <td>{{ entity.title }}</td>
+                                <td>
+                                    <a class="btn analyze-button" data-toggle="modal" href="{% url "view_analyzed_product" %}?id={{ entity.pk }}">Анализировать</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endblock %}
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("#analyze-table").dataTable({
+                    "language": {
+                        "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
+                    },
+                    "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [ 1 ] },
+                        { "bSearchable": false, "aTargets": [ 1 ] }
+                    ]
+                });
+            });
+            $(window).load(function() {
+                $("#analyze-table_filter").find("input[type='search']").attr("placeholder", "Поиск");
+            });
+        })(jQuery);
+    </script>
+{%endblock%}

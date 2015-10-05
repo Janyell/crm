@@ -272,9 +272,19 @@ class UploadFileForClientForm(ModelForm):
 class SourceForm(ModelForm):
     class Meta:
         model = Sources
+        exclude = ['is_deleted', 'is_active']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputTitle",
+                                      'required': 1})
+        }
+
+
+class SourceEditForm(ModelForm):
+    class Meta:
+        model = Sources
         exclude = ['is_deleted']
         widgets = {
             'title': TextInput(attrs={'id': "inputEditTitle",
                                       'required': 1}),
-            'is_active': Select(attrs={'id': "selectIsActive"}, choices=SOURCE_STATUS),
+            'is_active': Select(attrs={'id': "selectEditStatus"}, choices=SOURCE_STATUS),
         }

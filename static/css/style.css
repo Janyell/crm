@@ -280,7 +280,7 @@ div.source {
 .manager > .span2 {
     margin-left: inherit;
 }
-.datatables_massive_product {
+.datatables_massive_product, .datatables_massive_source {
     margin-bottom: 40px;
 }
 .datatables_massive > .action-bar {
@@ -294,4 +294,7 @@ div.source {
 }
 .label_between {
     padding-top: 5px;
+}
+.navbar .nav {
+    margin-top: 1px;
 }

@@ -139,7 +139,7 @@ def full_add_edit_order(request):
                     product.price_right_format = right_money_format(product.price)
                 out.update({'order_form': form})
                 out.update({'page_title': "Редактирование заказа"})
-                return render(request, 'add_edit_order.html', out)
+                return render(request, 'order_claim/add_edit_order.html', out)
             if request.POST['bill'] != '':
                 try:
                     bill = int(request.POST['bill'])
@@ -192,7 +192,7 @@ def full_add_edit_order(request):
                         product.price_right_format = right_money_format(product.price)
                     out.update({'order_form': form})
                     out.update({'page_title': "Редактирование заказа"})
-                    return render(request, 'add_edit_order.html', out)
+                    return render(request, 'order_claim/add_edit_order.html', out)
             else:
                 bill = None
             new_order = Orders.objects.get(id=pk, is_deleted=0)
@@ -274,7 +274,7 @@ def full_add_edit_order(request):
                             product.price_right_format = right_money_format(product.price)
                         out.update({'order_form': form})
                         out.update({'page_title': "Редактирование заказа"})
-                        return render(request, 'add_edit_order.html', out)
+                        return render(request, 'order_claim/add_edit_order.html', out)
                     else:
                         name_of_pr = 'select-product__number_' + id_of_pr
                         count_of_products = request.POST[name_of_pr]
@@ -375,7 +375,7 @@ def full_add_edit_order(request):
                             product.price_right_format = right_money_format(product.price)
                         out.update({'order_form': form})
                         out.update({'page_title': "Добавление заказа"})
-                        return render(request, 'add_edit_order.html', out)
+                        return render(request, 'order_claim/add_edit_order.html', out)
                     else:
                         name_of_pr = 'select-product__number_' + id_of_pr
                         count_of_products = request.POST[name_of_pr]
@@ -633,7 +633,7 @@ def full_add_edit_order(request):
         if organization.organization != "":
             organizations.append(organization.organization)
     out.update({'organizations': organizations})
-    return render(request, 'add_edit_order.html', out)
+    return render(request, 'order_claim/add_edit_order.html', out)
 
 
 def full_delete_order(request):
@@ -688,7 +688,7 @@ def full_get_orders(request):
         client_id = request.GET['client-id']
         if Clients.objects.filter(id=client_id, is_deleted=0).count() != 1:
             out.update({'page_title': "Данного клиента не существует!"})
-            return render(request, 'get_orders.html', out)
+            return render(request, 'order_claim/get_orders.html', out)
         client = Clients.objects.get(id=client_id, is_deleted=0)
         try:
             orders = orders.filter(client=client).order_by(sort)
@@ -770,7 +770,7 @@ def full_get_orders(request):
     out.update({'count': orders.count()})
     # IN_PRODUCTION status = 0
     out.update({'count_in_production': orders.filter(order_status=0).count()})
-    return render(request, 'get_orders.html', out)
+    return render(request, 'order_claim/get_orders.html', out)
 
 
 def full_get_old_orders(request):
@@ -863,7 +863,7 @@ def full_get_old_orders(request):
     out.update({'page_title': "Архив заказов"})
     out.update({'orders': order_list})
     out.update({'count': orders.count()})
-    return render(request, 'get_orders.html', out)
+    return render(request, 'order_claim/get_orders.html', out)
 
 
 def full_edit_order_for_factory(request):
@@ -930,7 +930,7 @@ def full_edit_order_for_factory(request):
                 return HttpResponseRedirect('/search/' + get_params)
             get_params += get_request_param_as_string(request)
             return HttpResponseRedirect('/orders/' + get_params)
-    return render(request, 'edit_order_for_factory.html', out)
+    return render(request, 'order_claim/edit_order_for_factory.html', out)
 
 
 def full_add_in_archive(request):

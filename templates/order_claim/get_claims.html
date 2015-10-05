@@ -1,4 +1,4 @@
-{%extends "base.html"%}
+{%extends "base.html" %}
 
 {%block content%}
     <div class="container container_full-width">
@@ -146,7 +146,7 @@
                             </td>
                             <td>
                                 {% if claim.files %}
-                                    <a class="btn btn-mini files-button" data-toggle="modal" href="#view-claim-files" value="
+                                    <a class="btn files-button" data-toggle="modal" href="#view-claim-files" value="
                                         {% for file in claim.files %}
                                             <div class=&quot;file&quot;>
                                                 <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
@@ -159,20 +159,20 @@
                             </td>
                             <td>
                                 {% if user_role == 0 %}
-                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                    <a class="btn edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
                                  {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                    <a class="btn edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
                                 {% else %}
-                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                    <a class="btn edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
                                 {% endif %}
                             </td>
                             <td>
                                 {% if user_role == 0 %}
-                                    <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
+                                    <a class="btn delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
                                         <i class="icon-remove"></i>
                                     </a>
                                 {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                    <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
+                                    <a class="btn delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
                                         <i class="icon-remove"></i>
                                     </a>
                                 {% endif %}

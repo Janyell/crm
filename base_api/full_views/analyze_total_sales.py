@@ -215,4 +215,4 @@ def full_analyze_total_sales(request):
     out.update({'page_title': "Общая воронка продаж"})
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
-    return render(request, 'analyze_total_sales.html', out)
+    return render(request, 'analyst/analyze_total_sales.html', out)

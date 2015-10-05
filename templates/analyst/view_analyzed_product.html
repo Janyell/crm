@@ -1,9 +1,10 @@
-{%extends "base.html"%}
+{%extends "base.html" %}
 
 {%block content%}
     <script src="{{ STATIC_URL }}js/Chart.min.js"></script>
 
     <div class="container">
+    {% url "analyze_products" as url_analyze_products %}
     <a href="{% url "analyze_products" %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }} {{ product_name }}</h2>
         <div class="new-period">

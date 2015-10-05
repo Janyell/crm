@@ -30,7 +30,7 @@ def full_analyze_period(request):
             user_role = Roles.objects.get(id=request.user.id).role
             out.update({'user_role': user_role})
             out.update({'page_title': 'Анализ продаж продуктов за период'})
-            return render(request, 'analyze_period.html', out)
+            return render(request, 'analyst/analyze_period.html', out)
         if count_for == 'shipped':
             orders = Order_Product.objects.filter(is_deleted=0)\
                                             .filter(order__order_date__gte=since_date)\
@@ -55,7 +55,7 @@ def full_analyze_period(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'page_title': 'Анализ продаж продуктов за период'})
-    return render(request, 'analyze_period.html', out)
+    return render(request, 'analyst/analyze_period.html', out)
 
 
 def full_analyze_period_product_groups(request):
@@ -78,7 +78,7 @@ def full_analyze_period_product_groups(request):
             user_role = Roles.objects.get(id=request.user.id).role
             out.update({'user_role': user_role})
             out.update({'page_title': 'Анализ продаж групп товаров за период'})
-            return render(request, 'analyze_period.html', out)
+            return render(request, 'analyst/analyze_period.html', out)
         if count_for == 'shipped':
             orders = Order_Product.objects.filter(is_deleted=0)\
                                             .filter(order__order_date__gte=since_date)\
@@ -103,4 +103,4 @@ def full_analyze_period_product_groups(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'page_title': 'Анализ продаж групп товаров за период'})
-    return render(request, 'analyze_period.html', out)
+    return render(request, 'analyst/analyze_period.html', out)

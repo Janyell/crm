@@ -75,7 +75,7 @@ def full_get_products(request):
     out.update({'product_form': form})
     out.update({'product_edit_form': product_edit_form})
     out.update({'count': products.count()})
-    return render(request, 'get_products.html', out)
+    return render(request, 'product/get_products.html', out)
 
 
 def full_get_product_groups(request):
@@ -109,7 +109,7 @@ def full_get_product_groups(request):
     out.update({'product_groups': product_groups})
     out.update({'product_group_form': form})
     out.update({'count': product_groups.count()})
-    return render(request, 'get_product_groups.html', out)
+    return render(request, 'product/get_product_groups.html', out)
 
 
 def full_edit_product(request):

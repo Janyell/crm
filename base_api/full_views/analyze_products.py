@@ -22,7 +22,7 @@ def full_analyze_products(request):
     out.update({'page_title': "Анализ продаж продукта"})
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
-    return render(request, 'analyze_products.html', out)
+    return render(request, 'analyst/analyze_products.html', out)
 
 
 def full_view_analyzed_product(request):
@@ -147,7 +147,7 @@ def full_view_analyzed_product(request):
     out.update({'page_title': "Анализ продаж продукта"})
     out.update({'product_name': product_name})
     out.update({'user_role': user_role})
-    return render(request, 'view_analyzed_product.html', out)
+    return render(request, 'analyst/view_analyzed_product.html', out)
 
 
 def month_diff(d1, d2):

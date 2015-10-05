@@ -41,18 +41,18 @@ def full_add_edit_client(request):
                 out.update({"error": 4})
                 out.update({'client_form': form})
                 out.update({'page_title': "Редактирование клиента"})
-                return render(request, 'add_edit_client.html', out)
+                return render(request, 'client/add_edit_client.html', out)
             email = request.POST['email']
             if organization == '' and last_name == '' and name == '' and patronymic == '':
                 out.update({"error": 3})
                 out.update({'client_form': form})
                 out.update({'page_title': "Редактирование клиента"})
-                return render(request, 'add_edit_client.html', out)
+                return render(request, 'client/add_edit_client.html', out)
             if person_phone == '' and organization_phone == '' and email == '':
                 out.update({"error": 2})
                 out.update({'client_form': form})
                 out.update({'page_title': "Редактирование клиента"})
-                return render(request, 'add_edit_client.html', out)
+                return render(request, 'client/add_edit_client.html', out)
             type = request.POST['organization-type']
             if 'ip' == type:
                 organization_type = u'ИП'
@@ -196,18 +196,18 @@ def full_add_edit_client(request):
                     out.update({"error": 4})
                     out.update({'client_form': form})
                     out.update({'page_title': "Добавление клиента"})
-                    return render(request, 'add_edit_client.html', out)
+                    return render(request, 'client/add_edit_client.html', out)
                 if organization == '' and last_name == '' and name == '' and patronymic == '':
                     out.update({"error": 3})
                     out.update({'client_form': form})
                     out.update({'page_title': "Добавление клиента"})
                     out.update({'is_interested': 1})
-                    return render(request, 'add_edit_client.html', out)
+                    return render(request, 'client/add_edit_client.html', out)
                 if person_phone == '' and organization_phone == '' and email == '':
                     out.update({"error": 2})
                     out.update({'client_form': form})
                     out.update({'page_title': "Добавление клиента"})
-                    return render(request, 'add_edit_client.html', out)
+                    return render(request, 'client/add_edit_client.html', out)
                 if organization != '':
                     try:
                         is_org_exist = Clients.objects.get(organization_type=organization_type,
@@ -259,7 +259,7 @@ def full_add_edit_client(request):
                     out.update({"error": 1})
                     out.update({'client_form': form})
                     out.update({'page_title': "Добавление клиента"})
-                    return render(request, 'add_edit_client.html', out)
+                    return render(request, 'client/add_edit_client.html', out)
                 else:
                     if 'only-save' in form.data:
                         get_params = '?'
@@ -324,7 +324,7 @@ def full_add_edit_client(request):
             organizations.append(organization.organization)
     out.update({'client_form': form})
     out.update({'organizations': organizations})
-    return render(request, 'add_edit_client.html', out)
+    return render(request, 'client/add_edit_client.html', out)
 
 
 def full_delete_clients(request):
@@ -390,7 +390,7 @@ def full_get_clients(request):
     out.update({'page_title': "Клиенты"})
     out.update({'clients': client_list})
     out.update({'count': clients.count()})
-    return render(request, 'get_clients.html', out)
+    return render(request, 'client/get_clients.html', out)
 
 
 def full_get_interested_clients(request):
@@ -434,4 +434,4 @@ def full_get_interested_clients(request):
     out.update({'page_title': "Люди"})
     out.update({'clients': client_list})
     out.update({'count': clients.count()})
-    return render(request, 'get_clients.html', out)
+    return render(request, 'client/get_clients.html', out)

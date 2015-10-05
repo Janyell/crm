@@ -195,3 +195,15 @@ def massive_change_product_group(request):
 
 def massive_delete_product_groups(request):
     pass
+
+
+def massive_delete_sources(request):
+    pass
+
+
+def massive_activate_source(request):
+    pass
+
+
+def massive_deactivate_source(request):
+    pass

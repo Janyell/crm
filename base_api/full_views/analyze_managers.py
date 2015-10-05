@@ -391,4 +391,4 @@ def full_analyze_managers(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'managers': managers})
-    return render(request, 'analyze_managers.html', out)
+    return render(request, 'analyst/analyze_managers.html', out)
