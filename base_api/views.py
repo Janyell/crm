@@ -465,8 +465,8 @@ def edit_product(request):
     return full_edit_product(request)
 
 
-# def get_documents(request):
-#     return render(request, 'get_documents.html')
+def get_documents(request):
+    return render(request, 'get_documents.html')
 
 
 def search(request):
