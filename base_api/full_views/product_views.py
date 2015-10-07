@@ -55,12 +55,17 @@ def full_get_products(request):
         out.update({'user_role': user_role})
     get_params = '?'
     get_params += get_request_param_as_string(request)
+    ProductForm.base_fields['group'] = ProductGroupModelChoiceField(queryset=ProductGroups.objects.filter(is_deleted=0),
+                                                                    required=False)
+    ProductEditForm.base_fields['group'] = ProductGroupModelChoiceField(queryset=ProductGroups.objects.filter(is_deleted=0),
+                                                                        required=False)
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
             price = form.cleaned_data['price']
-            new_product = Products.objects.create(title=title, price=price, is_active=1)
+            group = form.cleaned_data['group']
+            new_product = Products.objects.create(title=title, price=price, group=group, is_active=1)
             return HttpResponseRedirect('/products/' + get_params)
         else:
             out.update({"error": 1})
@@ -108,6 +113,7 @@ def full_get_product_groups(request):
     out.update({'page_title': "Группы товаров"})
     out.update({'product_groups': product_groups})
     out.update({'product_group_form': form})
+    out.update({'product_group_edit_form': form})
     out.update({'count': product_groups.count()})
     return render(request, 'product/get_product_groups.html', out)
 
@@ -128,9 +134,14 @@ def full_edit_product(request):
         product = Products.objects.get(id=id)
         title = request.POST['title']
         price = request.POST['price']
+        group = request.POST['group']
         is_active = int(request.POST['is_active'])
         product.title = title
         product.price = price
+        if group:
+            product.group = ProductGroups.objects.get(id=group)
+        else:
+            product.group = None
         product.is_active = is_active
         product.save()
         return HttpResponseRedirect('/products/' + get_params)

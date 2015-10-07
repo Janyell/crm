@@ -29,6 +29,11 @@ class SourceModelChoiceField(ModelChoiceField):
         return obj.title
 
 
+class ProductGroupModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.title
+
+
 class CityModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.name
