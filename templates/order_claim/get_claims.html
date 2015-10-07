@@ -80,6 +80,7 @@
                     {% for claim in claims %}
                         <tr>
                             <td>
+                                {% include "order_claim/modules/get_claims__related_with.html" %}
                                 {% if user_role == 0 %}
                                     <label class="checkbox">
                                         <input class="checkbox_one" type="checkbox" name="id[]" value="{{ claim.pk }}"/>
@@ -160,7 +161,7 @@
                             <td>
                                 {% if user_role == 0 %}
                                     <a class="btn edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
-                                 {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
+                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
                                     <a class="btn edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
                                 {% else %}
                                     <a class="btn edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
@@ -589,4 +590,5 @@
             });
         })(jQuery);
     </script>
+    {% include "order_claim/modules/related_claim_modal.html" %}
 {%endblock%}

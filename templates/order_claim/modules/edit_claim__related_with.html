@@ -1,0 +1,27 @@
+{% block related_with %}
+    {% if request.path == edit_claim_url %}
+        <div class="control-group">
+            <label class="control-label">
+                Заявка связана с
+            </label>
+            <div class="controls">
+                <a class="btn" data-toggle="modal" href="#manage-related-claims">Управление связанными заявками</a>
+            </div>
+        </div>
+
+{#        {{ order_form.client_related_with }}#}
+{#        {{ order_form.client }}#}
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function(){
+                    var $select_client_related_with = $('#client_related-with');
+                    $select_client_related_with.attr({
+                        'data-live-search': "true",
+                        'data-size': "10"
+                    });
+                    $select_client_related_with.selectpicker();
+                });
+            })(jQuery);
+        </script>
+    {% endif %}
+{% endblock related_with %}

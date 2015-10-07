@@ -1,4 +1,4 @@
-{%extends "base.html"%}
+{%extends "base.html" %}
 
 {%block content%}
     <div class="container container_full-width">
@@ -24,6 +24,7 @@
                                     <th>Дата готовности</th>
                                     <th>Доставка город</th>
                                     <th>Комментарии</th>
+                                    <th></th> {# Сменить менеджера #}
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -104,6 +105,9 @@
                                             {% endif %}
                                         </td>
                                         <td>
+                                            <a class="btn change-manager-button" data-toggle="modal" href="#change-manager" value="{{ order.pk }}">Сменить менеджера</a>
+                                        </td>
+                                        <td>
                                         {% if user_role == 0 %}
                                              <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}&search={{ request.GET.search }}">В архив</a>
                                         {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
@@ -145,8 +149,7 @@
                                                 </a>
                                             {% endif %}
                                         </td>
-                                        <td> {{ order.order_date }}
-                                        </td>
+                                        <td>{{ order.order_date }}</td>
                                         <td>
                                             {% if order.order_status|title == "Готов" %}
                                                 2
@@ -325,6 +328,7 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -379,6 +383,9 @@
                                                     <a class="comment-claim-button" data-toggle="modal" href="#view-info"
                                                         value="{{ claim.comment }}">...</a>
                                                 {% endif %}
+                                            </td>
+                                            <td>
+                                                <a class="btn change-manager-button" data-toggle="modal" href="#change-manager" value="{{ claim.pk }}">Сменить менеджера</a>
                                             </td>
                                             <td>
                                                 {% if claim.files %}
@@ -592,44 +599,66 @@
                         <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                     </div>
                 </div>
-                {% endif %}
-                <div class="modal hide fade" id="view-info" tabindex="-1" role="dialog" aria-labelledby="InfoLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <a class="close" data-dismiss="modal">×</a>
-                        <h3></h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="info__data_modal">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+            {% endif %}
+            <div class="modal hide fade" id="view-info" tabindex="-1" role="dialog" aria-labelledby="InfoLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="info__data_modal">
                     </div>
                 </div>
-                <script type="text/javascript">
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                </div>
+            </div>
+            <script type="text/javascript">
                     (function($){
                         $(document).ready(function(){
                             var $info_data = $('.info__data_modal');
                             var $delete_ok = $('#delete__ok');
                             {% if orders %}
+{#                                0     <th>Менеджер</th>#}
+{#                                1     <th>Название организации</th>#}
+{#                                2     <th>Номер заказа</th>#}
+{#                                3     <th>Компания</th>#}
+{#                                4     <th>Номер счета</th>#}
+{#                                5     <th>Сумма счета</th>#}
+{#                                6     <th>Дата оплаты</th>#}
+{#                                7     <th>Продукция</th>#}
+{#                                8     <th>Статус</th>#}
+{#                                9     <th>Дата готовности</th>#}
+{#                                10    <th>Доставка город</th>#}
+{#                                11    <th>Комментарии</th>#}
+{#                                12    <th></th> {# Сменить менеджера #}
+{#                                13    <th></th> {# В архив #}
+{#                                14    <th></th> {# Аттачи #}
+{#                                15    <th></th> {# Редактировать #}
+{#                                16    <th></th> {# Удалить #}
+{#                                17    <th></th> {# Дата заказа #}
+{#                                18    <th></th> {# Признак готовности #}
                                 $("#search-order-table").dataTable({
                                     "language": {
                                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                                     },
                                     "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16 ] },
-                                        { "sType": "de_datetime", "aTargets": [ 6, 9, 16 ] },
+                                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17 ] },
+                                        { "sType": "de_datetime", "aTargets": [ 6, 9, 17 ]},
                                         {% if user_role == 2 %}
-                                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 15, 16, 17]},
+                                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 16, 17, 18]},
+                                        {% elif user_role == 1 %}
+                                           { "bVisible": false,  "aTargets": [ 12, 17, 18 ]},
+                                        {% else %}
+                                            { "bVisible": false,  "aTargets": [ 17, 18 ]},
                                         {% endif %}
-                                        { "bVisible": false,  "aTargets": [ 16, 17 ]}
                                     ],
                                     "order": [
-                                        [ 17, 'desc' ],
+                                        [ 18, 'desc' ],
                                         [ 9, 'asc' ]
                                     ],
                                     "aaSortingFixed": [
-                                        [17, 'desc']
+                                        [18, 'desc']
                                     ],
                                     "bFilter": false
                                 });
@@ -642,9 +671,6 @@
                                     "aoColumnDefs": [
                                         { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16 ] },
                                         { "sType": "de_datetime", "aTargets": [ 6, 9, 16 ] },
-                                        {% if user_role == 2 %}
-                                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 15, 16, 17]},
-                                        {% endif %}
                                         { "bVisible": false,  "aTargets": [ 16, 17 ]}
                                     ],
                                     "order": [
@@ -658,13 +684,29 @@
                                 });
                             {% endif %}
                             {% if claims %}
+{#                                0     <th>Менеджер</th>#}
+{#                                1     <th>Дата заявки</th>#}
+{#                                2     <th>Название организации</th>#}
+{#                                3     <th>Компания</th>#}
+{#                                4     <th>Номер счета</th>#}
+{#                                5     <th>Сумма счета</th>#}
+{#                                6     <th>Продукция</th>#}
+{#                                7     <th>Статус</th>#}
+{#                                8     <th>Комментарии</th>#}
+{#                                9     <th></th> {# Сменить менеджера #}
+{#                                10    <th></th> {# Аттачи #}
+{#                                11    <th></th> {# Редактировать #}
+{#                                12    <th></th> {# Удалить #}
                                 $("#search-claim-table").dataTable({
                                     "language": {
                                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                                     },
                                     "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 4, 5, 6, 7, 8, 9, 10, 11 ] },
-                                        { "sType": "de_datetime", "aTargets": [ 1 ] }
+                                        { "bSortable": false, "aTargets": [ 4, 5, 6, 7, 8, 9, 10, 11, 12 ] },
+                                        { "sType": "de_datetime", "aTargets": [ 1 ]},
+                                        {% if user_role == 1 %}
+                                            { "bVisible": false,  "aTargets": [ 9 ]}
+                                        {% endif %}
                                     ],
                                     "order": [
                                         [ 1, "desc" ]
@@ -773,6 +815,7 @@
                         });
                     })(jQuery);
                 </script>
+            {% include "search/modules/change_manager.html" %}
         {% else %}
            <h4 class="center">Ничего не найдено по Вашему запросу. Попробуйте еще раз.</h4>
         {% endif %}

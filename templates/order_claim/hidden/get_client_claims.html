@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+<div class="container">
+    <h2 class="form-add__head">{{ page_title }}</h2>
+    {% if claims %}
+        <table class="table table-hover table-bordered" id="related-claim-table">
+            <thead>
+                <tr>
+                    <th>Менеджер</th>
+                    <th>Дата заявки</th>
+                    <th>Название организации</th>
+                    <th>Продукция</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for claim in claims %}
+                    <tr>
+                        <td>{{ claim.role }}</td>
+                        <td>{{ claim.order_date }}</td>
+                        <td>
+                            {% if claim.client.organization %}
+                                {{ claim.client.organization }}{% if claim.client.organization_type %}, {{ claim.client.organization_type }}{% endif %}
+                            {% else %}
+                                {{ claim.client.full_name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if claim.products %}
+                                {% for product in claim.products %}
+                                    <div class="no-wrap">
+                                        {{ product.product.title }} - {{ product.count_of_products }} шт.
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a class="btn bind-btn" value="{{ claim.pk }}">Связать</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h5 class="center">У клиента {{ organization_or_full_name }} нет ни одной заявки</h5>
+    {% endif %}

@@ -298,3 +298,22 @@ div.source {
 .navbar .nav {
     margin-top: 1px;
 }
+.label_related {
+    width: 150px;
+    margin-left: -159px;
+    float: left;
+    height: 14px;
+    display: block;
+}
+.label_related_red {
+    background-color: #F44336;
+}
+.label_related_orange {
+    background-color: #FF9800;
+}
+.label_related_green {
+    background-color: #4CAF50;
+}
+.label_related_purple {
+    background-color: #9C27B0;
+}

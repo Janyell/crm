@@ -1,0 +1,15 @@
+{% block related_with %}
+    {% if claim.related %}
+        <a class="label_related
+        {% if claim.related.color == 0 %}
+            label_related_red
+        {% elif claim.related.color == 1 %}
+            label_related_orange
+        {% elif claim.related.color == 2 %}
+            label_related_green
+        {% else %}
+            label_related_purple
+        {% endif %}
+           " href="#related-claim" role="button" data-toggle="modal"></a>
+    {% endif %}
+{% endblock %}

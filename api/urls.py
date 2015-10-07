@@ -128,6 +128,9 @@ urlpatterns = patterns('',
                        url(r'^search/$', 'base_api.views.search', name='search'),
                        url(r'^settings/$', 'base_api.views.get_settings', name='get_settings'),
                        url(r'^reports/$', 'base_api.views.get_reports', name='get_reports'),
+                       # hidden page
+                       url(r'^claims/related/$', 'base_api.views.get_related_claims', name='get_related_claims'),
+
                        url(r'^robots.txt$',
                            lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")),
                        url(r'^admin/', include(admin.site.urls)),

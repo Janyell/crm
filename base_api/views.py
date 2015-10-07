@@ -687,7 +687,7 @@ def search(request):
     out.update({'orders': order_list})
     out.update({'old_orders': archive_order_list})
     out.update({'claims': claim_list})
-    return render(request, 'search.html', out)
+    return render(request, 'search/search.html', out)
 
 
 def fix_file_nodes(request):
@@ -858,4 +858,8 @@ def analyze_product_groups(request):
 
 
 def view_analyzed_product_group(request):
-    return render_to_response('analyst/view_analyzed_product.html')
+    return render(request, 'analyst/view_analyzed_product.html')
+
+
+def get_related_claims(request):
+    return render(request, 'order_claim/hidden/get_related_claims.html')
