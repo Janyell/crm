@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import json
 from django.shortcuts import render, render_to_response
-from datetime import datetime
+import datetime
 import djangosphinx
 from djangosphinx.apis.api275 import SPH_MATCH_EXTENDED
 from api.settings import MEDIA_ROOT
@@ -748,7 +748,105 @@ def get_settings(request):
 
 
 def get_reports(request):
-    return render(request,'get_reports.html')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    out.update({'sources': Sources.objects.filter(is_deleted=0)})
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+        out.update({'page': page})
+        out.update({'length': length})
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_ORDER)
+    sort = SORT_TYPE_FOR_ORDER.get(sort_key, DEFAULT_SORT_TYPE_FOR_ORDER)
+    orders = Orders.objects.filter(is_deleted=0, is_claim=0, role=request.user.id)
+    if 'source' in request.GET:
+        source = int(request.GET.get('source'))
+        if source != -1:
+            orders = orders.filter(source=source)
+    if 'month-date' in request.GET:
+        month_date = request.GET.get('month-date')
+    else:
+        month_date = date.today().strftime("%Y-%m")
+    out.update({'month_date': month_date})
+    orders = orders.filter(shipped_date__year=month_date[:4],
+                           shipped_date__month=month_date[5:7])
+    try:
+        orders = orders.filter(in_archive=0).order_by(sort)
+    except TypeError:
+        orders = orders.filter(in_archive=0).order_by(*sort)
+    shipped_sum = 0
+    for order in orders:
+        shipped_sum += order.bill
+    out.update({'page_title': "Отчет"})
+    out.update({'shipped_sum': shipped_sum})
+    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
+    orders_pages = Paginator(orders, number)
+    page = request.GET.get('page')
+    try:
+        order_list = orders_pages.page(page)
+    except PageNotAnInteger:
+        order_list = orders_pages.page(1)
+    except EmptyPage:
+        order_list = orders_pages.page(orders_pages.num_pages)
+    for order in order_list:
+        if order.client.organization == '':
+            order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        else:
+            order.client.organization_or_full_name = order.client.organization
+        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
+        products_list = []
+        for pr in prs:
+            products_list.append(pr)
+        order.products = products_list
+        if order.order_status == 0:
+            order.order_status = 'В производстве'
+        elif order.order_status == -1:
+            order.order_status = 'Отгружен'
+            if order.shipped_date is not None:
+                order.is_shipped = 1
+                order.shipped_date = date(order.shipped_date.year, order.shipped_date.month, order.shipped_date.day)
+        elif order.order_status == 2:
+            order.order_status = 'Готов'
+        else:
+            order.order_status = ''
+        if order.bill is not None:
+            order.bill_right_format = right_money_format(order.bill)
+        order.brought_sum_right_format = 0
+        order.debt_right_format = 0
+        order.is_in_debt = False
+        if order.bill_status == 2:
+            order.is_full_pay = True
+        else:
+            order.is_full_pay = False
+        if order.brought_sum is not None and order.bill is not None:
+            if (order.bill - order.brought_sum) > 0:
+                order.is_in_debt = True
+            else:
+                order.is_in_debt = False
+            order.brought_sum_right_format = right_money_format(order.brought_sum)
+            order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
+        if order.is_full_pay or order.bill_status == 3:
+            order.is_in_debt = False
+        order.files = []
+        if Order_Files.objects.filter(order_id=order.id).all() is not None:
+            for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                if order_file.file is not None and order_file.file != '':
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    order.files.append(order_file)
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    out.update({'orders': order_list})
+    out.update({'count': orders.count()})
+    # IN_PRODUCTION status = 0
+    out.update({'count_in_production': orders.filter(order_status=0).count()})
+    return render(request, 'get_reports.html', out)
 
 
 def analyze_cities(request):
