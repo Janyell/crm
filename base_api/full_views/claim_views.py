@@ -148,7 +148,7 @@ def full_add_edit_claim(request):
                 is_comment_my = True
             new_claim.is_comment_my = is_comment_my
             new_claim.client = client
-            new_claim.source = source
+            new_claim.source = Sources.objects.get(id=source)
             new_claim.company = company
             new_claim.comment = comment
             new_claim.bill = bill

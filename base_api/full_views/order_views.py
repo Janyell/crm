@@ -78,6 +78,9 @@ def full_add_edit_order(request):
                 ready_date = None
             comment = request.POST['comment']
             city = request.POST['city']
+            if 'newCity' in request.POST:
+                newCity = request.POST['newCity']
+                city = Cities.objects.create(name=newCity)
             try:
                 brought_sum = int(request.POST['brought_sum'])
             except Exception:
@@ -201,7 +204,7 @@ def full_add_edit_order(request):
                 is_comment_my = True
             new_order.is_comment_my = is_comment_my
             new_order.client = client
-            new_order.source = source
+            new_order.source = Sources.objects.get(id=source)
             new_order.company = company
             new_order.bill = bill
             if brought_sum:
@@ -335,6 +338,9 @@ def full_add_edit_order(request):
             ready_date = form.cleaned_data['ready_date']
             comment = form.cleaned_data['comment']
             city = form.cleaned_data['city']
+            if 'newCity' in form.cleaned_data:
+                newCity = form.cleaned_data['newCity']
+                city = Cities.objects.create(name=newCity)
             account_number = form.cleaned_data['account_number']
             role = Roles.objects.get(id=request.user.id, is_deleted=0)
             products_list = request.POST.getlist('products[]')
@@ -469,6 +475,9 @@ def full_add_edit_order(request):
             shipped_date = request.POST['shipped_date']
             comment = request.POST['comment']
             city = request.POST['city']
+            if 'newCity' in request.POST:
+                newCity = request.POST['newCity']
+                city = Cities.objects.crete(name=newCity)
             account_number = request.POST['account_number']
             OrdersForm.base_fields['company'] = CompanyModelChoiceField(
                                             queryset=Companies.objects.filter(is_deleted=0), required=False)
