@@ -46,7 +46,7 @@
                                         <a class="btn btn-mini edit-button" data-toggle="modal" href="#edit-product" value="{{ product.pk }}">
                                             <i class="icon-pencil"></i>
                                             <div class="hidden edit-product__data">
-                                                <div class="product-data__group">{{ product.group }}</div>
+                                                <div class="product-data__group">{{ product.group.pk }}</div>
                                                 <div class="product-data__title">{{ product.title }}</div>
                                                 <div class="product-data__price">{{ product.price }}</div>
                                                 <div class="product-data__status">{% if product.is_active == True %}1{% else %}0{% endif %}</div>
@@ -280,7 +280,7 @@
                             $form_edit_product.attr({'action': '{% url "edit_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
                             var $edit_product__data = $('#edit-product').find('.modal-body');
                             var group = $(this).find('.product-data__group').text();
-                            $edit_product__data.find('#selectEditGroup').val(group);
+                            $edit_product__data.find('#id_group').val(group);
                             var title = $(this).find('.product-data__title').text();
                             $edit_product__data.find('#inputEditTitle').val(title);
                             var price = $(this).find('.product-data__price').text();

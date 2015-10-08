@@ -233,7 +233,13 @@
                             {% if manager.sources_orders_data or manager.sources_claims_data %}
                                 var bar_ctx = document.getElementById("analyzed-managers-bar-chart_{{ manager.pk }}").getContext("2d");
                                 var bar_data = {
-                                    labels: ["ЗТ", "AQB", "H-A-H", "Landing", "Тендер"],
+                                    labels: [
+                                        {% if sources %}
+                                            {% for source in sources %}
+                                                '{{ source.title }}',
+                                            {% endfor %}
+                                        {% endif %}
+                                    ],
                                     datasets: [
                                         {% if manager.sources_orders_data %}
                                             {

@@ -5,7 +5,7 @@
 
     <div class="container">
     {% url "analyze_products" as url_analyze_products %}
-    <a href="{% url "analyze_products" %}" class="btn">Назад</a>
+    <a href="{% if request.path == url_analyze_products %}{{ url_analyze_products }}{% else %}{% url "analyze_product_groups" %}{% endif %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }} {{ product_name }}</h2>
         <div class="new-period">
             <form method="post" action="{% url "view_analyzed_product" %}?id={{ request.GET.id }}" class="analyzed-product form-horizontal clearfix">

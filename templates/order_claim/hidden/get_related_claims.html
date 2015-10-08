@@ -15,6 +15,7 @@
                                 <th>Продукция</th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,24 +40,15 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {% if user_role == 0 %}
-                                            <a class="btn btn-mini edit-button" target="_blank" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
-                                        {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                            <a class="btn btn-mini edit-button" target="_blank" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
-                                        {% else %}
-                                            <a class="btn btn-mini edit-button" target="_blank" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
-                                        {% endif %}
+                                        <a class="btn unbind-button" data-toggle="modal" href="#unbind-claim" value={{ claim.pk }}>Отвязать заявку</a>
                                     </td>
                                     <td>
-                                        {% if user_role == 0 %}
-                                            <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
-                                                <i class="icon-remove"></i>
-                                            </a>
-                                        {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                            <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
-                                                <i class="icon-remove"></i>
-                                            </a>
-                                        {% endif %}
+                                        <a class="btn edit-button" target="_blank" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                    </td>
+                                    <td>
+                                        <a class="btn delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
+                                            <i class="icon-remove"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -66,6 +58,8 @@
                     <h5 class="center">Нет ни одной связанной заявки</h5>
 {#                {% endif %}#}
             {% endblock %}
+
+
         <div class="form-horizontal form-add">
             <h5 class="form-add-heading">Для добавления связанной заявки заполните, пожалуйста, следующую форму:</h5>
                 <div class="control-group">
