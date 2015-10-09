@@ -270,7 +270,7 @@
             <h3>Вы уверены, что хотите удалить эту заявку?</h3>
         </div>
         <div class="modal-footer">
-            <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+            <a href="" id="delete-claim__ok" class="btn btn-danger">Удалить</a>
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
@@ -416,7 +416,7 @@
                 });
                 $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
-                    $('#delete__ok').attr({'href': '{% url "delete_claim" %}?id=' + id + get_params});
+                    $('#delete-claim__ok').attr({'href': '{% url "delete_claim" %}?id=' + id + get_params});
                 });
                 $('.comment-button').bind('click', function(){
                     var comment = $(this).attr('value');
@@ -551,7 +551,7 @@
                         var $checkboxes_checked_length = $checkboxes_checked.length;
                         if ($checkboxes_checked_length == 1) {
                             var id = $checkboxes_checked.val();
-                            $('#delete__ok').attr("href", '{% url "delete_claim" %}?id=' + id + get_params);
+                            $('#delete-claim__ok').attr("href", '{% url "delete_claim" %}?id=' + id + get_params);
                             $('#delete-claim').modal('show');
                         }
                         else {

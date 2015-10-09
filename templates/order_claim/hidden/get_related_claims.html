@@ -3,9 +3,9 @@
 {% block content %}
     <div class="container">
         <h2 class="form-add__head">{{ page_title }}</h2>
-        <div class="in-modal">
+        <div class="ajax-loadable pre-scrollable_auto">
             {% block related-claim-table %}
-{#                {% if related_claims %}#}
+                {% if related_claims %}
                     <table class="table table-hover table-bordered" id="related-claim-table">
                         <thead>
                             <tr>
@@ -21,7 +21,7 @@
                         <tbody>
                             {% for claim in related_claims %}
                                 <tr>
-                                    <td>{{ claim.role }}</td>
+                                    <td>{% include "order_claim/modules/get_claims__related_with.html" %}{{ claim.role }}</td>
                                     <td>{{ claim.order_date }}</td>
                                     <td>
                                         {% if claim.client.organization %}
@@ -43,7 +43,9 @@
                                         <a class="btn unbind-button" data-toggle="modal" href="#unbind-claim" value={{ claim.pk }}>Отвязать заявку</a>
                                     </td>
                                     <td>
-                                        <a class="btn edit-button" target="_blank" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                        <a class="btn edit-button" target="_blank" href="{% url "edit_claim" %}?id={{ claim.pk }}">
+                                            <i class="icon-pencil"></i>
+                                        </a>
                                     </td>
                                     <td>
                                         <a class="btn delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
@@ -54,142 +56,10 @@
                             {% endfor %}
                         </tbody>
                     </table>
-{#                {% else %}#}
+                {% else %}
                     <h5 class="center">Нет ни одной связанной заявки</h5>
-{#                {% endif %}#}
+                {% endif %}
             {% endblock %}
-
-
-        <div class="form-horizontal form-add">
-            <h5 class="form-add-heading">Для добавления связанной заявки заполните, пожалуйста, следующую форму:</h5>
-                <div class="control-group">
-                    <label class="control-label" for="selectClient">
-                        Клиент
-                        <span class="required-input">*</span>
-                    </label>
-                    <div class="controls">
-                        {{ form.client }}
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="selectColor">
-                        Идентификационный цвет
-                        <span class="required-input">*</span>
-                    </label>
-                    <div class="controls">
-                        <select id="selectColor" class="selectpicker" name="color">
-                            <option value="0" data-content="<span class='label label_related_red'>Красный</span>">Красный</option>
-                            <option value="1" data-content="<span class='label label_related_orange'>Оранжевый</span>">Оранжевый</option>
-                            <option value="2" data-content="<span class='label label_related_green'>Зеленый</span>">Зеленый</option>
-                            <option value="3" data-content="<span class='label label_related_purple'>Фиолетовый</span>">Фиолетовый</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="client_claims" class="pre-scrollable hidden"></div>
-                <div class="form-add__tips">
-                    <div class="form-add-tips__tip">
-                        <span class="required-input">*</span> - поля, обязательные для заполнения
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-    <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                var $client_claims = $("#client_claims");
-                var get_client_claims_url = "{% url "get_claims" %}?client-id=";
-                $('#selectClient').change(function() {
-                    var id = $(this).val();
-                    $client_claims.load( get_client_claims_url + id + ' #claim-table', function() {
-                    });
-                });
-                var id = 123;
-                    $client_claims.load( get_client_claims_url + id + ' #claim-table', function() {
-                        console.log(id);
-                    });
-{#                $client_claims.css({'display': 'block'});#}
-                    $('#selectColor').selectpicker();
-
-                    $client_claims.find(".form-add__in-modal").load( get_client_claims_url + ' .in-modal', function() {
-                        $('.btn-file').each(function () {
-                            var self = this;
-                            $('input[type=file]', this).change(function () {
-                                $(self).next().remove();
-                                var value = $(this).val();
-                                var fileName = value.substring(value.lastIndexOf('/') + 1);
-                                fileName = value.substring(value.lastIndexOf('\\') + 1);
-                                var fileExt = fileName.split('.').pop().toLowerCase();
-                                $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
-                            });
-                            $('.delete-button').bind('click', function(){
-                                var id = $(this).attr('value');
-                                $('#delete__ok').attr({'href': '{% url "delete_client_files" %}?id=' + id});
-                            });
-                        });
-                        $('.form-add-file').on('submit', function(e) {
-                            e.preventDefault();
-                            var formdata = false;
-                            if(window.FormData){
-                                formdata = new FormData($(this)[0]);
-                            }
-                            $.ajax({
-                                type: $(this).attr('method'),
-                                url: this.action,
-                                data: formdata ? formdata : $(this).serialize(),
-                                context: this,
-                                processData: false,
-                                contentType: false,
-                                success: function(data, status) {
-                                    $client_claims.find(".form-add__in-modal").load(get_client_claims_url + ' .in-modal', function() {
-                                        $('.btn-file').each(function (){
-                                            var self = this;
-                                            $('input[type=file]', this).change(function (){
-                                                $(self).next().remove();
-                                                var value = $(this).val();
-                                                var fileName = value.substring(value.lastIndexOf('/') + 1);
-                                                fileName = value.substring(value.lastIndexOf('\\') + 1);
-                                                var fileExt = fileName.split('.').pop().toLowerCase();
-                                                $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
-                                            });
-                                        });
-                                        $('.delete-button').bind('click', function(){
-                                            var id = $(this).attr('value');
-                                            $('#delete__ok').attr({'href': '{% url "delete_client_files" %}?id=' + id});
-                                        });
-                                    });
-                                }
-                            });
-                            return false;
-                        });
-                        $("#delete__ok").bind('click', function(e) {
-                            e.preventDefault();
-                            $.ajax({
-                                url: $(this).attr('href'),
-                                success: function(data, status) {
-                                    $("#delete-file").modal("hide");
-                                    $client_claims.find(".form-add__in-modal").load(get_client_claims_url + ' .in-modal', function() {
-                                        $('.btn-file').each(function (){
-                                            var self = this;
-                                            $('input[type=file]', this).change(function (){
-                                                $(self).next().remove();
-                                                var value = $(this).val();
-                                                var fileName = value.substring(value.lastIndexOf('/') + 1);
-                                                fileName = value.substring(value.lastIndexOf('\\') + 1);
-                                                var fileExt = fileName.split('.').pop().toLowerCase();
-                                                $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
-                                            });
-                                        });
-                                        $('.delete-button').bind('click', function(){
-                                            var id = $(this).attr('value');
-                                            $('#delete__ok').attr({'href': '{% url "delete_client_files" %}?id=' + id});
-                                        });
-                                    });
-                                }
-                            });
-                        });
-                    });
-            });
-        })(jQuery);
-    </script>
 {% endblock %}

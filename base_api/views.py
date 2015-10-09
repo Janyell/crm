@@ -863,3 +863,15 @@ def view_analyzed_product_group(request):
 
 def get_related_claims(request):
     return render(request, 'order_claim/hidden/get_related_claims.html')
+
+
+def get_client_claims(request):
+    return render(request, 'order_claim/hidden/get_client_claims.html')
+
+
+def bind_claim(request):
+    pass
+
+
+def unbind_claim(request):
+    pass

@@ -299,11 +299,13 @@ div.source {
     margin-top: 1px;
 }
 .label_related {
-    width: 150px;
-    margin-left: -159px;
+    width: 23px;
     float: left;
     height: 14px;
     display: block;
+    margin-left: -32px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
 .label_related_red {
     background-color: #F44336;
@@ -316,4 +318,7 @@ div.source {
 }
 .label_related_purple {
     background-color: #9C27B0;
+}
+.pre-scrollable_auto {
+    overflow: auto;
 }

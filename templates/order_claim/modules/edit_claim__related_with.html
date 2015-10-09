@@ -1,25 +1,121 @@
 {% block related_with %}
     {% if request.path == edit_claim_url %}
-        <div class="control-group">
-            <label class="control-label">
-                Заявка связана с
-            </label>
-            <div class="controls">
-                <a class="btn" data-toggle="modal" href="#manage-related-claims">Управление связанными заявками</a>
+        <div class="form-horizontal form-add">
+            <div class="control-group_inline">
+                <label class="control-label">
+                    Заявка связана с
+                </label>
             </div>
         </div>
-
-{#        {{ order_form.client_related_with }}#}
-{#        {{ order_form.client }}#}
+        <div class="container" id="related-claims"></div>
+        <div class="form-horizontal form-add add-related-claim">
+            <div class="control-group add-related-claim__ctrl">
+                <div class="controls">
+                    <a class="btn">Добавить связанную заявку</a>
+                </div>
+            </div>
+            <div class="hide add-related-claim__form">
+                <h5 class="form-add-heading">Для добавления связанной заявки заполните, пожалуйста, следующую форму:</h5>
+                <div class="control-group">
+                    <label class="control-label" for="id_client_related_with">
+                        Клиент
+                        <span class="required-input">*</span>
+                    </label>
+                    <div class="controls">
+                        {{ form.client }}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="selectColor">
+                        Идентификационный цвет
+                        <span class="required-input">*</span>
+                    </label>
+                    <div class="controls">
+                        <select id="selectColor" class="selectpicker" name="color">
+                            <option value="0" data-content="<span class='label label_related_red'>Красный</span>">Красный</option>
+                            <option value="1" data-content="<span class='label label_related_orange'>Оранжевый</span>">Оранжевый</option>
+                            <option value="2" data-content="<span class='label label_related_green'>Зеленый</span>">Зеленый</option>
+                            <option value="3" data-content="<span class='label label_related_purple'>Фиолетовый</span>">Фиолетовый</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="client-claims" class="pre-scrollable pre-scrollable_auto hide container"></div>
+        <div class="modal hide fade" id="delete-claim" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3>Вы уверены, что хотите удалить эту заявку?</h3>
+            </div>
+            <div class="modal-footer">
+                <a id="delete-claim__ok" class="btn btn-danger">Удалить</a>
+                <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+            </div>
+        </div>
         <script type="text/javascript">
             (function($){
                 $(document).ready(function(){
-                    var $select_client_related_with = $('#client_related-with');
-                    $select_client_related_with.attr({
-                        'data-live-search': "true",
-                        'data-size': "10"
+                    var $related_claims = $('#related-claims');
+                    var get_related_claims_url = "{% url "get_related_claims" %}?id={{ request.GET.id }}";
+                    function loadRelatedClaims() {
+                        $related_claims.load(get_related_claims_url + ' .ajax-loadable');
+                    }
+                    loadRelatedClaims();
+
+                    var unbind_claims_url="{% url "unbind_claim" %}?id={{ request.GET.id }}&related_with=";
+                    $related_claims.on( "click", ".unbind-button", function() {
+                        var id = $(this).attr('value');
+                        $.get( unbind_claims_url + id, function() {
+                            loadRelatedClaims();
+                        });
                     });
-                    $select_client_related_with.selectpicker();
+
+                    var $delete__ok = $('#delete-claim__ok');
+                    $related_claims.on("click", ".delete-button", function(){
+                        var id = $(this).attr('value');
+                        $delete__ok.attr({'value': id});
+                    });
+                    var delete_claim_url = '{% url "delete_claim" %}?id=';
+                    var $delete_claim_modal = $('#delete-claim');
+                    $delete__ok.bind('click', function() {
+                        var id = $(this).attr('value');
+                        $.get( delete_claim_url + id, function() {
+                            loadRelatedClaims();
+                            $delete_claim_modal.modal('hide')
+                        });
+                    });
+
+                    var $select_client_related_with = $('#id_client_related_with');
+                        $select_client_related_with.attr({
+                            'data-live-search': "true",
+                            'data-size': "10"
+                        });
+                        $select_client_related_with.selectpicker();
+
+                    var $select_color = $('#selectColor');
+                    $select_color.selectpicker();
+
+                    $('.add-related-claim__ctrl .btn').click(function(){
+                        $(this).addClass('hide');
+                        $('.add-related-claim__form').removeClass('hide');
+                    });
+
+                    var $client_claims = $("#client-claims");
+                    var get_client_claims_url = "{% url "get_client_claims" %}?client-id=";
+                    $select_client_related_with.change(function() {
+                        $client_claims.addClass('hide');
+                        var id = $(this).val();
+                        $client_claims.load( get_client_claims_url + id + ' .ajax-loadable').removeClass('hide')
+                    });
+
+                    var bind_claims_url="{% url "bind_claim" %}?id={{ request.GET.id }}&related_with=";
+                    $client_claims.on( "click", ".bind-button", function() {
+                        var id = $(this).attr('value');
+                        var color = $select_color.val();
+                        $.get( bind_claims_url + id + "&color=" + color, function() {
+                            loadRelatedClaims();
+                        });
+                    });
                 });
             })(jQuery);
         </script>

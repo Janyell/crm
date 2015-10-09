@@ -1,22 +1,51 @@
 {% block related_claim_modal %}
-    <div class="modal hide fade" id="related-claim" tabindex="-1" role="dialog" aria-hidden="true">
-        <form class="change-manager-form form-add_modal" method="POST" action='{% url "massive_change_manager_in_order" %}?search={{ request.GET.search }}'>
-            <div class="modal-header">
-                <a class="close" data-dismiss="modal">×</a>
-                <h3 class="center">Связанные заявки</h3>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-            </div>
-        </form>
+    <div class="container modal hide fade" id="related-claim" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3 class="center">Связанные заявки</h3>
+        </div>
+        <div class="modal-body" id="related-claims">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
     </div>
     <script type="text/javascript">
         (function($) {
             $(document).ready(function() {
+                var $related_claims = $('#related-claims');
+                var get_related_claims_url = "{% url "get_related_claims" %}?id=";
+                function loadRelatedClaims(id) {
+                    $related_claims.load(get_related_claims_url + id + ' .ajax-loadable');
+                }
+                var id_modal;
+                $('.label_related').bind('click', function() {
+                    id_modal = $(this).attr('value');
+                    loadRelatedClaims(id_modal);
+                });
 
+                var unbind_claims_url="{% url "unbind_claim" %}?id=" + id_modal + "&related_with=";
+                $related_claims.on( "click", ".unbind-button", function() {
+                    var id = $(this).attr('value');
+                    $.get( unbind_claims_url + id, function() {
+                        loadRelatedClaims(id_modal);
+                    });
+                });
+
+                var $delete__ok = $('#delete-claim__ok');
+                $related_claims.on("click", ".delete-button", function(){
+                    var id = $(this).attr('value');
+                    $delete__ok.attr({'value': id});
+                });
+                var delete_claim_url = '{% url "delete_claim" %}?id=';
+                var $delete_claim_modal = $('#delete-claim');
+                $delete__ok.bind('click', function() {
+                    var id = $(this).attr('value');
+                    $.get( delete_claim_url + id, function() {
+                        loadRelatedClaims(id_modal);
+                        $delete_claim_modal.modal('hide')
+                    });
+                });
             });
         })(jQuery);
     </script>
