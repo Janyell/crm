@@ -21,7 +21,7 @@ body {
 .required-input_second, .blue {
     color: blue;
 }
-.form-add__input, .analyst__btns {
+.form-add__input, .analyst__btns, .settings__btns {
     margin-bottom: 10px;
 }
 .form-add__input_last {

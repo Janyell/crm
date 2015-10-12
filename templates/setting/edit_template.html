@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% block template-editor %}
+        <div class="container">
+            <a href="{% url "get_templates" %}" class="btn">Назад</a>
+            <h2 class="center">{{ page_title }}</h2>
+{#            <form method="" action="" class="form-horizontal form-analyze">#}
+{#                <div class="control-group">#}
+{#                    <label class="control-label" for="id_company">#}
+{#                        Компания#}
+{#                    </label>#}
+{#                    {{ form.company }}#}
+{#                </div>#}
+{#                <input class="btn btn-primary pull-right" type="submit" value="Редактировать шаблон" />#}
+{#            </form>#}
+            <div class="container-fluid">
+                <h3>Summernote Editor for Bootstrap</h3>
+                <div id="summernote">
+                  Hello Summernote. This is the editor demo.
+
+                </div>
+                <br>
+                <button class="btn btn-lg btn-danger" type="button">Save</button>
+            </div>
+            <script type="text/javascript" src="{{ STATIC_URL }}js/summernote.min.js"></script>
+            <script type="text/javascript" src="{{ STATIC_URL }}js/summernote-ru-RU.js"></script>
+            <script type="text/javascript">
+                (function($){
+                    $(document).ready(function() {
+                        $('#summernote').summernote({
+                            height: 200,
+                            lang: 'ru-RU',
+                            toolbar: [
+{#                                ['font', ['bold', 'italic', 'underline', 'clear']],#}
+                                ['image', ['image', 'floatLeft', 'floatRight','floatNone', 'shapeRounded', 'shapeCircle', 'shapeThumbnail', 'shapeNone', 'remove']],
+{#                                ['fontname', ['fontname']],#}
+{#                                    ['fontsize', ['fontsize']],#}
+{#                                ['para', ['paragraph']],#}
+{#                                ['height', ['height']],#}
+{#                                ['table', ['table']],#}
+                                ['insert', ['link', 'picture', 'hr']]
+                            ]
+                        });
+                    });
+                })(jQuery);
+            </script>
+        </div>
+    {% endblock %}
+{% endblock %}

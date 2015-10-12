@@ -2,7 +2,7 @@
 
 {%block content%}
     <div class="container container_mini-width">
-    <a href="{% url "analyst" %}" class="btn">Назад</a>
+    <a href="{% block back_url %}{% url "analyst" %}{% endblock %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }}</h2>
         <table class="table table-hover table-bordered" id="analyze-table">
             <thead>

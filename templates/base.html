@@ -14,6 +14,8 @@
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-select.min.css">
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-modal.css">
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/daterangepicker-bs2.css">
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/summernote.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/font-awesome.min.css">
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dataTables.min.js"></script>
@@ -85,8 +87,8 @@
                                 <li class={% navactive request 'get_documents' %}>
                                     <a href="{% url "index" %}admin/media_tree/filenode/">Документы</a>
                                 </li>
-                                {% if user_role == 0 %}{# только для менеджеров #}
-                                    <li class={% navactive request 'get_settings get_sources' %}>
+                                {% if user_role == 0 %}{# только для админа #}
+                                    <li class={% navactive request 'get_settings get_sources edit_template' %}>
                                         <a href="{% url "get_settings" %}">Настройки</a>
                                     </li>
                                 {% endif %}

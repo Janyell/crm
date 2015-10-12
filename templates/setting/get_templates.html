@@ -1,0 +1,18 @@
+{% extends "analyst/analyze_products.html" %}
+
+{% block back_url %}{% url "get_settings" %}{% endblock %}
+
+{% block entities_title %}Компания{% endblock %}
+
+{% block entities_content %}
+    {% if companies %}
+        {% for entity in companies %}
+            <tr>
+                <td>{{ entity.title }}</td>
+                <td>
+                    <a class="btn" href="{% url "edit_template" %}?id={{ entity.pk }}">Изменить шаблон</a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

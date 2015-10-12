@@ -875,3 +875,11 @@ def bind_claim(request):
 
 def unbind_claim(request):
     pass
+
+
+def edit_template(request):
+    return render(request, 'setting/edit_template.html')
+
+
+def get_templates(request):
+    return render(request, 'setting/get_templates.html')
