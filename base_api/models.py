@@ -195,6 +195,9 @@ class Orders(models.Model):
     shipped_date = UnixTimestampField(blank=True, null=True)
     brought_sum = models.IntegerField(null=True, blank=True)
 
+    related_orders = models.ManyToManyField("self", null=True, blank=True)
+    related_color = models.IntegerField(null=True, blank=True)
+
     search = SphinxSearch()
 
 
@@ -232,3 +235,7 @@ class Client_Files(models.Model):
     title = models.CharField(max_length=50, null=False, blank=True)
     file = models.FileField(upload_to="uploads/", null=True, blank=True)
     file_node = models.ForeignKey(FileNode, null=True, blank=True)
+
+#
+# class RelatedClaims(models.Model):
+#     claim_first = models.ForeignKey

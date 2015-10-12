@@ -862,16 +862,211 @@ def view_analyzed_product_group(request):
 
 
 def get_related_claims(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    out.update({'sources': Sources.objects.filter(is_deleted=0)})
+    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+    user_id = request.user.id
+    out.update({'user_id': user_id})
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_CLAIM)
+    sort = SORT_TYPE_FOR_CLAIM.get(sort_key, DEFAULT_SORT_TYPE_FOR_CLAIM)
+    claim = Orders.objects.get(id=request.GET['id'])
+    orders = claim.related_orders.filter(is_deleted=0, is_claim=1, in_archive=0)
+    if 'source' in request.GET:
+        source = int(request.GET.get('source'))
+        if source != -1:
+            orders = orders.filter(source=source)
+    if 'managers[]' in request.GET:
+        managers = request.GET.getlist('managers[]')
+        orders = orders.filter(role__in=managers)
+        out.update({'managers': managers})
+    try:
+        orders = orders.order_by(sort)
+    except TypeError:
+        orders = orders.order_by(*sort)
+    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
+    orders_pages = Paginator(orders, number)
+    page = request.GET.get('page')
+    try:
+        order_list = orders_pages.page(page)
+    except PageNotAnInteger:
+        order_list = orders_pages.page(1)
+    except EmptyPage:
+        order_list = orders_pages.page(orders_pages.num_pages)
+    for order in order_list:
+        if order.client.organization == '':
+            order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        else:
+            order.client.organization_or_full_name = order.client.organization
+        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
+        products_list = []
+        for pr in prs:
+            products_list.append(pr)
+        order.products = products_list
+        if order.bill_status == 0:
+            order.bill_status = 'Выставлен'
+        elif order.bill_status == 1:
+            order.bill_status = 'Нужна доплата'
+        elif order.bill_status == 2:
+            order.bill_status = 'Оплачен'
+        elif order.bill_status == 4:
+            order.bill_status = 'Устно'
+        else:
+            order.bill_status = ''
+        if order.bill != None:
+            orders_count_str = str(order.bill)
+            orders_count_str_reverse = orders_count_str[::-1]
+            orders_count_str_right_format = ''
+            for i in range(0, len(orders_count_str)/3 + 1):
+                j = 3
+                if i != (len(orders_count_str)/3):
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+                else:
+                    if (len(orders_count_str) % 3) == 2:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                        orders_count_str_reverse[i*j+1]
+                    elif (len(orders_count_str) % 3) == 1:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+            orders_count_str = orders_count_str_right_format[::-1]
+            order.bill = orders_count_str
+        order.files = []
+        if Order_Files.objects.filter(order_id=order.id).all() is not None:
+            for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                if order_file.file:
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    order.files.append(order_file)
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    out.update({'page_title': "Заявки"})
+    out.update({'claims': order_list})
+    out.update({'count': orders.count()})
     return render(request, 'order_claim/hidden/get_related_claims.html')
 
 
 def get_client_claims(request):
-    return render(request, 'order_claim/hidden/get_client_claims.html')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    out.update({'sources': Sources.objects.filter(is_deleted=0)})
+    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+    user_id = request.user.id
+    out.update({'user_id': user_id})
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_CLAIM)
+    sort = SORT_TYPE_FOR_CLAIM.get(sort_key, DEFAULT_SORT_TYPE_FOR_CLAIM)
+    client = Clients.objects.get(id=request.GET['client-id'])
+    if client.organization == '':
+        client.organization_or_full_name = client.last_name + ' ' + client.name + ' ' + client.patronymic
+    else:
+        client.organization_or_full_name = client.organization
+    orders = Orders.objects.filter(is_deleted=0, is_claim=1, in_archive=0, client=client)
+    if 'source' in request.GET:
+        source = int(request.GET.get('source'))
+        if source != -1:
+            orders = orders.filter(source=source)
+    if 'managers[]' in request.GET:
+        managers = request.GET.getlist('managers[]')
+        orders = orders.filter(role__in=managers)
+        out.update({'managers': managers})
+    try:
+        orders = orders.order_by(sort)
+    except TypeError:
+        orders = orders.order_by(*sort)
+    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
+    orders_pages = Paginator(orders, number)
+    page = request.GET.get('page')
+    try:
+        order_list = orders_pages.page(page)
+    except PageNotAnInteger:
+        order_list = orders_pages.page(1)
+    except EmptyPage:
+        order_list = orders_pages.page(orders_pages.num_pages)
+    for order in order_list:
+        if order.client.organization == '':
+            order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        else:
+            order.client.organization_or_full_name = order.client.organization
+        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
+        products_list = []
+        for pr in prs:
+            products_list.append(pr)
+        order.products = products_list
+        if order.bill_status == 0:
+            order.bill_status = 'Выставлен'
+        elif order.bill_status == 1:
+            order.bill_status = 'Нужна доплата'
+        elif order.bill_status == 2:
+            order.bill_status = 'Оплачен'
+        elif order.bill_status == 4:
+            order.bill_status = 'Устно'
+        else:
+            order.bill_status = ''
+        if order.bill != None:
+            orders_count_str = str(order.bill)
+            orders_count_str_reverse = orders_count_str[::-1]
+            orders_count_str_right_format = ''
+            for i in range(0, len(orders_count_str)/3 + 1):
+                j = 3
+                if i != (len(orders_count_str)/3):
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+                else:
+                    if (len(orders_count_str) % 3) == 2:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
+                                                        orders_count_str_reverse[i*j+1]
+                    elif (len(orders_count_str) % 3) == 1:
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+            orders_count_str = orders_count_str_right_format[::-1]
+            order.bill = orders_count_str
+        order.files = []
+        if Order_Files.objects.filter(order_id=order.id).all() is not None:
+            for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                if order_file.file:
+                    order_file.name = order_file.title
+                    order_file.url = order_file.file.url
+                    order.files.append(order_file)
+    user_role = Roles.objects.get(id=request.user.id).role
+    out.update({'user_role': user_role})
+    out.update({'page_title': "Заявки"})
+    out.update({'claims': order_list})
+    out.update({'count': orders.count()})
+    out.update({'organization_or_full_name': client.organization_or_full_name})
+    return render(request, 'order_claim/hidden/get_client_claims.html', out)
 
 
 def bind_claim(request):
-    pass
+    claim = Orders.objects.get(id=request.GET['id'])
+    related_claim = Orders.objects.get(id=request.GET['related_with'])
+    claim.related_orders.add(related_claim)
+    claim.save(update_fields=["related_orders"])
 
 
 def unbind_claim(request):
-    pass
+    claim = Orders.objects.get(id=request.GET['id'])
+    related_claim = Orders.objects.get(id=request.GET['related_with'])
+    claim.related_orders.remove(related_claim)
+    claim.save(update_fields=["related_orders"])

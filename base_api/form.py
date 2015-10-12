@@ -293,3 +293,12 @@ class SourceEditForm(ModelForm):
                                       'required': 1}),
             'is_active': Select(attrs={'id': "selectEditStatus"}, choices=SOURCE_STATUS),
         }
+
+
+class ClientRelatedForm(ModelForm):
+    class Meta:
+        model = Clients
+        exclude = ['is_deleted']
+        widgets = {
+            'client': Select(attrs={'id': "id_client_related_with", 'required': 0, 'class': 'selectpicker'}),
+        }
