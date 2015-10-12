@@ -197,7 +197,9 @@ def full_view_analyzed_product_groups(request):
         current_mounth = current_time[5:]
         current_mounth = current_mounth[:2]
         current_year = current_time[:4]
-        product_in_orders = Order_Product.objects.filter(product__group__id=product_group_id, is_deleted=0)
+        # product_in_orders = Order_Product.objects.filter(product__group__id=product_group_id, is_deleted=0)
+        product_in_orders = Order_Product.objects.filter(is_deleted=0)
+        # product_in_orders = [1]
         period = []
         period_str = ''
         amount = []
@@ -286,10 +288,10 @@ def full_view_analyzed_product_groups(request):
         out.update({'graphic': type_of_graphic})
         out.update({'average_sum_right_format': average_sum_right_format})
     user_role = Roles.objects.get(id=request.user.id).role
-    out.update({'page_title': "Анализ продаж продукта"})
-    out.update({'product_group_name': product_group_name})
+    out.update({'page_title': "Анализ продаж группы товаров"})
+    out.update({'product_name': product_group_name})
     out.update({'user_role': user_role})
-    return render(request, 'analyst/view_analyzed_product_group.html', out)
+    return render(request, 'analyst/view_analyzed_product.html', out)
 
 
 def month_diff(d1, d2):
