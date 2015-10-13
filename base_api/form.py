@@ -300,5 +300,5 @@ class ClientRelatedForm(ModelForm):
         model = Clients
         exclude = ['is_deleted']
         widgets = {
-            'client': Select(attrs={'id': "id_client_related_with", 'required': 0, 'class': 'selectpicker'}),
+            'client_related_with': Select(attrs={'id': "id_client_related_with", 'required': 0, 'class': 'selectpicker'}),
         }
