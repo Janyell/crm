@@ -93,7 +93,7 @@ def full_add_edit_claim(request):
                         product.price = price_of_products
                     product.price_right_format = right_money_format(product.price)
                 out.update({'order_form': form})
-                ClientRelatedForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 client_form = ClientRelatedForm()
                 out.update({'form': client_form})
                 out.update({'page_title': "Редактирование заявки"})
@@ -141,7 +141,7 @@ def full_add_edit_claim(request):
                             product.price = price_of_products
                         product.price_right_format = right_money_format(product.price)
                     out.update({'order_form': form})
-                    ClientRelatedForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                    ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                     client_form = ClientRelatedForm()
                     out.update({'form': client_form})
                     out.update({'page_title': "Редактирование заявки"})
@@ -217,7 +217,7 @@ def full_add_edit_claim(request):
                                 product.price = price_of_products
                             product.price_right_format = right_money_format(product.price)
                         out.update({'order_form': form})
-                        ClientRelatedForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                        ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         client_form = ClientRelatedForm()
                         out.update({'form': client_form})
                         out.update({'page_title': "Редактирование заказа"})
@@ -318,7 +318,7 @@ def full_add_edit_claim(request):
                                 product.price = price_of_products
                             product.price_right_format = right_money_format(product.price)
                         out.update({'order_form': form})
-                        ClientRelatedForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                        ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         client_form = ClientRelatedForm()
                         out.update({'form': client_form})
                         out.update({'page_title': "Добавление заказа"})
@@ -394,7 +394,7 @@ def full_add_edit_claim(request):
                     product.price_right_format = right_money_format(product.price)
                 out.update({'error': 3})
                 out.update({'order_form': form})
-                ClientRelatedForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 client_form = ClientRelatedForm()
                 out.update({'form': client_form})
                 out.update({'page_title': "Добавление заявки"})
@@ -430,7 +430,7 @@ def full_add_edit_claim(request):
                 product.price_right_format = right_money_format(product.price)
             out.update({'error': 1})
             out.update({'order_form': form})
-            ClientRelatedForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
             out.update({'form': client_form})
             out.update({'page_title': "Добавление заявки"})
@@ -462,7 +462,7 @@ def full_add_edit_claim(request):
                                                               order_id=id_order, is_deleted=0).price
                 product.price_right_format = right_money_format(product.price)
             out.update({'order_form': form})
-            ClientRelatedForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
             out.update({'form': client_form})
             out.update({'page_title': "Добавление заявки"})
@@ -481,7 +481,7 @@ def full_add_edit_claim(request):
             for product in form.products:
                 product.price_right_format = right_money_format(product.price)
             out.update({'order_form': form})
-            ClientRelatedForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
             out.update({'form': client_form})
             out.update({'client_id': client_id})
@@ -519,7 +519,7 @@ def full_add_edit_claim(request):
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum})
             form.products = Products.objects.filter(is_deleted=0)
-            ClientRelatedForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -548,7 +548,7 @@ def full_add_edit_claim(request):
             for product in form.products:
                 product.price_right_format = right_money_format(product.price)
             out.update({'order_form': form})
-            ClientRelatedForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+            ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
             out.update({'form': client_form})
             out.update({'page_title': "Добавление заявки"})
