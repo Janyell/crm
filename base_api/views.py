@@ -902,16 +902,7 @@ def get_related_claims(request):
         orders = orders.order_by(sort)
     except TypeError:
         orders = orders.order_by(*sort)
-    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
-    orders_pages = Paginator(orders, number)
-    page = request.GET.get('page')
-    try:
-        order_list = orders_pages.page(page)
-    except PageNotAnInteger:
-        order_list = orders_pages.page(1)
-    except EmptyPage:
-        order_list = orders_pages.page(orders_pages.num_pages)
-    for order in order_list:
+    for order in orders:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
