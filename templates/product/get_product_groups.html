@@ -11,7 +11,7 @@
                 </div>
             {% endif %}
         {% if product_groups %}
-            <form class="form-horizontal form-pg-massive" method="POST">
+            <form class="form-horizontal pg-form-massive" method="POST">
                 <table class="table table-hover table-bordered" id="product-group-table">
                     <thead>
                         <tr>
@@ -95,7 +95,7 @@
             </div>
 
             <div class="modal hide fade" id="edit-product-group" tabindex="-1" role="dialog" aria-hidden="true">
-                <form method="post" class="form-horizontal form-add_modal form-edit-product">
+                <form method="post" class="form-horizontal form-add_modal form-edit-product-group">
                     <div class="modal-header">
                         <a class="close" data-dismiss="modal">×</a>
                         <h3>Редактирование группы товаров</h3>
@@ -206,7 +206,7 @@
                         });
                         $massive_delete_ok.click(function(){
                             var info = table.page.info();
-                            var $filter_input = $('#product-table_filter').find('input');
+                            var $filter_input = $('#product-group-table_filter').find('input');
                             $form.attr('action', '{% url "massive_delete_product_groups" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
                     });

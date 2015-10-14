@@ -744,7 +744,14 @@ def edit_product_group(request):
 
 
 def get_settings(request):
-    return render(request, 'setting/get_settings.html')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role != 0:
+        return HttpResponseRedirect('/oops/')
+    out.update({'user_role': user_role})
+    return render(request, 'setting/get_settings.html', out)
 
 
 def get_reports(request):
@@ -951,10 +958,10 @@ def get_related_claims(request):
                     order.files.append(order_file)
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
-    out.update({'page_title': "Заявки"})
-    out.update({'claims': order_list})
+    out.update({'page_title': "Связанные заявки"})
+    out.update({'related_claims': orders})
     out.update({'count': orders.count()})
-    return render(request, 'order_claim/hidden/get_related_claims.html')
+    return render(request, 'order_claim/hidden/get_related_claims.html', out)
 
 
 def get_client_claims(request):
@@ -1062,14 +1069,18 @@ def bind_claim(request):
     claim = Orders.objects.get(id=request.GET['id'])
     related_claim = Orders.objects.get(id=request.GET['related_with'])
     claim.related_orders.add(related_claim)
-    claim.save(update_fields=["related_orders"])
+    claim.related_color = request.GET['color']
+    related_claim.related_color = request.GET['color']
+    related_claim.save(update_fields=["related_color"])
+    claim.save(update_fields=["related_color"])
+    return render(request, 'order_claim/hidden/get_client_claims.html')
 
 
 def unbind_claim(request):
     claim = Orders.objects.get(id=request.GET['id'])
     related_claim = Orders.objects.get(id=request.GET['related_with'])
     claim.related_orders.remove(related_claim)
-    claim.save(update_fields=["related_orders"])
+    return render(request, 'order_claim/hidden/get_client_claims.html')
 
 
 def edit_template(request):

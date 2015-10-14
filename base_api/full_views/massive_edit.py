@@ -3,7 +3,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from base_api.full_views.helper import get_request_param_as_string
-from base_api.models import Roles, Orders, Clients, Companies, Products, ProductGroups
+from base_api.models import Roles, Orders, Clients, Companies, Products, ProductGroups, Sources
 
 
 def massive_delete_orders(request):
@@ -183,7 +183,7 @@ def massive_change_product_group(request):
     if Roles.objects.get(id=request.user.id).role != 0:
         return HttpResponseRedirect('/oops/')
     ids = request.POST.getlist('id[]')
-    group_id = request.POST.get('group_id')
+    group_id = request.POST.get('product-group_id')
     for id in ids:
         product = Products.objects.get(pk=id, is_deleted=0)
         product.group = ProductGroups.objects.get(id=group_id)
@@ -194,16 +194,60 @@ def massive_change_product_group(request):
 
 
 def massive_delete_product_groups(request):
-    pass
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        product_group = ProductGroups.objects.get(pk=id)
+        product_group.is_deleted = 1
+        product_group.save(update_fields=["is_deleted"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/product_groups/' + get_params)
 
 
 def massive_delete_sources(request):
-    pass
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        source = Sources.objects.get(pk=id)
+        source.is_deleted = 1
+        source.save(update_fields=["is_deleted"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/settings/sources/' + get_params)
 
 
 def massive_activate_source(request):
-    pass
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        source = Sources.objects.get(pk=id, is_deleted=0)
+        source.is_active = 1
+        source.save(update_fields=["is_active"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/settings/sources/' + get_params)
 
 
 def massive_deactivate_source(request):
-    pass
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        source = Sources.objects.get(pk=id, is_deleted=0)
+        source.is_active = 0
+        source.save(update_fields=["is_active"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/settings/sources/' + get_params)

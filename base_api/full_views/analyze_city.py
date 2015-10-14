@@ -19,7 +19,6 @@ def full_analyze_city(request):
     if 'since-date' and 'until-date' in request.GET:
         since_date = request.GET['since-date']
         until_date = request.GET['until-date']
-        count_for = request.GET['count']
         if since_date == '' or until_date == '':
             out.update({'since_date': since_date})
             out.update({'until_date': until_date})
@@ -28,22 +27,13 @@ def full_analyze_city(request):
             out.update({'user_role': user_role})
             out.update({'page_title': 'Анализ продаж по городам за период'})
             return render(request, 'analyst/analyze_cities.html', out)
-        if count_for == 'shipped':
-            orders = Orders.objects.filter(is_deleted=0)\
-                                            .filter(order_date__gte=since_date)\
-                                            .filter(order_date__lte=until_date)\
-                                            .filter(Q(order_status=-1) | Q(order_status=2))\
-                                            .values("city__name")\
-                                            .annotate(number=Count('id'))\
-                                            .order_by()
-        elif count_for == 'made-claims':
-            orders = Orders.objects.filter(is_deleted=0)\
-                                            .filter(order_date__gte=since_date)\
-                                            .filter(order_date__lte=until_date)\
-                                            .filter(is_claim=1)\
-                                            .values("city__name")\
-                                            .annotate(number=Count('id'))\
-                                            .order_by()
+        orders = Orders.objects.filter(is_deleted=0)\
+                                        .filter(order_date__gte=since_date)\
+                                        .filter(order_date__lte=until_date)\
+                                        .filter(Q(order_status=-1) | Q(order_status=2))\
+                                        .values("city__name")\
+                                        .annotate(number=Count('id'))\
+                                        .order_by()
         out.update({'analysed_data': orders})
         out.update({'since_date': since_date})
         out.update({'until_date': until_date})

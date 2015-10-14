@@ -75,11 +75,13 @@ def full_get_products(request):
     for product in products:
         product.price_right_format = right_money_format(product.price)
     product_edit_form = ProductEditForm()
+    product_groups = ProductGroups.objects.filter(is_deleted=0)
     out.update({'page_title': "Продукты"})
     out.update({'products': products})
     out.update({'product_form': form})
     out.update({'product_edit_form': product_edit_form})
     out.update({'count': products.count()})
+    out.update({'product_groups': product_groups})
     return render(request, 'product/get_products.html', out)
 
 

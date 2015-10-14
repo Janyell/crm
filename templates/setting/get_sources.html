@@ -127,7 +127,7 @@
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label" for="inputEditStatus">
+                                <label class="control-label" for="selectEditStatus">
                                     Статус
                                 </label>
                                 <div class="controls">
@@ -217,7 +217,7 @@
                             var title = $(this).find('.source-data__title').text();
                             $edit_source__data.find('#inputEditTitle').val(title);
                             var status = $(this).find('.source-data__status').text();
-                            $edit_source__data.find('#selectIsActive').val(status);
+                            $edit_source__data.find('#selectEditStatus').val(status);
                         });
 
                         var $checkboxes_one = $('.checkbox_one');

@@ -18,7 +18,7 @@ def full_delete_source(request):
     source.save(update_fields=["is_deleted"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
-    return HttpResponseRedirect('/sources/' + get_params)
+    return HttpResponseRedirect('/settings/sources/' + get_params)
 
 
 def full_get_sources(request):
@@ -41,18 +41,22 @@ def full_get_sources(request):
         form = SourceForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
-            is_active = int(request.POST['is_active'])
+            is_active = True
+            if 'is_active' in request.POST:
+                is_active = int(request.POST['is_active'])
             new_source = Sources.objects.create(title=title, is_active=is_active)
-            return HttpResponseRedirect('/sources/' + get_params)
+            return HttpResponseRedirect('/settings/sources/' + get_params)
         else:
             out.update({"error": 1})
     else:
         form = SourceForm()
     sources = Sources.objects.filter(is_deleted=0)
+    source_edit_form = SourceEditForm()
     out.update({'page_title': "Источники"})
     out.update({'sources': sources})
     out.update({'source_form': form})
     out.update({'count': sources.count()})
+    out.update({'source_edit_form': source_edit_form})
     return render(request, 'setting/get_sources.html', out)
 
 
@@ -75,5 +79,5 @@ def full_edit_source(request):
         source.title = title
         source.is_active = is_active
         source.save()
-        return HttpResponseRedirect('/sources/' + get_params)
-    return HttpResponseRedirect('/sources/' + get_params)
+        return HttpResponseRedirect('/settings/sources/' + get_params)
+    return HttpResponseRedirect('/settings/sources/' + get_params)

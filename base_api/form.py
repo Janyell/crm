@@ -135,7 +135,7 @@ orders_form_widgets = {
                           'placeholder': "Город"}),
     'comment': Textarea(attrs={'id': "inputComment",
                                'placeholder': "Комментарии"}),
-    # 'source': Select(attrs={'id': "selectSource", 'required': 1}),
+    'source': Select(attrs={'id': "selectSource", 'required': 1}),
     'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                    'class': "datetime",
                                    'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
