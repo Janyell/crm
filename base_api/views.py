@@ -1070,7 +1070,6 @@ def unbind_claim(request):
     related_claim = Orders.objects.get(id=request.GET['related_with'])
     claim.related_orders.remove(related_claim)
     claim.save(update_fields=["related_orders"])
-    pass
 
 
 def edit_template(request):
