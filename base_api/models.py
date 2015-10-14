@@ -59,6 +59,9 @@ class Roles(User):
     surname = models.CharField(max_length=50, null=True, blank=True)
     patronymic = models.CharField(max_length=50, null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
+
+    phone = models.CharField(max_length=50, null=True, blank=True)
+
     objects = UserManager()
 
     search = SphinxSearch()
