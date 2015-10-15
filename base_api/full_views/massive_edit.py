@@ -144,6 +144,8 @@ def massive_change_manager_in_order(request):
         return HttpResponseRedirect('/orders/archive/' + get_params)
     if 'is_claim' in request.POST:
         return HttpResponseRedirect('/claims/' + get_params)
+    if 'search' in request.GET:
+        return HttpResponseRedirect('/search/' + get_params)
     return HttpResponseRedirect('/orders/' + get_params)
 
 

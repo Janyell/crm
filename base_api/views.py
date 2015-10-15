@@ -27,6 +27,7 @@ from base_api.full_views.product_views import *
 from base_api.full_views.claim_views import *
 # for excel
 import openpyxl
+# from zopyx.convert2 import Converter
 
 
 def add_edit_role(request):
@@ -481,6 +482,7 @@ def search(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'user': Roles.objects.get(id=request.user.id)})
+    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
     if 'search' in request.GET:
         search_word = request.GET['search'] + '*'
     else:
@@ -1077,6 +1079,12 @@ def unbind_claim(request):
 def edit_template(request):
     return render(request, 'setting/edit_template.html')
 
-
-def get_templates(request):
-    return render(request, 'setting/get_templates.html')
+#
+# def get_templates(request):
+#     # filename = MEDIA_ROOT + '/' + str('uploads/ch_g.html')
+#     filename = MEDIA_ROOT + '/' + str('uploads/test.html')
+#     out_filename = MEDIA_ROOT + '/' + str('uploads/ch1_g.odt')
+#     C = Converter(filename)
+#     docx_filename = C('odt-xfc')[out_filename]
+#     # docx_filename = C('docx-xfc')[out_filename]
+#     return render(request, 'setting/get_templates.html')
