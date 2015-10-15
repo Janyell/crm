@@ -111,11 +111,12 @@ def full_get_product_groups(request):
             out.update({"error": 1})
     else:
         form = ProductGroupForm()
+    product_group_edit_form = ProductGroupEditForm()
     product_groups = ProductGroups.objects.filter(is_deleted=0)
     out.update({'page_title': "Группы товаров"})
     out.update({'product_groups': product_groups})
     out.update({'product_group_form': form})
-    out.update({'product_group_edit_form': form})
+    out.update({'product_group_edit_form': product_group_edit_form})
     out.update({'count': product_groups.count()})
     return render(request, 'product/get_product_groups.html', out)
 
