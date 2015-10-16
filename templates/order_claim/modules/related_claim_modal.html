@@ -24,10 +24,10 @@
                     loadRelatedClaims(id_modal);
                 });
 
-                var unbind_claims_url="{% url "unbind_claim" %}?id=" + id_modal + "&related_with=";
+                var unbind_claims_url="{% url "unbind_claim" %}?id=";
                 $related_claims.on( "click", ".unbind-button", function() {
                     var id = $(this).attr('value');
-                    $.get( unbind_claims_url + id, function() {
+                    $.get( unbind_claims_url + id_modal + "&related_with=" + id, function() {
                         loadRelatedClaims(id_modal);
                     });
                 });

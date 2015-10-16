@@ -40,7 +40,7 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <a class="btn unbind-button" data-toggle="modal" href="#unbind-claim" value={{ claim.pk }}>Отвязать заявку</a>
+                                        <a class="btn unbind-button" value={{ claim.pk }}>Отвязать заявку</a>
                                     </td>
                                     <td>
                                         <a class="btn edit-button" target="_blank" href="{% url "edit_claim" %}?id={{ claim.pk }}">

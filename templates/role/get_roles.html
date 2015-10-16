@@ -13,6 +13,8 @@
                             <th>Роль</th>
                             <th>Логин</th>
                             <th>ФИО</th>
+                            <th>Телефон</th>
+                            <th>E-mail</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -28,6 +30,16 @@
                                 <td>{{ role.role }}</td>
                                 <td>{{ role.username }}</td>
                                 <td>{{ role.full_name }}</td>
+                                <td>
+                                    {% if role.phone != None %}
+                                        {{ role.phone }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if role.email != None %}
+                                        {{ role.email }}
+                                    {% endif %}
+                                </td>
                                 <td><a class="btn btn-mini edit-button" href="{% url "edit_role" %}?id={{ role.pk }}"><i class="icon-pencil"></i></a></td>
                                 <td><a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-role" value="{{ role.pk }}">
                                     <i class="icon-remove"></i></a>
@@ -96,8 +108,8 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        { "bSortable": false, "aTargets": [0, 4, 5 ] },
-                        { "bSearchable": false, "aTargets": [0, 4, 5 ] }
+                        { "bSortable": false, "aTargets": [0, 6, 7 ] },
+                        { "bSearchable": false, "aTargets": [0, 6, 7 ] }
                     ],
                     "order": [1, 'asc' ],
                     "bInfo": false,

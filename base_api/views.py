@@ -1079,12 +1079,13 @@ def unbind_claim(request):
 def edit_template(request):
     return render(request, 'setting/edit_template.html')
 
-#
-# def get_templates(request):
+
+def get_templates(request):
+    # pass
 #     # filename = MEDIA_ROOT + '/' + str('uploads/ch_g.html')
 #     filename = MEDIA_ROOT + '/' + str('uploads/test.html')
 #     out_filename = MEDIA_ROOT + '/' + str('uploads/ch1_g.odt')
 #     C = Converter(filename)
 #     docx_filename = C('odt-xfc')[out_filename]
 #     # docx_filename = C('docx-xfc')[out_filename]
-#     return render(request, 'setting/get_templates.html')
+    return render(request, 'setting/get_templates.html')
