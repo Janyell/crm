@@ -27,7 +27,7 @@ from base_api.full_views.product_views import *
 from base_api.full_views.claim_views import *
 # for excel
 import openpyxl
-# from zopyx.convert2 import Converter
+from zopyx.convert2 import Converter
 
 
 def add_edit_role(request):
@@ -978,6 +978,7 @@ def get_client_claims(request):
     sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_CLAIM)
     sort = SORT_TYPE_FOR_CLAIM.get(sort_key, DEFAULT_SORT_TYPE_FOR_CLAIM)
     client = Clients.objects.get(id=request.GET['client-id'])
+    claim = Orders.objects.get(id=request.GET['claim-id'])
     if client.organization == '':
         client.organization_or_full_name = client.last_name + ' ' + client.name + ' ' + client.patronymic
     else:
@@ -995,16 +996,8 @@ def get_client_claims(request):
         orders = orders.order_by(sort)
     except TypeError:
         orders = orders.order_by(*sort)
-    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
-    orders_pages = Paginator(orders, number)
-    page = request.GET.get('page')
-    try:
-        order_list = orders_pages.page(page)
-    except PageNotAnInteger:
-        order_list = orders_pages.page(1)
-    except EmptyPage:
-        order_list = orders_pages.page(orders_pages.num_pages)
-    for order in order_list:
+    orders_list = [x for x in orders.all() if x not in claim.related_orders.all()]
+    for order in orders_list:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
@@ -1052,7 +1045,7 @@ def get_client_claims(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'page_title': "Заявки"})
-    out.update({'claims': order_list})
+    out.update({'claims': orders_list})
     out.update({'count': orders.count()})
     out.update({'organization_or_full_name': client.organization_or_full_name})
     return render(request, 'order_claim/hidden/get_client_claims.html', out)
@@ -1081,11 +1074,10 @@ def edit_template(request):
 
 
 def get_templates(request):
-    # pass
-#     # filename = MEDIA_ROOT + '/' + str('uploads/ch_g.html')
-#     filename = MEDIA_ROOT + '/' + str('uploads/test.html')
-#     out_filename = MEDIA_ROOT + '/' + str('uploads/ch1_g.odt')
-#     C = Converter(filename)
-#     docx_filename = C('odt-xfc')[out_filename]
-#     # docx_filename = C('docx-xfc')[out_filename]
+    # filename = MEDIA_ROOT + '/' + str('uploads/ch_g.html')
+    filename = MEDIA_ROOT + '/' + str('uploads/test.html')
+    out_filename = MEDIA_ROOT + '/' + str('uploads/ch1_g.odt')
+    C = Converter(filename)
+    docx_filename = C('ooxml-xfc')[out_filename]
+    # docx_filename = C('docx-xfc')[out_filename]
     return render(request, 'setting/get_templates.html')
