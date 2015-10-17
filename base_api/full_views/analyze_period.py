@@ -84,7 +84,7 @@ def full_analyze_period_product_groups(request):
                                             .filter(order__order_date__gte=since_date)\
                                             .filter(order__order_date__lte=until_date)\
                                             .filter(Q(order__order_status=-1) | Q(order__order_status=2))\
-                                            .values("product__group")\
+                                            .values("product__group__title")\
                                             .annotate(number=Sum('count_of_products'))\
                                             .order_by()
         elif count_for == 'made-claims':
@@ -92,7 +92,7 @@ def full_analyze_period_product_groups(request):
                                             .filter(order__order_date__gte=since_date)\
                                             .filter(order__order_date__lte=until_date)\
                                             .filter(order__is_claim=1)\
-                                            .values("product__group")\
+                                            .values("product__group__title")\
                                             .annotate(number=Sum('count_of_products'))\
                                             .order_by()
         out.update({'analysed_data': orders})
