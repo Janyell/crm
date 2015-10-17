@@ -31,25 +31,27 @@ def full_add_edit_role(request):
             surname = request.POST['surname']
             name = request.POST['name']
             patronymic = request.POST['patronymic']
+            phone = request.POST['phone']
+            email = request.POST['email']
             if Roles.objects.filter(username=username).count() == 0:
                 new_author = Roles(id=id_role, username=username, role=role, surname=surname,
-                                   name=name, patronymic=patronymic)
+                                   name=name, patronymic=patronymic, email=email, phone=phone)
                 if password != '':
                     new_author.set_password(password)
                     new_author.save()
                 else:
-                    new_author.save(update_fields=["username", "role", "surname", "name", "patronymic"])
+                    new_author.save(update_fields=["username", "role", "surname", "name", "patronymic", "email", "phone"])
                 return HttpResponseRedirect('/roles/' + get_params)
             else:
                 exist_role = Roles.objects.get(username=username)
                 if str(exist_role.id) == id_role:
                     new_author = Roles(id=id_role, username=username, role=role, surname=surname,
-                                       name=name, patronymic=patronymic)
+                                       name=name, patronymic=patronymic, email=email, phone=phone)
                     if password != '':
                         new_author.set_password(password)
                         new_author.save()
                     else:
-                        new_author.save(update_fields=["username", "role", "surname", "name", "patronymic"])
+                        new_author.save(update_fields=["username", "role", "surname", "name", "patronymic", "email", "phone"])
                     return HttpResponseRedirect('/roles/' + get_params)
                 else:
                     out.update({"error": 1})
@@ -62,11 +64,13 @@ def full_add_edit_role(request):
                 surname = form.cleaned_data['surname']
                 name = form.cleaned_data['name']
                 patronymic = form.cleaned_data['patronymic']
+                email = form.cleaned_data['email']
+                phone = form.cleaned_data['phone']
 
                 new_author = Roles.objects.create(username=username,
                                                   is_staff=1, is_active=1, date_joined=datetime.now(),
                                                   role=role, surname=surname, name=name, patronymic=patronymic,
-                                                  is_superuser=True)
+                                                  is_superuser=True, email=email, phone=phone)
                 new_author.set_password(password)
                 new_author.save()
                 return HttpResponseRedirect('/roles/' + get_params)
@@ -83,7 +87,8 @@ def full_add_edit_role(request):
             out.update({"error": 0})
             author = Roles.objects.get(pk=id_role)
             form = RoleForm({'username': author.username, 'role': author.role, 'surname': author.surname,
-                             'name': author.name, 'patronymic': author.patronymic, 'pk': id_role})
+                             'name': author.name, 'patronymic': author.patronymic,
+                             'email': author.email, 'phone': author.phone, 'pk': id_role})
             out.update({'page_title': "Редактирование роли"})
         else:
             form = RoleForm()

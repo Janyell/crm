@@ -52,7 +52,7 @@ class ClientModelChoiceField(ModelChoiceField):
 class RoleForm(ModelForm):
     class Meta:
         model = Roles
-        fields = ['username', 'password', 'role', 'surname', 'name', 'patronymic']
+        fields = ['username', 'password', 'role', 'surname', 'name', 'patronymic', 'email', 'phone']
         widgets = {
             'username': TextInput(attrs={'id': "inputLogin",
                                          'placeholder': "Логин",

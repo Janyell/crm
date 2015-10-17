@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import json
+import subprocess
 from django.shortcuts import render, render_to_response
 import datetime
 import djangosphinx
@@ -27,7 +28,7 @@ from base_api.full_views.product_views import *
 from base_api.full_views.claim_views import *
 # for excel
 import openpyxl
-# from zopyx.convert2 import Converter
+from subprocess import Popen
 
 
 def add_edit_role(request):
@@ -1074,10 +1075,28 @@ def edit_template(request):
 
 
 def get_templates(request):
-    # filename = MEDIA_ROOT + '/' + str('uploads/ch_g.html')
-    filename = MEDIA_ROOT + '/' + str('uploads/test.html')
-    out_filename = MEDIA_ROOT + '/' + str('uploads/ch1_g.odt')
-    C = Converter(filename)
-    docx_filename = C('ooxml-xfc')[out_filename]
-    # docx_filename = C('docx-xfc')[out_filename]
-    return render(request, 'setting/get_templates.html')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2 or user_role == 1:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    companies = Companies.objects.filter(is_deleted=0)
+    for c in companies:
+        c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
+    out.update({'page_title': "Компании"})
+    out.update({'companies': companies})
+    out.update({'count': companies.count()})
+    # filename = MEDIA_ROOT + '/' + str('uploads/test.html')
+    # out_filename = MEDIA_ROOT + '/' + str('uploads/ttt1.docx')
+    # out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/ttt1.pdf')
+    # Popen(['pandoc', filename, '-f', 'html', '-t', 'docx', '-s', '-o', out_filename])
+    # Popen(['pandoc', filename, '-f', 'html', '-s', '-o', out_filename_pdf])
+    return render(request, 'setting/get_templates.html', out)
