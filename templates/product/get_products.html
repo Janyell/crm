@@ -184,7 +184,7 @@
                         <h5 class="form-add__please">Пожалуйста, выберите группу товаров:</h5>
                         <div class="center">
                             {% if product_groups %}
-                                <select id="selectGroup" name="productGroup">
+                                <select id="selectProductGroup" name="productGroup">
                                     {% for product_group in product_groups %}
                                         <option value="{{ product_group.pk }}">{{ product_group.title }}</option>
                                     {% endfor %}

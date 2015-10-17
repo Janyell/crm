@@ -58,7 +58,7 @@
                     var $related_claims = $('#related-claims');
                     var get_related_claims_url = "{% url "get_related_claims" %}?id={{ request.GET.id }}";
                     function loadRelatedClaims() {
-                        $related_claims.load(get_related_claims_url + ' .ajax-loadable');
+                        $related_claims.addClass('hide').load(get_related_claims_url + ' .ajax-loadable').removeClass('hide');
                     }
                     loadRelatedClaims();
 
@@ -101,11 +101,15 @@
                     });
 
                     var $client_claims = $("#client-claims");
-                    var get_client_claims_url = "{% url "get_client_claims" %}?client-id=";
+                    var get_client_claims_url = "{% url "get_client_claims" %}?claim-id={{ request.GET.id }}&client-id=";
+                    function loadClientClaims(client_id) {
+                        $client_claims.addClass('hide').load( get_client_claims_url + client_id + ' .ajax-loadable').removeClass('hide');
+                    }
+                    var last_id;
                     $select_client_related_with.change(function() {
-                        $client_claims.addClass('hide');
                         var id = $(this).val();
-                        $client_claims.load( get_client_claims_url + id + ' .ajax-loadable').removeClass('hide')
+                        last_id = id;
+                        loadClientClaims(id);
                     });
 
                     var bind_claims_url="{% url "bind_claim" %}?id={{ request.GET.id }}&related_with=";
@@ -114,6 +118,7 @@
                         var color = $select_color.val();
                         $.get( bind_claims_url + id + "&color=" + color, function() {
                             loadRelatedClaims();
+                            loadClientClaims(last_id)
                         });
                     });
                 });

@@ -55,17 +55,34 @@
         </div>
         {% block analyze-table %}
             {% if analysed_data %}
+                {% url "analyze_period_product_groups" as analyze_period_product_groups_url %}
                 <table class="table table-hover table-bordered" id="analyze-table">
                     <thead>
                         <tr>
-                            <th>Продукция</th>
+                            <th>
+                                {% if request.path == analyze_period_product_groups_url %}
+                                    Группа товаров
+                                {% else %}
+                                    Продукция
+                                {% endif %}
+                            </th>
                             <th>Количество, шт.</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for product in analysed_data %}
                             <tr>
-                                <td>{{ product.product__title }}</td>
+                                <td>
+                                    {% if request.path == analyze_period_product_groups_url %}
+                                        {% if product.product__group__title %}
+                                            {{ product.product__group__title }}
+                                        {% else %}
+                                            Без группы
+                                        {% endif %}
+                                    {% else %}
+                                        {{ product.product__title }}
+                                    {% endif %}
+                                </td>
                                 <td>{{ product.number }}</td>
                             </tr>
                         {% endfor %}

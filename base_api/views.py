@@ -27,7 +27,7 @@ from base_api.full_views.product_views import *
 from base_api.full_views.claim_views import *
 # for excel
 import openpyxl
-from zopyx.convert2 import Converter
+# from zopyx.convert2 import Converter
 
 
 def add_edit_role(request):
