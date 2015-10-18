@@ -1139,7 +1139,9 @@ def edit_kp(request):
     claim = Orders.objects.get(pk=id)
     template = KPTemplates.objects.filter(company=claim.company).first()
     temp_out = {}
-    number = 1
+    number = template.numder
+    template.numder += 1
+    template.save(update_fields=['number'])
     kp_date = date.today().strftime('%d.%m.%Y')
     products = Order_Product.objects.filter(order_id=claim.id, is_deleted=0).all()
     if claim.client.organization == '':
