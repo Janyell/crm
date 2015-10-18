@@ -45,17 +45,15 @@ def full_generate_kp(request):
     form_file.close()
 
     filename = os.path.join(BASE_DIR, 'templates') + '/' + str('kp/kp.html')
-    # out_filename = os.path.join(BASE_DIR, 'templates') + '/' + str('kp/kp.docx')
-    # out_filename_pdf = os.path.join(BASE_DIR, 'templates') + '/' + str('kp/kp.pdf')
-    out_filename = MEDIA_ROOT + '/' + str('uploads/ttt1.docx')
-    out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/ttt1.pdf')
+    out_filename = MEDIA_ROOT + '/' + str('uploads/kp.docx')
+    out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/kp.pdf')
     Popen(['pandoc', filename, '-f', 'html', '-t', 'docx', '-s', '-o', out_filename])
     Popen(['pandoc', filename, '-f', 'html', '-s', '-o', out_filename_pdf])
-    # format = request.POST['format']
-    # if format == 'pdf':
-    #     Popen(['pandoc', filename, '-f', 'html', '-t', 'docx', '-s', '-o', out_filename])
-    #     return HttpResponseRedirect(out_filename)
-    # elif format == 'docx':
-    #     Popen(['pandoc', filename, '-f', 'html', '-s', '-o', out_filename_pdf])
-    #     return HttpResponseRedirect(out_filename_pdf)
-    return HttpResponseRedirect(out_filename)
+    format = request.POST['format']
+    if format == 'docx':
+        Popen(['pandoc', filename, '-f', 'html', '-t', 'docx', '-s', '-o', out_filename])
+        return HttpResponseRedirect('/media/uploads/kp.docx')
+    elif format == 'pdf':
+        Popen(['pandoc', filename, '-f', 'html', '-s', '-o', out_filename_pdf])
+        return HttpResponseRedirect('/media/uploads/kp.pdf')
+    return HttpResponseRedirect('/')
