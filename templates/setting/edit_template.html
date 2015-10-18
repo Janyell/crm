@@ -6,28 +6,46 @@
             <a href="{% url "get_templates" %}" class="btn">Назад</a>
             <h2 class="center">{{ page_title }}</h2>
         </div>
-        <form id="edit-template-form" method="post" action="">
+        <form id="edit-template-form" method="post" action="" enctype="multipart/form-data">
             <div class="word-block">
                 <div id="pageEditor" class="summernote">
                     {% if page %}
                         {{ page|safe }}
                     {% else %}
                         <hr />
-{#                        Исх{% endif %}#}
-{#                <div class="kp-number row">#}
-{#                    <div class="span6">#}
-{#                        Исх.№{{ number }} от {{ date }} г.#}
-{#                    </div>#}
-{#                    <div class="span6 pull-right">#}
-{#                        для {{ organization_or_full_name }}#}
-{#                    </div>#}
+                        Исх.№{% templatetag openvariable %} number {% templatetag closevariable %} от {% templatetag openvariable %} date {% templatetag closevariable %} г.
+                        для {% templatetag openvariable %} organization_name {% templatetag closevariable %}
+                        <p></p>
+                        <table class="table table-bordered claim-table">
+                            <tbody>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Наименование</td>
+                                    <td>Кол-во</td>
+                                    <td>Ед. изм.</td>
+                                    <td>Цена с НДС, руб.</td>
+                                    <td>Сумма с НДС, руб.</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">Итого</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="accompanyingText">{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}
+                        Срок изготовления:
+                        {% templatetag openblock %} accompanying_text|end {% templatetag closeblock %}</div>
+                        <p>
+                            Исполнитель: {% templatetag openvariable %} manager.name {% templatetag closevariable %}
+                            {% templatetag openvariable %} manager.phone {% templatetag closevariable %}
+                            {% templatetag openvariable %} manager.email {% templatetag closevariable %}
+                        </p>
+
                     {% endif %}
-                </div>
                 </div>
                 <div class="form-add__submits">
                     <button class="btn btn-primary" type="submit">Сохранить</button>
                 </div>
-                <label class="checkbox"><input type="checkbox" class="hide-border"/>Скрыть границы шапки</label>
             </div>
         </form>
         <script type="text/javascript" src="{{ STATIC_URL }}js/summernote.min.js"></script>
@@ -44,6 +62,7 @@
                             ['fontname', ['fontname']],
                             ['fontsize', ['fontsize']],
                             ['para', ['paragraph']],
+                            ['height', ['height']],
                             ['table', ['table']],
                             ['insert', ['link', 'picture', 'hr']]
                         ]
@@ -54,8 +73,15 @@
                         $editor.next().find('.note-editable').html()
                     }
 
-                    $('#editTemplateForm').submit(function() {
-                        $(this).append('<input type="hidden" name="page" value="' + getHTML($page) + '">');
+                    $('#edit-template-form').submit(function(e) {
+                        alert( "Handler for .submit() called." );
+
+                        var html = getHTML($page);
+{#                        html = html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '');#}
+                        console.log(html + 123);
+
+                        e.stopPropagation();
+                        $(this).append('<input type="hidden" name="page" value="' + html + '">');
                     });
                 });
             })(jQuery);

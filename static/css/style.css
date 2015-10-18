@@ -333,7 +333,7 @@ div.source {
     padding: 15mm 15mm 15mm 25mm;
     margin: 0 auto;
     font-family: "Times New Roman", serif;
-    font-size: 12px;
+    font-size: 12pt;
     line-height: 1.5;
     border: 1px solid #DDD;
 }
@@ -351,4 +351,14 @@ div.source {
 }
 .note-editable hr {
     border: 1px solid black;
+}
+.note-editable .claim-table td {
+    text-align: center;
+}
+.note-editable .claim-table td p {
+    display: inline;
+}
+.note-editable .claim-table, .note-editable .claim-table td {
+    border-color: black;
+    border-radius: 0 !important;
 }
