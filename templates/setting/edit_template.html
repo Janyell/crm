@@ -5,46 +5,73 @@
         <div class="container">
             <a href="{% url "get_templates" %}" class="btn">Назад</a>
             <h2 class="center">{{ page_title }}</h2>
-{#            <form method="" action="" class="form-horizontal form-analyze">#}
-{#                <div class="control-group">#}
-{#                    <label class="control-label" for="id_company">#}
-{#                        Компания#}
-{#                    </label>#}
-{#                    {{ form.company }}#}
-{#                </div>#}
-{#                <input class="btn btn-primary pull-right" type="submit" value="Редактировать шаблон" />#}
-{#            </form>#}
-            <div class="container-fluid">
-                <h3>Summernote Editor for Bootstrap</h3>
-                <div id="summernote">
-                  Hello Summernote. This is the editor demo.
-
+        </div>
+            <div class="word-block">
+                <div>
+                    <h3>Шапка</h3>
+                    <div id="headerEditor" class="summernote">
+                        {{ header }}
+                    </div>
+                    <label class="checkbox"><input type="checkbox" class="hide-border"/>Скрыть границы таблицы</label>
                 </div>
-                <br>
-                <button class="btn btn-lg btn-danger" type="button">Save</button>
+                <div>
+                    <h3>Текст</h3>
+                    <div id="textEditor" class="summernote">
+                        {{ text }}
+                    </div>
+                </div>
+                <div>
+                    <h3>Сопроводительный текст</h3>
+                    <div id="accompanyingTextEditor" class="summernote">
+                        {{ accompanying_text }}
+                    </div>
+                </div>
+                <div>
+                    <h3>Печать и подпись</h3>
+                    <div id="captionEditor" class="summernote">
+                        {{ caption }}
+                    </div>
+                    <label class="checkbox"><input type="checkbox" class="hide-border"/>Скрыть границы таблицы</label>
+                </div>
+                <div>
+                    <h3>Телефоны</h3>
+                    <div id="phoneEditor" class="summernote">
+                        {{ phone }}
+                    </div>
+                </div>
+
+            </div>
+            <div class="container">
+                <div class="form-add__submits">
+                    <button class="btn btn-primary" >Сохранить</button>
+                </div>
             </div>
             <script type="text/javascript" src="{{ STATIC_URL }}js/summernote.min.js"></script>
             <script type="text/javascript" src="{{ STATIC_URL }}js/summernote-ru-RU.js"></script>
             <script type="text/javascript">
                 (function($){
                     $(document).ready(function() {
-                        $('#summernote').summernote({
-                            height: 200,
+                        var options = {
+                            height: 150,
                             lang: 'ru-RU',
                             toolbar: [
-{#                                ['font', ['bold', 'italic', 'underline', 'clear']],#}
+                                ['font', ['bold', 'italic', 'underline', 'clear']],
                                 ['image', ['image', 'floatLeft', 'floatRight','floatNone', 'shapeRounded', 'shapeCircle', 'shapeThumbnail', 'shapeNone', 'remove']],
-{#                                ['fontname', ['fontname']],#}
-{#                                    ['fontsize', ['fontsize']],#}
-{#                                ['para', ['paragraph']],#}
-{#                                ['height', ['height']],#}
-{#                                ['table', ['table']],#}
+                                ['fontname', ['fontname']],
+                                ['fontsize', ['fontsize']],
+                                ['para', ['paragraph']],
+                                ['table', ['table']],
                                 ['insert', ['link', 'picture', 'hr']]
                             ]
-                        });
+                        };
+                        $('#headerEditor').summernote(options);
+                        $('#accompanyingTextEditor').summernote(options);
+                        $('#captionEditor').summernote(options);
+                        options.height = 75;
+                        $('#textEditor').summernote(options);
+                        $('#phoneEditor').summernote(options);
                     });
                 })(jQuery);
             </script>
-        </div>
     {% endblock %}
 {% endblock %}

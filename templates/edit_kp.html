@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% block kp-editor %}
+        <div class="container">
+            <h2 class="center">{{ page_title }}</h2>
+            <div class="word-block word-page">
+                <div class="kp-header">
+                    {{ header }}
+                </div>
+                <div class="kp-number row">
+                    <div class="span6">
+                        Исх.№{{ number }} от {{ date }} г.
+                    </div>
+                    <div class="span6 pull-right">
+                        для {{ organization_or_full_name }}
+                    </div>
+                </div>
+            </div>
+            <div class="kp_text">
+                {{ text }}
+            </div>
+        </div>
+    {% endblock %}
+{% endblock %}

@@ -322,3 +322,35 @@ div.source {
 .pre-scrollable_auto {
     overflow: auto;
 }
+.summernote {
+    margin-bottom: 40px;
+}
+.pull-right_second {
+    margin-right: 10px;
+}
+.word-block {
+    width: 210mm;
+    padding: 5mm 15mm 15mm 25mm;
+    margin: 0 auto;
+    font-family: "Times New Roman", serif;
+    font-size: 12px;
+    line-height: 1.5;
+    border: 1px solid #DDD;
+}
+.word-page {
+    height: 297mm;
+    margin: 50px auto;
+    padding-top: 15mm;
+}
+/*.word-page p {*/
+    /*text-indent: 35px;*/
+/*}*/
+.word-page .span6 {
+    width: inherit;
+}
+.word-block h3 {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.form-group.row {
+    margin-left: 0;
+}

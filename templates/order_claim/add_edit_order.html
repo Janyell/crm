@@ -27,6 +27,9 @@
                 {% url "add_order" %}?copy={{ request.GET.id }}" class="btn pull-right">Копировать заказ
             {% endif %}</a>
         {% endif %}
+        {% if request.path == edit_claim_url %}
+            <a href="{% url 'edit_kp' %}?" target="_blank" class="btn pull-right pull-right_second">Сформировать КП</a>
+        {% endif %}
         <form class="form-horizontal form-add form-add-order" method="post">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
