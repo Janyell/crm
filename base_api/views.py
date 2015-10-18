@@ -1087,13 +1087,16 @@ def edit_template(request):
     template = KPTemplates.objects.filter(company__id=id).first()
     if request.method == 'POST':
         page = request.POST['page']
+        kp_page = request.POST['kp-page']
         if template:
             template.html_text = page
         else:
-            template = KPTemplates.objects.create(html_text=page, company=Companies.objects.get(pk=id), number=1000)
+            template = KPTemplates.objects.create(html_text=page, company=Companies.objects.get(pk=id),
+                                                  html_text_for_kp=kp_page, number=1000)
         template.save()
     if template:
         out.update({'page': template.html_text})
+        out.update({'kp_page': template.html_text_for_kp})
     return render(request, 'setting/edit_template.html', out)
 
 
@@ -1117,7 +1120,6 @@ def get_templates(request):
     out.update({'page_title': "Компании"})
     out.update({'companies': companies})
     out.update({'count': companies.count()})
-
     return render(request, 'setting/get_templates.html', out)
 
 
@@ -1139,11 +1141,17 @@ def edit_kp(request):
     claim = Orders.objects.get(pk=id)
     template = KPTemplates.objects.filter(company=claim.company).first()
     temp_out = {}
-    number = template.numder
-    template.numder += 1
+    number = template.number
+    template.number += 1
     template.save(update_fields=['number'])
     kp_date = date.today().strftime('%d.%m.%Y')
     products = Order_Product.objects.filter(order_id=claim.id, is_deleted=0).all()
+    count = 1
+    for product in products:
+        product.number = count
+        count += 1
+        product.total_price = product.count_of_products * product.price
+        product.title = product.product.title
     if claim.client.organization == '':
         organization_or_full_name = claim.client.last_name + ' ' + claim.client.name + ' ' + claim.client.patronymic
     else:
@@ -1152,14 +1160,17 @@ def edit_kp(request):
     added_table = ''
 
     form_file = open('templates/kp/new_template.html', 'wb')
-    form_file.write(template.html_text.encode('utf-8'))
+    form_file.write(template.html_text_for_kp.encode('utf-8'))
     form_file.close()
     temp_out.update({'number': number})
     temp_out.update({'date': kp_date})
-    temp_out.update({'organization_or_full_name': organization_or_full_name})
+    temp_out.update({'organization_name': organization_or_full_name})
+    out.update({'organization_name': organization_or_full_name})
+    out.update({'organization_or_full_name': organization_or_full_name})
     temp_out.update({'added_table': added_table})
     temp_out.update({'products': products})
     temp_out.update({'in_total': claim.bill})
+    temp_out.update({'manager': claim.role})
     html = render_to_response('kp/new_template.html', temp_out)
-    out.update({'page': html})
+    out.update({'page': html.content})
     return render(request, 'edit_kp.html', out)
