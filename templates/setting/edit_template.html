@@ -112,7 +112,7 @@
                         var html = getHTML($page);
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + html + "'>");
 
-                        html = html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '<div class="accompanyingText">');
+                        html = html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '<div id="accompanyingText">');
                         html = html.replace('{% templatetag openblock %} accompanying_text|end {% templatetag closeblock %}', '</div>');
                         html = html.replace('{% templatetag openvariable %} organization_name {% templatetag closevariable %}',
                                 '{% templatetag openvariable %} organization_name|safe {% templatetag closevariable %}');
