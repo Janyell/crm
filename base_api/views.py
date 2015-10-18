@@ -1070,7 +1070,32 @@ def unbind_claim(request):
 
 
 def edit_template(request):
-    return render(request, 'setting/edit_template.html')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2 or user_role == 1:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    id = request.GET['id']
+    template = KPTemplates.objects.filter(company__id=id).first()
+    if template:
+        out.update({'page': template.html_text})
+    print(request.method)
+    if request.method == 'POST':
+        page = request.POST['page']
+        if template:
+            template.html_text = page
+        else:
+            template = KPTemplates.objects.create(html_text=page, company=Companies.objects.get(pk=id), number=1000)
+        template.save()
+    return render(request, 'setting/edit_template.html', out)
 
 
 def get_templates(request):
@@ -1094,10 +1119,43 @@ def get_templates(request):
     out.update({'companies': companies})
     out.update({'count': companies.count()})
 
-    html_code = '<div class="kp-number row"><div class="span6">Исх.№{{ number }} от {{ date }} г.</div><div class="span6 pull-right">для {{ organization_or_full_name }}</div></div>'
-    out.update({'header': html_code})
     return render(request, 'setting/get_templates.html', out)
 
 
 def edit_kp(request):
-    return render(request, 'edit_kp.html')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    id = request.GET['id']
+    claim = Orders.objects.get(pk=id)
+    template = KPTemplates.objects.filter(company=claim.company).first()
+    temp_out = {}
+    number = 1
+    kp_date = date.today().strftime('%d.%m.%Y')
+    if claim.client.organization == '':
+        organization_or_full_name = claim.client.last_name + ' ' + claim.client.name + ' ' + claim.client.patronymic
+    else:
+        organization_or_full_name = claim.client.organization
+    # TODO
+    added_table = ''
+
+    form_file = open('templates/kp/new_template.html', 'wb')
+    form_file.write(template.html_text)
+    form_file.close()
+    temp_out.update({'number': number})
+    temp_out.update({'date': kp_date})
+    temp_out.update({'organization_or_full_name': organization_or_full_name})
+    temp_out.update({'added_table': added_table})
+    html = render_to_response('kp/new_template.html', temp_out)
+    out.update({'page': html})
+    return render(request, 'edit_kp.html', out)

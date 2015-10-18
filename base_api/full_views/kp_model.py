@@ -1,63 +1,57 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from datetime import date
+import os
 from django.http import HttpResponseRedirect
 from subprocess import Popen
-from api.settings import MEDIA_ROOT
+from django.shortcuts import render_to_response
+from api.settings import MEDIA_ROOT, BASE_DIR
+from base_api.models import *
 
 
 def full_generate_kp(request):
-    filename = MEDIA_ROOT + '/' + str('uploads/test.html')
-    out_filename = MEDIA_ROOT + '/' + str('uploads/ttt1.docx')
-    out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/ttt1.pdf')
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    if 'page' in request.GET and 'length' in request.GET:
+        page = int(request.GET['page'])
+        length = int(request.GET['length'])
+        start = (page - 1) * length
+        out.update({'start': start})
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    id = request.GET['id']
+    claim = Orders.objects.get(pk=id)
+    template = KPTemplates.objects.filter(company=claim.company).first()
+    temp_out = {}
+    organization_or_full_name = request.POST['organization_or_full_name']
+    accompanying_text = request.POST['accompanying_text']
+    added_table = ''
+    if 'added_table' in request.POST:
+        added_table = request.POST['added_table']
+    number = template.numder
+    template.numder += 1
+    template.save(update_fields=['number'])
+    kp_date = date.today().strftime('%d.%m.%Y')
+    temp_out.update({'number': number})
+    temp_out.update({'date': kp_date})
+    temp_out.update({'accompanying_text': accompanying_text})
+    temp_out.update({'organization_or_full_name': organization_or_full_name})
+    temp_out.update({'added_table': added_table})
+
+    form_file = open('templates/kp/random.html', 'wb')
+    form_file.write(template.html_text)
+    form_file.close()
+    html = render_to_response('kp/new_template.html', temp_out)
+
+    # filename = os.path.join(BASE_DIR, 'templates') + '/' + str('kp/kp.html')
+    # out_filename = os.path.join(BASE_DIR, 'templates') + '/' + str('kp/kp.docx')
+    # out_filename_pdf = os.path.join(BASE_DIR, 'templates') + '/' + str('kp/kp.pdf')
+    # # out_filename = MEDIA_ROOT + '/' + str('uploads/ttt1.docx')
+    # # out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/ttt1.pdf')
     # Popen(['pandoc', filename, '-f', 'html', '-t', 'docx', '-s', '-o', out_filename])
     # Popen(['pandoc', filename, '-f', 'html', '-s', '-o', out_filename_pdf])
-
-    # document = Document()
-    #
-    # document.add_heading('Document Title', 0)
-    #
-    # p = document.add_paragraph('A plain paragraph having some ')
-    # p.add_run('bold').bold = True
-    # p.add_run(' and some ')
-    # p.add_run('italic.').italic = True
-    #
-    # document.add_heading('Heading, level 1', level=1)
-    # document.add_paragraph('Intense quote', style='IntenseQuote')
-    #
-    # document.add_paragraph(
-    #     'first item in unordered list', style='ListBullet'
-    # )
-    # document.add_paragraph(
-    #     'first item in ordered list', style='ListNumber'
-    # )
-    #
-    # document.add_picture('/Users/megge/Documents/Яндекс.Диск/gif/tumblr_nata787Rh01rjm4kxo1_500.jpg', width=Inches(1.25))
-    #
-    # table = document.add_table(rows=1, cols=3)
-    # hdr_cells = table.rows[0].cells
-    # hdr_cells[0].text = 'Qty'
-    # hdr_cells[1].text = 'Id'
-    # hdr_cells[2].text = 'Desc'
-    # row_cells = table.add_row().cells
-    # row_cells[0].text = str(3123)
-    # row_cells[1].text = str(3213)
-    # row_cells[2].text = str(2313213)
-    #
-    # document.add_page_break()
-    #
-    # document.save('demo.docx')
-
-    # import os
-    # from win32com import client
-    #
-    # wdFormatPDF = 17
-    #
-    # in_file = os.path.abspath('demo.docx')
-    # out_file = os.path.abspath('demo.pdf')
-    #
-    # word = client.CreateObject('Word.Application')
-    # doc = word.Documents.Open(in_file)
-    # doc.SaveAs(out_file, FileFormat=wdFormatPDF)
-    # doc.Close()
-    # word.Quit()
     return HttpResponseRedirect('/')

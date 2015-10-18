@@ -239,6 +239,8 @@ class Client_Files(models.Model):
     file = models.FileField(upload_to="uploads/", null=True, blank=True)
     file_node = models.ForeignKey(FileNode, null=True, blank=True)
 
-#
-# class RelatedClaims(models.Model):
-#     claim_first = models.ForeignKey
+
+class KPTemplates(models.Model):
+    html_text = models.TextField()
+    company = models.ForeignKey(Companies, null=True, blank=True)
+    numder = models.IntegerField(null=True, blank=True)
