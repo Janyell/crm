@@ -28,13 +28,13 @@
                                 </tr>
                                 <tr>
                                     <td colspan="5">Итого</td>
-                                    <td></td>
+                                    <td>{% templatetag openvariable %} in_total {% templatetag closevariable %}</td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="accompanyingText">{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}
+                        {% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}
                         Срок изготовления:
-                        {% templatetag openblock %} accompanying_text|end {% templatetag closeblock %}</div>
+                        {% templatetag openblock %} accompanying_text|end {% templatetag closeblock %}
                         <p>
                             Исполнитель: {% templatetag openvariable %} manager.name {% templatetag closevariable %}
                             {% templatetag openvariable %} manager.phone {% templatetag closevariable %}
@@ -73,14 +73,55 @@
                         return $editor.next().find('.note-editable').html();
                     }
 
-                    $('#edit-template-form').submit(function(e) {
-                        var html = getHTML($page);
-                        html = html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '');
-                        html = html.replace('{% templatetag openblock %} accompanying_text|end {% templatetag closeblock %}', '');
-{#                        console.log(html);#}
+                    function renderClaimTable($where) {
+                        var $claim_table = $where.find('.claim-table');
+                        var $first_tr = $claim_table.find('tr:first');
+                        var first_i = 0;
+                        $first_tr.find('td').each(function(){
+                            if ($(this).text()) {
+                                ++first_i;
+                            }
+                            else {
+                                $(this).remove();
+                            }
+                        });
+                        var $second_tr = $first_tr.next();
+                        var $second_tr_first_td = $second_tr.find('td:first');
+                        if ($second_tr_first_td.text()) {
+                            if (first_i == 5) {
+                                $second_tr_first_td.attr('colspan',4);
+                            }
+                            $second_tr_first_td.next().html('{% templatetag openvariable %} in_total {% templatetag closevariable %}');
+                        }
+                        var tr_template = '<tr class="insert-cycle">' +
+                                        '<td>{% templatetag openvariable %} product.number {% templatetag closevariable %}</td>' +
+                                        '<td style="text-align: left;">{% templatetag openvariable %} product.title {% templatetag closevariable %}</td>' +
+                                        '<td>{% templatetag openvariable %} product.count_of_products {% templatetag closevariable %}</td>';
+                        if (first_i == 6) {
+			                tr_template += '<td>шт.</td>';
+		                }
+                        tr_template +=  '<td>{% templatetag openvariable %} product.price {% templatetag closevariable %}</td>' +
+                                        '<td>{% templatetag openvariable %} product.total_price {% templatetag closevariable %}</td>' +
+                                '</tr>';
+                        $first_tr.after(tr_template);
+                    }
 
-                        $(this).append("<input type=\"hidden\" name=\"page\" value='" + html + "'>");
-{#                        return false;#}
+                    $('#edit-template-form').submit(function(e) {
+                        var $this = $(this);
+                        var html = getHTML($page);
+                        $this.append("<input type=\"hidden\" name=\"page\" value='" + html + "'>");
+
+                        html = html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '<div class="accompanyingText">');
+                        html = html.replace('{% templatetag openblock %} accompanying_text|end {% templatetag closeblock %}', '</div>');
+                        var $pre_submit_div = $('<div class="hide pre-submit">' + html + '</div>').appendTo($this);
+                        renderClaimTable($pre_submit_div);
+                        var kp_html = $pre_submit_div.html();
+                        var replace_pattern_tr = '<tr class="insert-cycle">';
+                        kp_html = kp_html.replace(replace_pattern_tr, '{% templatetag openblock %} for product in products {% templatetag closeblock %}' + replace_pattern_tr);
+                        var replace_pattern_end_tr = 'product.total_price {% templatetag closevariable %}</td></tr>';
+                        kp_html = kp_html.replace(replace_pattern_end_tr, replace_pattern_end_tr + '{% templatetag openblock %} endfor {% templatetag closeblock %}');
+
+                        $this.append("<input type=\"hidden\" name=\"kp-page\" value='" + kp_html + "'>");
                     });
                 });
             })(jQuery);

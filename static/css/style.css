@@ -352,13 +352,13 @@ div.source {
 .note-editable hr {
     border: 1px solid black;
 }
-.note-editable .claim-table td {
+.claim-table td {
     text-align: center;
 }
-.note-editable .claim-table td p {
+.claim-table td p {
     display: inline;
 }
-.note-editable .claim-table, .note-editable .claim-table td {
+.claim-table, .claim-table td {
     border-color: black;
     border-radius: 0 !important;
 }
