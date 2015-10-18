@@ -1141,6 +1141,7 @@ def edit_kp(request):
     temp_out = {}
     number = 1
     kp_date = date.today().strftime('%d.%m.%Y')
+    products = Order_Product.objects.filter(order_id=claim.id, is_deleted=0).all()
     if claim.client.organization == '':
         organization_or_full_name = claim.client.last_name + ' ' + claim.client.name + ' ' + claim.client.patronymic
     else:
@@ -1148,13 +1149,15 @@ def edit_kp(request):
     # TODO
     added_table = ''
 
-    # form_file = open('templates/kp/new_template.html', 'wb')
-    # form_file.write(template.html_text)
-    # form_file.close()
+    form_file = open('templates/kp/new_template.html', 'wb')
+    form_file.write(template.html_text.encode('utf-8'))
+    form_file.close()
     temp_out.update({'number': number})
     temp_out.update({'date': kp_date})
     temp_out.update({'organization_or_full_name': organization_or_full_name})
     temp_out.update({'added_table': added_table})
+    temp_out.update({'products': products})
+    temp_out.update({'in_total': claim.bill})
     html = render_to_response('kp/new_template.html', temp_out)
     out.update({'page': html})
     return render(request, 'edit_kp.html', out)
