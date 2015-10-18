@@ -1091,6 +1091,7 @@ def edit_template(request):
         kp_page = request.POST['kp-page']
         if template:
             template.html_text = page
+            template.html_text_for_kp = kp_page
         else:
             template = KPTemplates.objects.create(html_text=page, company=Companies.objects.get(pk=id),
                                                   html_text_for_kp=kp_page, number=1000)
