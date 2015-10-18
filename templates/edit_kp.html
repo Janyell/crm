@@ -4,15 +4,16 @@
     {% block kp-editor %}
         <div class="container">
             <h2 class="center">{{ page_title }}</h2>
-            <form id="editKpForm" method="post" action="{% url "generate_kp" %}">
+            <form id="edit-kp-form" method="post" action="{% url "generate_kp" %}">
                 <div id="page" class="word-block">
                     {{ page|safe }}
-{#                    <a class="btn show-button">Добавить вариант</a>#}
-{#                    <div class="added-table">#}
-{#                        <p><b>Вариант 2</b></p>#}
-{#                        <table class="table table-bordered claim-table"></table>#}
-{#                    </div>#}
-{#                    <a class="btn hide-button">Убрать вариант</a>#}
+                    <div class="added-table__wrap center hide">
+                        <a class="btn show-button">Добавить вариант</a>
+                        <div id="addedTable">
+                            <table class="table table-bordered claim-table"></table>
+                        </div>
+                        <a class="btn hide-button">Убрать вариант</a>
+                    </div>
                 </div>
                 <div class="form-add__submits">
                     <button class="btn btn-primary" type="submit" name="format" value="docx">Сохранить как docx</button>
@@ -34,7 +35,7 @@
                             ['insert', ['link']]
                         ]
                     };
-                    var $accompanying_text = $('#accompanyingTextEditor');
+                    var $accompanying_text = $('#accompanyingText');
                     $accompanying_text.summernote(options);
 {#                    $('.claim-table').after('<a class="btn show-button">Добавить вариант</a>' +#}
 {#                            '<');#}
@@ -59,7 +60,7 @@
                         return $editor.next().find('.note-editable').html()
                     }
 
-                    $('#editKpForm').submit(function() {
+                    $('#edit-kp-form').submit(function() {
                         var $this = $(this);
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
                         var $added_table = $this.find('.added-table__wrap').find('.claim-table');
