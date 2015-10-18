@@ -1,8 +1,10 @@
 
                     
+                        
+                    
                         <hr>
                         Исх.№{{ number }} от {{ date }} г.
-                        для {{ organization_name }}
+                        для {{ organization_name|safe }}
                         <p></p>
                         <table class="table table-bordered claim-table">
                             <tbody>
@@ -20,14 +22,17 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="accompanyingText">
-                        Срок изготовления:
+                        <div id="accompanyingText">
+                        Срок изготовлениякаукау:
                         </div>
                         <p>
                             Исполнитель: {{ manager.name }}
+                            {{ manager.surname }}
                             {{ manager.phone }}
                             {{ manager.email }}
                         </p>
 
+                    
+                
                     
                 

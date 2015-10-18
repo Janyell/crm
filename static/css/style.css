@@ -343,7 +343,7 @@ div.source {
 .form-group.row {
     margin-left: 0;
 }
-.note-editable hr {
+.word-block hr {
     border: 1px solid black;
 }
 .claim-table td {
@@ -356,6 +356,9 @@ div.source {
     border-color: black;
     border-radius: 0 !important;
 }
-.word-block .hide-button {
-    margin-top: 10px;
+.word-block .hide-button, .word-block .show-button {
+    margin: 10px 0;
+}
+.note-toolbar {
+    text-align: left;
 }

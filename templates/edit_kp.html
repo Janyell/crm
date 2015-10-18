@@ -64,15 +64,27 @@
                     function getHTML($editor) {
                         return $editor.next().find('.note-editable').html()
                     }
+                    var $page = $('#page');
 
                     $('#edit-kp-form').submit(function() {
                         var $this = $(this);
+
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
+                        $accompanying_text.next().replaceWith('{% templatetag openvariable %} accompanying_text|safe {% templatetag closevariable %}');
+                        $accompanying_text.remove();
                         if (!$added_table_editor.hasClass('hide')) {
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
+                            $added_table__wrap.replaceWith('{% templatetag openvariable %} added_table|safe {% templatetag closevariable %}');
                         }
+                        else {
+                            $added_table__wrap.remove();
+                        }
+                        $('.organization_name').replaceWith('{% templatetag openvariable %} organization_name|safe {% templatetag closevariable %}');
 
-                        $this.append("<input type=\"hidden\" name=\"page\" value='" + $('#page').html() + "'>");
+                        $page.summernote(options);
+                        $this.append("<input type=\"hidden\" name=\"page\" value='" + getHTML($page) + "'>");
+{#                        console.log(getHTML($page));#}
+{#                        return false;#}
                     });
                 });
             })(jQuery);
