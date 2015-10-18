@@ -337,13 +337,7 @@ div.source {
     line-height: 1.5;
     border: 1px solid #DDD;
 }
-.word-page {
-    height: 297mm;
-}
-.word-page .span6 {
-    width: inherit;
-}
-.word-block h3 {
+.word-block h3, .word-block .show-button, .word-block .hide-button {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 .form-group.row {
