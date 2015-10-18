@@ -330,7 +330,7 @@ div.source {
 }
 .word-block {
     width: 210mm;
-    padding: 5mm 15mm 15mm 25mm;
+    padding: 15mm 15mm 15mm 25mm;
     margin: 0 auto;
     font-family: "Times New Roman", serif;
     font-size: 12px;
@@ -339,12 +339,7 @@ div.source {
 }
 .word-page {
     height: 297mm;
-    margin: 50px auto;
-    padding-top: 15mm;
 }
-/*.word-page p {*/
-    /*text-indent: 35px;*/
-/*}*/
 .word-page .span6 {
     width: inherit;
 }
@@ -353,4 +348,7 @@ div.source {
 }
 .form-group.row {
     margin-left: 0;
+}
+.note-editable hr {
+    border: 1px solid black;
 }

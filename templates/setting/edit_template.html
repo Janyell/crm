@@ -6,72 +6,59 @@
             <a href="{% url "get_templates" %}" class="btn">Назад</a>
             <h2 class="center">{{ page_title }}</h2>
         </div>
+        <form id="edit-template-form" method="post" action="">
             <div class="word-block">
-                <div>
-                    <h3>Шапка</h3>
-                    <div id="headerEditor" class="summernote">
-                        {{ header }}
-                    </div>
-                    <label class="checkbox"><input type="checkbox" class="hide-border"/>Скрыть границы таблицы</label>
+                <div id="pageEditor" class="summernote">
+                    {% if page %}
+                        {{ page|safe }}
+                    {% else %}
+                        <hr />
+{#                        Исх{% endif %}#}
+{#                <div class="kp-number row">#}
+{#                    <div class="span6">#}
+{#                        Исх.№{{ number }} от {{ date }} г.#}
+{#                    </div>#}
+{#                    <div class="span6 pull-right">#}
+{#                        для {{ organization_or_full_name }}#}
+{#                    </div>#}
+                    {% endif %}
                 </div>
-                <div>
-                    <h3>Текст</h3>
-                    <div id="textEditor" class="summernote">
-                        {{ text }}
-                    </div>
                 </div>
-                <div>
-                    <h3>Сопроводительный текст</h3>
-                    <div id="accompanyingTextEditor" class="summernote">
-                        {{ accompanying_text }}
-                    </div>
-                </div>
-                <div>
-                    <h3>Печать и подпись</h3>
-                    <div id="captionEditor" class="summernote">
-                        {{ caption }}
-                    </div>
-                    <label class="checkbox"><input type="checkbox" class="hide-border"/>Скрыть границы таблицы</label>
-                </div>
-                <div>
-                    <h3>Телефоны</h3>
-                    <div id="phoneEditor" class="summernote">
-                        {{ phone }}
-                    </div>
-                </div>
-
-            </div>
-            <div class="container">
                 <div class="form-add__submits">
-                    <button class="btn btn-primary" >Сохранить</button>
+                    <button class="btn btn-primary" type="submit">Сохранить</button>
                 </div>
+                <label class="checkbox"><input type="checkbox" class="hide-border"/>Скрыть границы шапки</label>
             </div>
-            <script type="text/javascript" src="{{ STATIC_URL }}js/summernote.min.js"></script>
-            <script type="text/javascript" src="{{ STATIC_URL }}js/summernote-ru-RU.js"></script>
-            <script type="text/javascript">
-                (function($){
-                    $(document).ready(function() {
-                        var options = {
-                            height: 150,
-                            lang: 'ru-RU',
-                            toolbar: [
-                                ['font', ['bold', 'italic', 'underline', 'clear']],
-                                ['image', ['image', 'floatLeft', 'floatRight','floatNone', 'shapeRounded', 'shapeCircle', 'shapeThumbnail', 'shapeNone', 'remove']],
-                                ['fontname', ['fontname']],
-                                ['fontsize', ['fontsize']],
-                                ['para', ['paragraph']],
-                                ['table', ['table']],
-                                ['insert', ['link', 'picture', 'hr']]
-                            ]
-                        };
-                        $('#headerEditor').summernote(options);
-                        $('#accompanyingTextEditor').summernote(options);
-                        $('#captionEditor').summernote(options);
-                        options.height = 75;
-                        $('#textEditor').summernote(options);
-                        $('#phoneEditor').summernote(options);
+        </form>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/summernote.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/summernote-ru-RU.js"></script>
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function() {
+                    var options = {
+                        height: 1000,
+                        lang: 'ru-RU',
+                        toolbar: [
+                            ['font', ['bold', 'italic', 'underline', 'clear']],
+                            ['image', ['image', 'floatLeft', 'floatRight','floatNone', 'shapeRounded', 'shapeCircle', 'shapeThumbnail', 'shapeNone', 'remove']],
+                            ['fontname', ['fontname']],
+                            ['fontsize', ['fontsize']],
+                            ['para', ['paragraph']],
+                            ['table', ['table']],
+                            ['insert', ['link', 'picture', 'hr']]
+                        ]
+                    };
+                    var $page = $('#pageEditor');
+                    $page.summernote(options);
+                    function getHTML($editor) {
+                        $editor.next().find('.note-editable').html()
+                    }
+
+                    $('#editTemplateForm').submit(function() {
+                        $(this).append('<input type="hidden" name="page" value="' + getHTML($page) + '">');
                     });
-                })(jQuery);
-            </script>
+                });
+            })(jQuery);
+        </script>
     {% endblock %}
 {% endblock %}

@@ -4,22 +4,64 @@
     {% block kp-editor %}
         <div class="container">
             <h2 class="center">{{ page_title }}</h2>
-            <div class="word-block word-page">
-                <div class="kp-header">
-                    {{ header }}
+            <form id="editKpForm" method="post" action="{% url "generate_kp" %}">
+                <div id="page" class="word-block">
+                    {{ page|safe }}
                 </div>
-                <div class="kp-number row">
-                    <div class="span6">
-                        Исх.№{{ number }} от {{ date }} г.
-                    </div>
-                    <div class="span6 pull-right">
-                        для {{ organization_or_full_name }}
-                    </div>
+                <div class="form-add__submits">
+                    <button class="btn btn-primary" type="submit">Сохранить</button>
                 </div>
-            </div>
-            <div class="kp_text">
-                {{ text }}
-            </div>
+            </form>
         </div>
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function() {
+                    var options = {
+                        height: 150,
+                        lang: 'ru-RU',
+                        toolbar: [
+                            ['font', ['bold', 'italic', 'underline', 'clear']],
+                            ['image', ['image', 'floatLeft', 'floatRight','floatNone', 'shapeRounded', 'shapeCircle', 'shapeThumbnail', 'shapeNone', 'remove']],
+                            ['fontname', ['fontname']],
+                            ['fontsize', ['fontsize']],
+                            ['para', ['paragraph']],
+                            ['table', ['table']],
+                            ['insert', ['link', 'picture', 'hr']]
+                        ]
+                    };
+                    var $accompanying_text = $('#accompanyingTextEditor');
+                    $accompanying_text.summernote(options);
+                    var $added_table = $('#addedTable');
+                    $added_table.summernote(options);
+
+                    var $show_button = $('.show-button');
+                    var $hide_button = $('.hide-button');
+                    $show_button.click(function() {
+                        $(this).addClass('hide');
+                        $added_table.removeClass('hide');
+                        $hide_button.removeClass('hide');
+                    });
+
+                    $('hide-button').click(function() {
+                        $(this).addClass('hide');
+                        $added_table.addClass('hide');
+                        $show_button.removeClass('hide');
+                    });
+
+                    function getHTML($editor) {
+                        $editor.next().find('.note-editable').html()
+                    }
+
+                    $('#editKpForm').submit(function() {
+                        var $this = $(this);
+                        $this.append('<input type="hidden" name="accompanying_text" value="' + getHTML($accompanying_text) + '">');
+                        var $added_table = $this.find('.claim-table.show');
+                        if (!$added_table.hasClass('hide')) {
+                            $this.append('<input type="hidden" name="added_table" value="' + getHTML($added_table) + '">');
+                        }
+                    });
+                });
+            })(jQuery);
+        </script>
     {% endblock %}
 {% endblock %}

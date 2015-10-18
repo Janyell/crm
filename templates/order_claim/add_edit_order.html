@@ -28,7 +28,7 @@
             {% endif %}</a>
         {% endif %}
         {% if request.path == edit_claim_url %}
-            <a href="{% url 'edit_kp' %}?" target="_blank" class="btn pull-right pull-right_second">Сформировать КП</a>
+            <a href="{% url 'edit_kp' %}?id={{ request.GET.id }}" target="_blank" class="btn pull-right pull-right_second generate-kp-button">Сформировать КП</a>
         {% endif %}
         <form class="form-horizontal form-add form-add-order" method="post">
             <h2 class="form-add__head">{{ page_title }}</h2>
@@ -446,6 +446,10 @@
                 });
                 $select_client.selectpicker();
                 var $select_company = $('#id_company');
+
+                if (!$select_company.val()) {
+                    $('.generate-kp-button').addClass('hide');
+                }
                 $select_company.attr({
                     'data-live-search': "true",
                     'data-size': "10"
