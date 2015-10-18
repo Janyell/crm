@@ -70,13 +70,13 @@
                     var $page = $('#pageEditor');
                     $page.summernote(options);
                     function getHTML($editor) {
-{#                        return $editor.next().find('.note-editable').html();#}
+                        return $editor.next().find('.note-editable').html();
                     }
 
                     $('#edit-template-form').submit(function(e) {
                         var html = getHTML($page);
 {#                        html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '');#}
-{#                        console.log(html);#}
+                        console.log(html);
 
                         $(this).append('<input type="hidden" name="page" value="' + html + '">');
 {#                        return false;#}
