@@ -70,18 +70,16 @@
                     var $page = $('#pageEditor');
                     $page.summernote(options);
                     function getHTML($editor) {
-                        $editor.next().find('.note-editable').html()
+{#                        return $editor.next().find('.note-editable').html();#}
                     }
 
                     $('#edit-template-form').submit(function(e) {
-                        alert( "Handler for .submit() called." );
-
                         var html = getHTML($page);
-{#                        html = html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '');#}
-                        console.log(html + 123);
+{#                        html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '');#}
+{#                        console.log(html);#}
 
-                        e.stopPropagation();
                         $(this).append('<input type="hidden" name="page" value="' + html + '">');
+{#                        return false;#}
                     });
                 });
             })(jQuery);

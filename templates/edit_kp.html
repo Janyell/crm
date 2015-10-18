@@ -49,7 +49,7 @@
                     });
 
                     function getHTML($editor) {
-                        $editor.next().find('.note-editable').html()
+                        return $editor.next().find('.note-editable').html()
                     }
 
                     $('#editKpForm').submit(function() {
