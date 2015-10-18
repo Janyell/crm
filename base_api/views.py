@@ -1083,6 +1083,7 @@ def edit_template(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    out.update({'page_title': "Редактирование шаблона КП"})
     id = request.GET['id']
     template = KPTemplates.objects.filter(company__id=id).first()
     if request.method == 'POST':
@@ -1090,6 +1091,7 @@ def edit_template(request):
         kp_page = request.POST['kp-page']
         if template:
             template.html_text = page
+            template.html_text_for_kp = kp_page
         else:
             template = KPTemplates.objects.create(html_text=page, company=Companies.objects.get(pk=id),
                                                   html_text_for_kp=kp_page, number=1000)
@@ -1114,6 +1116,7 @@ def get_templates(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    out.update({'page_title': "Шаблоны КП"})
     companies = Companies.objects.filter(is_deleted=0)
     for c in companies:
         c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
@@ -1137,6 +1140,7 @@ def edit_kp(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    out.update({'page_title': "Создание КП"})
     id = request.GET['id']
     claim = Orders.objects.get(pk=id)
     template = KPTemplates.objects.filter(company=claim.company).first()
@@ -1164,8 +1168,7 @@ def edit_kp(request):
     form_file.close()
     temp_out.update({'number': number})
     temp_out.update({'date': kp_date})
-    temp_out.update({'organization_name': organization_or_full_name})
-    temp_out.update({'organization_name': '<input type="text" name="organization_or_full_name" value="«вставить имя заказчика»">'})
+    temp_out.update({'organization_name': u'<input type="text" name="organization_or_full_name" value="{}">'.format(organization_or_full_name)})
     temp_out.update({'added_table': added_table})
     temp_out.update({'products': products})
     temp_out.update({'in_total': claim.bill})

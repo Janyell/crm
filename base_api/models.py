@@ -60,7 +60,7 @@ class Roles(User):
     patronymic = models.CharField(max_length=50, null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
 
-    phone = models.CharField(max_length=50, null=True, blank=True)
+    phone = models.CharField(max_length=50, null=True, blank=True, default='')
 
     objects = UserManager()
 
