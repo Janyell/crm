@@ -356,3 +356,6 @@ div.source {
     border-color: black;
     border-radius: 0 !important;
 }
+.word-block .hide-button {
+    margin-top: 10px;
+}

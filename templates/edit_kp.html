@@ -7,13 +7,6 @@
             <form id="edit-kp-form" method="post" action="{% url "generate_kp" %}">
                 <div id="page" class="word-block">
                     {{ page|safe }}
-                    <div class="added-table__wrap center">
-                        <a class="btn show-button">Добавить вариант</a>
-                        <div id="addedTable hide">
-                            <table class="table table-bordered claim-table"></table>
-                        </div>
-                        <a class="btn hide-button hide">Убрать вариант</a>
-                    </div>
                 </div>
                 <div class="form-add__submits">
                     <button class="btn btn-primary" type="submit" name="format" value="docx">Сохранить как docx</button>
@@ -37,22 +30,34 @@
                     };
                     var $accompanying_text = $('#accompanyingText');
                     $accompanying_text.summernote(options);
-{#                    $('.claim-table').after('<a class="btn show-button">Добавить вариант</a>' +#}
-{#                            '<');#}
+
+                    var $claim_table = $('.claim-table');
+                    $claim_table.after('<div class="added-table__wrap center">' +
+                            '<a class="btn show-button">Добавить вариант</a>' +
+                            '<div id="addedTable" class="hide">' +
+                            '<table class="table table-bordered claim-table"></table>' +
+                            '</div>' +
+                            '<a class="btn hide-button hide">Убрать вариант</a>' +
+                            '</div>');
+                    var $added_table__wrap = $('.added-table__wrap').addClass('hide');
                     var $added_table = $('#addedTable');
+                    $added_table.find('table').html($claim_table.html());
                     $added_table.summernote(options);
+                    var $added_table_editor = $added_table.next();
+                    $added_table_editor.addClass('hide');
+                    $added_table__wrap.removeClass('hide');
 
                     var $show_button = $('.show-button');
                     var $hide_button = $('.hide-button');
                     $show_button.click(function() {
                         $(this).addClass('hide');
-                        $added_table.removeClass('hide');
+                        $added_table_editor.removeClass('hide');
                         $hide_button.removeClass('hide');
                     });
 
-                    $('hide-button').click(function() {
+                    $hide_button.click(function() {
                         $(this).addClass('hide');
-                        $added_table.addClass('hide');
+                        $added_table_editor.addClass('hide');
                         $show_button.removeClass('hide');
                     });
 
@@ -63,10 +68,11 @@
                     $('#edit-kp-form').submit(function() {
                         var $this = $(this);
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
-                        var $added_table = $added_table.find('.claim-table');
-                        if (!$added_table.hasClass('hide')) {
+                        if (!$added_table_editor.hasClass('hide')) {
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
                         }
+
+                        $this.append("<input type=\"hidden\" name=\"page\" value='" + $('#page').html() + "'>");
                     });
                 });
             })(jQuery);
