@@ -75,10 +75,11 @@
 
                     $('#edit-template-form').submit(function(e) {
                         var html = getHTML($page);
-{#                        html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '');#}
-                        console.log(html);
+                        html = html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '');
+                        html = html.replace('{% templatetag openblock %} accompanying_text|end {% templatetag closeblock %}', '');
+{#                        console.log(html);#}
 
-                        $(this).append('<input type="hidden" name="page" value="' + html + '">');
+                        $(this).append("<input type=\"hidden\" name=\"page\" value='" + html + "'>");
 {#                        return false;#}
                     });
                 });

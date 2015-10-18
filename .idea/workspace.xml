@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3b7a90fd-86fb-4af3-8eeb-735f4105b015" name="Default" comment="подгрузка списка менеджеров для изменения менеджера">
+    <list default="true" id="3b7a90fd-86fb-4af3-8eeb-735f4105b015" name="Default" comment="add 8 and other in 2.7;">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/api.iml" afterPath="$PROJECT_DIR$/.idea/api.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base_api/full_views/kp_model.py" afterPath="$PROJECT_DIR$/base_api/full_views/kp_model.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/settings.py" afterPath="$PROJECT_DIR$/api/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base_api/views.py" afterPath="$PROJECT_DIR$/base_api/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/edit_kp.html" afterPath="$PROJECT_DIR$/templates/edit_kp.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/setting/edit_template.html" afterPath="$PROJECT_DIR$/templates/setting/edit_template.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
+    <list id="1eacce0b-263f-4757-b037-1ab11a4eed7e" name="Rejected commit: Default" comment="add 8 and other in 2.7;" />
     <ignored path="api.iws" />
     <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +23,17 @@
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
-  <component name="DaemonCodeAnalyzer">
-    <disable_hints />
+  <component name="DatabaseView">
+    <option name="FLATTEN" value="false" />
+    <option name="GROUP_BY_TYPE" value="true" />
+    <option name="SORT_CHILDREN" value="false" />
+    <option name="SHOW_TABLE_CONSTRAINTS" value="true" />
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" />
+        <option name="myItemType" value="com.intellij.database.view.DbRootNodeDescriptor" />
+      </PATH_ELEMENT>
+    </PATH>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
@@ -29,69 +41,57 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/base_api/views.py">
+      <file leaf-file-name="edit_template.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/setting/edit_template.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.3643216" vertical-offset="15537" max-vertical-offset="16200">
-              <caret line="1097" column="4" selection-start-line="1097" selection-start-column="4" selection-end-line="1097" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="kp_model.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/base_api/full_views/kp_model.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1020">
-              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.805915">
+              <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
               <folding>
-                <element signature="e#42#86#0" expanded="true" />
+                <marker date="1445187465973" expanded="true" signature="3014:3624" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api/urls.py">
+      <file leaf-file-name="edit_kp.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/edit_kp.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1468" max-vertical-offset="2310">
-              <caret line="133" column="78" selection-start-line="133" selection-start-column="78" selection-end-line="133" selection-end-column="78" />
+            <state vertical-scroll-proportion="-18.5">
+              <caret line="59" column="125" selection-start-line="59" selection-start-column="125" selection-end-line="59" selection-end-column="125" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="style.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/css/style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="362" column="32" selection-start-line="362" selection-start-column="32" selection-end-line="362" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="825" max-vertical-offset="3375">
-              <caret line="70" column="21" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="form.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/base_api/form.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="647" max-vertical-offset="4665">
-              <caret line="54" column="98" selection-start-line="54" selection-start-column="98" selection-end-line="54" selection-end-column="98" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="role_views.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/base_api/full_views/role_views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2070">
-              <caret line="90" column="50" selection-start-line="90" selection-start-column="50" selection-end-line="90" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="54" column="60" selection-start-line="54" selection-start-column="60" selection-end-line="54" selection-end-column="60" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Html5" />
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -101,67 +101,81 @@
   <component name="Git.Settings">
     <option name="UPDATE_TYPE" value="MERGE" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master_new" />
+      </map>
+    </option>
   </component>
   <component name="IdeDocumentHistory">
-    <option name="changedFiles">
+    <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/base_api/constantse.py" />
-        <option value="$PROJECT_DIR$/templates/get_claims.html" />
-        <option value="$PROJECT_DIR$/templates/search.html" />
-        <option value="$PROJECT_DIR$/static/css/style.css" />
-        <option value="$PROJECT_DIR$/templates/view_analyzed_product.html" />
-        <option value="$PROJECT_DIR$/templates/get_orders.html" />
-        <option value="$PROJECT_DIR$/templates/analyze_managers.html" />
-        <option value="$PROJECT_DIR$/base_api/full_views/company_views.py" />
-        <option value="$PROJECT_DIR$/base_api/full_views/client_views.py" />
-        <option value="$PROJECT_DIR$/base_api/constants.py" />
-        <option value="dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_products" />
-        <option value="dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_order_files" />
-        <option value="dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_order_product" />
-        <option value="$PROJECT_DIR$/base_api/full_views/analyze_sales_by_managers.py" />
-        <option value="$PROJECT_DIR$/base_api/full_views/analyze_total_sales.py" />
-        <option value="$PROJECT_DIR$/base_api/full_views/helper.py" />
-        <option value="dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..auth_user" />
+        <option value="$PROJECT_DIR$/templates/index.html" />
+        <option value="$PROJECT_DIR$/templates/edit_claim.html" />
         <option value="$PROJECT_DIR$/templates/add_edit_order.html" />
-        <option value="$PROJECT_DIR$/base_api/fixtures/sources.json" />
-        <option value="dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_sources" />
-        <option value="$PROJECT_DIR$/base_api/full_views/city_views.py" />
-        <option value="$PROJECT_DIR$/templates/analyze_city_period.html" />
-        <option value="$PROJECT_DIR$/base_api/full_views/analyze_products.py" />
-        <option value="dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_orders" />
-        <option value="$PROJECT_DIR$/templates/order_claim/modules/edit_claim__related_with.html" />
-        <option value="dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_orders_related_orders" />
+        <option value="$PROJECT_DIR$/templates/analyze_products.html" />
+        <option value="$PROJECT_DIR$/templates/analyze_product_groups.html" />
+        <option value="$PROJECT_DIR$/templates/view_analyzed_product_group.html" />
+        <option value="$PROJECT_DIR$/templates/view_analyzed_product.html" />
+        <option value="$PROJECT_DIR$/templates/client/add_edit_client.html" />
+        <option value="$PROJECT_DIR$/templates/client/get_clients.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/edit_order_for_factory.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/edit_order_for_other_managers.html" />
+        <option value="$PROJECT_DIR$/templates/analyst/index.html" />
+        <option value="$PROJECT_DIR$/templates/company/add_edit_company.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/modules/order-table.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/modules/change_manager.html" />
+        <option value="$PROJECT_DIR$/templates/search/modules/change_manager.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/modules/edit_claim.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/get_related_claim.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/get_related_claims.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/get_client_claims.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/get_orders.html" />
+        <option value="$PROJECT_DIR$/templates/analyst/view_analyzed_product.html" />
+        <option value="$PROJECT_DIR$/templates/analyst/analyze_cities.html" />
+        <option value="$PROJECT_DIR$/templates/analyst/analyze_managers.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/hidden/get_client_claims.html" />
         <option value="$PROJECT_DIR$/templates/order_claim/modules/get_claims__related_with.html" />
-        <option value="$PROJECT_DIR$/api/urls.py" />
-        <option value="$PROJECT_DIR$/base_api/full_views/source_views.py" />
-        <option value="$PROJECT_DIR$/templates/setting/get_sources.html" />
-        <option value="$PROJECT_DIR$/base_api/full_views/analyze_managers.py" />
+        <option value="$PROJECT_DIR$/templates/edit_template.html" />
+        <option value="$PROJECT_DIR$/templates/analyst/analyze_products.html" />
+        <option value="$PROJECT_DIR$/templates/setting/get_settings.html" />
+        <option value="$PROJECT_DIR$/templates/search/search.html" />
         <option value="$PROJECT_DIR$/templates/product/get_product_groups.html" />
-        <option value="$PROJECT_DIR$/templates/product/get_products.html" />
-        <option value="$PROJECT_DIR$/base_api/full_views/claim_views.py" />
-        <option value="dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_cities" />
-        <option value="$PROJECT_DIR$/base_api/full_views/analyze_city.py" />
-        <option value="$PROJECT_DIR$/base_api/full_views/order_views.py" />
-        <option value="$PROJECT_DIR$/templates/order_claim/add_edit_order.html" />
+        <option value="$PROJECT_DIR$/templates/role/add_edit_role.html" />
+        <option value="$PROJECT_DIR$/templates/role/get_roles.html" />
         <option value="$PROJECT_DIR$/templates/order_claim/hidden/get_related_claims.html" />
-        <option value="$PROJECT_DIR$/base_api/models.py" />
-        <option value="$PROJECT_DIR$/base_api/full_views/product_views.py" />
-        <option value="$PROJECT_DIR$/base_api/full_views/massive_edit.py" />
-        <option value="$PROJECT_DIR$/assets/media/uploads/test.html" />
-        <option value="$PROJECT_DIR$/assets/media/uploads/ch_g.html" />
-        <option value="$PROJECT_DIR$/base_api/full_views/analyze_period.py" />
-        <option value="$PROJECT_DIR$/api/settings.py" />
-        <option value="$PROJECT_DIR$/base_api/form.py" />
-        <option value="dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_roles" />
-        <option value="$PROJECT_DIR$/base_api/full_views/role_views.py" />
+        <option value="$PROJECT_DIR$/templates/order_claim/modules/related_claim_modal.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/modules/edit_claim__related_with.html" />
+        <option value="$PROJECT_DIR$/templates/analyst/analyze_period.html" />
+        <option value="$PROJECT_DIR$/templates/product/get_products.html" />
+        <option value="$PROJECT_DIR$/api/urls.py" />
         <option value="$PROJECT_DIR$/base_api/views.py" />
-        <option value="$PROJECT_DIR$/base_api/full_views/kp_model.py" />
+        <option value="$PROJECT_DIR$/templates/setting/get_templates.html" />
+        <option value="$PROJECT_DIR$/templates/order_claim/get_claims.html" />
+        <option value="$PROJECT_DIR$/base_api/form.py" />
+        <option value="$PROJECT_DIR$/templates/order_claim/add_edit_order.html" />
+        <option value="$PROJECT_DIR$/base_api/templatetags/raw.py" />
+        <option value="$PROJECT_DIR$/base_api/middleware/raw_middleware.py" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
+        <option value="$PROJECT_DIR$/api/settings.py" />
+        <option value="$PROJECT_DIR$/static/css/style.css" />
+        <option value="$PROJECT_DIR$/templates/edit_kp.html" />
+        <option value="$PROJECT_DIR$/templates/setting/edit_template.html" />
       </list>
     </option>
   </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="NamedScopeManager">
+    <order />
+  </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1280" />
-    <option name="height" value="800" />
+    <option name="x" value="151" />
+    <option name="y" value="70" />
+    <option name="width" value="1215" />
+    <option name="height" value="698" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -170,10 +184,22 @@
           <State>
             <id />
           </State>
+          <State>
+            <id>Django</id>
+          </State>
+          <State>
+            <id>GeneralJavaScript</id>
+          </State>
+          <State>
+            <id>JavaScript</id>
+          </State>
+          <State>
+            <id>JavaScript validity issuesJavaScript</id>
+          </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>Buildout</id>
+            <id>ExtendsTagPositionInspection</id>
           </State>
         </selected-state>
       </profile-state>
@@ -189,9 +215,6 @@
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
-  <component name="ProjectReloadState">
-    <option name="STATE" value="0" />
-  </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
@@ -205,6 +228,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -247,24 +271,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="role" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="crm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="base_api" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -283,43 +289,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="full_views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="crm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="crm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="media" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="uploads" />
+              <option name="myItemId" value="templatetags" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -345,18 +315,30 @@
   <component name="PropertiesComponent">
     <property name="recentsLimit" value="5" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="FullScreen" value="true" />
-    <property name="options.lastSelected" value="database.main" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../smartKettle" />
+    <property name="FullScreen" value="false" />
+    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
     <property name="dynamic.classpath" value="false" />
-    <property name="restartRequiresConfirmation" value="true" />
-    <property name="LayoutCode.rearrangeEntriesPython" value="false" />
-    <property name="ignore_missing_gitignore" value="true" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
-    <property name="SearchEverywhereHistoryKey" value="s&#9;FILE&#9;file:///Users/megge/Documents/crm/api/urls.py&#10;sett&#9;FILE&#9;file:///Users/megge/Documents/crm/api/settings.py" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="76" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="94" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="100" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="988" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="74" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="94" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="100" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="990" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -365,224 +347,16 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/assets/media/uploads" />
-      <recent name="$PROJECT_DIR$/templates" />
-      <recent name="$PROJECT_DIR$/base_api/full_views" />
-      <recent name="$PROJECT_DIR$/base_api/fixtures" />
+      <recent name="$PROJECT_DIR$/static/css" />
+      <recent name="$PROJECT_DIR$/static" />
     </key>
-  </component>
-  <component name="RestClientSettings">
-    <option name="REQUEST_HISTORY">
-      <list>
-        <RestClientRequest>
-          <option name="httpMethod" value="POST" />
-          <option name="urlBase" value="http://127.0.0.1:8000" />
-          <option name="urlPath" value="claims/add/" />
-          <option name="headers">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="Accept" />
-                <option name="value" value="*/*" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="Cache-Control" />
-                <option name="value" value="no-cache" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="parameters">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="page" />
-                <option name="value" value="1" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="length" />
-                <option name="value" value="10" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="page" />
-                <option name="value" value="1" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="length" />
-                <option name="value" value="10" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="parametersEnabled" value="true" />
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-        <RestClientRequest>
-          <option name="httpMethod" value="POST" />
-          <option name="urlBase" value="http://localhost:8000" />
-          <option name="urlPath" value="/claims/add/" />
-          <option name="headers">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="Accept" />
-                <option name="value" value="*/*" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="Cache-Control" />
-                <option name="value" value="no-cache" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="parameters">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="page" />
-                <option name="value" value="1" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="length" />
-                <option name="value" value="10" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="parametersEnabled" value="true" />
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-        <RestClientRequest>
-          <option name="httpMethod" value="POST" />
-          <option name="urlBase" value="http://localhost:8000" />
-          <option name="urlPath" value="/resources" />
-          <option name="headers">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="Accept" />
-                <option name="value" value="*/*" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="Cache-Control" />
-                <option name="value" value="no-cache" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="parametersEnabled" value="true" />
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-      </list>
-    </option>
-  </component>
-  <component name="RestoreUpdateTree">
-    <UpdateInfo date="Moments ago" ActionInfo="_Update">
-      <UpdatedFiles>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Updated from server" />
-          <option name="myStatusName" value="Changed on server" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="CHANGED_ON_SERVER" />
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Updated" />
-            <option name="myStatusName" value="Changed" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="UPDATED" />
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/base_api/views.py</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/templates/analyst/analyze_period.html</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/templates/order_claim/modules/edit_claim__related_with.html</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/templates/product/get_products.html</PATH>
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Created" />
-            <option name="myStatusName" value="Created" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="CREATED" />
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Deleted" />
-            <option name="myStatusName" value="Deleted" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="true" />
-            <option name="myId" value="REMOVED_FROM_REPOSITORY" />
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Restored" />
-            <option name="myStatusName" value="Will be restored" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="RESTORED" />
-          </FILE-GROUP>
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Modified" />
-          <option name="myStatusName" value="Modified" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MODIFIED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Skipped" />
-          <option name="myStatusName" value="Skipped" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="SKIPPED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with conflicts" />
-          <option name="myStatusName" value="Will be merged with conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_CONFLICTS" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with tree conflicts" />
-          <option name="myStatusName" value="Merged with tree conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with property conflicts" />
-          <option name="myStatusName" value="Will be merged with property conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged" />
-          <option name="myStatusName" value="Will be merged" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Not in repository" />
-          <option name="myStatusName" value="Not in repository" />
-          <option name="mySupportsDeletion" value="true" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="UNKNOWN" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Locally added" />
-          <option name="myStatusName" value="Locally added" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="LOCALLY_ADDED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Locally removed" />
-          <option name="myStatusName" value="Locally removed" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="LOCALLY_REMOVED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Switched" />
-          <option name="myStatusName" value="Switched" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="SWITCHED" />
-        </FILE-GROUP>
-      </UpdatedFiles>
-    </UpdateInfo>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/base_api" />
+      <recent name="$PROJECT_DIR$/templates/setting" />
+      <recent name="$PROJECT_DIR$/templates/order_claim/hidden" />
+      <recent name="$PROJECT_DIR$/templates/order_claim" />
+      <recent name="$PROJECT_DIR$/templates/search/modules" />
+    </key>
   </component>
   <component name="RunManager" selected="Django server.api">
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
@@ -603,6 +377,172 @@
       <option name="CUSTOM_SETTINGS" value="false" />
       <option name="USE_OPTIONS" value="false" />
       <option name="OPTIONS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="api" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PyLettuceRunConfigurationType" factoryName="Lettuce">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="api" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="api" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="api" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="api" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="api" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="api" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="api" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="py.test">
@@ -630,149 +570,14 @@
       <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="tests" factoryName="Nosetests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="api" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="api" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Unittests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="api" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="Python.DjangoServer" factoryName="Django server">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="api" />
-      <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
-      <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
-      <option name="runTestServer" value="false" />
-      <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Doctests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="api" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Attests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="api" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="com.intellij.persistence.run.ConsoleRunConfigurationType" factoryName="Query Language Console">
-      <option name="VM_PARAMETERS" value="" />
-      <option name="USER_CFG_CLASS" />
-      <option name="CONTEXT_PROVIDER" />
-      <method />
-    </configuration>
     <configuration default="false" name="api" type="Python.DjangoServer" factoryName="Django server">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="XFC_DIR" value="/usr/xfc_eval_java-5_3_0/bin" />
         <env name="DJANGO_SETTINGS_MODULE" value="api.settings" />
       </envs>
-      <option name="SDK_HOME" value="/usr/bin/python" />
+      <option name="SDK_HOME" value="/usr/bin/python2.7" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -782,15 +587,13 @@
       <option name="port" value="8000" />
       <option name="host" value="" />
       <option name="additionalOptions" value="" />
-      <option name="browserUrl" value="" />
+      <option name="browserUrl" value="http://127.0.0.1:8000/" />
       <option name="runTestServer" value="false" />
       <option name="runNoReload" value="false" />
       <option name="useCustomRunCommand" value="false" />
       <option name="customRunCommand" value="" />
-      <RunnerSettings RunnerId="PyDebugRunner" />
       <RunnerSettings RunnerId="PythonCover" />
       <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PyDebugRunner" />
       <ConfigurationWrapper RunnerId="PythonCover" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
@@ -807,889 +610,357 @@
     <task active="true" id="Default" summary="Default task">
       <changelist id="3b7a90fd-86fb-4af3-8eeb-735f4105b015" name="Default" comment="" />
       <created>1411363616962</created>
+      <option name="number" value="Default" />
       <updated>1411363616962</updated>
     </task>
-    <task id="LOCAL-00001" summary="added forms and templates;">
-      <created>1412078376521</created>
-      <updated>1412078376521</updated>
-    </task>
-    <task id="LOCAL-00002" summary="added forms and templates;">
-      <created>1412078518658</created>
-      <updated>1412078518658</updated>
-    </task>
-    <task id="LOCAL-00003" summary="added forms and templates;">
-      <created>1412078533029</created>
-      <updated>1412078533029</updated>
-    </task>
-    <task id="LOCAL-00004" summary="added forms and templates;">
-      <created>1412078645314</created>
-      <updated>1412078645314</updated>
-    </task>
-    <task id="LOCAL-00005" summary="added forms and templates;">
-      <created>1412078785150</created>
-      <updated>1412078785150</updated>
-    </task>
-    <task id="LOCAL-00006" summary="added forms and templates;">
-      <created>1412952553850</created>
-      <updated>1412952553850</updated>
-    </task>
-    <task id="LOCAL-00007" summary="add delete modal;">
-      <created>1413002140297</created>
-      <updated>1413002140297</updated>
-    </task>
-    <task id="LOCAL-00008" summary="add delete modal;">
-      <created>1413002325852</created>
-      <updated>1413002325852</updated>
-    </task>
-    <task id="LOCAL-00009" summary="add delete modal;">
-      <created>1413002773379</created>
-      <updated>1413002773379</updated>
-    </task>
-    <task id="LOCAL-00010" summary="fixed bug in client card;">
-      <created>1413020679557</created>
-      <updated>1413020679557</updated>
-    </task>
-    <task id="LOCAL-00011" summary="fix reset + back;">
-      <created>1413037920728</created>
-      <updated>1413037920728</updated>
-    </task>
-    <task id="LOCAL-00012" summary="required source;">
-      <created>1413038207808</created>
-      <updated>1413038207808</updated>
-    </task>
-    <task id="LOCAL-00013" summary="add interested;">
-      <created>1413039164317</created>
-      <updated>1413039164317</updated>
-    </task>
-    <task id="LOCAL-00014" summary="we can show and delete orders now!">
-      <created>1413108206924</created>
-      <updated>1413108206924</updated>
-    </task>
-    <task id="LOCAL-00015" summary="hmm...">
-      <created>1413115367154</created>
-      <updated>1413115367154</updated>
-    </task>
-    <task id="LOCAL-00016" summary="hmm... where is my commit?">
-      <created>1413129394678</created>
-      <updated>1413129394678</updated>
-    </task>
-    <task id="LOCAL-00017" summary="fixed None's bugs;">
-      <created>1413147291789</created>
-      <updated>1413147291789</updated>
-    </task>
-    <task id="LOCAL-00018" summary="add manager analyst's template;">
-      <created>1413227993657</created>
-      <updated>1413227993657</updated>
-    </task>
-    <task id="LOCAL-00019" summary="add manager analyst's views">
-      <created>1413271732604</created>
-      <updated>1413271732604</updated>
-    </task>
-    <task id="LOCAL-00020" summary="add manager analyst's views">
-      <created>1413271973704</created>
-      <updated>1413271973704</updated>
-    </task>
-    <task id="LOCAL-00021" summary="add manager analyst's views all">
-      <created>1413273041783</created>
-      <updated>1413273041783</updated>
-    </task>
-    <task id="LOCAL-00022" summary="add all analyst's views">
-      <created>1413285333518</created>
-      <updated>1413285333518</updated>
-    </task>
-    <task id="LOCAL-00023" summary="all analyst's views are perfect">
-      <created>1413289154628</created>
-      <updated>1413289154628</updated>
-    </task>
-    <task id="LOCAL-00024" summary="all analyst's views are more perfect">
-      <created>1413291149056</created>
-      <updated>1413291149056</updated>
-    </task>
-    <task id="LOCAL-00025" summary="add get order's status by spesial url">
-      <created>1413292901414</created>
-      <updated>1413292901414</updated>
-    </task>
-    <task id="LOCAL-00026" summary="all was well">
-      <created>1413319503789</created>
-      <updated>1413319503789</updated>
-    </task>
-    <task id="LOCAL-00027" summary="all was well (after tests)">
-      <created>1413381987261</created>
-      <updated>1413381987261</updated>
-    </task>
-    <task id="LOCAL-00028" summary="all was well (after beta tests)">
-      <created>1413401970167</created>
-      <updated>1413401970167</updated>
-    </task>
-    <task id="LOCAL-00029" summary="add products view">
-      <created>1413404819444</created>
-      <updated>1413404819444</updated>
-    </task>
-    <task id="LOCAL-00030" summary="add products view">
-      <created>1413407681417</created>
-      <updated>1413407681417</updated>
-    </task>
-    <task id="LOCAL-00031" summary="some edit">
-      <created>1414001702477</created>
-      <updated>1414001702477</updated>
-    </task>
-    <task id="LOCAL-00032" summary="some edit again">
-      <created>1414002656278</created>
-      <updated>1414002656278</updated>
-    </task>
-    <task id="LOCAL-00033" summary="edit account_number">
-      <created>1414004840442</created>
-      <updated>1414004840442</updated>
-    </task>
-    <task id="LOCAL-00034" summary="edit some">
-      <created>1414009759689</created>
-      <updated>1414009759689</updated>
-    </task>
-    <task id="LOCAL-00035" summary="some edit">
-      <created>1414095600245</created>
-      <updated>1414095600245</updated>
-    </task>
-    <task id="LOCAL-00036" summary="add claims view">
-      <created>1414139931510</created>
-      <updated>1414139931510</updated>
-    </task>
-    <task id="LOCAL-00037" summary="fix analyze">
-      <created>1414153299688</created>
-      <updated>1414153299688</updated>
-    </task>
-    <task id="LOCAL-00038" summary="some edit">
-      <created>1414155038918</created>
-      <updated>1414155038918</updated>
-    </task>
-    <task id="LOCAL-00039" summary="edit">
-      <created>1414155380146</created>
-      <updated>1414155380146</updated>
-    </task>
-    <task id="LOCAL-00040" summary="edit format">
-      <created>1414174180875</created>
-      <updated>1414174180875</updated>
-    </task>
-    <task id="LOCAL-00041" summary="small fixes">
-      <created>1414177554850</created>
-      <updated>1414177554850</updated>
-    </task>
-    <task id="LOCAL-00042" summary="add another staff">
-      <created>1414263188543</created>
-      <updated>1414263188543</updated>
-    </task>
-    <task id="LOCAL-00043" summary="add client's history of orders">
-      <created>1414264541368</created>
-      <updated>1414264541368</updated>
-    </task>
-    <task id="LOCAL-00044" summary="little fixes">
-      <created>1414309031058</created>
-      <updated>1414309031058</updated>
-    </task>
-    <task id="LOCAL-00045" summary="fix data, xoxo">
-      <created>1414366274862</created>
-      <updated>1414366274862</updated>
-    </task>
-    <task id="LOCAL-00046" summary="fix bugs">
-      <created>1414831236485</created>
-      <updated>1414831236485</updated>
-    </task>
-    <task id="LOCAL-00047" summary="fix comments and analitics">
-      <created>1414847535861</created>
-      <updated>1414847535861</updated>
-    </task>
-    <task id="LOCAL-00048" summary="edit list of clients">
-      <created>1414856309656</created>
-      <updated>1414856309656</updated>
-    </task>
-    <task id="LOCAL-00049" summary="fixes with delete views">
-      <created>1414877865945</created>
-      <updated>1414877865945</updated>
-    </task>
-    <task id="LOCAL-00050" summary="new little edits">
-      <created>1415381442452</created>
-      <updated>1415381442453</updated>
-    </task>
-    <task id="LOCAL-00051" summary="edit">
-      <created>1415536688470</created>
-      <updated>1415536688470</updated>
-    </task>
-    <task id="LOCAL-00052" summary="edit">
-      <created>1415537764582</created>
-      <updated>1415537764582</updated>
-    </task>
-    <task id="LOCAL-00053" summary="edit">
-      <created>1415538890103</created>
-      <updated>1415538890103</updated>
-    </task>
-    <task id="LOCAL-00054" summary="add delete from archive">
-      <created>1415565420118</created>
-      <updated>1415565420118</updated>
-    </task>
-    <task id="LOCAL-00055" summary="edit analitics">
-      <created>1415630569233</created>
-      <updated>1415630569233</updated>
-    </task>
-    <task id="LOCAL-00056" summary="edit analyze managers">
-      <created>1415632277566</created>
-      <updated>1415632277567</updated>
-    </task>
-    <task id="LOCAL-00057" summary="edit models">
-      <created>1415633699185</created>
-      <updated>1415633699185</updated>
-    </task>
-    <task id="LOCAL-00058" summary="some edit">
-      <created>1415691050174</created>
-      <updated>1415691050174</updated>
-    </task>
-    <task id="LOCAL-00059" summary="edit claims">
-      <created>1415692765383</created>
-      <updated>1415692765383</updated>
-    </task>
-    <task id="LOCAL-00060" summary="edit client">
-      <created>1415991234481</created>
-      <updated>1415991234481</updated>
-    </task>
-    <task id="LOCAL-00061" summary="edit client">
-      <created>1415994739713</created>
-      <updated>1415994739714</updated>
-    </task>
-    <task id="LOCAL-00062" summary="some changes">
-      <created>1416133287986</created>
-      <updated>1416133287986</updated>
-    </task>
-    <task id="LOCAL-00063" summary="edit">
-      <created>1416769014064</created>
-      <updated>1416769014064</updated>
-    </task>
-    <task id="LOCAL-00064" summary="edit">
-      <created>1416769419146</created>
-      <updated>1416769419146</updated>
-    </task>
-    <task id="LOCAL-00065" summary="edit">
-      <created>1416770963766</created>
-      <updated>1416770963766</updated>
-    </task>
-    <task id="LOCAL-00066" summary="some changes">
-      <created>1422373575041</created>
-      <updated>1422373575041</updated>
-    </task>
-    <task id="LOCAL-00067" summary="edits">
-      <created>1423293897243</created>
-      <updated>1423293897243</updated>
-    </task>
-    <task id="LOCAL-00068" summary="edit bill status choices">
-      <created>1423296546594</created>
-      <updated>1423296546594</updated>
-    </task>
-    <task id="LOCAL-00069" summary=" 5 and 13">
-      <created>1423298124778</created>
-      <updated>1423298124779</updated>
-    </task>
-    <task id="LOCAL-00070" summary="edit">
-      <created>1423298274378</created>
-      <updated>1423298274378</updated>
-    </task>
-    <task id="LOCAL-00071" summary="edit">
-      <created>1423298359308</created>
-      <updated>1423298359308</updated>
-    </task>
-    <task id="LOCAL-00072" summary="fix is_comment_my">
-      <created>1423409958118</created>
-      <updated>1423409958119</updated>
-    </task>
-    <task id="LOCAL-00073" summary="attach first try">
-      <created>1423577333189</created>
-      <updated>1423577333189</updated>
-    </task>
-    <task id="LOCAL-00074" summary="order status return json/jsonp">
-      <created>1423587318038</created>
-      <updated>1423587318038</updated>
-    </task>
-    <task id="LOCAL-00075" summary="some fixes and analyze sources">
-      <created>1423588997209</created>
-      <updated>1423588997209</updated>
-    </task>
-    <task id="LOCAL-00076" summary="fix analyze manager&amp;products">
-      <created>1423652466301</created>
-      <updated>1423652466301</updated>
-    </task>
-    <task id="LOCAL-00077" summary="add organization type field in db">
-      <created>1423655293098</created>
-      <updated>1423655293098</updated>
-    </task>
-    <task id="LOCAL-00078" summary="add excel maker">
-      <created>1424360515964</created>
-      <updated>1424360515964</updated>
-    </task>
-    <task id="LOCAL-00079" summary="fix entities limit on page in orders">
-      <created>1424365079314</created>
-      <updated>1424365079314</updated>
-    </task>
-    <task id="LOCAL-00080" summary="add 'start' and attaches">
-      <created>1424452479778</created>
-      <updated>1424452479778</updated>
-    </task>
-    <task id="LOCAL-00081" summary="add &quot;start&quot; param to get_clients methods&amp;fix url for attaches">
-      <created>1424496975842</created>
-      <updated>1424496975842</updated>
-    </task>
-    <task id="LOCAL-00082" summary="fix bag with organization type">
-      <created>1424497731245</created>
-      <updated>1424497731246</updated>
-    </task>
-    <task id="LOCAL-00083" summary="some edits (give client_id in templates for claims and orders)">
-      <created>1424499910610</created>
-      <updated>1424499910610</updated>
-    </task>
-    <task id="LOCAL-00084" summary="fix files problems in order/claim add/edit">
-      <created>1424500655160</created>
-      <updated>1424500655161</updated>
-    </task>
-    <task id="LOCAL-00085" summary="edit clients-id">
-      <created>1424500969205</created>
-      <updated>1424500969206</updated>
-    </task>
-    <task id="LOCAL-00086" summary="edit">
-      <created>1424502039700</created>
-      <updated>1424502039700</updated>
-    </task>
-    <task id="LOCAL-00087" summary="edit something">
-      <created>1424516655236</created>
-      <updated>1424516655236</updated>
-    </task>
-    <task id="LOCAL-00088" summary="edit">
-      <created>1424539446525</created>
-      <updated>1424539446525</updated>
-    </task>
-    <task id="LOCAL-00089" summary="add delete file">
-      <created>1424541898760</created>
-      <updated>1424541898760</updated>
-    </task>
-    <task id="LOCAL-00090" summary="edit attaches">
-      <created>1424543081003</created>
-      <updated>1424543081003</updated>
-    </task>
-    <task id="LOCAL-00091" summary=" edit attaches">
-      <created>1424545114176</created>
-      <updated>1424545114176</updated>
-    </task>
-    <task id="LOCAL-00092" summary="edit files">
-      <created>1424616119172</created>
-      <updated>1424616119172</updated>
-    </task>
-    <task id="LOCAL-00093" summary="edit">
-      <created>1424619928319</created>
-      <updated>1424619928320</updated>
-    </task>
-    <task id="LOCAL-00094" summary="edit files">
-      <created>1424623401373</created>
-      <updated>1424623401373</updated>
-    </task>
-    <task id="LOCAL-00095" summary="edit excel made function">
-      <created>1424626606439</created>
-      <updated>1424626606439</updated>
-    </task>
-    <task id="LOCAL-00096" summary="edit excel - we not depend on path now">
-      <created>1424627166557</created>
-      <updated>1424627166557</updated>
-    </task>
-    <task id="LOCAL-00097" summary="add claim files show">
-      <created>1424629532648</created>
-      <updated>1424629532648</updated>
-    </task>
-    <task id="LOCAL-00098" summary="edits">
-      <created>1424629670211</created>
-      <updated>1424629670211</updated>
-    </task>
-    <task id="LOCAL-00099" summary="edit how organization name show">
-      <created>1424673421768</created>
-      <updated>1424673421768</updated>
-    </task>
-    <task id="LOCAL-00100" summary="edit files">
-      <created>1424704512070</created>
-      <updated>1424704512070</updated>
-    </task>
-    <task id="LOCAL-00101" summary="edit">
-      <created>1424709628566</created>
-      <updated>1424709628566</updated>
-    </task>
-    <task id="LOCAL-00102" summary="edit">
-      <created>1424885595797</created>
-      <updated>1424885595797</updated>
-    </task>
-    <task id="LOCAL-00103" summary="edit">
-      <created>1424896732661</created>
-      <updated>1424896732662</updated>
-    </task>
-    <task id="LOCAL-00104" summary="edit &quot;&quot;">
-      <created>1425315388446</created>
-      <updated>1425315388447</updated>
-    </task>
-    <task id="LOCAL-00105" summary="edit files problem (kirillic name add)">
-      <created>1425488314153</created>
-      <updated>1425488314154</updated>
-    </task>
-    <task id="LOCAL-00106" summary="edit">
-      <created>1425580421147</created>
-      <updated>1425580421147</updated>
-    </task>
-    <task id="LOCAL-00107" summary="edit analyze_period">
-      <created>1425709036357</created>
-      <updated>1425709036358</updated>
-    </task>
-    <task id="LOCAL-00108" summary="edit">
-      <created>1425709566573</created>
-      <updated>1425709566573</updated>
-    </task>
-    <task id="LOCAL-00109" summary="edits">
-      <created>1426780159281</created>
-      <updated>1426780159281</updated>
-    </task>
-    <task id="LOCAL-00110" summary="add shipped_date in order">
-      <created>1427209322565</created>
-      <updated>1427209322565</updated>
-    </task>
-    <task id="LOCAL-00111" summary="edit">
-      <created>1427261944579</created>
-      <updated>1427261944579</updated>
-    </task>
-    <task id="LOCAL-00112" summary="edit">
-      <created>1427265320018</created>
-      <updated>1427265320018</updated>
-    </task>
-    <task id="LOCAL-00113" summary="edit shipped field in order">
-      <created>1427267151870</created>
-      <updated>1427267151870</updated>
-    </task>
-    <task id="LOCAL-00114" summary="edit shipped_date and files">
-      <created>1427384636290</created>
-      <updated>1427384636290</updated>
-    </task>
-    <task id="LOCAL-00115" summary="edit shipped_date">
-      <created>1427441930471</created>
-      <updated>1427441930471</updated>
-    </task>
-    <task id="LOCAL-00116" summary="edit">
-      <created>1428090785319</created>
-      <updated>1428090785320</updated>
-    </task>
-    <task id="LOCAL-00117" summary="edit files, add files for client, add logic for copy order/claim">
-      <created>1429384243446</created>
-      <updated>1429384243446</updated>
-    </task>
-    <task id="LOCAL-00118" summary="add files forms (client and order)">
-      <created>1429384708541</created>
-      <updated>1429384708541</updated>
-    </task>
-    <task id="LOCAL-00119" summary="fix file work">
-      <created>1429457256296</created>
-      <updated>1429457256296</updated>
-    </task>
-    <task id="LOCAL-00120" summary="edit clients files show">
-      <created>1429458358084</created>
-      <updated>1429458358084</updated>
-    </task>
-    <task id="LOCAL-00121" summary="fix 'save and add file' function for clients">
-      <created>1429531420767</created>
-      <updated>1429531420767</updated>
-    </task>
-    <task id="LOCAL-00122" summary="add status 'устно' to claims">
-      <created>1429707364243</created>
-      <updated>1429707364243</updated>
-    </task>
-    <task id="LOCAL-00123" summary="edit files">
-      <created>1429804117942</created>
-      <updated>1429804117942</updated>
-    </task>
-    <task id="LOCAL-00124" summary="delete print functions">
-      <created>1429811216035</created>
-      <updated>1429811216036</updated>
-    </task>
-    <task id="LOCAL-00125" summary="edits">
-      <created>1429863907846</created>
-      <updated>1429863907846</updated>
-    </task>
-    <task id="LOCAL-00126" summary="edit">
-      <created>1429864637491</created>
-      <updated>1429864637491</updated>
-    </task>
-    <task id="LOCAL-00127" summary="edit">
-      <created>1429865516148</created>
-      <updated>1429865516149</updated>
-    </task>
-    <task id="LOCAL-00128" summary="edits">
-      <created>1429876698668</created>
-      <updated>1429876698668</updated>
-    </task>
-    <task id="LOCAL-00129" summary="editss">
-      <created>1429965966588</created>
-      <updated>1429965966588</updated>
-    </task>
-    <task id="LOCAL-00130" summary="edits">
-      <created>1430227031503</created>
-      <updated>1430227031503</updated>
-    </task>
-    <task id="LOCAL-00131" summary="add edit manager for claim/order if you are admin">
-      <created>1430312167608</created>
-      <updated>1430312167608</updated>
-    </task>
-    <task id="LOCAL-00132" summary="add analyze managers by chosen month">
-      <created>1430317063657</created>
-      <updated>1430317063657</updated>
-    </task>
-    <task id="LOCAL-00133" summary="edit analyze managers bill/ship/call new formula">
-      <created>1430319119640</created>
-      <updated>1430319119640</updated>
-    </task>
-    <task id="LOCAL-00134" summary="fix edit role if you are admin">
-      <created>1430463021753</created>
-      <updated>1430463021753</updated>
-    </task>
-    <task id="LOCAL-00135" summary="добавление поля &quot;внесенная сумма&quot;, показ долгов">
-      <created>1430494622195</created>
-      <updated>1430494622195</updated>
-    </task>
-    <task id="LOCAL-00136" summary="edit">
-      <created>1430494918223</created>
-      <updated>1430494918223</updated>
-    </task>
-    <task id="LOCAL-00137" summary="add analyze debtors">
-      <created>1430497052694</created>
-      <updated>1430497052695</updated>
-    </task>
-    <task id="LOCAL-00138" summary="edit prices">
-      <created>1430744314891</created>
-      <updated>1430744314891</updated>
-    </task>
-    <task id="LOCAL-00139" summary="add files folders">
-      <created>1430865831439</created>
-      <updated>1430865831439</updated>
-    </task>
-    <task id="LOCAL-00140" summary="add pagination in views">
-      <created>1431604505360</created>
-      <updated>1431604505361</updated>
-    </task>
-    <task id="LOCAL-00141" summary="add GET params - number and sort">
-      <created>1432006502643</created>
-      <updated>1432006502643</updated>
-    </task>
-    <task id="LOCAL-00142" summary="убрана пагинация из продуктов, компаний и ролей">
-      <created>1432389502669</created>
-      <updated>1432389502669</updated>
-    </task>
-    <task id="LOCAL-00143" summary=" изменение гет-параметра number на length">
-      <created>1432480743135</created>
-      <updated>1432480743136</updated>
-    </task>
-    <task id="LOCAL-00144" summary="проставление/изменение цен, аналитика продуктов">
-      <created>1432554706632</created>
-      <updated>1432554706633</updated>
-    </task>
-    <task id="LOCAL-00145" summary="добавление массовых действий">
-      <created>1432594051037</created>
-      <updated>1432594051038</updated>
-    </task>
-    <task id="LOCAL-00146" summary="поправлена сортировка, гет параметры при удалении, показ цен">
-      <created>1432634870641</created>
-      <updated>1432634870642</updated>
-    </task>
-    <task id="LOCAL-00147" summary="гет-параметры при удалении">
-      <created>1432636022209</created>
-      <updated>1432636022210</updated>
-    </task>
-    <task id="LOCAL-00148" summary=" правка гет параметров и удаления ролей">
-      <created>1432636837098</created>
-      <updated>1432636837099</updated>
-    </task>
-    <task id="LOCAL-00149" summary="прощай жестокий мир, или ад в гет параметрах">
-      <created>1432642904899</created>
-      <updated>1432642904899</updated>
-    </task>
-    <task id="LOCAL-00150" summary="источники и список менеджеров в заказах/заявках">
-      <created>1432644643486</created>
-      <updated>1432644643486</updated>
-    </task>
-    <task id="LOCAL-00151" summary="правки">
-      <created>1432653995181</created>
-      <updated>1432653995181</updated>
-    </task>
-    <task id="LOCAL-00152" summary="edit">
-      <created>1432658362956</created>
-      <updated>1432658362956</updated>
-    </task>
-    <task id="LOCAL-00153" summary="edit">
-      <created>1432660303235</created>
-      <updated>1432660303235</updated>
-    </task>
-    <task id="LOCAL-00154" summary="edits">
-      <created>1432744823610</created>
-      <updated>1432744823610</updated>
-    </task>
-    <task id="LOCAL-00155" summary="edits">
-      <created>1432813475627</created>
-      <updated>1432813475627</updated>
-    </task>
-    <task id="LOCAL-00156" summary="поиск, итерация один">
-      <created>1432886322185</created>
-      <updated>1432886322185</updated>
-    </task>
-    <task id="LOCAL-00157" summary="поиск">
-      <created>1432939565558</created>
-      <updated>1432939565558</updated>
-    </task>
-    <task id="LOCAL-00158" summary="edit">
-      <created>1432987448093</created>
-      <updated>1432987448093</updated>
-    </task>
-    <task id="LOCAL-00159" summary="поиск, переходы">
-      <created>1432993510436</created>
-      <updated>1432993510437</updated>
-    </task>
-    <task id="LOCAL-00160" summary="аналитика, продукты. начало">
-      <created>1432994607379</created>
-      <updated>1432994607379</updated>
-    </task>
-    <task id="LOCAL-00161" summary="аналитика, продукты. дни">
-      <created>1433002648666</created>
-      <updated>1433002648666</updated>
-    </task>
-    <task id="LOCAL-00162" summary="edit">
-      <created>1433003144491</created>
-      <updated>1433003144492</updated>
-    </task>
-    <task id="LOCAL-00163" summary="edit">
-      <created>1433007287465</created>
-      <updated>1433007287465</updated>
-    </task>
-    <task id="LOCAL-00164" summary="edits">
-      <created>1433009483573</created>
-      <updated>1433009483573</updated>
-    </task>
-    <task id="LOCAL-00165" summary="edit">
-      <created>1433009937116</created>
-      <updated>1433009937117</updated>
-    </task>
-    <task id="LOCAL-00166" summary="аналитика продуктов завершена">
-      <created>1433020301267</created>
-      <updated>1433020301268</updated>
-    </task>
-    <task id="LOCAL-00167" summary="исправления косяков">
-      <created>1433027296586</created>
-      <updated>1433027296586</updated>
-    </task>
-    <task id="LOCAL-00168" summary="edit">
-      <created>1433062277969</created>
-      <updated>1433062277969</updated>
-    </task>
-    <task id="LOCAL-00169" summary="edit">
-      <created>1433063818533</created>
-      <updated>1433063818533</updated>
-    </task>
-    <task id="LOCAL-00170" summary="edit">
-      <created>1433063858199</created>
-      <updated>1433063858199</updated>
-    </task>
-    <task id="LOCAL-00171" summary="count на страницах заявок/заказов, исправлена аналитика, показывается статус &quot;Устно&quot;">
-      <created>1436645157339</created>
-      <updated>1436645157339</updated>
-    </task>
-    <task id="LOCAL-00172" summary="добавлено количество сущностей на всех страницах">
-      <created>1436881414432</created>
-      <updated>1436881414432</updated>
-    </task>
-    <task id="LOCAL-00173" summary="edits">
-      <created>1437341737475</created>
-      <updated>1437341737475</updated>
-    </task>
-    <task id="LOCAL-00174" summary="edit">
-      <created>1437768174324</created>
-      <updated>1437768174324</updated>
-    </task>
-    <task id="LOCAL-00175" summary="показываются только активные продукты при создании/редактировании заявки/заказа + генерация exel для продуктов">
-      <created>1437812645259</created>
-      <updated>1437812645259</updated>
-    </task>
-    <task id="LOCAL-00176" summary="edit">
-      <created>1437813388268</created>
-      <updated>1437813388268</updated>
-    </task>
-    <task id="LOCAL-00177" summary="правки в аналитике">
-      <created>1437834627408</created>
-      <updated>1437834627408</updated>
-    </task>
-    <task id="LOCAL-00178" summary="edit">
-      <created>1438017180385</created>
-      <updated>1438017180385</updated>
-    </task>
-    <task id="LOCAL-00179" summary="edit">
-      <created>1438072963946</created>
-      <updated>1438072963946</updated>
-    </task>
-    <task id="LOCAL-00180" summary="edit">
-      <created>1438075159591</created>
-      <updated>1438075159591</updated>
-    </task>
-    <task id="LOCAL-00181" summary="edit">
-      <created>1438111477915</created>
-      <updated>1438111477915</updated>
-    </task>
-    <task id="LOCAL-00182" summary="сохранение параметров поиска в продуктах">
-      <created>1438276369019</created>
-      <updated>1438276369019</updated>
-    </task>
-    <task id="LOCAL-00183" summary="edit">
-      <created>1438279885804</created>
-      <updated>1438279885804</updated>
-    </task>
-    <task id="LOCAL-00184" summary="добавлен параметр count_in_production на странице заказов - показывает количество заказов сос татусом &quot;В производстве&quot;">
-      <created>1442211764392</created>
-      <updated>1442211764392</updated>
-    </task>
-    <task id="LOCAL-00185" summary="добавлена сущность &quot;группа товаров&quot;">
-      <created>1442213451523</created>
-      <updated>1442213451523</updated>
-    </task>
-    <task id="LOCAL-00186" summary="аналитика по периоду для групп товаров">
-      <created>1442218467617</created>
-      <updated>1442218467617</updated>
-    </task>
-    <task id="LOCAL-00187" summary="чтобы все было ок">
-      <created>1442590661735</created>
-      <updated>1442590661736</updated>
-    </task>
-    <task id="LOCAL-00188" summary="источники теперь - отдельная сущность">
-      <created>1442750084016</created>
-      <updated>1442750084016</updated>
-    </task>
-    <task id="LOCAL-00189" summary="изменена аналитика по источникам">
-      <created>1442818260616</created>
-      <updated>1442818260616</updated>
-    </task>
-    <task id="LOCAL-00190" summary="поддержка выпадающего списка городов">
-      <created>1442832446001</created>
-      <updated>1442832446001</updated>
-    </task>
-    <task id="LOCAL-00191" summary="дополнения к городам">
-      <created>1442834098180</created>
-      <updated>1442834098180</updated>
-    </task>
-    <task id="LOCAL-00192" summary="обязательность поля &quot;источник&quot;">
-      <created>1443435112225</created>
-      <updated>1443435112225</updated>
-    </task>
-    <task id="LOCAL-00193" summary="города - аналитика и связь с таблицей заказов">
-      <created>1444031207412</created>
-      <updated>1444031207412</updated>
-    </task>
-    <task id="LOCAL-00194" summary="add reports view">
-      <created>1444228416627</created>
-      <updated>1444228416627</updated>
-    </task>
-    <task id="LOCAL-00195" summary="можно добавлять новый город">
-      <created>1444228905112</created>
-      <updated>1444228905112</updated>
-    </task>
-    <task id="LOCAL-00196" summary="правки по работе с группами продуктов">
-      <created>1444230532479</created>
-      <updated>1444230532479</updated>
-    </task>
-    <task id="LOCAL-00197" summary="двухступенчатая аналитика групп продуктов">
-      <created>1444232166071</created>
-      <updated>1444232166071</updated>
-    </task>
-    <task id="LOCAL-00198" summary="правки связанных заявок">
-      <created>1444658304531</created>
-      <updated>1444658304531</updated>
-    </task>
-    <task id="LOCAL-00199" summary="смена имени поля цвета">
-      <created>1444658372084</created>
-      <updated>1444658372084</updated>
-    </task>
-    <task id="LOCAL-00200" summary="правка  id  для формы клиента в связанной заявке">
-      <created>1444763337651</created>
-      <updated>1444763337651</updated>
-    </task>
-    <task id="LOCAL-00201" summary="куча правок различных косяков">
-      <created>1444836712965</created>
-      <updated>1444836712965</updated>
-    </task>
-    <task id="LOCAL-00202" summary="и еще правки в связанных заявках">
-      <created>1444839308151</created>
-      <updated>1444839308151</updated>
-    </task>
-    <task id="LOCAL-00203" summary="к роли добавлены поля телефон и email">
-      <created>1444839583606</created>
-      <updated>1444839583606</updated>
-    </task>
-    <task id="LOCAL-00204" summary="исправлена форма редактирвоания группы товаров">
-      <created>1444939620917</created>
-      <updated>1444939620917</updated>
-    </task>
-    <task id="LOCAL-00205" summary="подгрузка списка менеджеров для изменения менеджера, остаемся на странице поиска при смене менеджера">
-      <created>1444940387711</created>
-      <updated>1444940387711</updated>
-    </task>
-    <task id="LOCAL-00206" summary="удаляем из списка заявок клиента те, что же связаны с переданной нам заявкой">
-      <created>1445022852371</created>
-      <updated>1445022852371</updated>
-    </task>
-    <task id="LOCAL-00207" summary="название группы продуктов в аналитике по периоду">
-      <created>1445067152616</created>
-      <updated>1445067152616</updated>
-    </task>
-    <task id="LOCAL-00208" summary="сохранения почты/телефона для ролей + список компаний на странице шаблонов">
-      <created>1445071277324</created>
-      <updated>1445071277324</updated>
-    </task>
-    <option name="localTasksCounter" value="209" />
+    <task id="LOCAL-00057" summary="style bug fixed;">
+      <created>1416778689019</created>
+      <option name="number" value="00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1416778689019</updated>
+    </task>
+    <task id="LOCAL-00058" summary="hardcode and hardcore;">
+      <created>1416827646128</created>
+      <option name="number" value="00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1416827646129</updated>
+    </task>
+    <task id="LOCAL-00059" summary="1, 2, 13+">
+      <created>1423413758305</created>
+      <option name="number" value="00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1423413758305</updated>
+    </task>
+    <task id="LOCAL-00060" summary="start 5;">
+      <created>1423414662098</created>
+      <option name="number" value="00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1423414662098</updated>
+    </task>
+    <task id="LOCAL-00061" summary="add my part of 16;">
+      <created>1423425273120</created>
+      <option name="number" value="00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1423425273120</updated>
+    </task>
+    <task id="LOCAL-00062" summary="start attachments;">
+      <created>1423514247551</created>
+      <option name="number" value="00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1423514247551</updated>
+    </task>
+    <task id="LOCAL-00063" summary="i don't know i change;">
+      <created>1424110571824</created>
+      <option name="number" value="00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1424110571824</updated>
+    </task>
+    <task id="LOCAL-00064" summary="add 3 and 4 for orders;">
+      <created>1424265815965</created>
+      <option name="number" value="00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1424265815966</updated>
+    </task>
+    <task id="LOCAL-00065" summary="add 3 and 4 for orders;">
+      <created>1424265879511</created>
+      <option name="number" value="00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1424265879511</updated>
+    </task>
+    <task id="LOCAL-00066" summary="i do 4 again &amp; again;">
+      <created>1424500665228</created>
+      <option name="number" value="00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1424500665228</updated>
+    </task>
+    <task id="LOCAL-00067" summary="dooo 4;">
+      <created>1424501594422</created>
+      <option name="number" value="00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1424501594422</updated>
+    </task>
+    <task id="LOCAL-00068" summary="dooo 4 agaaaaain;">
+      <created>1424504845647</created>
+      <option name="number" value="00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1424504845648</updated>
+    </task>
+    <task id="LOCAL-00069" summary="i finish 4, yeah;">
+      <created>1424520588651</created>
+      <option name="number" value="00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1424520588652</updated>
+    </task>
+    <task id="LOCAL-00070" summary="start attachments;">
+      <created>1424544054276</created>
+      <option name="number" value="00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1424544054276</updated>
+    </task>
+    <task id="LOCAL-00071" summary="do 7;">
+      <created>1424619399473</created>
+      <option name="number" value="00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1424619399473</updated>
+    </task>
+    <task id="LOCAL-00072" summary="try-try-try attachments;">
+      <created>1424631115322</created>
+      <option name="number" value="00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1424631115322</updated>
+    </task>
+    <task id="LOCAL-00073" summary="i finish attachs, may be;">
+      <created>1424711511390</created>
+      <option name="number" value="00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1424711511390</updated>
+    </task>
+    <task id="LOCAL-00074" summary="fixed bugs;">
+      <created>1424713128666</created>
+      <option name="number" value="00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1424713128666</updated>
+    </task>
+    <task id="LOCAL-00075" summary="fixed bugs in claims/clients;">
+      <created>1424713834711</created>
+      <option name="number" value="00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1424713834711</updated>
+    </task>
+    <task id="LOCAL-00076" summary="- analyze_period bugs;">
+      <created>1425505424130</created>
+      <option name="number" value="00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1425505424130</updated>
+    </task>
+    <task id="LOCAL-00077" summary="add favicon;">
+      <created>1425586743797</created>
+      <option name="number" value="00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1425586743798</updated>
+    </task>
+    <task id="LOCAL-00078" summary="add favicon to git;">
+      <created>1425587790846</created>
+      <option name="number" value="00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1425587790847</updated>
+    </task>
+    <task id="LOCAL-00079" summary="add shipped_date;">
+      <created>1427268344526</created>
+      <option name="number" value="00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1427268344527</updated>
+    </task>
+    <task id="LOCAL-00080" summary="happy hell;">
+      <created>1429459835313</created>
+      <option name="number" value="00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1429459835313</updated>
+    </task>
+    <task id="LOCAL-00081" summary="fixed bugs;">
+      <created>1429461878854</created>
+      <option name="number" value="00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1429461878861</updated>
+    </task>
+    <task id="LOCAL-00082" summary="fix-fix-fix;">
+      <created>1429464395391</created>
+      <option name="number" value="00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1429464395391</updated>
+    </task>
+    <task id="LOCAL-00083" summary="fixed bug with interested;">
+      <created>1429596133761</created>
+      <option name="number" value="00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1429596133762</updated>
+    </task>
+    <task id="LOCAL-00084" summary="added  copy order | claim from &quot;edit order | claim for other managers&quot;;">
+      <created>1430146593681</created>
+      <option name="number" value="00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1430146593681</updated>
+    </task>
+    <task id="LOCAL-00085" summary="first steps to v2.3-5">
+      <created>1430230707026</created>
+      <option name="number" value="00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1430230707026</updated>
+    </task>
+    <task id="LOCAL-00086" summary="added half 3 (v2.3) and 4 (v2.5) in analyze_managers;">
+      <created>1430253851496</created>
+      <option name="number" value="00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1430253851496</updated>
+    </task>
+    <task id="LOCAL-00087" summary="fixed bug in edit_order;">
+      <created>1439905072337</created>
+      <option name="number" value="00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1439905072337</updated>
+    </task>
+    <task id="LOCAL-00088" summary="add 8 and other in 2.7;">
+      <created>1443435495645</created>
+      <option name="number" value="00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1443435495657</updated>
+    </task>
+    <task id="LOCAL-00089" summary="added 7 (without analyst) in 2.7;">
+      <created>1443545949366</created>
+      <option name="number" value="00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1443545949380</updated>
+    </task>
+    <task id="LOCAL-00090" summary="add 7 and other in 2.7;">
+      <created>1444036165075</created>
+      <option name="number" value="00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1444036165088</updated>
+    </task>
+    <task id="LOCAL-00091" summary="add half 4 and other in 2.7;">
+      <created>1444040990021</created>
+      <option name="number" value="00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1444040990021</updated>
+    </task>
+    <task id="LOCAL-00092" summary="add 4 and other in 2.7;">
+      <created>1444073387203</created>
+      <option name="number" value="00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1444073387203</updated>
+    </task>
+    <task id="LOCAL-00093" summary="what is get_documents.html?">
+      <created>1444073548190</created>
+      <option name="number" value="00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1444073548190</updated>
+    </task>
+    <task id="LOCAL-00094" summary="add 10(partly) and other in 2.7;">
+      <created>1444237910771</created>
+      <option name="number" value="00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1444237910796</updated>
+    </task>
+    <task id="LOCAL-00095" summary="fixed bugs in 2.7;">
+      <created>1444332790973</created>
+      <option name="number" value="00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1444332790974</updated>
+    </task>
+    <task id="LOCAL-00096" summary="added 10(front-end) in 2.7;">
+      <created>1444399182551</created>
+      <option name="number" value="00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1444399182551</updated>
+    </task>
+    <task id="LOCAL-00097" summary="started 1 in 2.7;">
+      <created>1444662338792</created>
+      <option name="number" value="00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1444662338793</updated>
+    </task>
+    <task id="LOCAL-00098" summary="i don't know where it changed, but commit;">
+      <created>1444797418689</created>
+      <option name="number" value="00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1444797418689</updated>
+    </task>
+    <task id="LOCAL-00099" summary="fixed bugs in 2.7;">
+      <created>1444997125860</created>
+      <option name="number" value="00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1444997125861</updated>
+    </task>
+    <task id="LOCAL-00100" summary="fixed bugs-bugs-bugs in 2.7;">
+      <created>1445071388079</created>
+      <option name="number" value="00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1445071388088</updated>
+    </task>
+    <task id="LOCAL-00101" summary="started 1 and other in 2.7;">
+      <created>1445162456943</created>
+      <option name="number" value="00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1445162456978</updated>
+    </task>
+    <task id="LOCAL-00102" summary="added edit_kp for 1 in 2.7;">
+      <created>1445172475880</created>
+      <option name="number" value="00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1445172475916</updated>
+    </task>
+    <task id="LOCAL-00103" summary="added half of edit_template(1) in 2.7;">
+      <created>1445186297655</created>
+      <option name="number" value="00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1445186297656</updated>
+    </task>
+    <task id="LOCAL-00104" summary="fixed bugs in 2.7;">
+      <created>1445186847524</created>
+      <option name="number" value="00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1445186847524</updated>
+    </task>
+    <task id="LOCAL-00105" summary="fixed bugs [2] in 2.7;">
+      <created>1445187044511</created>
+      <option name="number" value="00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1445187044511</updated>
+    </task>
+    <option name="localTasksCounter" value="106" />
     <servers />
   </component>
-  <component name="TodoView" selected-index="0">
-    <todo-panel id="selected-file">
-      <are-packages-shown value="false" />
-      <are-modules-shown value="false" />
-      <flatten-packages value="false" />
-      <is-autoscroll-to-source value="false" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="false" />
-      <are-modules-shown value="false" />
-      <flatten-packages value="false" />
-      <is-autoscroll-to-source value="false" />
-    </todo-panel>
-    <todo-panel id="default-changelist">
-      <are-packages-shown value="false" />
-      <are-modules-shown value="false" />
-      <flatten-packages value="false" />
-      <is-autoscroll-to-source value="false" />
-    </todo-panel>
-  </component>
+  <component name="TodoView" selected-index="4" />
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <frame x="151" y="70" width="1215" height="698" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6448864" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25282714" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4275568" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4275568" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328125" sideWeight="0.687399" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23505655" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37642047" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4900568" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32973805" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32738096" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820907" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25258964" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6644683" sideWeight="0.49885058" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5125786" sideWeight="0.49116063" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25577688" sideWeight="0.5011494" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3809524" sideWeight="0.50883937" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37742504" sideWeight="0.4996016" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3266564" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2810047" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="REST Client" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34517047" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4503546" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2919937" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3266564" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32973805" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28125" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820907" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25577688" sideWeight="0.5011494" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3809524" sideWeight="0.50883937" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3794643" sideWeight="0.4996016" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32738096" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25258964" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30899307" sideWeight="0.49885058" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.51339287" sideWeight="0.49116063" order="2" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -1703,505 +974,414 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="myTodoPanelSettings">
-      <TodoPanelSettings />
-    </option>
-    <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="false" />
-    <MESSAGE value="добавлен параметр count_in_production на странице заказов - показывает количество заказов сос татусом &quot;В производстве&quot;" />
-    <MESSAGE value="добавлена сущность &quot;группа товаров&quot;" />
-    <MESSAGE value="аналитика по периоду для групп товаров" />
-    <MESSAGE value="чтобы все было ок" />
-    <MESSAGE value="источники теперь - отдельная сущность" />
-    <MESSAGE value="изменена аналитика по источникам" />
-    <MESSAGE value="поддержка выпадающего списка городов" />
-    <MESSAGE value="дополнения к городам" />
-    <MESSAGE value="обязательность поля &quot;источник&quot;" />
-    <MESSAGE value="города - аналитика и связь с таблицей заказов" />
-    <MESSAGE value="add reports view" />
-    <MESSAGE value="можно добавлять новый город" />
-    <MESSAGE value="правки по работе с группами продуктов" />
-    <MESSAGE value="двухступенчатая аналитика групп продуктов" />
-    <MESSAGE value="правки связанных заявок" />
-    <MESSAGE value="смена имени поля цвета" />
-    <MESSAGE value="правка  id  для формы клиента в связанной заявке" />
-    <MESSAGE value="куча правок различных косяков" />
-    <MESSAGE value="и еще правки в связанных заявках" />
-    <MESSAGE value="к роли добавлены поля телефон и email" />
-    <MESSAGE value="исправлена форма редактирвоания группы товаров" />
-    <MESSAGE value="подгрузка списка менеджеров для изменения менеджера, остаемся на странице поиска при смене менеджера" />
-    <MESSAGE value="удаляем из списка заявок клиента те, что же связаны с переданной нам заявкой" />
-    <MESSAGE value="название группы продуктов в аналитике по периоду" />
-    <MESSAGE value="сохранения почты/телефона для ролей + список компаний на странице шаблонов" />
-    <option name="LAST_COMMIT_MESSAGE" value="сохранения почты/телефона для ролей + список компаний на странице шаблонов" />
+    <MESSAGE value="add shipped_date;" />
+    <MESSAGE value="happy hell;" />
+    <MESSAGE value="fixed bugs;" />
+    <MESSAGE value="fix-fix-fix;" />
+    <MESSAGE value="fixed bug with interested;" />
+    <MESSAGE value="added  copy order | claim from &quot;edit order | claim for other managers&quot;;" />
+    <MESSAGE value="first steps to v2.3-5" />
+    <MESSAGE value="added half 3 (v2.3) and 4 (v2.5) in analyze_managers;" />
+    <MESSAGE value="fixed bug in edit_order;" />
+    <MESSAGE value="add 8 and other in 2.7;" />
+    <MESSAGE value="added 7 (without analyst) in 2.7;" />
+    <MESSAGE value="add 7 and other in 2.7;" />
+    <MESSAGE value="add half 4 and other in 2.7;" />
+    <MESSAGE value="add 4 and other in 2.7;" />
+    <MESSAGE value="what is get_documents.html?" />
+    <MESSAGE value="add 10(partly) and other in 2.7;" />
+    <MESSAGE value="added 10(front-end) in 2.7;" />
+    <MESSAGE value="started 1 in 2.7;" />
+    <MESSAGE value="i don't know where it changed, but commit;" />
+    <MESSAGE value="fixed bugs-bugs-bugs in 2.7;" />
+    <MESSAGE value="started 1 and other in 2.7;" />
+    <MESSAGE value="added edit_kp for 1 in 2.7;" />
+    <MESSAGE value="added half of edit_template(1) in 2.7;" />
+    <MESSAGE value="fixed bugs in 2.7;" />
+    <MESSAGE value="fixed bugs [2] in 2.7;" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed bugs [2] in 2.7;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/tidy.py</url>
-          <line>66</line>
-          <option name="timeStamp" value="34" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/fo.py</url>
-          <line>118</line>
-          <option name="timeStamp" value="39" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/fo.py</url>
-          <line>114</line>
-          <option name="timeStamp" value="40" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/fo.py</url>
-          <line>63</line>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>jar:///Library/Python/2.7/site-packages/elementtree-1.2.7_20070827_preview-py2.7.egg!/elementtree/ElementTree.py</url>
-          <line>170</line>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/fo.py</url>
-          <line>83</line>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="49" />
+      <option name="time" value="3" />
     </breakpoint-manager>
+    <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_managers.py">
+    <entry file="file://$PROJECT_DIR$/templates/setting/edit_template.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5330" max-vertical-offset="5970">
-          <caret line="361" column="4" selection-start-line="361" selection-start-column="4" selection-end-line="361" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
+          <folding>
+            <marker date="1445187465973" expanded="true" signature="3014:3624" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="55" column="64" selection-start-line="55" selection-start-column="64" selection-end-line="55" selection-end-column="64" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/style.css">
+    <entry file="file://$PROJECT_DIR$/templates/log_in.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334" vertical-offset="4021" max-vertical-offset="4935">
-          <caret line="282" column="27" selection-start-line="282" selection-start-column="1" selection-end-line="282" selection-end-column="27" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/product/get_product_groups.html">
+    <entry file="file://$PROJECT_DIR$/templates/company/add_edit_company.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.25" vertical-offset="2178" max-vertical-offset="3900">
-          <caret line="160" column="28" selection-start-line="160" selection-start-column="28" selection-end-line="160" selection-end-column="28" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/get_documents.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/files.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.6101695">
+          <caret line="10" column="139" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="139" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyst/analyze_total_sales.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyst/analyze_product_groups.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0">
+          <caret line="0" column="35" selection-start-line="0" selection-start-column="35" selection-end-line="0" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyst/view_analyzed_product.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.048465267">
+          <caret line="7" column="124" selection-start-line="7" selection-start-column="124" selection-end-line="7" selection-end-column="124" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/bootstrap.min.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34796748">
+          <caret line="8" column="86809" selection-start-line="8" selection-start-column="86809" selection-end-line="8" selection-end-column="86809" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/bootstrap.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40625">
+          <caret line="1024" column="1" selection-start-line="1024" selection-start-column="1" selection-end-line="1024" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyst/analyze_cities.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.25">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyst/analyze_managers.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7964459">
+          <caret line="239" column="35" selection-start-line="239" selection-start-column="35" selection-end-line="239" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyst/analyze_debtors.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.024232633">
+          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/setting/get_sources.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.33279222" vertical-offset="2110" max-vertical-offset="4335">
-          <caret line="127" column="34" selection-start-line="127" selection-start-column="34" selection-end-line="127" selection-end-column="34" />
-          <folding />
+        <state vertical-scroll-proportion="0.2907916">
+          <caret line="12" column="28" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/source_views.py">
+    <entry file="file://$PROJECT_DIR$/templates/analyst/analyze_products.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="314" max-vertical-offset="1335">
-          <caret line="31" column="22" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
-          <folding>
-            <element signature="e#42#97#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="0.365105">
+          <caret line="17" column="32" selection-start-line="17" selection-start-column="32" selection-end-line="17" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="dbDummy://dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_cities">
-      <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.DatabaseTableFileEditorProvider">
-        <state />
+    <entry file="file://$PROJECT_DIR$/templates/get_reports.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="43" column="23" selection-start-line="42" selection-start-column="16" selection-end-line="43" selection-end-column="23" />
+        </state>
       </provider>
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="150">
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/font-awesome.min.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/product/get_products.html">
+    <entry file="file://$PROJECT_DIR$/templates/search/search.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2792208" vertical-offset="5093" max-vertical-offset="5790">
-          <caret line="351" column="70" selection-start-line="351" selection-start-column="70" selection-end-line="351" selection-end-column="70" />
-          <folding />
+        <state vertical-scroll-proportion="0.94863015">
+          <caret line="692" column="60" selection-start-line="692" selection-start-column="60" selection-end-line="692" selection-end-column="60" />
         </state>
       </provider>
     </entry>
-    <entry file="dbDummy://dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_orders">
-      <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.DatabaseTableFileEditorProvider">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/Django-1.7-py2.7.egg/django/forms/forms.py">
+    <entry file="file://$PROJECT_DIR$/templates/order_claim/get_orders.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3328125" vertical-offset="1887" max-vertical-offset="9960">
-          <caret line="156" column="8" selection-start-line="156" selection-start-column="8" selection-end-line="156" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.6833603">
+          <caret line="203" column="47" selection-start-line="201" selection-start-column="36" selection-end-line="203" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/setting/get_settings.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2180937">
+          <caret line="9" column="10" selection-start-line="9" selection-start-column="10" selection-end-line="9" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/product/get_product_groups.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.0833333">
+          <caret line="141" column="1" selection-start-line="141" selection-start-column="1" selection-end-line="141" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/role/add_edit_role.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="82" column="24" selection-start-line="82" selection-start-column="24" selection-end-line="82" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/order_views.py">
+    <entry file="file://$PROJECT_DIR$/templates/role/get_roles.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.453125" vertical-offset="8830" max-vertical-offset="15390">
-          <caret line="608" column="54" selection-start-line="608" selection-start-column="54" selection-end-line="608" selection-end-column="54" />
-          <folding>
-            <element signature="e#42#114#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_city.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44526628" vertical-offset="14" max-vertical-offset="690">
-          <caret line="25" column="40" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/helper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51035506" vertical-offset="0" max-vertical-offset="676">
-          <caret line="23" column="8" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/order_claim/add_edit_order.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.36" vertical-offset="397" max-vertical-offset="12045">
-          <caret line="41" column="23" selection-start-line="41" selection-start-column="23" selection-end-line="41" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/order_claim/get_claims.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="11.201878" vertical-offset="1722" max-vertical-offset="8985">
-          <caret line="592" column="44" selection-start-line="592" selection-start-column="44" selection-end-line="592" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_orders_related_orders">
-      <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.DatabaseTableFileEditorProvider">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="240">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="73" column="52" selection-start-line="73" selection-start-column="52" selection-end-line="73" selection-end-column="52" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/order_claim/hidden/get_related_claims.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23474178" vertical-offset="210" max-vertical-offset="1050">
-          <caret line="24" column="25" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="25" />
+        <state vertical-scroll-proportion="-11.666667">
+          <caret line="23" column="85" selection-start-line="23" selection-start-column="85" selection-end-line="23" selection-end-column="85" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/order_claim/modules/edit_claim__related_with.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3572594" vertical-offset="651" max-vertical-offset="1920">
-          <caret line="58" column="64" selection-start-line="58" selection-start-column="64" selection-end-line="58" selection-end-column="64" />
+        <state vertical-scroll-proportion="-20.0">
+          <caret line="122" column="23" selection-start-line="122" selection-start-column="23" selection-end-line="122" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/analyst/analyze_period.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9127907">
+          <caret line="80" column="18" selection-start-line="80" selection-start-column="18" selection-end-line="80" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/product_views.py">
+    <entry file="file://$PROJECT_DIR$/templates/order_claim/hidden/get_client_claims.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1382" max-vertical-offset="2535">
-          <caret line="96" column="38" selection-start-line="96" selection-start-column="38" selection-end-line="96" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/search/search.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.720339" vertical-offset="11830" max-vertical-offset="12420">
-          <caret line="817" column="43" selection-start-line="817" selection-start-column="43" selection-end-line="817" selection-end-column="43" />
+        <state vertical-scroll-proportion="1.0465117">
+          <caret line="26" column="68" selection-start-line="26" selection-start-column="68" selection-end-line="26" selection-end-column="68" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/search/modules/change_manager.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.875" vertical-offset="0" max-vertical-offset="690">
-          <caret line="3" column="122" selection-start-line="3" selection-start-column="91" selection-end-line="3" selection-end-column="122" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/massive_edit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1718" max-vertical-offset="3870">
-          <caret line="147" column="44" selection-start-line="147" selection-start-column="44" selection-end-line="147" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/Django-1.7-py2.7.egg/django/contrib/auth/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35502958" vertical-offset="5130" max-vertical-offset="7215">
-          <caret line="374" column="9" selection-start-line="374" selection-start-column="4" selection-end-line="374" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/Caches/PyCharm30/python_stubs/348993582/__builtin__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334" vertical-offset="37060" max-vertical-offset="77265">
-          <caret line="2479" column="8" selection-start-line="2479" selection-start-column="8" selection-end-line="2479" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/registry.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
-          <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/media/uploads/test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1110">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/Caches/PyCharm30/python_stubs/348993582/_io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334" vertical-offset="13972" max-vertical-offset="20700">
-          <caret line="939" column="8" selection-start-line="939" selection-start-column="8" selection-end-line="939" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/tempfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.50284094" vertical-offset="4998" max-vertical-offset="9315">
-          <caret line="348" column="7" selection-start-line="348" selection-start-column="7" selection-end-line="348" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.59659094" vertical-offset="0" max-vertical-offset="1500">
-          <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/convert.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17307693" vertical-offset="363" max-vertical-offset="1095">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding>
-            <element signature="e#266#275#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Python/2.7/site-packages/elementtree-1.2.7_20070827_preview-py2.7.egg!/elementtree/ElementTree.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17307693" vertical-offset="2448" max-vertical-offset="19950">
-          <caret line="171" column="0" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/tidy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8002958" vertical-offset="359" max-vertical-offset="1035">
-          <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/xfc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17307693" vertical-offset="813" max-vertical-offset="1500">
-          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/media/uploads/ch_g.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.24256651" vertical-offset="2050" max-vertical-offset="11835">
-          <caret line="147" column="56" selection-start-line="147" selection-start-column="56" selection-end-line="147" selection-end-column="56" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#3;n#div#0;n#fieldset#0;n#div#1;n#div#0;n#div#2;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/zopyx.convert2-2.4.5-py2.7.egg/zopyx/convert2/fo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30150753" vertical-offset="705" max-vertical-offset="1815">
-          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/Django-1.7-py2.7.egg/django/core/handlers/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3314917" vertical-offset="1305" max-vertical-offset="3660">
-          <caret line="110" column="0" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/subprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.1180904" vertical-offset="10578" max-vertical-offset="24120">
-          <caret line="649" column="25" selection-start-line="649" selection-start-column="25" selection-end-line="649" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/order_claim/modules/related_claim_modal.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.35658914" vertical-offset="468" max-vertical-offset="855">
-          <caret line="22" column="50" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/claim_views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="9187" max-vertical-offset="10170">
-          <caret line="543" column="110" selection-start-line="543" selection-start-column="110" selection-end-line="543" selection-end-column="110" />
-          <folding />
+        <state vertical-scroll-proportion="0.47965115">
+          <caret line="18" column="35" selection-start-line="12" selection-start-column="24" selection-end-line="18" selection-end-column="35" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/order_claim/modules/get_claims__related_with.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="300">
-          <caret line="14" column="14" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
+        <state vertical-scroll-proportion="0.04360465">
+          <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/order_claim/modules/related_claim_modal.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.47965115">
+          <caret line="29" column="76" selection-start-line="29" selection-start-column="76" selection-end-line="29" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/client/add_edit_client.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="202" column="18" selection-start-line="190" selection-start-column="12" selection-end-line="202" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/models.py">
+    <entry file="file://$PROJECT_DIR$/templates/product/get_products.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2799" max-vertical-offset="3660">
-          <caret line="207" column="9" selection-start-line="207" selection-start-column="4" selection-end-line="207" selection-end-column="9" />
+        <state vertical-scroll-proportion="-1.875">
+          <caret line="350" column="69" selection-start-line="350" selection-start-column="69" selection-end-line="350" selection-end-column="69" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_products.py">
+    <entry file="file://$PROJECT_DIR$/templates/setting/get_templates.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2977" max-vertical-offset="4725">
-          <caret line="291" column="50" selection-start-line="291" selection-start-column="32" selection-end-line="291" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.2820513">
+          <caret line="11" column="15" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/analyze_period.py">
+    <entry file="file://$PROJECT_DIR$/templates/order_claim/get_claims.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1059" max-vertical-offset="1560">
-          <caret line="96" column="55" selection-start-line="96" selection-start-column="55" selection-end-line="96" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/role/add_edit_role.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.375" vertical-offset="915" max-vertical-offset="1890">
-          <caret line="76" column="28" selection-start-line="76" selection-start-column="28" selection-end-line="76" selection-end-column="28" />
+        <state vertical-scroll-proportion="-366.875">
+          <caret line="587" column="20" selection-start-line="586" selection-start-column="24" selection-end-line="587" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/base_api/form.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="647" max-vertical-offset="4665">
-          <caret line="54" column="98" selection-start-line="54" selection-start-column="98" selection-end-line="54" selection-end-column="98" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="169" column="51" selection-start-line="169" selection-start-column="51" selection-end-line="169" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base_api/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/order_claim/add_edit_order.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-115.86207">
+          <caret line="448" column="0" selection-start-line="448" selection-start-column="0" selection-end-line="448" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="dbDummy://dbtable:/9bb4da4f/56491fc0-93f9-47c6-9b70-192528079835/base_for_api..base_api_roles">
-      <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.DatabaseTableFileEditorProvider">
-        <state />
+    <entry file="file://$PROJECT_DIR$/base_api/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1096" column="174" selection-start-line="1096" selection-start-column="174" selection-end-line="1096" selection-end-column="174" />
+          <folding>
+            <element signature="e#42#53#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="90">
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/wsgi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.024630541">
+          <caret line="120" column="30" selection-start-line="120" selection-start-column="30" selection-end-line="120" selection-end-column="41" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/role_views.py">
+    <entry file="file://$PROJECT_DIR$/base_api/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2070">
-          <caret line="90" column="50" selection-start-line="90" selection-start-column="50" selection-end-line="90" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.25">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/company_views.py">
+    <entry file="file://$PROJECT_DIR$/base_api/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44526628" vertical-offset="914" max-vertical-offset="1590">
-          <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="106" selection-end-column="44" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base_api/templatetags/smart_if.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base_api/templatetags/base_extras.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="362" column="32" selection-start-line="362" selection-start-column="32" selection-end-line="362" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/api/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="825" max-vertical-offset="3375">
-          <caret line="70" column="21" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="54" column="60" selection-start-line="54" selection-start-column="60" selection-end-line="54" selection-end-column="60" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/urls.py">
+    <entry file="file://$PROJECT_DIR$/templates/edit_kp.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1468" max-vertical-offset="2310">
-          <caret line="133" column="78" selection-start-line="133" selection-start-column="78" selection-end-line="133" selection-end-column="78" />
+        <state vertical-scroll-proportion="-18.5">
+          <caret line="59" column="125" selection-start-line="59" selection-start-column="125" selection-end-line="59" selection-end-column="125" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/full_views/kp_model.py">
+    <entry file="file://$PROJECT_DIR$/templates/setting/edit_template.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1020">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.805915">
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
           <folding>
-            <element signature="e#42#86#0" expanded="true" />
+            <marker date="1445187465973" expanded="true" signature="3014:3624" placeholder="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base_api/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.3643216" vertical-offset="15537" max-vertical-offset="16200">
-          <caret line="1097" column="4" selection-start-line="1097" selection-start-column="4" selection-end-line="1097" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
   </component>
 </project>
-
