@@ -1085,9 +1085,6 @@ def edit_template(request):
         out.update({'user_role': user_role})
     id = request.GET['id']
     template = KPTemplates.objects.filter(company__id=id).first()
-    if template:
-        out.update({'page': template.html_text})
-    print(request.method)
     if request.method == 'POST':
         page = request.POST['page']
         if template:
@@ -1095,6 +1092,9 @@ def edit_template(request):
         else:
             template = KPTemplates.objects.create(html_text=page, company=Companies.objects.get(pk=id), number=1000)
         template.save()
+    if template:
+        out.update({'page': template.html_text})
+        print(template.html_text)
     return render(request, 'setting/edit_template.html', out)
 
 

@@ -243,4 +243,4 @@ class Client_Files(models.Model):
 class KPTemplates(models.Model):
     html_text = models.TextField()
     company = models.ForeignKey(Companies, null=True, blank=True)
-    numder = models.IntegerField(null=True, blank=True)
+    number = models.IntegerField(null=True, blank=True)
