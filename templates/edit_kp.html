@@ -7,12 +7,21 @@
             <form id="editKpForm" method="post" action="{% url "generate_kp" %}">
                 <div id="page" class="word-block">
                     {{ page|safe }}
+{#                    <a class="btn show-button">Добавить вариант</a>#}
+{#                    <div class="added-table">#}
+{#                        <p><b>Вариант 2</b></p>#}
+{#                        <table class="table table-bordered claim-table"></table>#}
+{#                    </div>#}
+{#                    <a class="btn hide-button">Убрать вариант</a>#}
                 </div>
                 <div class="form-add__submits">
-                    <button class="btn btn-primary" type="submit">Сохранить</button>
+                    <button class="btn btn-primary" type="submit" name="format" value="docx">Сохранить как docx</button>
+                    <button class="btn btn-primary" type="submit" name="format" value="pdf">Сохранить как pdf</button>
                 </div>
             </form>
         </div>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/summernote.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/summernote-ru-RU.js"></script>
         <script type="text/javascript">
             (function($){
                 $(document).ready(function() {
@@ -21,16 +30,14 @@
                         lang: 'ru-RU',
                         toolbar: [
                             ['font', ['bold', 'italic', 'underline', 'clear']],
-                            ['image', ['image', 'floatLeft', 'floatRight','floatNone', 'shapeRounded', 'shapeCircle', 'shapeThumbnail', 'shapeNone', 'remove']],
-                            ['fontname', ['fontname']],
-                            ['fontsize', ['fontsize']],
                             ['para', ['paragraph']],
-                            ['table', ['table']],
-                            ['insert', ['link', 'picture', 'hr']]
+                            ['insert', ['link']]
                         ]
                     };
                     var $accompanying_text = $('#accompanyingTextEditor');
                     $accompanying_text.summernote(options);
+{#                    $('.claim-table').after('<a class="btn show-button">Добавить вариант</a>' +#}
+{#                            '<');#}
                     var $added_table = $('#addedTable');
                     $added_table.summernote(options);
 
@@ -55,7 +62,7 @@
                     $('#editKpForm').submit(function() {
                         var $this = $(this);
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
-                        var $added_table = $this.find('.claim-table.show');
+                        var $added_table = $this.find('.added-table__wrap').find('.claim-table');
                         if (!$added_table.hasClass('hide')) {
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
                         }
