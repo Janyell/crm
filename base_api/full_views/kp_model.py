@@ -42,10 +42,10 @@ def full_generate_kp(request):
     temp_out.update({'organization_or_full_name': organization_or_full_name})
     temp_out.update({'added_table': added_table})
 
-    form_file = open('templates/kp/random.html', 'wb')
-    form_file.write(template.html_text)
-    form_file.close()
-    html = render_to_response('kp/new_template.html', temp_out)
+    # form_file = open('templates/kp/random.html', 'wb')
+    # form_file.write(template.html_text)
+    # form_file.close()
+    # html = render_to_response('kp/new_template.html', temp_out)
 
     # filename = os.path.join(BASE_DIR, 'templates') + '/' + str('kp/kp.html')
     # out_filename = os.path.join(BASE_DIR, 'templates') + '/' + str('kp/kp.docx')
@@ -54,4 +54,6 @@ def full_generate_kp(request):
     # # out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/ttt1.pdf')
     # Popen(['pandoc', filename, '-f', 'html', '-t', 'docx', '-s', '-o', out_filename])
     # Popen(['pandoc', filename, '-f', 'html', '-s', '-o', out_filename_pdf])
+    if template:
+        out.update({'page': template.html_text})
     return HttpResponseRedirect('/')

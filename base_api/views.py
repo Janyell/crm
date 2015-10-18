@@ -1094,7 +1094,6 @@ def edit_template(request):
         template.save()
     if template:
         out.update({'page': template.html_text})
-        print(template.html_text)
     return render(request, 'setting/edit_template.html', out)
 
 
@@ -1149,9 +1148,9 @@ def edit_kp(request):
     # TODO
     added_table = ''
 
-    form_file = open('templates/kp/new_template.html', 'wb')
-    form_file.write(template.html_text)
-    form_file.close()
+    # form_file = open('templates/kp/new_template.html', 'wb')
+    # form_file.write(template.html_text)
+    # form_file.close()
     temp_out.update({'number': number})
     temp_out.update({'date': kp_date})
     temp_out.update({'organization_or_full_name': organization_or_full_name})
