@@ -28,7 +28,6 @@ from base_api.full_views.product_views import *
 from base_api.full_views.claim_views import *
 # for excel
 import openpyxl
-from subprocess import Popen
 
 
 def add_edit_role(request):
@@ -1094,9 +1093,7 @@ def get_templates(request):
     out.update({'page_title': "Компании"})
     out.update({'companies': companies})
     out.update({'count': companies.count()})
-    # filename = MEDIA_ROOT + '/' + str('uploads/test.html')
-    # out_filename = MEDIA_ROOT + '/' + str('uploads/ttt1.docx')
-    # out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/ttt1.pdf')
-    # Popen(['pandoc', filename, '-f', 'html', '-t', 'docx', '-s', '-o', out_filename])
-    # Popen(['pandoc', filename, '-f', 'html', '-s', '-o', out_filename_pdf])
+
+    html_code = '<div class="kp-number row"><div class="span6">Исх.№{{ number }} от {{ date }} г.</div><div class="span6 pull-right">для {{ organization_or_full_name }}</div>{# <span style="font-family: Times New Roman;"><span style="font-weight: bold; font-size: 12px;">Исх. №М337 от 20.02.2015 г.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;для Юлии</span></span>#}</div>'
+    out.update({'header': html_code})
     return render(request, 'setting/get_templates.html', out)
