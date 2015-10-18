@@ -114,6 +114,9 @@
 
                         html = html.replace('{% templatetag openblock %} accompanying_text|begin {% templatetag closeblock %}', '<div class="accompanyingText">');
                         html = html.replace('{% templatetag openblock %} accompanying_text|end {% templatetag closeblock %}', '</div>');
+                        html = html.replace('{% templatetag openvariable %} organization_name {% templatetag closevariable %}',
+                                '{% templatetag openvariable %} organization_name|safe {% templatetag closevariable %}');
+
                         var $pre_submit_div = $('<div class="hide pre-submit">' + html + '</div>').appendTo($this);
                         renderClaimTable($pre_submit_div);
                         var kp_html = $pre_submit_div.html();

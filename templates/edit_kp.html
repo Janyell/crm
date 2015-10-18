@@ -7,12 +7,12 @@
             <form id="edit-kp-form" method="post" action="{% url "generate_kp" %}">
                 <div id="page" class="word-block">
                     {{ page|safe }}
-                    <div class="added-table__wrap center hide">
+                    <div class="added-table__wrap center">
                         <a class="btn show-button">Добавить вариант</a>
-                        <div id="addedTable">
+                        <div id="addedTable hide">
                             <table class="table table-bordered claim-table"></table>
                         </div>
-                        <a class="btn hide-button">Убрать вариант</a>
+                        <a class="btn hide-button hide">Убрать вариант</a>
                     </div>
                 </div>
                 <div class="form-add__submits">
@@ -63,7 +63,7 @@
                     $('#edit-kp-form').submit(function() {
                         var $this = $(this);
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
-                        var $added_table = $this.find('.added-table__wrap').find('.claim-table');
+                        var $added_table = $added_table.find('.claim-table');
                         if (!$added_table.hasClass('hide')) {
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
                         }
