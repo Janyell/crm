@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import json
-import subprocess
 from django.shortcuts import render, render_to_response
 import datetime
 import djangosphinx
@@ -1144,6 +1143,9 @@ def edit_kp(request):
     id = request.GET['id']
     claim = Orders.objects.get(pk=id)
     template = KPTemplates.objects.filter(company=claim.company).first()
+    if not template:
+        out.update({'page_title': "Для данной компании нет шаблона КП"})
+        return render(request, 'edit_kp.html', out)
     temp_out = {}
     number = template.number
     template.number += 1
@@ -1168,11 +1170,12 @@ def edit_kp(request):
     form_file.close()
     temp_out.update({'number': number})
     temp_out.update({'date': kp_date})
-    temp_out.update({'organization_name': u'<input type="text" name="organization_or_full_name" value="{}">'.format(organization_or_full_name)})
+    temp_out.update({'organization_name': u'<input type="text" class="organization_name" name="organization_or_full_name" value="{}">'.format(organization_or_full_name)})
     temp_out.update({'added_table': added_table})
     temp_out.update({'products': products})
     temp_out.update({'in_total': claim.bill})
     temp_out.update({'manager': claim.role})
     html = render_to_response('kp/new_template.html', temp_out)
     out.update({'page': html.content})
+    os.remove(form_file.name)
     return render(request, 'edit_kp.html', out)
