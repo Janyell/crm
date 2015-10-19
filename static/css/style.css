@@ -346,6 +346,9 @@ div.source {
 .word-block hr {
     border: 1px solid black;
 }
+.claim-table {
+    border-collapse: collapse;
+}
 .claim-table td {
     text-align: center;
 }

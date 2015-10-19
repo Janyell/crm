@@ -64,15 +64,49 @@
                     function getHTML($editor) {
                         return $editor.next().find('.note-editable').html()
                     }
+
+                    String.prototype.repeat = function(n) {
+                        return new Array( n + 1 ).join(this);
+                    };
+
+                    function removeColspan($tr, cols) {
+                        if (!$tr) return;
+                        var $td_with_colspan = $tr.find('td:first');
+                        var text_align = $tr.find('td:first').css('text-align');
+                        var td = "<td></td>";
+                        var td_with_content_without_opentag = $td_with_colspan.html() + "</td>";
+                        var td_with_content = "<td style='" + text_align + "'>" + td_with_content_without_opentag;
+                        if (text_align == 'right') {
+                            $td_with_colspan.replaceWith(td.repeat(cols - 2) + td_with_content);
+                        }
+                        else if (text_align == 'left') {
+                            $td_with_colspan.replaceWith(td_with_content + td.repeat(cols - 2));
+                        }
+                        else {
+                            td_with_content = '<td style="text-align:right">' + td_with_content_without_opentag
+                            if (cols == 6) {
+                                $td_with_colspan.replaceWith(td + td_with_content + td.repeat(3));
+                            }
+                            else {
+                                 $td_with_colspan.replaceWith(td + td_with_content + td.repeat(2));
+                            }
+                        }
+                    }
+
                     var $page = $('#page');
 
                     $('#edit-kp-form').submit(function() {
                         var $this = $(this);
-
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
                         $accompanying_text.next().replaceWith('{% templatetag openvariable %} accompanying_text|safe {% templatetag closevariable %}');
                         $accompanying_text.remove();
+
+                        var cols = $claim_table.find('tr:first td').size();
+                        removeColspan($claim_table.find('tr:last'), cols);
+
                         if (!$added_table_editor.hasClass('hide')) {
+                            var $added_claim_table = $added_table_editor.find('.claim-table');
+                            removeColspan($added_claim_table.find('tr:last'), cols);
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
                             $added_table__wrap.replaceWith('{% templatetag openvariable %} added_table|safe {% templatetag closevariable %}');
                         }

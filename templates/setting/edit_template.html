@@ -16,19 +16,19 @@
                         Исх.№{% templatetag openvariable %} number {% templatetag closevariable %} от {% templatetag openvariable %} date {% templatetag closevariable %} г.
                         для {% templatetag openvariable %} organization_name {% templatetag closevariable %}
                         <p></p>
-                        <table class="table table-bordered claim-table">
+                        <table class="table table-bordered claim-table" style="border: 1px solid black;">
                             <tbody>
                                 <tr>
-                                    <td>#</td>
-                                    <td>Наименование</td>
-                                    <td>Кол-во</td>
-                                    <td>Ед. изм.</td>
-                                    <td>Цена с НДС, руб.</td>
-                                    <td>Сумма с НДС, руб.</td>
+                                    <td style="border: 1px solid black; ">№</td>
+                                    <td style="border: 1px solid black;">Наименование</td>
+                                    <td style="border: 1px solid black;">Кол-во</td>
+                                    <td style="border: 1px solid black;">Ед. изм.</td>
+                                    <td style="border: 1px solid black;">Цена с НДС, руб.</td>
+                                    <td style="border: 1px solid black;">Сумма с НДС, руб.</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5">Итого</td>
-                                    <td>{% templatetag openvariable %} in_total {% templatetag closevariable %}</td>
+                                    <td colspan="5" style="text-align: right; border: 1px solid black;">Итого</td>
+                                    <td style="border: 1px solid black;">{% templatetag openvariable %} in_total {% templatetag closevariable %}</td>
                                 </tr>
                             </tbody>
                         </table>
