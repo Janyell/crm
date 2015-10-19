@@ -79,7 +79,8 @@
                         else {
                             $added_table__wrap.remove();
                         }
-                        $('.organization_name').replaceWith('{% templatetag openvariable %} organization_name|safe {% templatetag closevariable %}');
+                        var $organization_name = $('.organization_name');
+                        $organization_name.replaceWith($organization_name.val());
 
                         $page.summernote(options);
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + getHTML($page) + "'>");
