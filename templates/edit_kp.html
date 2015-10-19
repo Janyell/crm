@@ -96,6 +96,7 @@
                     var $page = $('#page');
 
                     $('#edit-kp-form').submit(function() {
+                        var page_html = $page.html();
                         var $this = $(this);
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
                         $accompanying_text.next().replaceWith('{% templatetag openvariable %} accompanying_text|safe {% templatetag closevariable %}');
@@ -116,9 +117,8 @@
                         var $organization_name = $('.organization_name');
                         $organization_name.replaceWith($organization_name.val());
 
-                        $page.summernote(options);
-                        $this.append("<input type=\"hidden\" name=\"page\" value='" + getHTML($page) + "'>");
-{#                        console.log(getHTML($page));#}
+                        $this.append("<input type=\"hidden\" name=\"page\" value='" + $page.html() + "'>");
+                        $page.html(page_html);
 {#                        return false;#}
                     });
                 });

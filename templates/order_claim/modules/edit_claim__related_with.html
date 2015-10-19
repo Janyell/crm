@@ -67,6 +67,7 @@
                         var id = $(this).attr('value');
                         $.get( unbind_claims_url + id, function() {
                             loadRelatedClaims();
+                            loadClientClaims(last_id);
                         });
                     });
 
@@ -118,7 +119,7 @@
                         var color = $select_color.val();
                         $.get( bind_claims_url + id + "&color=" + color, function() {
                             loadRelatedClaims();
-                            loadClientClaims(last_id)
+                            loadClientClaims(last_id);
                         });
                     });
                 });
