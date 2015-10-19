@@ -904,6 +904,7 @@ def get_related_claims(request):
     except TypeError:
         orders = orders.order_by(*sort)
     for order in orders:
+        order.related = order.related_orders.all()
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
@@ -997,6 +998,7 @@ def get_client_claims(request):
         orders = orders.order_by(*sort)
     orders_list = [x for x in orders.all() if x not in claim.related_orders.all()]
     for order in orders_list:
+        order.related = order.related_orders.all()
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
