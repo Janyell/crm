@@ -30,13 +30,8 @@ def full_generate_kp(request):
     if 'added_table' in request.POST:
         added_table = request.POST['added_table']
     page = request.POST['page']
-    print(page)
-    # print(pr)
     temp_out.update({'accompanying_text': accompanying_text})
-    # temp_out.update({'organization_name': organization_or_full_name})
     temp_out.update({'added_table': added_table})
-    # template = KPTemplates.objects.first()
-    # page = template.html_text
 
     form_file = open('templates/kp/new_template.html', 'wb')
     form_file.write(page.encode('utf-8'))
@@ -53,11 +48,12 @@ def full_generate_kp(request):
     out_filename = MEDIA_ROOT + '/' + str('uploads/kp.docx')
     out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/kp.pdf')
     format = request.POST['format']
+    Popen(['pandoc', filename, '-f', 'html', '-t', 'docx', '-s', '-o', out_filename])
     if format == 'docx':
-        Popen(['pandoc', filename, '-f', 'html', '-t', 'docx', '-s', '-o', out_filename])
         return HttpResponseRedirect('/media/uploads/kp.docx')
     elif format == 'pdf':
         os.environ['PATH'] += ':/usr/texbin'
-        Popen(['pandoc', filename, '-f', 'html', '-s', '-o', out_filename_pdf, '--latex-engine=xelatex', '--variable', 'mainfont=Georgia'])
+        Popen(['pandoc', out_filename, '-f', 'html', '-s', '-o', out_filename_pdf, '--latex-engine=xelatex',
+               '--variable', 'mainfont=Georgia', '-t', 'latex+escaped_line_breaks', '-V', 'geometry:margin=1in'])
         return HttpResponseRedirect('/media/uploads/kp.pdf')
     return HttpResponseRedirect('/')
