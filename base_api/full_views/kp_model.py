@@ -89,7 +89,7 @@ def full_generate_kp(request):
         organization_or_full_name = request.POST['organization_or_full_name']
         # TODO
         added_table = ''
-        if 'added_table' in request.POST['added_table']:
+        if 'added_table' in request.POST:
             added_table = request.POST['added_table']
         temp_out.update({'number': number})
         temp_out.update({'date': kp_date})
