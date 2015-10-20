@@ -6,6 +6,11 @@
             <h2 class="center">{{ page_title }}</h2>
             <form id="edit-kp-form" method="post" action="{% url "generate_kp" %}">
                 <div id="page" class="word-block">
+                    <style>
+                        .hide {
+                            display: none;
+                        }
+                    </style>
                     {{ page|safe }}
                 </div>
                 {% if filename %}
@@ -35,24 +40,33 @@
                     var $accompanying_text = $('#accompanyingText');
                     $accompanying_text.summernote(options);
 
-                    var $claim_table = $('.claim-table');
-                    $claim_table.after('<div class="added-table__wrap center">' +
-                            '<a class="btn show-button">Добавить вариант</a>' +
-                            '<div id="addedTable" class="hide">' +
-                            '<table class="table table-bordered claim-table"></table>' +
-                            '</div>' +
-                            '<a class="btn hide-button hide">Убрать вариант</a>' +
-                            '</div>');
-                    var $added_table__wrap = $('.added-table__wrap').addClass('hide');
                     var $added_table = $('#addedTable');
-                    $added_table.find('table').html($claim_table.html());
-                    $added_table.summernote(options);
-                    var $added_table_editor = $added_table.next();
-                    $added_table_editor.addClass('hide');
-                    $added_table__wrap.removeClass('hide');
+                    var $hide_button;
+                    if ($added_table.size()) {
+                        $hide_button = $('.hide-button');
+                        $hide_button.removeClass('hide');
+                    }
+                    else {
+                        var $claim_table = $('.claim-table');
+                        $claim_table.after('<div class="added-table__wrap center">' +
+                                '<a class="btn show-button">Добавить вариант</a>' +
+                                '<div id="addedTable" class="hide">' +
+                                '<table class="table table-bordered claim-table"></table>' +
+                                '</div>' +
+                                '<a class="btn hide-button hide">Убрать вариант</a>' +
+                                '</div>');
+                        var $added_table__wrap = $('.added-table__wrap').addClass('hide');
+                        $added_table = $('#addedTable');
+                        $added_table.find('table').html($claim_table.html());
+                        $added_table.summernote(options);
+                        var $added_table_editor = $added_table.next();
+                        $added_table_editor.addClass('hide');
+                        $added_table__wrap.removeClass('hide');
 
+                        $hide_button = $('.hide-button');
+                    }
                     var $show_button = $('.show-button');
-                    var $hide_button = $('.hide-button');
+
                     $show_button.on('click', function() {
                         $show_button.addClass('hide');
                         $added_table_editor.removeClass('hide');
@@ -102,7 +116,7 @@
                     $('#edit-kp-form').submit(function() {
                         var $this = $(this);
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
-                        $accompanying_text.next().replaceWith('<div class="#accompanyingText">{% templatetag openvariable %} accompanying_text|safe {% templatetag closevariable %}</div>');
+                        $accompanying_text.next().replaceWith('<div id="accompanyingText">{% templatetag openvariable %} accompanying_text|safe {% templatetag closevariable %}</div>');
                         $accompanying_text.remove();
 
                         var cols = $claim_table.find('tr:first td').size();
@@ -131,7 +145,7 @@
                             );
                         $this.append("<input type=\"hidden\" name=\"organization_name\" value=\"" + organization_name + "\">");
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + $page.html() + "'>");
-                        return false;
+{#                        return false;#}
                     });
                 });
             })(jQuery);
