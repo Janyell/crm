@@ -6,11 +6,6 @@
             <h2 class="center">{{ page_title }}</h2>
             <form id="edit-kp-form" method="post" action="{% url "generate_kp" %}">
                 <div id="page" class="word-block">
-                    <style>
-                        .hide {
-                            display: none;
-                        }
-                    </style>
                     {{ page|safe }}
                 </div>
                 {% if filename %}
@@ -41,10 +36,9 @@
                     $accompanying_text.summernote(options);
 
                     var $added_table = $('#addedTable');
-                    var $hide_button;
                     if ($added_table.size()) {
-                        $hide_button = $('.hide-button');
-                        $hide_button.removeClass('hide');
+                        $added_table.before('<a class="btn show-button hide">Добавить вариант</a>');
+                        $added_table.before('<a class="btn hide-button">Убрать вариант</a>');
                     }
                     else {
                         var $claim_table = $('.claim-table');
@@ -62,9 +56,9 @@
                         var $added_table_editor = $added_table.next();
                         $added_table_editor.addClass('hide');
                         $added_table__wrap.removeClass('hide');
-
-                        $hide_button = $('.hide-button');
                     }
+
+                    var $hide_button = $('.hide-button');
                     var $show_button = $('.show-button');
 
                     $show_button.on('click', function() {
@@ -128,11 +122,9 @@
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
                             $added_table__wrap.replaceWith(
                                 '<div class="added-table__wrap center">' +
-                                '<a class="btn show-button hide">Добавить вариант</a>' +
                                 '<div id="addedTable">' +
                                 '{% templatetag openvariable %} added_table|safe {% templatetag closevariable %}' +
                                 '</div>' +
-                                '<a class="btn hide-button hide">Убрать вариант</a>' +
                                 '</div>');
                         }
                         else {
