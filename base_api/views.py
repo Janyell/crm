@@ -27,6 +27,12 @@ from base_api.full_views.product_views import *
 from base_api.full_views.claim_views import *
 # for excel
 import openpyxl
+import os
+from django.http import HttpResponseRedirect
+from django.template import Template, Context
+from api.settings import MEDIA_ROOT
+from base_api.models import *
+import pypandoc
 
 
 def add_edit_role(request):
@@ -1167,9 +1173,9 @@ def edit_kp(request):
     # TODO
     added_table = ''
 
-    form_file = open('templates/kp/new_template.html', 'wb')
-    form_file.write(template.html_text_for_kp.encode('utf-8'))
-    form_file.close()
+    # form_file = open('templates/kp/new_template.html', 'wb')
+    # form_file.write(template.html_text_for_kp.encode('utf-8'))
+    # form_file.close()
     temp_out.update({'number': number})
     temp_out.update({'date': kp_date})
     temp_out.update({'organization_name': u'<input type="text" class="organization_name" name="organization_or_full_name" value="{}">'.format(organization_or_full_name)})
@@ -1177,7 +1183,35 @@ def edit_kp(request):
     temp_out.update({'products': products})
     temp_out.update({'in_total': claim.bill})
     temp_out.update({'manager': claim.role})
-    html = render_to_response('kp/new_template.html', temp_out)
+    # html = render_to_response('kp/new_template.html', temp_out)
+    html = Template(template.html_text_for_kp.encode('utf-8')).render(Context(temp_out))
     out.update({'page': html.content})
-    os.remove(form_file.name)
+    # os.remove(form_file.name)
+
+    temp_out = {}
+    accompanying_text = request.POST['accompanying_text']
+    # organization_or_full_name = request.POST['organization_or_full_name']
+    added_table = ''
+    if 'added_table' in request.POST:
+        added_table = request.POST['added_table']
+    page = request.POST['page']
+    temp_out.update({'accompanying_text': accompanying_text})
+    temp_out.update({'added_table': added_table})
+    if request.method == 'POST':
+        html = Template(page).render(Context(temp_out))
+        filename = str(hash(datetime.now()))
+        out_filename = MEDIA_ROOT + '/' + str('uploads/') + filename + '.docx'
+        out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/') + filename + '.pdf'
+        os.environ['PATH'] += ':/usr/texbin'
+        pdoc_args = ['--latex-engine=xelatex',
+                     '--variable',
+                     'mainfont=Georgia',
+                     '-t',
+                     'latex+escaped_line_breaks',
+                     '-V',
+                     'geometry:margin=1in']
+        pypandoc.convert(html, 'docx', format='html', outputfile=out_filename)
+        os.environ['PATH'] += ':/usr/texbin'
+        pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
+        out.update({'filename': filename})
     return render(request, 'edit_kp.html', out)

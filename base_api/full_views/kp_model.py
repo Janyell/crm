@@ -1,15 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from datetime import date
 import os
 from django.http import HttpResponseRedirect
-from subprocess import Popen
-from django.shortcuts import render_to_response
-from api.settings import MEDIA_ROOT, BASE_DIR
+from django.template import Template, Context
+from api.settings import MEDIA_ROOT
 from base_api.models import *
+import pypandoc
 
 
-def full_generate_kp(request):
+def fulll_generate_kp(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
@@ -33,27 +32,28 @@ def full_generate_kp(request):
     temp_out.update({'accompanying_text': accompanying_text})
     temp_out.update({'added_table': added_table})
 
-    form_file = open('templates/kp/new_template.html', 'wb')
-    form_file.write(page.encode('utf-8'))
-    form_file.close()
-    html = render_to_response('kp/new_template.html', temp_out)
-    os.remove(form_file.name)
-    form_file = open('templates/kp/kp.html', 'wb')
-    os.remove(form_file.name)
-    form_file = open('templates/kp/kp.html', 'wb')
-    form_file.write(html.content)
-    form_file.close()
-
-    filename = os.path.join(BASE_DIR, 'templates') + '/' + str('kp/kp.html')
-    out_filename = MEDIA_ROOT + '/' + str('uploads/kp.docx')
-    out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/kp.pdf')
-    format = request.POST['format']
-    Popen(['pandoc', filename, '-f', 'html', '-t', 'docx', '-s', '-o', out_filename])
-    if format == 'docx':
-        return HttpResponseRedirect('/media/uploads/kp.docx')
-    elif format == 'pdf':
-        os.environ['PATH'] += ':/usr/texbin'
-        Popen(['pandoc', out_filename, '-f', 'html', '-s', '-o', out_filename_pdf, '--latex-engine=xelatex',
-               '--variable', 'mainfont=Georgia', '-t', 'latex+escaped_line_breaks', '-V', 'geometry:margin=1in'])
-        return HttpResponseRedirect('/media/uploads/kp.pdf')
+    html = Template(page).render(Context(temp_out))
+    filename = str(hash(datetime.now()))
+    out_filename = MEDIA_ROOT + '/' + str('uploads/') + filename + '.docx'
+    out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/') + filename + '.pdf'
+    os.environ['PATH'] += ':/usr/texbin'
+    pdoc_args = ['--latex-engine=xelatex',
+                 '--variable',
+                 'mainfont=Georgia',
+                 '-t',
+                 'latex+escaped_line_breaks',
+                 '-V',
+                 'geometry:margin=1in']
+    pypandoc.convert(html, 'docx', format='html', outputfile=out_filename)
+    os.environ['PATH'] += ':/usr/texbin'
+    pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
     return HttpResponseRedirect('/')
+
+
+def full_generate_kp(request):
+    format = request.POST['format']
+    filename = request.POST['filename']
+    if format == 'docx':
+        return HttpResponseRedirect('/media/uploads/' + filename + '.docx')
+    elif format == 'pdf':
+        return HttpResponseRedirect('/media/uploads/' + filename + '.pdf')
