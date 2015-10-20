@@ -86,12 +86,11 @@ def full_generate_kp(request):
             count += 1
             product.total_price = product.count_of_products * product.price
             product.title = product.product.title
-        if claim.client.organization == '':
-            organization_or_full_name = claim.client.last_name + ' ' + claim.client.name + ' ' + claim.client.patronymic
-        else:
-            organization_or_full_name = claim.client.organization
+        organization_or_full_name = request.POST['organization_or_full_name']
         # TODO
         added_table = ''
+        if 'added_table' in request.POST['added_table']:
+            added_table = request.POST['added_table']
         temp_out.update({'number': number})
         temp_out.update({'date': kp_date})
         temp_out.update({'organization_name': u'<input type="text" class="organization_name" name="organization_or_full_name" value="{}">'.format(organization_or_full_name)})
