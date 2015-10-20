@@ -102,7 +102,7 @@
                     $('#edit-kp-form').submit(function() {
                         var $this = $(this);
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
-                        $accompanying_text.next().replaceWith('{% templatetag openvariable %} accompanying_text|safe {% templatetag closevariable %}');
+                        $accompanying_text.next().replaceWith('<div class="#accompanyingText">{% templatetag openvariable %} accompanying_text|safe {% templatetag closevariable %}</div>');
                         $accompanying_text.remove();
 
                         var cols = $claim_table.find('tr:first td').size();
@@ -112,17 +112,26 @@
                             var $added_claim_table = $added_table_editor.find('.claim-table');
                             removeColspan($added_claim_table.find('tr:last'), cols);
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
-                            $added_table__wrap.replaceWith('{% templatetag openvariable %} added_table|safe {% templatetag closevariable %}');
+                            $added_table__wrap.replaceWith(
+                                '<div class="added-table__wrap center">' +
+                                '<a class="btn show-button hide">Добавить вариант</a>' +
+                                '<div id="addedTable">' +
+                                '{% templatetag openvariable %} added_table|safe {% templatetag closevariable %}' +
+                                '</div>' +
+                                '<a class="btn hide-button hide">Убрать вариант</a>' +
+                                '</div>');
                         }
                         else {
                             $added_table__wrap.remove();
                         }
                         var $input_organization_name = $('.organization_name');
                         var organization_name = $input_organization_name.val();
-                        $input_organization_name.replaceWith('{% templatetag openvariable %} organization_name|safe {% templatetag closevariable %}');
+                        $input_organization_name.replaceWith(
+                            '{% templatetag openvariable %} organization_name|safe {% templatetag closevariable %}'
+                            );
                         $this.append("<input type=\"hidden\" name=\"organization_name\" value=\"" + organization_name + "\">");
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + $page.html() + "'>");
-{#                        return false;#}
+                        return false;
                     });
                 });
             })(jQuery);
