@@ -1185,19 +1185,19 @@ def edit_kp(request):
     temp_out.update({'manager': claim.role})
     # html = render_to_response('kp/new_template.html', temp_out)
     html = Template(template.html_text_for_kp.encode('utf-8')).render(Context(temp_out))
-    out.update({'page': html.content})
+    out.update({'page': html})
     # os.remove(form_file.name)
 
-    temp_out = {}
-    accompanying_text = request.POST['accompanying_text']
-    # organization_or_full_name = request.POST['organization_or_full_name']
-    added_table = ''
-    if 'added_table' in request.POST:
-        added_table = request.POST['added_table']
-    page = request.POST['page']
-    temp_out.update({'accompanying_text': accompanying_text})
-    temp_out.update({'added_table': added_table})
     if request.method == 'POST':
+        temp_out = {}
+        accompanying_text = request.POST['accompanying_text']
+        # organization_or_full_name = request.POST['organization_or_full_name']
+        added_table = ''
+        if 'added_table' in request.POST:
+            added_table = request.POST['added_table']
+        page = request.POST['page']
+        temp_out.update({'accompanying_text': accompanying_text})
+        temp_out.update({'added_table': added_table})
         html = Template(page).render(Context(temp_out))
         filename = str(hash(datetime.now()))
         out_filename = MEDIA_ROOT + '/' + str('uploads/') + filename + '.docx'
