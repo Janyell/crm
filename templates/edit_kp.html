@@ -124,7 +124,7 @@
                         $organization_name.replaceWith($organization_name.val());
 
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + $page.html() + "'>");
-                        $page.html(page_html);
+                        $this.append("<input type=\"hidden\" name=\"kp_page\" value='" + page_html + "'>");
 {#                        return false;#}
                     });
                 });
