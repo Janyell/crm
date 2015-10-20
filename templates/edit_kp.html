@@ -119,7 +119,7 @@
                         }
                         var $input_organization_name = $('.organization_name');
                         var organization_name = $input_organization_name.val();
-                        $input_organization_name.replaceWith({% templatetag openvariable %} organization_name|safe {% templatetag closevariable %});
+                        $input_organization_name.replaceWith('{% templatetag openvariable %} organization_name|safe {% templatetag closevariable %}');
                         $this.append("<input type=\"hidden\" name=\"organization_name\" value=\"" + organization_name + "\">");
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + $page.html() + "'>");
 {#                        return false;#}
