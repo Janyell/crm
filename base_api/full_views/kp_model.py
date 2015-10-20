@@ -53,7 +53,7 @@ def fulll_generate_kp(request):
 
 
 def full_generate_kp(request):
-    if 'format' in request.POST:
+    if 'format' not in request.POST:
         if not request.user.is_active:
             return HttpResponseRedirect('/login/')
         out = {}
