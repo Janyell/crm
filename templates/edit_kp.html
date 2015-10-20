@@ -4,13 +4,17 @@
     {% block kp-editor %}
         <div class="container">
             <h2 class="center">{{ page_title }}</h2>
-            <form id="edit-kp-form" method="post" action="{% url "generate_kp" %}">
+            <form id="edit-kp-form" method="post" action="{% url "generate_kp" %}?id={{ request.GET.id }}">
                 <div id="page" class="word-block">
                     {{ page|safe }}
                 </div>
+                {% if filename %}
+                    <input type="hidden" name="filename" value="{{ filename }}" />
+                {% endif %}
                 <div class="form-add__submits">
-                    <button class="btn btn-primary" type="submit" name="format" value="docx">Сохранить как docx</button>
-                    <button class="btn btn-primary" type="submit" name="format" value="pdf">Сохранить как pdf</button>
+                    <button class="btn btn-primary" type="submit">Сохранить</button>
+                    <button class="btn{% if not filename %} disabled{% endif %}" type="submit" name="format" value="docx">Скачать как docx</button>
+                    <button class="btn{% if not filename %} disabled{% endif %}" type="submit" name="format" value="pdf">Скачать как pdf</button>
                 </div>
             </form>
         </div>
@@ -47,16 +51,18 @@
                     $added_table_editor.addClass('hide');
                     $added_table__wrap.removeClass('hide');
 
+
+
                     var $show_button = $('.show-button');
                     var $hide_button = $('.hide-button');
-                    $show_button.click(function() {
-                        $(this).addClass('hide');
+                    $show_button.on('click', function() {
+                        $show_button.addClass('hide');
                         $added_table_editor.removeClass('hide');
                         $hide_button.removeClass('hide');
                     });
 
-                    $hide_button.click(function() {
-                        $(this).addClass('hide');
+                     $hide_button.on('click', function() {
+                        $hide_button.addClass('hide');
                         $added_table_editor.addClass('hide');
                         $show_button.removeClass('hide');
                     });
@@ -93,7 +99,7 @@
                         }
                     }
 
-                    var $page = $('#page');
+                     var $page = $('#page');
 
                     $('#edit-kp-form').submit(function() {
                         var page_html = $page.html();
