@@ -4,7 +4,7 @@
     {% block kp-editor %}
         <div class="container">
             <h2 class="center">{{ page_title }}</h2>
-            <form id="edit-kp-form" method="post" action="{% url "generate_kp" %}?id={{ request.GET.id }}">
+            <form id="edit-kp-form" method="post" action="{% url "generate_kp" %}">
                 <div id="page" class="word-block">
                     {{ page|safe }}
                 </div>
@@ -50,8 +50,6 @@
                     var $added_table_editor = $added_table.next();
                     $added_table_editor.addClass('hide');
                     $added_table__wrap.removeClass('hide');
-
-
 
                     var $show_button = $('.show-button');
                     var $hide_button = $('.hide-button');
@@ -102,7 +100,6 @@
                      var $page = $('#page');
 
                     $('#edit-kp-form').submit(function() {
-                        var page_html = $page.html();
                         var $this = $(this);
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
                         $accompanying_text.next().replaceWith('{% templatetag openvariable %} accompanying_text|safe {% templatetag closevariable %}');
@@ -120,11 +117,11 @@
                         else {
                             $added_table__wrap.remove();
                         }
-                        var $organization_name = $('.organization_name');
-                        $organization_name.replaceWith($organization_name.val());
-
+                        var $input_organization_name = $('.organization_name');
+                        var organization_name = $input_organization_name.val();
+                        $input_organization_name.replaceWith({% templatetag openvariable %} organization_name|safe {% templatetag closevariable %});
+                        $this.append("<input type=\"hidden\" name=\"organization_name\" value=\"" + organization_name + "\">");
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + $page.html() + "'>");
-                        $this.append("<input type=\"hidden\" name=\"kp_page\" value='" + page_html + "'>");
 {#                        return false;#}
                     });
                 });
