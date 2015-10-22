@@ -76,8 +76,25 @@ def full_add_edit_role(request):
                 return HttpResponseRedirect('/roles/' + get_params)
             else:
                 username = request.POST['username']
-                if Roles.objects.filter(username=username).count() == 0:
+                exist_role = Roles.objects.filter(username=username).first()
+                if not exist_role:
                     out.update({"error": 2})
+                elif exist_role.is_deleted:
+                    exist_role.password = form.cleaned_data['password']
+                    exist_role.role = form.cleaned_data['role']
+                    exist_role.surname = form.cleaned_data['surname']
+                    exist_role.name = form.cleaned_data['name']
+                    exist_role.patronymic = form.cleaned_data['patronymic']
+                    exist_role.email = form.cleaned_data['email']
+                    exist_role.phone = form.cleaned_data['phone']
+                    exist_role.is_deleted = False
+                    password = form.cleaned_data['password']
+                    if password != '':
+                        exist_role.set_password(password)
+                        exist_role.save()
+                    else:
+                        exist_role.save()
+                    return HttpResponseRedirect('/roles/' + get_params)
                 else:
                     out.update({"error": 1})
                 out.update({'page_title': "Добавление роли"})
