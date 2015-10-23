@@ -27,9 +27,10 @@ SORT_TYPE_FOR_ORDER = {
     'city': ['-order_status', 'city'],
     'city_d': ['-order_status', '-city'],
     'order_status_d': ['-order_status', '-order_status'],
-    'pk': ['-order_status', 'pk']
+    'pk': ['-order_status', 'pk'],
+    'default': ['-order_status', '-shipped_date'],
 }
-DEFAULT_SORT_TYPE_FOR_ORDER = 'ready_date'
+DEFAULT_SORT_TYPE_FOR_ORDER = 'default'
 DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE = 'order_date_d'
 
 SORT_TYPE_FOR_CLIENT = {
