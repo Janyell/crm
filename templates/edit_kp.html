@@ -113,6 +113,7 @@
                     $('#edit-kp-form').submit(function() {
                         var $this = $(this);
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
+
                         $accompanying_text.next().replaceWith('<div id="accompanyingText">{% templatetag openvariable %} accompanying_text|safe {% templatetag closevariable %}</div>');
                         $accompanying_text.remove();
 
@@ -121,7 +122,9 @@
 
                         if (!$added_table_editor.hasClass('hide')) {
                             var $added_claim_table = $added_table_editor.find('.claim-table');
-                            removeColspan($added_claim_table.find('tr:last'), cols);
+                            {% if not filename %}
+                                removeColspan($added_claim_table.find('tr:last'), cols);
+                            {% endif %}
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
                             $added_table__wrap.replaceWith(
                                 '<div class="added-table__wrap center">' +
