@@ -1182,3 +1182,7 @@ def edit_kp(request):
     html = Template(template.html_text_for_kp.encode('utf-8')).render(Context(temp_out))
     out.update({'page': html})
     return render(request, 'edit_kp.html', out)
+
+
+def get_kp(request):
+    pass

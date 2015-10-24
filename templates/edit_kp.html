@@ -13,8 +13,8 @@
                 {% endif %}
                 <div class="form-add__submits">
                     <button class="btn btn-primary" type="submit">Сохранить</button>
-                    <button class="btn{% if not filename %} disabled{% endif %}" type="submit" name="format" value="docx">Скачать как docx</button>
-                    <button class="btn{% if not filename %} disabled{% endif %}" type="submit" name="format" value="pdf">Скачать как pdf</button>
+                    <a class="btn{% if not filename %} disabled" onclick="return false;{% endif %}" href="{% url "get_kp" %}?format=docx&filename={{ filename }}" target="_blank">Скачать как docx</a>
+                    <a class="btn{% if not filename %} disabled"  onclick="return false;{% endif %}" href="{% url "get_kp" %}?format=pdf&filename={{ filename }}" target="_blank">Скачать как pdf</a>
                 </div>
             </form>
         </div>
@@ -84,46 +84,63 @@
                         return new Array( n + 1 ).join(this);
                     };
 
-                    function removeColspan($tr, cols) {
+                    function removeColspan($tr, cols, is_added) {
                         if (!$tr) return;
+
                         var $td_with_colspan = $tr.find('td:first');
+                        var td_with_colspan_html = $td_with_colspan.get(0).outerHTML;
+
                         var text_align = $tr.find('td:first').css('text-align');
-                        var td = "<td></td>";
-                        var td_with_content_without_opentag = $td_with_colspan.html() + "</td>";
-                        var td_with_content = "<td style='" + text_align + "'>" + td_with_content_without_opentag;
+                        var td_begin = "<td>";
+                        var td_end = "</td>";
+                        var td = td_begin + td_end;
+                        var td_end_with_content = $td_with_colspan.html() + td_end;
+                        var td_with_content = "<td style='" + text_align + "'>" + td_end_with_content;
+                        var colspan;
                         if (text_align == 'right') {
-                            $td_with_colspan.replaceWith(td.repeat(cols - 2) + td_with_content);
+                            colspan = td.repeat(cols - 2) + td_with_content;
                         }
                         else if (text_align == 'left') {
-                            $td_with_colspan.replaceWith(td_with_content + td.repeat(cols - 2));
+                            colspan = td_with_content + td.repeat(cols - 2);
                         }
                         else {
-                            td_with_content = '<td style="text-align:right">' + td_with_content_without_opentag;
+                            td_with_content = '<td style="text-align:right">' + td_end_with_content;
                             if (cols == 6) {
-                                $td_with_colspan.replaceWith(td + td_with_content + td.repeat(3));
+                                colspan = td + td_with_content + td.repeat(3);
                             }
                             else {
-                                 $td_with_colspan.replaceWith(td + td_with_content + td.repeat(2));
+                                 colspan = td + td_with_content + td.repeat(2);
                             }
                         }
+
+                        var name = "table__total";
+                        if (is_added) {
+                            name = "added_" + name;
+                        }
+
+                        $td_with_colspan.replaceWith("{% templatetag openvariable %} table__total|safe {% templatetag closevariable %}" +
+                                "<input type=\"hidden\" name=\"" + name + "\" value='" + td_with_colspan_html + "'>" +
+                                "<input type=\"hidden\" name=\"" + name + "_kp\" value='" + colspan + "'>"
+                        );
                     }
 
-                     var $page = $('#page');
+                    var $page = $('#page');
 
                     $('#edit-kp-form').submit(function() {
                         var $this = $(this);
+                        $this.addClass('hide');
                         $this.append("<input type=\"hidden\" name=\"accompanying_text\" value='" + getHTML($accompanying_text) + "'>");
 
                         $accompanying_text.next().replaceWith('<div id="accompanyingText">{% templatetag openvariable %} accompanying_text|safe {% templatetag closevariable %}</div>');
                         $accompanying_text.remove();
 
                         var cols = $claim_table.find('tr:first td').size();
-                        removeColspan($claim_table.find('tr:last'), cols);
+                        removeColspan($claim_table.find('tr:last'), cols, false);
 
                         if (!$added_table_editor.hasClass('hide')) {
                             var $added_claim_table = $added_table_editor.find('.claim-table');
                             {% if not filename %}
-                                removeColspan($added_claim_table.find('tr:last'), cols);
+                                removeColspan($added_claim_table.find('tr:last'), cols, true);
                             {% endif %}
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
                             $added_table__wrap.replaceWith(
