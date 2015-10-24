@@ -8,7 +8,6 @@ from djangosphinx.apis.api275 import SPH_MATCH_EXTENDED
 from api.settings import MEDIA_ROOT
 from base_api.full_views.analyze_debtors import full_analyze_debtors
 from base_api.full_views.attach import *
-from base_api.full_views.kp_model import full_generate_kp
 from base_api.models import *
 from base_api.form import *
 from django.http import *
@@ -733,10 +732,6 @@ def fix_cities(request):
     return HttpResponseRedirect('/')
 
 
-def generate_kp(request):
-    return full_generate_kp(request)
-
-
 def get_product_groups(request):
     return full_get_product_groups(request)
 
@@ -1182,7 +1177,3 @@ def edit_kp(request):
     html = Template(template.html_text_for_kp.encode('utf-8')).render(Context(temp_out))
     out.update({'page': html})
     return render(request, 'edit_kp.html', out)
-
-
-def get_kp(request):
-    pass
