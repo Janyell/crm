@@ -84,7 +84,7 @@
                         return new Array( n + 1 ).join(this);
                     };
 
-                    function removeColspan($tr, cols, is_added) {
+                    function removeColspan($form, $tr, cols, is_added) {
                         if (!$tr) return;
 
                         var $td_with_colspan = $tr.find('td:first');
@@ -118,8 +118,8 @@
                             name = "added_" + name;
                         }
 
-                        $td_with_colspan.replaceWith("{% templatetag openvariable %} table__total|safe {% templatetag closevariable %}" +
-                                "<input type=\"hidden\" name=\"" + name + "\" value='" + td_with_colspan_html + "'/>" +
+                        $td_with_colspan.replaceWith("{% templatetag openvariable %} table__total|safe {% templatetag closevariable %}");
+                        $form.append("<input type=\"hidden\" name=\"" + name + "\" value='" + td_with_colspan_html + "'/>" +
                                 "<input type=\"hidden\" name=\"" + name + "_kp\" value='" + colspan + "'/>"
                         );
                     }
@@ -135,12 +135,12 @@
                         $accompanying_text.remove();
 
                         var cols = $claim_table.find('tr:first td').size();
-                        removeColspan($claim_table.find('tr:last'), cols, false);
+                        removeColspan($this, $claim_table.find('tr:last'), cols, false);
 
                         if (!$added_table_editor.hasClass('hide')) {
                             var $added_claim_table = $added_table_editor.find('.claim-table');
                             {% if not filename %}
-                                removeColspan($added_claim_table.find('tr:last'), cols, true);
+                                removeColspan($this, $added_claim_table.find('tr:last'), cols, true);
                             {% endif %}
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
                             $added_table__wrap.replaceWith(
