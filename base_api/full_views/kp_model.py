@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.template import Template, Context
 from api.settings import MEDIA_ROOT
 from base_api.models import *
-import pypandoc
+# import pypandoc
 
 
 def get_kp(request):
@@ -60,9 +60,9 @@ def get_kp(request):
                      'latex+escaped_line_breaks',
                      '-V',
                      'geometry:margin=1in']
-        pypandoc.convert(html, 'docx', format='html', outputfile=out_filename)
-        os.environ['PATH'] += ':/usr/texbin'
-        pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
+        # pypandoc.convert(html, 'docx', format='html', outputfile=out_filename)
+        # os.environ['PATH'] += ':/usr/texbin'
+        # pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
         out.update({'filename': filename})
         return render(request, 'edit_kp.html', out)
 
@@ -127,9 +127,9 @@ def full_generate_kp(request):
                      'latex+escaped_line_breaks',
                      '-V',
                      'geometry:margin=1in']
-        pypandoc.convert(html, 'docx', format='html', outputfile=out_filename)
-        os.environ['PATH'] += ':/usr/texbin'
-        pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
+        # pypandoc.convert(html, 'docx', format='html', outputfile=out_filename)
+        # os.environ['PATH'] += ':/usr/texbin'
+        # pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
         out.update({'filename': filename})
         return render(request, 'edit_kp.html', out)
 
