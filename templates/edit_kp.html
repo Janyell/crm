@@ -8,9 +8,6 @@
                 <div id="page" class="word-block">
                     {{ page|safe }}
                 </div>
-                {% if filename %}
-                    <input type="hidden" name="filename" value="{{ filename }}" />
-                {% endif %}
                 <div class="form-add__submits">
                     <button class="btn btn-primary" type="submit">Сохранить</button>
                     <a class="btn{% if not filename %} disabled" onclick="return false;{% endif %}" href="{% url "get_kp" %}?format=docx&filename={{ filename }}" target="_blank">Скачать как docx</a>
@@ -34,18 +31,20 @@
                     };
                     var $accompanying_text = $('#accompanyingText');
                     $accompanying_text.summernote(options);
-
                     var $added_table = $('#addedTable');
                     var $added_table_editor = $added_table.next();
+                    var $claim_table;
+                    var $added_table__wrap;
                     if ($added_table.size()) {
                         $added_table.before('<a class="btn show-button hide">Добавить вариант</a>');
                         $added_table.after('<a class="btn hide-button">Убрать вариант</a>');
                         $added_table.summernote(options);
                         $added_table_editor = $added_table.next();
-                        var $claim_table = $('.claim-table').get(0);
+                        $claim_table = $('.claim-table').first();
+                        $added_table__wrap = $('.added-table__wrap')
                     }
                     else {
-                        var $claim_table = $('.claim-table');
+                        $claim_table = $('.claim-table');
                         $claim_table.after('<div class="added-table__wrap center">' +
                                 '<a class="btn show-button">Добавить вариант</a>' +
                                 '<div id="addedTable" class="hide">' +
@@ -53,7 +52,7 @@
                                 '</div>' +
                                 '<a class="btn hide-button hide">Убрать вариант</a>' +
                                 '</div>');
-                        var $added_table__wrap = $('.added-table__wrap').addClass('hide');
+                        $added_table__wrap = $('.added-table__wrap').addClass('hide');
                         $added_table = $('#addedTable');
                         $added_table.find('table').html($claim_table.html());
                         $added_table.summernote(options);
@@ -119,7 +118,7 @@
                             name = "added_" + name;
                         }
 
-                        $td_with_colspan.replaceWith("{% templatetag openvariable %}" + name + "|safe {% templatetag closevariable %}");
+                        $td_with_colspan.replaceWith("{% templatetag openvariable %} " + name + "|safe {% templatetag closevariable %}");
                         $form.append("<input type=\"hidden\" name=\"" + name + "\" value='" + td_with_colspan_html + "'/>" +
                                 "<input type=\"hidden\" name=\"" + name + "_kp\" value='" + colspan + "'/>"
                         );
