@@ -1146,13 +1146,15 @@ def edit_number_template(request):
     get_params = '?'
     get_params += get_request_param_as_string(request)
     if request.method == 'POST':
-        id = request.GET['id']
-        kp_template = KPTemplates.objects.filter(company__id=id).first()
-        number = request.POST['number']
-        kp_template.number = number
-        kp_template.save()
-        return HttpResponseRedirect('/setting/get_templates/' + get_params)
-    return HttpResponseRedirect('/setting/get_templates/' + get_params)
+        form = KPTemplatesForm(request.POST)
+        if form.is_valid() and request.POST['number']:
+            id = request.GET['id']
+            kp_template = KPTemplates.objects.filter(company__id=id).first()
+            number = request.POST['number']
+            kp_template.number = number
+            kp_template.save()
+            return HttpResponseRedirect('/settings/template/' + get_params)
+    return HttpResponseRedirect('/settings/template/' + get_params)
 
 
 def edit_kp(request):
@@ -1171,7 +1173,6 @@ def edit_kp(request):
         out.update({'user_role': user_role})
     out.update({'page_title': "Создание КП"})
     if request.method == 'GET':
-        out.update({'page_title': "Создание КП (гет)"})
         id = request.GET['id']
         claim = Orders.objects.get(pk=id)
         template = KPTemplates.objects.filter(company=claim.company).first()
