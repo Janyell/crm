@@ -313,5 +313,5 @@ class KPTemplatesForm(ModelForm):
         model = KPTemplates
         exclude = ['html_text', 'html_text_for_kp', 'company']
         widgets = {
-            'number': NumberInput(attrs={'id': "inputBroughtSum"}),
+            'number': NumberInput(attrs={'id': "inputNumber"}),
         }
