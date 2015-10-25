@@ -4,6 +4,11 @@
 
 {% block entities_title %}Компания{% endblock %}
 
+{% block entities_params %}
+    <th>Номер КП</th>
+    <th></th>
+{% endblock %}
+
 {% block entities_content %}
     {% if companies %}
         {% for entity in companies %}
@@ -12,7 +17,68 @@
                 <td>
                     <a class="btn" href="{% url "edit_template" %}?id={{ entity.pk }}">Изменить шаблон</a>
                 </td>
+                <td>
+                    {{ entity.number }}
+                </td>
+                <td>
+                    {% if entity.no_template %}
+                        <a class="btn edit-button" data-toggle="modal" href="#edit-number" value="{{ entity.pk }}">
+                            Изменить номер КП
+                            <div class="hidden edit-number__data">{{ entity.number }}</div>
+                        </a>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     {% endif %}
+{% endblock %}
+
+{% block entities_modal %}
+    <div class="modal hide fade" id="edit-number" tabindex="-1" role="dialog" aria-hidden="true">
+        <form method="post" class="form-horizontal form-add_modal form-edit-number">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3>Редактирование номера КП</h3>
+            </div>
+            <div class="modal-body">
+                <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
+                <div class="control-group">
+                    <label class="control-label" for="inputNumber">
+                        Номер КП
+                        <span class="required-input">*</span>
+                    </label>
+                    <div class="controls">
+                        {{ form.number }}
+                    </div>
+                </div>
+                <div class="form-add__tips">
+                    <div class="form-add-tips__tip">
+                        <span class="required-input">*</span> - поле, обязательное для заполнения
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-add__submits">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="reset" class="btn">Очистить</button>
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                </div>
+            </div>
+        </form>
+    </div>
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function() {
+                    var $form_edit_number = $('.form-edit-number');
+                    $('.edit-button').bind('click', function(){
+                        var id = $(this).attr('value');
+                        $form_edit_number.attr({'action': '{% url "edit_number_template" %}?id=' + id});
+                        var $edit_number__data = $('#edit-number').find('.modal-body');
+                        var number = $(this).find('.edit-number__data').text();
+
+                        $edit_number__data.find('#inputNumber').val(number);
+                    });
+                });
+            })(jQuery);
+        </script>
 {% endblock %}

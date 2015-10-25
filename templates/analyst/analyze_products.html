@@ -9,6 +9,7 @@
                 <tr>
                     <th>{% block entities_title %}Продукция{% endblock %}</th>
                     <th></th>
+                    {% block entities_params %}{% endblock %}
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +28,7 @@
             </tbody>
         </table>
     </div>
+    {% block entities_modal %}{% endblock %}
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){

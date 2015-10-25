@@ -10,8 +10,8 @@
                 </div>
                 <div class="form-add__submits">
                     <button class="btn btn-primary" type="submit">Сохранить</button>
-                    <a class="btn{% if not filename %} disabled" onclick="return false;{% endif %}" href="{% url "get_kp" %}?format=docx&filename={{ filename }}" target="_blank">Скачать как docx</a>
-                    <a class="btn{% if not filename %} disabled"  onclick="return false;{% endif %}" href="{% url "get_kp" %}?format=pdf&filename={{ filename }}" target="_blank">Скачать как pdf</a>
+                    <a class="btn file-button{% if not filename %} disabled" onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.docx" target="_blank">Скачать как docx</a>
+                    <a class="btn file-button{% if not filename %} disabled"  onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.pdf" target="_blank">Скачать как pdf</a>
                 </div>
             </form>
         </div>
