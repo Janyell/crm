@@ -118,7 +118,7 @@
                             name = "added_" + name;
                         }
 
-                        $td_with_colspan.replaceWith("{% templatetag openvariable %} table__total|safe {% templatetag closevariable %}");
+                        $td_with_colspan.replaceWith("{% templatetag openvariable %}" + name + "|safe {% templatetag closevariable %}");
                         $form.append("<input type=\"hidden\" name=\"" + name + "\" value='" + td_with_colspan_html + "'/>" +
                                 "<input type=\"hidden\" name=\"" + name + "_kp\" value='" + colspan + "'/>"
                         );
@@ -139,9 +139,7 @@
 
                         if (!$added_table_editor.hasClass('hide')) {
                             var $added_claim_table = $added_table_editor.find('.claim-table');
-                            {% if not filename %}
-                                removeColspan($this, $added_claim_table.find('tr:last'), cols, true);
-                            {% endif %}
+                            removeColspan($this, $added_claim_table.find('tr:last'), cols, true);
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
                             $added_table__wrap.replaceWith(
                                 '<div class="added-table__wrap center">' +
