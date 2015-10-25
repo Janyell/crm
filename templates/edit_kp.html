@@ -95,7 +95,7 @@
                         var td_end = "</td>";
                         var td = td_begin + td_end;
                         var td_end_with_content = $td_with_colspan.html() + td_end;
-                        var td_with_content = "<td style='" + text_align + "'>" + td_end_with_content;
+                        var td_with_content = '<td style="' + text_align + '">' + td_end_with_content;
                         var colspan;
                         if (text_align == 'right') {
                             colspan = td.repeat(cols - 2) + td_with_content;
@@ -119,8 +119,8 @@
                         }
 
                         $td_with_colspan.replaceWith("{% templatetag openvariable %} table__total|safe {% templatetag closevariable %}" +
-                                "<input type=\"hidden\" name=\"" + name + "\" value='" + td_with_colspan_html + "'>" +
-                                "<input type=\"hidden\" name=\"" + name + "_kp\" value='" + colspan + "'>"
+                                "<input type=\"hidden\" name=\"" + name + "\" value='" + td_with_colspan_html + "'/>" +
+                                "<input type=\"hidden\" name=\"" + name + "_kp\" value='" + colspan + "'/>"
                         );
                     }
 
