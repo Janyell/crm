@@ -1121,7 +1121,7 @@ def get_templates(request):
     out.update({'page_title': "Шаблоны КП"})
     companies = Companies.objects.filter(is_deleted=0)
     for c in companies:
-        c.number = KPTemplates.objects.filter(company=c).first()
+        c.number = KPTemplates.objects.filter(company=c).first().number
         c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
     out.update({'page_title': "Компании"})
     out.update({'companies': companies})
@@ -1135,7 +1135,7 @@ def edit_number_template(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2:
+    if user_role == 2 or user_role == 1:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
