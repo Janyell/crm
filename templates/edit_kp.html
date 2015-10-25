@@ -37,12 +37,10 @@
                     var $added_table__wrap;
                     if ($added_table.size()) {
                         $added_table.before('<a class="btn show-button hide">Добавить вариант</a>');
-                        $added_table.before('<div style="margin-left: 25px; font-weight: bold; text-align: left;" class="var-text">Вариант 2</div>');
                         $added_table.after('<a class="btn hide-button">Убрать вариант</a>');
                         $added_table.summernote(options);
                         $added_table_editor = $added_table.next();
                         $claim_table = $('.claim-table').first();
-                        $claim_table.before('<div style="margin-left: 25px; font-weight: bold; text-align: left;" class="var-text">Вариант 1</div>');
                         $added_table__wrap = $('.added-table__wrap')
                     }
                     else {
@@ -167,7 +165,7 @@
                             );
                         $this.append("<input type=\"hidden\" name=\"organization_name\" value=\"" + organization_name + "\">");
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + $page.html() + "'>");
-                        return false;
+{#                        return false;#}
                     });
                 });
             })(jQuery);
