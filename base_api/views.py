@@ -1186,26 +1186,38 @@ def edit_kp(request):
         table__total_kp = request.POST['table__total_kp']
         table__total = request.POST['table__total']
         added_table = ''
+        added_table_kp = ''
         added_table__total_kp = ''
         added_table__total = ''
         if 'added_table' in request.POST:
             added_table__total_kp = request.POST['added_table__total_kp']
             added_table__total = request.POST['added_table__total']
             added_table = request.POST['added_table']
+            print(added_table)
+            print(added_table__total)
             added_table_out = {}
-            added_table_out.update({'added_table__total_kp ': added_table__total_kp })
+            added_table_kp_out = {}
+            added_table_out.update({'added_table__total': added_table__total})
+            added_table_kp_out.update({'added_table__total_kp': added_table__total_kp})
             added_table = Template(added_table).render(Context(added_table_out))
+            print(added_table)
+            added_table_kp = Template(added_table).render(Context(added_table_kp_out))
         page = request.POST['page']
-        temp_out.update({'organization_name': u'<input type="text" class="organization_name" name="organization_name" value="{}">'.format(organization_name)})
         temp_out.update({'accompanying_text': accompanying_text})
-        temp_out.update({'added_table': added_table})
+        temp_out.update({'added_table': added_table_kp})
         temp_out.update({'table__total_kp': table__total_kp})
-        temp_out.update({'added_table__total_kp': added_table__total_kp})
+        # temp_out.update({'added_table__total_kp': added_table__total_kp})
         temp_out.update({'organization_name': organization_name})
         html = Template(page).render(Context(temp_out))
-        out.update({'page': html})
-        out.update({'added_table__total': added_table__total})
-        out.update({'table__total': table__total})
+        page_out = {}
+        page_out.update({'accompanying_text': accompanying_text})
+        page_out.update({'added_table': added_table})
+        page_out.update({'table__total': table__total})
+        # page_out.update({'added_table__total': added_table__total})
+        # page_out.update({'organization_name': organization_name})
+        page_out.update({'organization_name': u'<input type="text" class="organization_name" name="organization_name" value="{}">'.format(organization_name)})
+        page_html = Template(page).render(Context(page_out))
+        out.update({'page': page_html})
         filename = str(hash(datetime.now()))
         out_filename = MEDIA_ROOT + '/' + str('uploads/') + filename + '.docx'
         out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/') + filename + '.pdf'
@@ -1221,4 +1233,5 @@ def edit_kp(request):
         # os.environ['PATH'] += ':/usr/texbin'
         # pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
         out.update({'filename': filename})
+        print(filename)
         return render(request, 'edit_kp.html', out)
