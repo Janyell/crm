@@ -37,16 +37,19 @@
                     var $added_table__wrap;
                     if ($added_table.size()) {
                         $added_table.before('<a class="btn show-button hide">Добавить вариант</a>');
+                        $added_table.before('<div style="margin-left: 25px; font-weight: bold; text-align: left;" class="var-text">Вариант 2</div>');
                         $added_table.after('<a class="btn hide-button">Убрать вариант</a>');
                         $added_table.summernote(options);
                         $added_table_editor = $added_table.next();
                         $claim_table = $('.claim-table').first();
+                        $claim_table.before('<div style="margin-left: 25px; font-weight: bold; text-align: left;" class="var-text">Вариант 1</div>');
                         $added_table__wrap = $('.added-table__wrap')
                     }
                     else {
                         $claim_table = $('.claim-table');
                         $claim_table.after('<div class="added-table__wrap center">' +
                                 '<a class="btn show-button">Добавить вариант</a>' +
+                                '<div style="margin-left: 25px; font-weight: bold; text-align: left;" class="var2-text hide">Вариант 2</div>' +
                                 '<div id="addedTable" class="hide">' +
                                 '<table class="table table-bordered claim-table"></table>' +
                                 '</div>' +
@@ -63,17 +66,22 @@
 
                     var $hide_button = $('.hide-button');
                     var $show_button = $('.show-button');
+                    var $var2_text = $('.var2-text');
 
                     $show_button.on('click', function() {
+                        $claim_table.before('<div style="margin-left: 25px; font-weight: bold; text-align: left;" class="var1-text">Вариант 1</div>');
                         $show_button.addClass('hide');
+                        $var2_text.removeClass('hide');
                         $added_table_editor.removeClass('hide');
                         $hide_button.removeClass('hide');
                     });
 
                      $hide_button.on('click', function() {
-                        $hide_button.addClass('hide');
-                        $added_table_editor.addClass('hide');
-                        $show_button.removeClass('hide');
+                         $hide_button.addClass('hide');
+                         $('.var1-text').remove();
+                         $var2_text.addClass('hide');
+                         $added_table_editor.addClass('hide');
+                         $show_button.removeClass('hide');
                     });
 
                     function getHTML($editor) {
@@ -143,6 +151,7 @@
                             $this.append("<input type=\"hidden\" name=\"added_table\" value='" + getHTML($added_table) + "'>");
                             $added_table__wrap.replaceWith(
                                 '<div class="added-table__wrap center">' +
+                                '<div style="margin-left: 25px; font-weight: bold; text-align: left;" class="var2-text">Вариант 2</div>' +
                                 '<div id="addedTable">' +
                                 '{% templatetag openvariable %} added_table|safe {% templatetag closevariable %}' +
                                 '</div>' +
@@ -158,7 +167,7 @@
                             );
                         $this.append("<input type=\"hidden\" name=\"organization_name\" value=\"" + organization_name + "\">");
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + $page.html() + "'>");
-{#                        return false;#}
+                        return false;
                     });
                 });
             })(jQuery);
