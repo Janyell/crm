@@ -1121,11 +1121,34 @@ def get_templates(request):
     out.update({'page_title': "Шаблоны КП"})
     companies = Companies.objects.filter(is_deleted=0)
     for c in companies:
+        c.number = KPTemplates.objects.filter(company=c).first()
         c.full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
     out.update({'page_title': "Компании"})
     out.update({'companies': companies})
     out.update({'count': companies.count()})
+    out.update({'form': KPTemplatesForm()})
     return render(request, 'setting/get_templates.html', out)
+
+
+def edit_number_template(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    if request.method == 'POST':
+        id = request.GET['id']
+        kp_template = KPTemplates.objects.filter(company__id=id).first()
+        number = request.POST['number']
+        kp_template.number = number
+        kp_template.save()
+        return HttpResponseRedirect('/setting/get_templates/' + get_params)
+    return HttpResponseRedirect('/setting/get_templates/' + get_params)
 
 
 def edit_kp(request):
@@ -1187,34 +1210,27 @@ def edit_kp(request):
         table__total = request.POST['table__total']
         added_table = ''
         added_table_kp = ''
-        added_table__total_kp = ''
-        added_table__total = ''
         if 'added_table' in request.POST:
             added_table__total_kp = request.POST['added_table__total_kp']
             added_table__total = request.POST['added_table__total']
             added_table = request.POST['added_table']
-            print(added_table)
-            print(added_table__total)
+            added_table_kp = request.POST['added_table']
             added_table_out = {}
             added_table_kp_out = {}
             added_table_out.update({'added_table__total': added_table__total})
-            added_table_kp_out.update({'added_table__total_kp': added_table__total_kp})
+            added_table_kp_out.update({'added_table__total': added_table__total_kp})
             added_table = Template(added_table).render(Context(added_table_out))
-            print(added_table)
-            added_table_kp = Template(added_table).render(Context(added_table_kp_out))
+            added_table_kp = Template(added_table_kp).render(Context(added_table_kp_out))
         page = request.POST['page']
         temp_out.update({'accompanying_text': accompanying_text})
         temp_out.update({'added_table': added_table_kp})
-        temp_out.update({'table__total_kp': table__total_kp})
-        # temp_out.update({'added_table__total_kp': added_table__total_kp})
+        temp_out.update({'table__total': table__total_kp})
         temp_out.update({'organization_name': organization_name})
         html = Template(page).render(Context(temp_out))
         page_out = {}
         page_out.update({'accompanying_text': accompanying_text})
         page_out.update({'added_table': added_table})
         page_out.update({'table__total': table__total})
-        # page_out.update({'added_table__total': added_table__total})
-        # page_out.update({'organization_name': organization_name})
         page_out.update({'organization_name': u'<input type="text" class="organization_name" name="organization_name" value="{}">'.format(organization_name)})
         page_html = Template(page).render(Context(page_out))
         out.update({'page': page_html})
@@ -1229,9 +1245,8 @@ def edit_kp(request):
                      'latex+escaped_line_breaks',
                      '-V',
                      'geometry:margin=1in']
-        # pypandoc.convert(html, 'docx', format='html', outputfile=out_filename)
-        # os.environ['PATH'] += ':/usr/texbin'
-        # pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
+        pypandoc.convert(html, 'docx', format='html', outputfile=out_filename)
+        os.environ['PATH'] += ':/usr/texbin'
+        pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
         out.update({'filename': filename})
-        print(filename)
         return render(request, 'edit_kp.html', out)

@@ -306,3 +306,12 @@ class ClientRelatedForm(ModelForm):
         widgets = {
             'client_related_with': Select(attrs={'id': "id_client_related_with", 'required': 0, 'class': 'selectpicker'}),
         }
+
+
+class KPTemplatesForm(ModelForm):
+    class Meta:
+        model = KPTemplates
+        exclude = ['html_text', 'html_text_for_kp', 'company']
+        widgets = {
+            'number': NumberInput(attrs={'id': "inputBroughtSum"}),
+        }
