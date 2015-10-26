@@ -4,9 +4,7 @@ import json
 from django.shortcuts import render, render_to_response
 import datetime
 import djangosphinx
-from djangosphinx.apis.api275 import SPH_MATCH_EXTENDED
 import pypandoc
-from api.settings import MEDIA_ROOT
 from base_api.full_views.analyze_debtors import full_analyze_debtors
 from base_api.full_views.attach import *
 from base_api.models import *
@@ -199,6 +197,7 @@ def json_response(func):
     into json. If a callback is added through GET or POST
     the response is JSONP.
     """
+
     def decorator(request, *args, **kwargs):
         objects = func(request, *args, **kwargs)
         if isinstance(objects, HttpResponse):
@@ -212,6 +211,7 @@ def json_response(func):
         except:
             data = json.dumps(str(objects))
         return HttpResponse(data, "application/json")
+
     return decorator
 
 
@@ -643,17 +643,19 @@ def search(request):
             orders_count_str = str(order.bill)
             orders_count_str_reverse = orders_count_str[::-1]
             orders_count_str_right_format = ''
-            for i in range(0, len(orders_count_str)/3 + 1):
+            for i in range(0, len(orders_count_str) / 3 + 1):
                 j = 3
-                if i != (len(orders_count_str)/3):
-                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+                if i != (len(orders_count_str) / 3):
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i * j] + \
+                                                    orders_count_str_reverse[i * j + 1] + orders_count_str_reverse[
+                                                        i * j + 2] + ' '
                 else:
                     if (len(orders_count_str) % 3) == 2:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                        orders_count_str_reverse[i*j+1]
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[
+                            i * j] + \
+                                                        orders_count_str_reverse[i * j + 1]
                     elif (len(orders_count_str) % 3) == 1:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i * j]
             orders_count_str = orders_count_str_right_format[::-1]
             order.bill = orders_count_str
         order.files = []
@@ -713,7 +715,7 @@ def fix_cities(request):
     # sheet = wb['list']
     # column_index = 4
     # for row_index in xrange(2, 10971):
-    #     city = Cities.objects.create(name=sheet.cell(row=row_index, column=column_index).value)
+    # city = Cities.objects.create(name=sheet.cell(row=row_index, column=column_index).value)
     #     row_index += 1
 
     cities_list = list(Cities.objects.values_list('name', flat=True))
@@ -930,17 +932,19 @@ def get_related_claims(request):
             orders_count_str = str(order.bill)
             orders_count_str_reverse = orders_count_str[::-1]
             orders_count_str_right_format = ''
-            for i in range(0, len(orders_count_str)/3 + 1):
+            for i in range(0, len(orders_count_str) / 3 + 1):
                 j = 3
-                if i != (len(orders_count_str)/3):
-                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+                if i != (len(orders_count_str) / 3):
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i * j] + \
+                                                    orders_count_str_reverse[i * j + 1] + orders_count_str_reverse[
+                                                        i * j + 2] + ' '
                 else:
                     if (len(orders_count_str) % 3) == 2:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                        orders_count_str_reverse[i*j+1]
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[
+                            i * j] + \
+                                                        orders_count_str_reverse[i * j + 1]
                     elif (len(orders_count_str) % 3) == 1:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i * j]
             orders_count_str = orders_count_str_right_format[::-1]
             order.bill = orders_count_str
         order.files = []
@@ -1024,17 +1028,19 @@ def get_client_claims(request):
             orders_count_str = str(order.bill)
             orders_count_str_reverse = orders_count_str[::-1]
             orders_count_str_right_format = ''
-            for i in range(0, len(orders_count_str)/3 + 1):
+            for i in range(0, len(orders_count_str) / 3 + 1):
                 j = 3
-                if i != (len(orders_count_str)/3):
-                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                    orders_count_str_reverse[i*j+1] + orders_count_str_reverse[i*j+2] + ' '
+                if i != (len(orders_count_str) / 3):
+                    orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i * j] + \
+                                                    orders_count_str_reverse[i * j + 1] + orders_count_str_reverse[
+                                                        i * j + 2] + ' '
                 else:
                     if (len(orders_count_str) % 3) == 2:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j] + \
-                                                        orders_count_str_reverse[i*j+1]
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[
+                            i * j] + \
+                                                        orders_count_str_reverse[i * j + 1]
                     elif (len(orders_count_str) % 3) == 1:
-                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i*j]
+                        orders_count_str_right_format = orders_count_str_right_format + orders_count_str_reverse[i * j]
             orders_count_str = orders_count_str_right_format[::-1]
             order.bill = orders_count_str
         order.files = []
@@ -1199,7 +1205,9 @@ def edit_kp(request):
         added_table = ''
         temp_out.update({'number': number})
         temp_out.update({'date': kp_date})
-        temp_out.update({'organization_name': u'<input type="text" class="organization_name" name="organization_name" value="{}">'.format(organization_or_full_name)})
+        temp_out.update({
+            'organization_name': u'<input type="text" class="organization_name" name="organization_name" value="{}">'.format(
+                organization_or_full_name)})
         temp_out.update({'added_table': added_table})
         temp_out.update({'products': products})
         temp_out.update({'in_total': claim.bill})
@@ -1236,22 +1244,25 @@ def edit_kp(request):
         page_out.update({'accompanying_text': accompanying_text})
         page_out.update({'added_table': added_table})
         page_out.update({'table__total': table__total})
-        page_out.update({'organization_name': u'<input type="text" class="organization_name" name="organization_name" value="{}">'.format(organization_name)})
+        page_out.update({
+            'organization_name': u'<input type="text" class="organization_name" name="organization_name" value="{}">'.format(
+                organization_name)})
         page_html = Template(page).render(Context(page_out))
         out.update({'page': page_html})
         filename = str(hash(datetime.now()))
         out_filename = MEDIA_ROOT + '/' + str('uploads/') + filename + '.docx'
         out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/') + filename + '.pdf'
         os.environ['PATH'] += ':/usr/texbin'
+        os.environ['PATH'] = '/root/.cabal/bin:' + os.environ['PATH']
         pdoc_args = ['--latex-engine=xelatex',
                      '--variable',
-                     'mainfont=Georgia',
+                     'mainfont=DejaVuSans',
                      '-t',
                      'latex+escaped_line_breaks',
                      '-V',
                      'geometry:margin=1in']
+
         pypandoc.convert(html, 'docx', format='html', outputfile=out_filename)
-        os.environ['PATH'] += ':/usr/texbin'
         pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
         out.update({'filename': filename})
         return render(request, 'edit_kp.html', out)
