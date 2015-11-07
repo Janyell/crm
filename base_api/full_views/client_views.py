@@ -321,7 +321,7 @@ def full_add_edit_client(request):
     organizations = []
     for organization in Clients.objects.all().order_by('organization'):
         if organization.organization != "":
-            organizations.append(organization.organization)
+            organizations.append(organization.organization.strip())
     out.update({'client_form': form})
     out.update({'organizations': organizations})
     return render(request, 'client/add_edit_client.html', out)
