@@ -170,7 +170,7 @@
                     $('.file-button_docx').click( function() {
                         $.post("{% url "upload_kp_files" %}", { filename: "{{ filename }}.docx", claim_id: "{{ request.GET.id }}" });
                     });
-                    $$('.file-button_pdf').click( function() {
+                    $('.file-button_pdf').click( function() {
                         $.post("{% url "upload_kp_files" %}", { filename: "{{ filename }}.pdf", claim_id: "{{ request.GET.id }}" });
                     });
                 });
