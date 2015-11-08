@@ -368,6 +368,10 @@ def full_add_edit_claim(request):
                         get_params = '?'
                         get_params += get_request_param_as_string(request)
                         return HttpResponseRedirect('/claims/' + get_params)
+                elif 'save-and-generate-kp' in form.data:
+                    get_params = '&'
+                    get_params += get_request_param_as_string(request)
+                    return HttpResponseRedirect('/claims/kp/edit/?id=%s' % new_claim.id + get_params)
                 else:
                     return HttpResponseRedirect('/uploads/order/?id=%s' % new_claim.id)
             else:
