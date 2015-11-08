@@ -10,8 +10,8 @@
                 </div>
                 <div class="form-add__submits">
                     <button class="btn btn-primary" type="submit">Сохранить</button>
-                    <a class="btn file-button{% if not filename %} disabled" onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.docx" target="_blank">Скачать как docx</a>
-                    <a class="btn file-button{% if not filename %} disabled"  onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.pdf" target="_blank">Скачать как pdf</a>
+                    <a class="btn file-button_docx{% if not filename %} disabled" onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.docx" target="_blank">Скачать как docx</a>
+                    <a class="btn file-button_pdf{% if not filename %} disabled"  onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.pdf" target="_blank">Скачать как pdf</a>
                 </div>
             </form>
         </div>
@@ -166,6 +166,12 @@
                         $this.append("<input type=\"hidden\" name=\"organization_name\" value=\"" + organization_name + "\">");
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + $page.html() + "'>");
 {#                        return false;#}
+                    });
+                    $('.file-button_docx').click( function() {
+                        $.post("{% url "upload_kp_files" %}", { filename: "{{ filename }}.docx" });
+                    });
+                    $$('.file-button_pdf').click( function() {
+                        $.post("{% url "upload_kp_files" %}", { filename: "{{ filename }}.pdf" });
                     });
                 });
             })(jQuery);

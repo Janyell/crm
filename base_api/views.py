@@ -1266,3 +1266,7 @@ def edit_kp(request):
         pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
         out.update({'filename': filename})
         return render(request, 'edit_kp.html', out)
+
+
+def upload_kp_files(request):
+    pass

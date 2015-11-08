@@ -774,7 +774,7 @@
                                 $('.delete-client-button').bind('click', function(){
                                     $("#delete").find("h3").text("Вы уверены, что хотите удалить этого клиента?");
                                     var id = $(this).attr('value');
-                                    $delete_ok.attr({'href': '{% url "delete_claim" %}?id=' + id + '&search={{ request.GET.search }}'});
+                                    $delete_ok.attr({'href': '{% url "delete_client" %}?id=' + id + '&search={{ request.GET.search }}'});
                                 });
                                 $('.files-client-button').bind('click', function(){
                                     $("#view-info").find("h3").text("Прикрепленные к клиенту файлы");
