@@ -28,7 +28,7 @@ import openpyxl
 import os
 from django.http import HttpResponseRedirect
 from django.template import Template, Context
-from api.settings import MEDIA_ROOT
+from api.settings import MEDIA_ROOT, BASE_DIR
 from base_api.models import *
 
 
@@ -719,8 +719,7 @@ def fix_cities(request):
     #     row_index += 1
 
     cities_list = list(Cities.objects.values_list('name', flat=True))
-    for city in cities_list:
-        city.lower()
+    cities_list = [x.lower() for x in cities_list]
     orders = Orders.objects.all()
     for order in orders:
         if order.city_old:
@@ -1097,6 +1096,7 @@ def edit_template(request):
     if request.method == 'POST':
         page = request.POST['page']
         kp_page = request.POST['kp-page']
+        template_backup = KPTemplates.objects.create(html_text=page, html_text_for_kp=kp_page, number=id)
         if template:
             template.html_text = page
             template.html_text_for_kp = kp_page
@@ -1217,29 +1217,32 @@ def edit_kp(request):
         return render(request, 'edit_kp.html', out)
     else:
         temp_out = {}
-        organization_name = request.POST['organization_name']
-        accompanying_text = request.POST['accompanying_text']
-        table__total_kp = request.POST['table__total_kp']
-        table__total = request.POST['table__total']
+        organization_name = request.POST.get('organization_name', '')
+        accompanying_text = request.POST.get('accompanying_text', '')
+        table__total_kp = request.POST.get('table__total_kp', '')
+        table__total = request.POST.get('table__total', '')
         added_table = ''
         added_table_kp = ''
         if 'added_table' in request.POST:
-            added_table__total_kp = request.POST['added_table__total_kp']
-            added_table__total = request.POST['added_table__total']
-            added_table = request.POST['added_table']
-            added_table_kp = request.POST['added_table']
+            added_table__total_kp = request.POST.get('added_table__total_kp', '')
+            added_table__total = request.POST.get('added_table__total', '')
+            added_table = request.POST.get('added_table', '')
+            added_table_kp = request.POST.get('added_table', '')
             added_table_out = {}
             added_table_kp_out = {}
             added_table_out.update({'added_table__total': added_table__total})
             added_table_kp_out.update({'added_table__total': added_table__total_kp})
             added_table = Template(added_table).render(Context(added_table_out))
             added_table_kp = Template(added_table_kp).render(Context(added_table_kp_out))
-        page = request.POST['page']
+        page = request.POST.get('page', '')
         temp_out.update({'accompanying_text': accompanying_text})
         temp_out.update({'added_table': added_table_kp})
         temp_out.update({'table__total': table__total_kp})
         temp_out.update({'organization_name': organization_name})
         html = Template(page).render(Context(temp_out))
+        form_file = open('templates/kp/kp.html', 'wb')
+        form_file.write(html.encode('utf-8'))
+        form_file.close()
         page_out = {}
         page_out.update({'accompanying_text': accompanying_text})
         page_out.update({'added_table': added_table})
@@ -1252,21 +1255,20 @@ def edit_kp(request):
         filename = str(hash(datetime.now()))
         out_filename = MEDIA_ROOT + '/' + str('uploads/') + filename + '.docx'
         out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/') + filename + '.pdf'
+        docx_template = BASE_DIR + '/reference.docx'
         os.environ['PATH'] += ':/usr/texbin'
         os.environ['PATH'] = '/root/.cabal/bin:' + os.environ['PATH']
+        pdoc_args_for_doc = ['--reference-docx=' + docx_template]
         pdoc_args = ['--latex-engine=xelatex',
                      '--variable',
-                     'mainfont=DejaVuSans',
+                     'mainfont=Georgia',
+                     # 'mainfont=DejaVuSans',
                      '-t',
                      'latex+escaped_line_breaks',
                      '-V',
                      'geometry:margin=1in']
 
-        pypandoc.convert(html, 'docx', format='html', outputfile=out_filename)
+        pypandoc.convert(html, 'docx', format='html', outputfile=out_filename, extra_args=pdoc_args_for_doc)
         pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
         out.update({'filename': filename})
         return render(request, 'edit_kp.html', out)
-
-
-def upload_kp_files(request):
-    pass

@@ -169,3 +169,11 @@ def save_file_in_node(obj):
 
     obj.file_node = new_file_node
     obj.save()
+
+
+def upload_kp_files(request):
+    filename = request.POST.get('filename')
+    order_id = request.POST.get('claim_id')
+    file = Order_Files.objects.create(order_id=order_id, title=filename, file='uploads/'+filename)
+    save_file_in_node(file)
+    return HttpResponseRedirect('/')
