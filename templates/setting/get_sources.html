@@ -57,7 +57,7 @@
                         </tbody>
                     </table>
                 </form>
-                <div class="row-fluid datatables_massive datatables_massive_source">
+                <div class="row-fluid datatables_massive">
                     <div class="span8 action-bar">
                         <div class="action-bar__checkbox">
                             <label class="checkbox">
@@ -76,9 +76,9 @@
                             </a>
                         </div>
                     </div>
-                    <div class="record-number">
-                        Всего источников: {{ count }}
-                    </div>
+                </div>
+                <div class="record-number datatables_massive_source">
+                    Всего источников: {{ count }}
                 </div>
 
                 <div class="modal hide fade" id="delete-source" tabindex="-1" role="dialog" aria-hidden="true">
