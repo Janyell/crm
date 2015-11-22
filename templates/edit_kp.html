@@ -10,8 +10,9 @@
                 </div>
                 <div class="form-add__submits">
                     <button class="btn btn-primary" type="submit">Сохранить</button>
-                    <a class="btn file-button_docx{% if not filename %} disabled" onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.docx" target="_blank">Скачать как docx</a>
+                    <a class="btn file-button_docx disabled" onclick="return false;" href="/media/uploads/{{ filename }}.docx" target="_blank">Скачать как docx</a>
                     <a class="btn file-button_pdf{% if not filename %} disabled"  onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.pdf" target="_blank">Скачать как pdf</a>
+                    <a class="btn file-button_pdf{% if not filename %} disabled"  onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.html" target="_blank">Скачать как html</a>
                 </div>
             </form>
         </div>
@@ -91,43 +92,43 @@
                     };
 
                     function removeColspan($form, $tr, cols, is_added) {
-                        if (!$tr) return;
-
-                        var $td_with_colspan = $tr.find('td:first');
-                        var td_with_colspan_html = $td_with_colspan.get(0).outerHTML;
-
-                        var text_align = $tr.find('td:first').css('text-align');
-                        var td_begin = "<td>";
-                        var td_end = "</td>";
-                        var td = td_begin + td_end;
-                        var td_end_with_content = $td_with_colspan.html() + td_end;
-                        var td_with_content = '<td style="' + text_align + '">' + td_end_with_content;
-                        var colspan;
-                        if (text_align == 'right') {
-                            colspan = td.repeat(cols - 2) + td_with_content;
-                        }
-                        else if (text_align == 'left') {
-                            colspan = td_with_content + td.repeat(cols - 2);
-                        }
-                        else {
-                            td_with_content = '<td style="text-align:right">' + td_end_with_content;
-                            if (cols == 6) {
-                                colspan = td + td_with_content + td.repeat(3);
-                            }
-                            else {
-                                 colspan = td + td_with_content + td.repeat(2);
-                            }
-                        }
-
-                        var name = "table__total";
-                        if (is_added) {
-                            name = "added_" + name;
-                        }
-
-                        $td_with_colspan.replaceWith("{% templatetag openvariable %} " + name + "|safe {% templatetag closevariable %}");
-                        $form.append("<input type=\"hidden\" name=\"" + name + "\" value='" + td_with_colspan_html + "'/>" +
-                                "<input type=\"hidden\" name=\"" + name + "_kp\" value='" + colspan + "'/>"
-                        );
+{#                        if (!$tr) return;#}
+{##}
+{#                        var $td_with_colspan = $tr.find('td:first');#}
+{#                        var td_with_colspan_html = $td_with_colspan.get(0).outerHTML;#}
+{##}
+{#                        var text_align = $tr.find('td:first').css('text-align');#}
+{#                        var td_begin = "<td>";#}
+{#                        var td_end = "</td>";#}
+{#                        var td = td_begin + td_end;#}
+{#                        var td_end_with_content = $td_with_colspan.html() + td_end;#}
+{#                        var td_with_content = '<td style="' + text_align + '">' + td_end_with_content;#}
+{#                        var colspan;#}
+{#                        if (text_align == 'right') {#}
+{#                            colspan = td.repeat(cols - 2) + td_with_content;#}
+{#                        }#}
+{#                        else if (text_align == 'left') {#}
+{#                            colspan = td_with_content + td.repeat(cols - 2);#}
+{#                        }#}
+{#                        else {#}
+{#                            td_with_content = '<td style="text-align:right">' + td_end_with_content;#}
+{#                            if (cols == 6) {#}
+{#                                colspan = td + td_with_content + td.repeat(3);#}
+{#                            }#}
+{#                            else {#}
+{#                                 colspan = td + td_with_content + td.repeat(2);#}
+{#                            }#}
+{#                        }#}
+{##}
+{#                        var name = "table__total";#}
+{#                        if (is_added) {#}
+{#                            name = "added_" + name;#}
+{#                        }#}
+{##}
+{#                        $td_with_colspan.replaceWith("{% templatetag openvariable %} " + name + "|safe {% templatetag closevariable %}");#}
+{#                        $form.append("<input type=\"hidden\" name=\"" + name + "\" value='" + td_with_colspan_html + "'/>" +#}
+{#                                "<input type=\"hidden\" name=\"" + name + "_kp\" value='" + colspan + "'/>"#}
+{#                        );#}
                     }
 
                     var $page = $('#page');
@@ -172,6 +173,10 @@
                     });
                     $('.file-button_pdf').click( function() {
                         $.post("{% url "upload_kp_files" %}", { filename: "{{ filename }}.pdf", claim_id: "{{ request.GET.id }}" });
+                    });
+
+                    $('.file-button_html').click( function() {
+                        $.post("{% url "upload_kp_files" %}", { filename: "{{ filename }}.html", claim_id: "{{ request.GET.id }}" });
                     });
                 });
             })(jQuery);
