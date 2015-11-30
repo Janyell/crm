@@ -4,7 +4,10 @@ import json
 from django.shortcuts import render, render_to_response
 import datetime
 import djangosphinx
+from easy_pdf.rendering import render_to_pdf, render_to_pdf_response
+import pdfkit
 import pypandoc
+from wkhtmltopdf import wkhtmltopdf
 from base_api.full_views.analyze_debtors import full_analyze_debtors
 from base_api.full_views.attach import *
 from base_api.models import *
@@ -718,20 +721,42 @@ def fix_cities(request):
     # city = Cities.objects.create(name=sheet.cell(row=row_index, column=column_index).value)
     #     row_index += 1
 
-    cities_list = list(Cities.objects.values_list('name', flat=True))
-    cities_list = [x.lower() for x in cities_list]
-    orders = Orders.objects.all()
-    for order in orders:
-        if order.city_old:
-            order.city_old = order.city_old.strip()
-            if order.city_old.lower() not in cities_list:
-                city = Cities.objects.create(name=order.city_old)
-                cities_list.append(order.city_old.lower())
-            else:
-                city = Cities.objects.filter(name=order.city_old).first()
-            order.city = city
-            order.save(update_fields=["city"])
-    return HttpResponseRedirect('/')
+    # cities_list = list(Cities.objects.values_list('name', flat=True))
+    # cities_list = [x.lower() for x in cities_list]
+    # orders = Orders.objects.all()
+    # for order in orders:
+    #     if order.city_old:
+    #         order.city_old = order.city_old.strip()
+    #         if order.city_old.lower() not in cities_list:
+    #             city = Cities.objects.create(name=order.city_old)
+    #             cities_list.append(order.city_old.lower())
+    #         else:
+    #             city = Cities.objects.filter(name=order.city_old).first()
+    #         order.city = city
+    #         order.save(update_fields=["city"])
+    # cities = Cities.objects.order_by('name').all()
+    # for x in range(0, 287):
+    #     if cities[x].name == cities[x+1].name:
+    #         for order in Orders.objects.filter(city=cities[x+1]):
+    #             order.city = cities[x]
+    #             order.save()
+    #         cities[x+1].delete()
+    # options = {
+    #     'page-size': 'Letter',
+    #     'margin-top': '0.75in',
+    #     'margin-right': '0.75in',
+    #     'margin-bottom': '0.75in',
+    #     'margin-left': '0.75in',
+    #     'encoding': "UTF-8",
+    #     'no-outline': None
+    # }
+    # pdfkit.from_file('/Users/megge/Documents/crm/templates/kp/kp.html',
+    #                  '/Users/megge/Documents/crm/templates/kp/google.pdf',
+    #                  options=options)
+    # from wkhtmltopdf import WKhtmlToPdf
+    # wkhtmltopdf.render()
+    # wkhtmltopdf(url='/Users/megge/Documents/crm/templates/kp/kp.html', output_file='/Users/megge/Documents/crm/templates/kp/google.pdf')
+    return render(request, 'kp/kp.html')
 
 
 def get_product_groups(request):
@@ -1240,9 +1265,6 @@ def edit_kp(request):
         temp_out.update({'table__total': table__total_kp})
         temp_out.update({'organization_name': organization_name})
         html = Template(page).render(Context(temp_out))
-        form_file = open('templates/kp/kp.html', 'wb')
-        form_file.write(html.encode('utf-8'))
-        form_file.close()
         page_out = {}
         page_out.update({'accompanying_text': accompanying_text})
         page_out.update({'added_table': added_table})
@@ -1253,22 +1275,24 @@ def edit_kp(request):
         page_html = Template(page).render(Context(page_out))
         out.update({'page': page_html})
         filename = str(hash(datetime.now()))
-        out_filename = MEDIA_ROOT + '/' + str('uploads/') + filename + '.docx'
         out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/') + filename + '.pdf'
-        docx_template = BASE_DIR + '/reference.docx'
-        os.environ['PATH'] += ':/usr/texbin'
-        os.environ['PATH'] = '/root/.cabal/bin:' + os.environ['PATH']
-        pdoc_args_for_doc = ['--reference-docx=' + docx_template]
-        pdoc_args = ['--latex-engine=xelatex',
-                     '--variable',
-                     'mainfont=Georgia',
-                     # 'mainfont=DejaVuSans',
-                     '-t',
-                     'latex+escaped_line_breaks',
-                     '-V',
-                     'geometry:margin=1in']
-
-        pypandoc.convert(html, 'docx', format='html', outputfile=out_filename, extra_args=pdoc_args_for_doc)
-        pypandoc.convert(out_filename, 'pdf', format='docx', outputfile=out_filename_pdf, extra_args=pdoc_args)
+        out_filename_html = MEDIA_ROOT + '/' + str('uploads/') + filename + '.html'
+        form_file = open(out_filename_html, 'wb')
+        form_file.write(html.encode('utf-8'))
+        form_file.close()
         out.update({'filename': filename})
+
+        options = {
+            'page-size': 'Letter',
+            'margin-top': '0.75in',
+            'margin-right': '0.75in',
+            'margin-bottom': '0.75in',
+            'margin-left': '0.75in',
+            'encoding': "UTF-8",
+            'no-outline': None
+        }
+        pdfkit.from_file(out_filename_html,
+                         out_filename_pdf,
+                         options=options)
         return render(request, 'edit_kp.html', out)
+

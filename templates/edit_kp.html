@@ -12,7 +12,7 @@
                     <button class="btn btn-primary" type="submit">Сохранить</button>
                     <a class="btn file-button_docx disabled" onclick="return false;" href="/media/uploads/{{ filename }}.docx" target="_blank">Скачать как docx</a>
                     <a class="btn file-button_pdf{% if not filename %} disabled"  onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.pdf" target="_blank">Скачать как pdf</a>
-                    <a class="btn file-button_pdf{% if not filename %} disabled"  onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.html" target="_blank">Скачать как html</a>
+                    <a class="btn file-button_html{% if not filename %} disabled"  onclick="return false;{% endif %}" href="/media/uploads/{{ filename }}.html" target="_blank">Скачать как html</a>
                 </div>
             </form>
         </div>
@@ -168,9 +168,9 @@
                         $this.append("<input type=\"hidden\" name=\"page\" value='" + $page.html() + "'>");
 {#                        return false;#}
                     });
-                    $('.file-button_docx').click( function() {
-                        $.post("{% url "upload_kp_files" %}", { filename: "{{ filename }}.docx", claim_id: "{{ request.GET.id }}" });
-                    });
+{#                    $('.file-button_docx').click( function() {#}
+{#                        $.post("{% url "upload_kp_files" %}", { filename: "{{ filename }}.docx", claim_id: "{{ request.GET.id }}" });#}
+{#                    });#}
                     $('.file-button_pdf').click( function() {
                         $.post("{% url "upload_kp_files" %}", { filename: "{{ filename }}.pdf", claim_id: "{{ request.GET.id }}" });
                     });
