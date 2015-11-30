@@ -1,20 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import json
-from django.shortcuts import render, render_to_response
-import datetime
-import djangosphinx
-from easy_pdf.rendering import render_to_pdf, render_to_pdf_response
 import pdfkit
-import pypandoc
-from wkhtmltopdf import wkhtmltopdf
 from base_api.full_views.analyze_debtors import full_analyze_debtors
 from base_api.full_views.attach import *
-from base_api.models import *
-from base_api.form import *
-from django.http import *
-from django.contrib.auth import authenticate, login, logout
-from django.core.exceptions import ObjectDoesNotExist
 from base_api.full_views.company_views import *
 from base_api.full_views.role_views import *
 from base_api.full_views.client_views import *
@@ -1289,7 +1278,6 @@ def edit_kp(request):
             'margin-bottom': '0.75in',
             'margin-left': '0.75in',
             'encoding': "UTF-8",
-            'no-outline': None
         }
         pdfkit.from_file(out_filename_html,
                          out_filename_pdf,
