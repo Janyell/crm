@@ -167,13 +167,13 @@ class OrdersFormForAdmins(forms.ModelForm):
 
 claims_form_widgets = {
     'client': Select(attrs={'id': "selectClient", 'required': 1, 'class': 'selectpicker'}),
-    'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker'}),
+    'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker', 'required': 1}),
     'bill': NumberInput(attrs={'id': "inputBill"}),
     'payment_date': TextInput(attrs={'id': "inputPaymentDate",
                                      'class': "datetime",
                                      'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
     'order_status': Select(attrs={'id': "selectStatus"}),
-    'bill_status': Select(attrs={'id': "selectBillStatus"}, choices=BILL_STATUS_CHOICES_FOR_CLAIM),
+    'bill_status': Select(attrs={'id': "selectBillStatus", 'required': 1}, choices=BILL_STATUS_CHOICES_FOR_CLAIM),
     'city': Select(attrs={'id': "selectCity",
                           'placeholder': "Город"}),
     'comment': Textarea(attrs={'id': "inputComment",
