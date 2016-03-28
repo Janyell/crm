@@ -628,6 +628,8 @@ def full_get_claims(request):
             order.bill_status = 'Оплачен'
         elif order.bill_status == 4:
             order.bill_status = 'Устно'
+        elif order.bill_status == 5:
+            order.bill_status = 'Подбор'
         else:
             order.bill_status = ''
         if order.bill != None:

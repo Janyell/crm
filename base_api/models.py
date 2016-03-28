@@ -176,12 +176,14 @@ class Orders(models.Model):
     NEED_SURCHARGE = 1
     DELAY = 3
     VERBAL = 4
+    SELECTION = 5
     BILL_STATUS_CHOICES = (
         (SET, 'Выставлен'),
         (NEED_SURCHARGE, 'Нужна доплата'),
         (PAID, 'Оплачен'),
         (DELAY, 'Отсрочка платежа'),
-        (VERBAL, 'Устно')
+        (VERBAL, 'Устно'),
+        (SELECTION, 'Подбор'),
     )
     bill_status = models.IntegerField(null=True, blank=True)
     ready_date = UnixTimestampField(blank=True, null=True)
