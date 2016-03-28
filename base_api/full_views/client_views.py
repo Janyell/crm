@@ -330,7 +330,7 @@ def full_add_edit_client(request):
 def full_delete_clients(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
+    if Roles.objects.get(id=request.user.id).role != 0:
         return HttpResponseRedirect('/oops')
     id = request.GET['id']
     client = Clients.objects.get(pk=id)

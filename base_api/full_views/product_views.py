@@ -14,7 +14,7 @@ from django.core.exceptions import ObjectDoesNotExist
 def full_delete_product(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
+    if Roles.objects.get(id=request.user.id).role != 0:
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     product = Products.objects.get(pk=id)
@@ -28,7 +28,7 @@ def full_delete_product(request):
 def full_delete_product_group(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    if Roles.objects.get(id=request.user.id).role == 2:
+    if Roles.objects.get(id=request.user.id).role != 0:
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     product_group = ProductGroups.objects.get(pk=id)
