@@ -244,12 +244,16 @@ def edit_order_for_other_managers(request):
         if 'pk' in request.POST:
             pk = request.POST['pk']
             comment = request.POST['comment']
+            factory_comment = None
+            if 'factory_comment' in request.POST:
+                factory_comment = request.POST['factory_comment']
             new_order = Orders.objects.get(id=pk, is_deleted=0)
             is_comment_my = False
             if new_order.role_id == request.user.id:
                 is_comment_my = True
             new_order.is_comment_my = is_comment_my
             new_order.comment = comment
+            new_order.factory_comment = factory_comment
             new_order.save(force_update=True)
             get_params = '?'
             if 'search' in request.GET:
@@ -271,7 +275,7 @@ def edit_order_for_other_managers(request):
             id_order = request.GET['id']
             out.update({"error": 0})
             order = Orders.objects.get(pk=id_order, is_deleted=0)
-            form = OrdersForm({'comment': order.comment})
+            form = OrdersForm({'comment': order.comment, 'factory_comment': order.factory_comment})
             out.update({'order_form': form})
             out.update({'page_title': "Редактирование заказа"})
         else:
@@ -298,8 +302,12 @@ def edit_claim_for_other_managers(request):
         if 'pk' in request.POST:
             pk = request.POST['pk']
             comment = request.POST['comment']
+            factory_comment = None
+            if 'factory_comment' in request.POST:
+                factory_comment = request.POST['factory_comment']
             new_order = Orders.objects.get(id=pk, is_deleted=0, is_claim=1)
             new_order.comment = comment
+            new_order.factory_comment = factory_comment
             is_comment_my = False
             if new_order.role_id == request.user.id:
                 is_comment_my = True
@@ -325,7 +333,7 @@ def edit_claim_for_other_managers(request):
             id_order = request.GET['id']
             out.update({"error": 0})
             order = Orders.objects.get(pk=id_order, is_deleted=0, is_claim=1)
-            form = OrdersForm({'comment': order.comment})
+            form = OrdersForm({'comment': order.comment, 'factory_comment': order.factory_comment})
             out.update({'order_form': form})
             out.update({'page_title': "Редактирование заявки"})
         else:

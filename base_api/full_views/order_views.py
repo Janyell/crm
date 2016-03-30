@@ -80,6 +80,9 @@ def full_add_edit_order(request):
             else:
                 ready_date = None
             comment = request.POST['comment']
+            factory_comment = None
+            if 'factory_comment' in request.POST:
+                factory_comment = request.POST['factory_comment']
             city = request.POST['city']
             if city:
                 city = Cities.objects.get(pk=city)
@@ -130,13 +133,15 @@ def full_add_edit_order(request):
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                   'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum})
+                                   'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum,
+                                   'factory_comment': factory_comment})
                 else:
                     form = OrdersForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                   'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
+                                   'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
+                                   'factory_comment': factory_comment})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -183,13 +188,15 @@ def full_add_edit_order(request):
                                        'payment_date': payment_date, 'order_status': order_status,
                                        'bill_status': bill_status, 'city': city, 'comment': comment,
                                        'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                       'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum})
+                                       'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum,
+                                       'factory_comment': factory_comment})
                     else:
                         form = OrdersForm({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'payment_date': payment_date, 'order_status': order_status,
                                        'bill_status': bill_status, 'city': city, 'comment': comment,
                                        'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                       'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
+                                       'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
+                                       'factory_comment': factory_comment})
                     form.products = Products.objects.filter(is_deleted=0)
                     products_list = request.POST.getlist('products[]')
                     for product in form.products:
@@ -223,6 +230,7 @@ def full_add_edit_order(request):
             new_order.shipped_date = shipped_date
             new_order.ready_date = ready_date
             new_order.comment = comment
+            new_order.factory_comment = factory_comment
             new_order.city = city
             new_order.role = Roles.objects.filter(id=role).first()
             new_order.account_number = account_number
@@ -265,13 +273,15 @@ def full_add_edit_order(request):
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                           'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum})
+                                           'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum,
+                                           'factory_comment': factory_comment})
                         else:
                             form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                           'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
+                                           'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
+                                           'factory_comment': factory_comment})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -347,6 +357,9 @@ def full_add_edit_order(request):
                     shipped_date = datetime.now()
             ready_date = form.cleaned_data['ready_date']
             comment = form.cleaned_data['comment']
+            factory_comment = None
+            if 'factory_comment' in form.data:
+                factory_comment = form.cleaned_data['factory_comment']
             city = form.cleaned_data['city']
             if 'newCity' in form.cleaned_data:
                 newCity = form.cleaned_data['newCity']
@@ -378,7 +391,8 @@ def full_add_edit_order(request):
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                           'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
+                                           'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
+                                           'factory_comment': factory_comment})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -423,7 +437,8 @@ def full_add_edit_order(request):
                                               payment_date=payment_date, order_status=order_status, city=city,
                                               bill_status=bill_status, ready_date=ready_date, comment=comment,
                                               account_number=account_number, shipped_date=shipped_date,
-                                              brought_sum=brought_sum)
+                                              brought_sum=brought_sum,
+                                              factory_comment=factory_comment)
                     new_order_product_link = Order_Product.objects.create(order=new_order, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products,
@@ -453,7 +468,8 @@ def full_add_edit_order(request):
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                                   'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
+                                   'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
+                                   'factory_comment': factory_comment})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -487,6 +503,9 @@ def full_add_edit_order(request):
             ready_date = request.POST['ready_date']
             shipped_date = request.POST['shipped_date']
             comment = request.POST['comment']
+            factory_comment = None
+            if 'factory_comment' in request.POST:
+                factory_comment = request.POST['factory_comment']
             city = request.POST['city']
             if 'newCity' in request.POST:
                 newCity = request.POST['newCity']
@@ -509,7 +528,8 @@ def full_add_edit_order(request):
                                'payment_date': payment_date, 'order_status': order_status,
                                'bill_status': bill_status, 'city': city, 'comment': comment,
                                'source': source, 'ready_date': ready_date, 'account_number': account_number,
-                               'shipped_date': shipped_day_month, 'brought_sum': brought_sum})
+                               'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
+                               'factory_comment': factory_comment})
             form.products = Products.objects.filter(is_deleted=0)
             products_list = request.POST.getlist('products[]')
             for product in form.products:
@@ -548,7 +568,7 @@ def full_add_edit_order(request):
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
-                               'brought_sum': order.brought_sum})
+                               'brought_sum': order.brought_sum, 'factory_comment': order.factory_comment})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -615,14 +635,15 @@ def full_add_edit_order(request):
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
-                               'role': order.role, 'brought_sum': order.brought_sum})
+                               'role': order.role, 'brought_sum': order.brought_sum,
+                               'factory_comment': order.factory_comment})
             else:
                 form = OrdersForm({'client': order.client, 'company': order.company, 'bill': order.bill,
                                'payment_date': order.payment_date, 'order_status': order.order_status,
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
-                               'brought_sum': order.brought_sum})
+                               'brought_sum': order.brought_sum, 'factory_comment': order.factory_comment})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []

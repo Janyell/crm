@@ -32,6 +32,9 @@ def full_add_edit_claim(request):
             claim = Orders.objects.get(id=pk)
             source = request.POST['source']
             comment = request.POST['comment']
+            factory_comment = None
+            if 'factory_comment' in request.POST:
+                factory_comment = request.POST['factory_comment']
             try:
                 brought_sum = int(request.POST['brought_sum'])
             except Exception:
@@ -76,11 +79,12 @@ def full_add_edit_claim(request):
                 if user_role == 0:
                     form = ClaimsFormForAdmins({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'bill_status': bill_status, 'account_number': account_number, 'source': source,
-                                   'comment': comment, 'role': role, 'brought_sum': brought_sum})
+                                   'comment': comment, 'role': role, 'brought_sum': brought_sum,
+                                   'factory_comment': factory_comment})
                 else:
                     form = ClaimsForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'bill_status': bill_status, 'account_number': account_number, 'source': source,
-                                   'comment': comment, 'brought_sum': brought_sum})
+                                   'comment': comment, 'brought_sum': brought_sum, 'factory_comment': factory_comment})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -124,11 +128,13 @@ def full_add_edit_claim(request):
                     if user_role == 0:
                         form = ClaimsFormForAdmins({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'bill_status': bill_status, 'account_number': account_number, 'source': source,
-                                       'comment': comment, 'role': role, 'brought_sum': brought_sum})
+                                       'comment': comment, 'role': role, 'brought_sum': brought_sum,
+                                       'factory_comment': factory_comment})
                     else:
                         form = ClaimsForm({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'bill_status': bill_status, 'account_number': account_number, 'source': source,
-                                       'comment': comment, 'brought_sum': brought_sum})
+                                       'comment': comment, 'brought_sum': brought_sum,
+                                       'factory_comment': factory_comment})
                     form.products = Products.objects.filter(is_deleted=0)
                     products_list = request.POST.getlist('products[]')
                     for product in form.products:
@@ -157,6 +163,7 @@ def full_add_edit_claim(request):
             new_claim.source = Sources.objects.get(id=source)
             new_claim.company = company
             new_claim.comment = comment
+            new_claim.factory_comment = factory_comment
             new_claim.bill = bill
             new_claim.brought_sum = brought_sum
             new_claim.bill_status = bill_status
@@ -200,11 +207,13 @@ def full_add_edit_claim(request):
                         if user_role == 0:
                             form = ClaimsFormForAdmins({'client': client, 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
-                                           'comment': comment, 'role': role, 'brought_sum': brought_sum})
+                                           'comment': comment, 'role': role, 'brought_sum': brought_sum,
+                                           'factory_comment': factory_comment})
                         else:
                             form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
-                                           'comment': comment, 'brought_sum': brought_sum})
+                                           'comment': comment, 'brought_sum': brought_sum,
+                                           'factory_comment': factory_comment})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -273,6 +282,7 @@ def full_add_edit_claim(request):
             unique_number = id_generator()
             company = form.cleaned_data['company']
             comment = form.cleaned_data['comment']
+            factory_comment = form.cleaned_data['factory_comment']
             bill = form.cleaned_data['bill']
             try:
                 brought_sum = int(request.POST['brought_sum'])
@@ -305,7 +315,8 @@ def full_add_edit_claim(request):
                         ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
-                                           'comment': comment, 'brought_sum': brought_sum})
+                                           'comment': comment, 'brought_sum': brought_sum,
+                                           'factory_comment': factory_comment})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -352,7 +363,7 @@ def full_add_edit_claim(request):
                                               unique_number=unique_number, company=company, bill=bill,
                                               bill_status=bill_status, is_claim=is_claim,
                                               account_number=account_number, comment=comment, source=source,
-                                              brought_sum=brought_sum)
+                                              brought_sum=brought_sum, factory_comment=factory_comment)
                     new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products,
@@ -384,7 +395,8 @@ def full_add_edit_claim(request):
                 ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                    'bill_status': bill_status, 'account_number': account_number,
-                                   'comment': comment, 'brought_sum': brought_sum})
+                                   'comment': comment, 'brought_sum': brought_sum,
+                                   'factory_comment': factory_comment})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -409,6 +421,9 @@ def full_add_edit_claim(request):
                 source = request.POST['source']
             company = request.POST['company']
             comment = request.POST['comment']
+            factory_comment = None
+            if 'factory_comment' in request.POST:
+                factory_comment = request.POST['factory_comment']
             bill = request.POST['bill']
             brought_sum = request.POST['brought_sum']
             bill_status = request.POST['bill_status']
@@ -422,7 +437,8 @@ def full_add_edit_claim(request):
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                'bill_status': bill_status, 'account_number': account_number,
-                               'comment': comment, 'brought_sum': brought_sum})
+                               'comment': comment, 'brought_sum': brought_sum,
+                               'factory_comment': factory_comment})
             form.products = Products.objects.filter(is_deleted=0)
             products_list = request.POST.getlist('products[]')
             for product in form.products:
@@ -454,7 +470,8 @@ def full_add_edit_claim(request):
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = ClaimsForm({'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
-                               'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum})
+                               'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum,
+                               'factory_comment': claim.factory_comment})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -519,11 +536,12 @@ def full_add_edit_claim(request):
                 form = ClaimsFormForAdmins({'client': claim.client, 'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'role': claim.role,
-                               'brought_sum': claim.brought_sum})
+                               'brought_sum': claim.brought_sum, 'factory_comment': claim.factory_comment})
             else:
                 form = ClaimsForm({'client': claim.client, 'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
-                               'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum})
+                               'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum,
+                               'factory_comment': claim.factory_comment})
             form.products = Products.objects.filter(is_deleted=0)
             ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()

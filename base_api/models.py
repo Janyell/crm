@@ -203,6 +203,8 @@ class Orders(models.Model):
     related_orders = models.ManyToManyField("self", null=True, blank=True)
     related_color = models.IntegerField(null=True, blank=True)
 
+    factory_comment = models.TextField(null=True, blank=True)
+
     search = SphinxSearch()
 
 

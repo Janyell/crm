@@ -147,7 +147,9 @@ orders_form_widgets = {
     'shipped_date': TextInput(attrs={'id': "inputShippedDate",
                                      'class': "datetime",
                                      'placeholder': "ГГГГ-ММ-ДД"}),
-    'brought_sum': NumberInput(attrs={'id': "inputBroughtSum"})
+    'brought_sum': NumberInput(attrs={'id': "inputBroughtSum"}),
+    'factory_comment': Textarea(attrs={'id': "inputFactoryComment",
+                                       'placeholder': "Информация для производства"})
 }
 
 
@@ -183,7 +185,9 @@ claims_form_widgets = {
     'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                    'class': "datetime",
                                    'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
-    'brought_sum': NumberInput(attrs={'id': "inputBroughtSum"})
+    'brought_sum': NumberInput(attrs={'id': "inputBroughtSum"}),
+    'factory_comment': Textarea(attrs={'id': "inputFactoryComment",
+                                       'placeholder': "Информация для производства"})
 }
 
 
