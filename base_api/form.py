@@ -9,7 +9,8 @@ from django.forms import ModelChoiceField
 BILL_STATUS_CHOICES_FOR_CLAIM = (('0', 'Выставлен'),
                                  ('1', 'Нужна доплата'),
                                  ('2', 'Оплачен'),
-                                 ('4', 'Устно'))
+                                 ('4', 'Устно'),
+                                 ('5', 'Подбор'))
 BILL_STATUS_CHOICES_FOR_ORDER = (('1', 'Нужна доплата'),
                                  ('3', 'Отсрочка платежа'),
                                  ('2', 'Оплачен'))
