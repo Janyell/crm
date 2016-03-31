@@ -153,6 +153,9 @@
                 <div class="control-group">
                     <label class="control-label" for="selectCompany">
                         Компания
+                        {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                            <span class="required-input">*</span>
+                        {% endif %}
                     </label>
                     <div class="controls">
                         {{ order_form.company }}
@@ -170,6 +173,7 @@
                 <div class="control-group">
                     <label class="control-label" for="selectBillStatus">
                         Статус заявки
+                        <span class="required-input">*</span>
                     </label>
                     <div class="controls">
                         {{ order_form.bill_status }}
@@ -430,6 +434,7 @@
                     $select_city.selectpicker();
 
                 {% endif %}
+
                 $('select.product-select option:selected').each(function() {
                     var $this = $(this);
                     var product_id = $this.attr('value');
@@ -448,16 +453,21 @@
                     'data-size': "10"
                 });
                 $select_client.selectpicker();
-                var $select_company = $('#id_company');
 
+                var $select_company = $('#id_company');
+                {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                    {#id_company -> required + первый option сделать disabled #}
+                    $select_company.prop("required", true);
+                    $select_company.find('option:first').prop("disabled", true);
+                {% endif %}
                 if (!$select_company.val()) {
                     $('.generate-kp-button').addClass('hide');
                 }
-                $select_company.attr({
-                    'data-live-search': "true",
-                    'data-size': "10"
-                });
-                $select_company.selectpicker();
+{#                $select_company.attr({#}
+{#                    'data-live-search': "true",#}
+{#                    'data-size': "10"#}
+{#                });#}
+{#                $select_company.selectpicker();#}
 
                 var $brought_sum = $('.brought-sum');
                 var $select_bill_status = $('#selectBillStatus');
@@ -472,11 +482,15 @@
                         $brought_sum.css({'display': 'none'});
                     }
                 });
+                {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                    {#selectBillStatus -> required + первый option сделать disabled #}
+                    $select_bill_status.prop("required", true);
+                    $select_bill_status.find('option:first').prop("disabled", true);
+                {% endif %}
 
                 {#id_source -> required + первый option сделать disabled #}
                 var $select_source = $('#id_source');
                 $select_source.prop("required", true);
-                $select_source.find('option:first').prop("disabled", true);
 
                 function get_get_params() {
                     var need_get_params = ['page', 'length', 'sort', 'source', 'managers', 'search'];

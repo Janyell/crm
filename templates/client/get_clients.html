@@ -29,8 +29,10 @@
                 <table class="table table-hover table-bordered" id="client-table">
                     <thead>
                         <tr>
-                            <th>
-                            </th>
+                            {% if user_role != 1 %}
+                                {# massive th #}
+                                <th></th>
+                            {% endif %}
                             <th class="sortable{% if not request.GET.sort or request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">
                                 Организация
                             </th>
@@ -52,17 +54,23 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
+                            {% if user_role != 1 %}
+                                {# delete th #}
+                                <th></th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
                         {% for client in clients %}
                             <tr>
-                                <td>
-                                    <label class="checkbox">
-                                        <input class="checkbox_one" type="checkbox" name="id[]" value="{{ client.pk }}"/>
-                                    </label>
-                                </td>
+                                {% if user_role != 1 %}
+                                    {# massive td #}
+                                    <td>
+                                        <label class="checkbox">
+                                            <input class="checkbox_one" type="checkbox" name="id[]" value="{{ client.pk }}"/>
+                                        </label>
+                                    </td>
+                                {% endif %}
                                 <td>
                                     {% if client.organization %}
                                         {{ client.organization }}{% if client.organization_type %}, {{ client.organization_type }}{% endif %}</td>
@@ -101,9 +109,13 @@
                                         <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}"><i class="icon-pencil"></i></a>
                                     {% endif %}
                                 </td>
-                                <td><a class="btn delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
-                                    <i class="icon-remove"></i></a>
-                                </td>
+                                {% if user_role != 1 %}
+                                    {# delete td #}
+                                    <td>
+                                        <a class="btn delete-button" data-toggle="modal" href="#delete-client" value="{{ client.pk }}">
+                                        <i class="icon-remove"></i></a>
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -111,16 +123,19 @@
             </form>
             <div class="row-fluid">
                 <div class="span5 action-bar">
-                    <div class="action-bar__checkbox">
-                        <label class="checkbox">
-                            <input class="checkbox_all" type="checkbox"/> Для всех
-                        </label>
-                    </div>
-                    <div class="action-bar__action">
-                        <a class="btn massive-delete-button">
-                            <i class="icon-remove"></i>
-                        </a>
-                    </div>
+                    {% if user_role != 1 %}
+                        <div class="action-bar__checkbox">
+                            <label class="checkbox">
+                                <input class="checkbox_all" type="checkbox"/> Для всех
+                            </label>
+                        </div>
+                        <div class="action-bar__action">
+                            {# delete massive #}
+                            <a class="btn massive-delete-button">
+                                <i class="icon-remove"></i>
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="span2 record-number-wrap">
                     <div class="record-number">
@@ -137,16 +152,8 @@
             <h5 class="center">Не было добавлено ни одного клиента</h5>
         {% endif %}
     </div>
-     <div class="modal hide fade" id="delete-client" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-            <h3>Вы уверены, что хотите удалить этого клиента?</h3>
-        </div>
-        <div class="modal-footer">
-            <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
-            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-        </div>
-    </div>
+
+
     <div class="modal hide fade" id="view-client-files" tabindex="-1" role="dialog" aria-labelledby="FilesLabel" aria-hidden="true">
         <div class="modal-header">
             <a class="close" data-dismiss="modal">×</a>
@@ -160,22 +167,38 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
-    <div class="modal hide fade" id="massive-delete-client" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-            <h3>Вы уверены, что хотите удалить выделенных клиентов?</h3>
-        </div>
-        <div class="modal-body">
-            <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
-            <div class="center">
-                <input id="inputDelete" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+
+    {% if user_role != 1 %}
+        {# delete modal #}
+        <div class="modal hide fade" id="delete-client" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3>Вы уверены, что хотите удалить этого клиента?</h3>
+            </div>
+            <div class="modal-footer">
+                <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+                <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
             </div>
         </div>
-        <div class="modal-footer">
-            <button id="massive-delete__ok" class="btn btn-danger" disabled>Удалить</button>
-            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+
+        {# massive delete modal #}
+        <div class="modal hide fade" id="massive-delete-client" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3>Вы уверены, что хотите удалить выделенных клиентов?</h3>
+            </div>
+            <div class="modal-body">
+                <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
+                <div class="center">
+                    <input id="inputDelete" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="massive-delete__ok" class="btn btn-danger" disabled>Удалить</button>
+                <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+            </div>
         </div>
-    </div>
+    {% endif %}
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -207,10 +230,13 @@
                     return url;
                 }
 
-                $('.delete-button').bind('click', function(){
-                    var id = $(this).attr('value');
-                    $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + get_params);
-                });
+                {% if user_role != 1 %}
+                    {# delete js #}
+                    $('.delete-button').bind('click', function(){
+                        var id = $(this).attr('value');
+                        $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + get_params);
+                    });
+                {% endif %}
                 $(".edit-button").click(function() {
                     $(this).attr("href", $(this).attr('href') + get_params);
                 });
@@ -250,43 +276,47 @@
                         document.location.href = url + "_d";
                     }
                 });
-                var $checkboxes_one = $('.checkbox_one');
-                var $checkbox_all = $('.checkbox_all');
-                $checkbox_all.change(function() {
-                    if($(this).is(":checked")) {
-                        $checkboxes_one.prop('checked', true);
-                    }
-                    else {
-                        $checkboxes_one.prop('checked', false);
-                    }
-                });
-
-                $('.massive-delete-button').click(function(){
-                    var $checkboxes_checked = $(".checkbox_one:checked");
-                    var $checkboxes_checked_length = $checkboxes_checked.length;
-                    if ($checkboxes_checked_length == 1) {
-                        var id = $checkboxes_checked.val();
-                        $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + get_params);
-                        $('#delete-client').modal('show');
-                    }
-                    else {
-                        if ($checkboxes_checked_length != 0) {
-                            $('#massive-delete-client').modal('show');
+                {% if user_role != 1 %}
+                    {# massive js #}
+                    var $checkboxes_one = $('.checkbox_one');
+                    var $checkbox_all = $('.checkbox_all');
+                    $checkbox_all.change(function() {
+                        if($(this).is(":checked")) {
+                            $checkboxes_one.prop('checked', true);
                         }
-                    }
-                });
+                        else {
+                            $checkboxes_one.prop('checked', false);
+                        }
+                    });
 
-                var $massive_delete_ok = $('#massive-delete__ok');
-                $('#inputDelete').change(function() {
-                    if($(this).val() == "УДАЛИТЬ") {
-                        $massive_delete_ok.prop( "disabled", false );
-                    } else {
-                        $massive_delete_ok.prop( "disabled", true );
-                    }
-                });
-                $massive_delete_ok.click(function(){
-                    $('.form-massive').append( '{% if request.path == get_interested_clients_url %}<input type="hidden" name="is_interested" value="1"/>{% endif %}').attr('action', '{% url "massive_delete_clients" %}{% if request.path == get_interested_clients_url %}?is_interested=1&{% else %}?{% endif %}' + get_params.slice(1)).submit();
-                });
+                    {# massive delete js #}
+                    $('.massive-delete-button').click(function(){
+                        var $checkboxes_checked = $(".checkbox_one:checked");
+                        var $checkboxes_checked_length = $checkboxes_checked.length;
+                        if ($checkboxes_checked_length == 1) {
+                            var id = $checkboxes_checked.val();
+                            $('#delete__ok').attr("href", '{% url "delete_client" %}?id=' + id + get_params);
+                            $('#delete-client').modal('show');
+                        }
+                        else {
+                            if ($checkboxes_checked_length != 0) {
+                                $('#massive-delete-client').modal('show');
+                            }
+                        }
+                    });
+
+                    var $massive_delete_ok = $('#massive-delete__ok');
+                    $('#inputDelete').change(function() {
+                        if($(this).val() == "УДАЛИТЬ") {
+                            $massive_delete_ok.prop( "disabled", false );
+                        } else {
+                            $massive_delete_ok.prop( "disabled", true );
+                        }
+                    });
+                    $massive_delete_ok.click(function(){
+                        $('.form-massive').append( '{% if request.path == get_interested_clients_url %}<input type="hidden" name="is_interested" value="1"/>{% endif %}').attr('action', '{% url "massive_delete_clients" %}{% if request.path == get_interested_clients_url %}?is_interested=1&{% else %}?{% endif %}' + get_params.slice(1)).submit();
+                    });
+                {% endif %}
             });
         })(jQuery);
     </script>

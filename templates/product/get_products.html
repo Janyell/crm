@@ -21,7 +21,10 @@
                                 <th>Цена</th>
                                 <th>Статус</th>
                                 <th></th>
-                                <th></th>
+                                {% if user_role != 1 %}
+                                    {# delete th #}
+                                    <th></th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -53,11 +56,14 @@
                                             </div>
                                         </a>
                                     </td>
-                                    <td>
-                                        <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-product" value="{{ product.pk }}">
-                                            <i class="icon-remove"></i>
-                                        </a>
-                                    </td>
+                                    {% if user_role != 1 %}
+                                        {# delete td #}
+                                        <td>
+                                            <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-product" value="{{ product.pk }}">
+                                                <i class="icon-remove"></i>
+                                            </a>
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -80,9 +86,12 @@
                             <a class="btn massive-deactivate-button">
                                 Деактивировать
                             </a>
-                            <a class="btn massive-delete-button">
-                                <i class="icon-remove"></i>
-                            </a>
+                            {% if user_role != 1 %}
+                                {# massive delete a #}
+                                <a class="btn massive-delete-button">
+                                    <i class="icon-remove"></i>
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="record-number">
@@ -90,33 +99,37 @@
                     </div>
                 </div>
 
-                <div class="modal hide fade" id="delete-product" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-header">
-                        <a class="close" data-dismiss="modal">×</a>
-                        <h3>Вы уверены, что хотите удалить этот продукт?</h3>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-                    </div>
-                </div>
-
-                <div class="modal hide fade" id="massive-delete-product" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <a class="close" data-dismiss="modal">×</a>
-                        <h3>Вы уверены, что хотите удалить выделенные продукты?</h3>
-                    </div>
-                    <div class="modal-body">
-                        <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
-                        <div class="center">
-                            <input id="inputDelete" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+                {% if user_role != 1 %}
+                    {# delete modal #}
+                    <div class="modal hide fade" id="delete-product" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-header">
+                            <a class="close" data-dismiss="modal">×</a>
+                            <h3>Вы уверены, что хотите удалить этот продукт?</h3>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button id="massive-delete__ok" class="btn btn-danger" disabled>Удалить</button>
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+
+                    {# massive delete modal #}
+                    <div class="modal hide fade" id="massive-delete-product" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+                        <div class="modal-header">
+                            <a class="close" data-dismiss="modal">×</a>
+                            <h3>Вы уверены, что хотите удалить выделенные продукты?</h3>
+                        </div>
+                        <div class="modal-body">
+                            <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
+                            <div class="center">
+                                <input id="inputDelete" type="text" name="delete" placeholder="УДАЛИТЬ" required />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="massive-delete__ok" class="btn btn-danger" disabled>Удалить</button>
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
 
                 <div class="modal hide fade" id="edit-product" tabindex="-1" role="dialog" aria-hidden="true">
                     <form method="post" class="form-horizontal form-add_modal form-edit-product">
@@ -251,8 +264,8 @@
                                 "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
                             },
                             "aoColumnDefs": [
-                                { "bSortable": false, "aTargets": [0, 5, 6 ] },
-                                { "bSearchable": false, "aTargets": [0, 5, 6 ] }
+                                { "bSortable": false, "aTargets": [0, 5{% if user_role != 1 %}, 6{% endif %} ] },
+                                { "bSearchable": false, "aTargets": [0, 5{% if user_role != 1 %}, 6{% endif %} ] }
                             ],
                             "order": [2, 'asc' ],
                             "bInfo": false,
@@ -265,12 +278,15 @@
                             {% endif %}
                         });
                         var table = $product_table.DataTable();
-                        $('.delete-button').bind('click', function(){
-                            var id = $(this).attr('value');
-                            var info = table.page.info();
-                            var $filter_input = $('#product-table_filter').find('input');
-                            $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
-                        });
+                        {% if user_role != 1 %}
+                            {# delete js #}
+                            $('.delete-button').bind('click', function(){
+                                var id = $(this).attr('value');
+                                var info = table.page.info();
+                                var $filter_input = $('#product-table_filter').find('input');
+                                $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
+                            });
+                        {% endif %}
 
                         var $form_edit_product = $('.form-edit-product');
                         $('.edit-button').bind('click', function(){
@@ -299,37 +315,40 @@
                                 $checkboxes_one.prop('checked', false);
                             }
                         });
+                        var $form = $('.form-massive');
 
-                        $('.massive-delete-button').click(function(){
-                            var $checkboxes_checked = $(".checkbox_one:checked");
-                            var $checkboxes_checked_length = $checkboxes_checked.length;
-                            if ($checkboxes_checked_length == 1) {
-                                var id = $checkboxes_checked.val();
+                        {% if user_role != 1 %}
+                            {# massive delete js #}
+                            $('.massive-delete-button').click(function(){
+                                var $checkboxes_checked = $(".checkbox_one:checked");
+                                var $checkboxes_checked_length = $checkboxes_checked.length;
+                                if ($checkboxes_checked_length == 1) {
+                                    var id = $checkboxes_checked.val();
+                                    var info = table.page.info();
+                                    var $filter_input = $('#product-table_filter').find('input');
+                                    $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
+                                    $('#delete-product').modal('show');
+                                }
+                                else {
+                                    if ($checkboxes_checked_length != 0) {
+                                        $('#massive-delete-product').modal('show');
+                                    }
+                                }
+                            });
+                            var $massive_delete_ok = $('#massive-delete__ok');
+                            $('#inputDelete').change(function() {
+                                if($(this).val() == "УДАЛИТЬ") {
+                                    $massive_delete_ok.prop( "disabled", false );
+                                } else {
+                                    $massive_delete_ok.prop( "disabled", true );
+                                }
+                            });
+                            $massive_delete_ok.click(function(){
                                 var info = table.page.info();
                                 var $filter_input = $('#product-table_filter').find('input');
-                                $('#delete__ok').attr({'href': '{% url "delete_product" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
-                                $('#delete-product').modal('show');
-                            }
-                            else {
-                                if ($checkboxes_checked_length != 0) {
-                                    $('#massive-delete-product').modal('show');
-                                }
-                            }
-                        });
-                        var $form = $('.form-massive');
-                        var $massive_delete_ok = $('#massive-delete__ok');
-                        $('#inputDelete').change(function() {
-                            if($(this).val() == "УДАЛИТЬ") {
-                                $massive_delete_ok.prop( "disabled", false );
-                            } else {
-                                $massive_delete_ok.prop( "disabled", true );
-                            }
-                        });
-                        $massive_delete_ok.click(function(){
-                            var info = table.page.info();
-                            var $filter_input = $('#product-table_filter').find('input');
-                            $form.attr('action', '{% url "massive_delete_products" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
-                        });
+                                $form.attr('action', '{% url "massive_delete_products" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
+                            });
+                        {% endif %}
                         $('.massive-activate-button').click(function(){
                             var info = table.page.info();
                             var $filter_input = $('#product-table_filter').find('input');

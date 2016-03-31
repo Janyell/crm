@@ -6,7 +6,8 @@ from base_api.models import *
 from django.forms import ModelChoiceField
 
 
-BILL_STATUS_CHOICES_FOR_CLAIM = (('0', 'Выставлен'),
+BILL_STATUS_CHOICES_FOR_CLAIM = (('', '----------'),
+                                 ('0', 'Выставлен'),
                                  ('1', 'Нужна доплата'),
                                  ('2', 'Оплачен'),
                                  ('4', 'Устно'),
