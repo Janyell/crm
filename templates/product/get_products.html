@@ -21,10 +21,8 @@
                                 <th>Цена</th>
                                 <th>Статус</th>
                                 <th></th>
-                                {% if user_role != 1 %}
-                                    {# delete th #}
-                                    <th></th>
-                                {% endif %}
+                                {# delete th #}
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,14 +54,12 @@
                                             </div>
                                         </a>
                                     </td>
-                                    {% if user_role != 1 %}
-                                        {# delete td #}
-                                        <td>
-                                            <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-product" value="{{ product.pk }}">
-                                                <i class="icon-remove"></i>
-                                            </a>
-                                        </td>
-                                    {% endif %}
+                                    {# delete td #}
+                                    <td>
+                                        <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-product" value="{{ product.pk }}">
+                                            <i class="icon-remove"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -264,8 +260,11 @@
                                 "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
                             },
                             "aoColumnDefs": [
-                                { "bSortable": false, "aTargets": [0, 5{% if user_role != 1 %}, 6{% endif %} ] },
-                                { "bSearchable": false, "aTargets": [0, 5{% if user_role != 1 %}, 6{% endif %} ] }
+                                {% if user_role == 1 %}
+                                    { "bVisible": false,  "aTargets": 6 },
+                                {% endif %}
+                                { "bSortable": false, "aTargets": [0, 5 ] },
+                                { "bSearchable": false, "aTargets": [0, 5 ] }
                             ],
                             "order": [2, 'asc' ],
                             "bInfo": false,

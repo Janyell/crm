@@ -1,0 +1,17 @@
+{% extends "order_claim/get_orders.html" %}
+
+{% block account_number_th %}{% endblock %}
+
+{% block account_number_th_factory %}
+    <th>Номер счета</th>
+{% endblock %}
+
+{% block account_number_td %}{% endblock %}
+
+{% block account_number_td_factory %}
+    <td>
+        {% if order.account_number != None %}
+            {{ order.account_number }}
+        {% endif %}
+    </td>
+{% endblock %}
