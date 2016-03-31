@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="inputAccountNumber">
+                    <label class="control-label" for="id_account_number">
                         Номер счета
                     </label>
                     <div class="controls">
@@ -368,7 +368,7 @@
         </div>
     {% endif %}
 
-
+    {% include "order_claim/modules/add_edit_order_hard_links.html" %}
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -415,7 +415,7 @@
                             $shipped_date_label.html(shipped_date_label_text + "<span class=\"required-input\">*</span>");
                         }
                         else {
-                           $shipped_date.prop("required", false);
+                            $shipped_date.prop("required", false);
                             $shipped_date_label.html(shipped_date_label_text);
                         }
                     });

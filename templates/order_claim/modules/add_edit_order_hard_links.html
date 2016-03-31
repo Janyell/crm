@@ -1,0 +1,34 @@
+{% url 'add_claim' as add_claim_url %}
+{% url 'edit_claim' as edit_claim_url %}
+{% block hard_links %}
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                    {# billed hard link #}
+                    var $select_bill_status = $('#selectBillStatus');
+                    var $account_number = $('#id_account_number');
+                    var $account_number_label = $("label[for=\"id_account_number\"]");
+                    var account_number_label_text = $account_number_label.text();
+                    if ($select_bill_status.val() == 0) { // Выставлен
+                            $account_number.prop("required", true);
+                            $account_number_label.html(account_number_label_text + "<span class=\"required-input\">*</span>");
+                        }
+                    $select_bill_status.change(function() {
+                        if ($(this).val() == 0) { // Выставлен
+                            $account_number.prop("required", true);
+                            $account_number_label.html(account_number_label_text + "<span class=\"required-input\">*</span>");
+                        }
+                        else {
+                            $account_number.prop("required", false);
+                            $account_number_label.html(account_number_label_text);
+                        }
+                    });
+                {% else %}
+                    {# shipped hard link #}
+
+                {% endif %}
+            });
+        })(jQuery);
+    </script>
+{% endblock %}
