@@ -48,6 +48,7 @@ def full_add_edit_order(request):
                         files.append(order_file)
             out.update({'files': files})
             source = request.POST['source']
+            transport_campaign = request.POST['transport_campaign']
             if request.POST['company'] != '':
                 id_company = int(request.POST['company'])
                 company = Companies.objects.get(id=id_company, is_deleted=0)
@@ -111,6 +112,8 @@ def full_add_edit_order(request):
                     queryset=Companies.objects.filter(is_deleted=0), required=False)
                     OrdersFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                    OrdersFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                     OrdersFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                 else:
@@ -118,6 +121,8 @@ def full_add_edit_order(request):
                     queryset=Companies.objects.filter(is_deleted=0), required=False)
                     OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                    OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                     OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                           required=False)
                 if user_role == 0:
@@ -134,14 +139,14 @@ def full_add_edit_order(request):
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
                                    'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum,
-                                   'factory_comment': factory_comment})
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
                 else:
                     form = OrdersForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'payment_date': payment_date, 'order_status': order_status,
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
                                    'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
-                                   'factory_comment': factory_comment})
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -166,6 +171,8 @@ def full_add_edit_order(request):
                                                     queryset=Companies.objects.filter(is_deleted=0), required=False)
                         OrdersFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                        OrdersFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                         OrdersFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                     else:
@@ -173,6 +180,8 @@ def full_add_edit_order(request):
                                                     queryset=Companies.objects.filter(is_deleted=0), required=False)
                         OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                        OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                         OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                     if user_role == 0:
@@ -189,14 +198,14 @@ def full_add_edit_order(request):
                                        'bill_status': bill_status, 'city': city, 'comment': comment,
                                        'source': source, 'ready_date': ready_date, 'account_number': account_number,
                                        'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum,
-                                       'factory_comment': factory_comment})
+                                       'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
                     else:
                         form = OrdersForm({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'payment_date': payment_date, 'order_status': order_status,
                                        'bill_status': bill_status, 'city': city, 'comment': comment,
                                        'source': source, 'ready_date': ready_date, 'account_number': account_number,
                                        'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
-                                       'factory_comment': factory_comment})
+                                       'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
                     form.products = Products.objects.filter(is_deleted=0)
                     products_list = request.POST.getlist('products[]')
                     for product in form.products:
@@ -220,6 +229,7 @@ def full_add_edit_order(request):
             new_order.is_comment_my = is_comment_my
             new_order.client = client
             new_order.source = Sources.objects.get(id=source)
+            new_order.transport_campaign = TransportCampaigns.objects.get(id=transport_campaign)
             new_order.company = company
             new_order.bill = bill
             if brought_sum:
@@ -251,6 +261,8 @@ def full_add_edit_order(request):
                                                         queryset=Companies.objects.filter(is_deleted=0), required=False)
                             OrdersFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=False)
+                            OrdersFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                             OrdersFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         else:
@@ -258,6 +270,8 @@ def full_add_edit_order(request):
                                                         queryset=Companies.objects.filter(is_deleted=0), required=False)
                             OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                            OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                             OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         if user_role == 0:
@@ -274,14 +288,16 @@ def full_add_edit_order(request):
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
                                            'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum,
-                                           'factory_comment': factory_comment})
+                                           'factory_comment': factory_comment,
+                                           'transport_campaign': transport_campaign})
                         else:
                             form = OrdersForm({'client': client, 'company': company, 'bill': bill,
                                            'payment_date': payment_date, 'order_status': order_status,
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
                                            'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
-                                           'factory_comment': factory_comment})
+                                           'factory_comment': factory_comment,
+                                           'transport_campaign': transport_campaign})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -340,6 +356,7 @@ def full_add_edit_order(request):
                     form.cleaned_data['order_status'] == -1 and form.cleaned_data['shipped_date']):
             client = form.cleaned_data['client']
             source = form.cleaned_data['source']
+            transport_campaign = form.cleaned_data['transport_campaign']
             unique_number = id_generator()
             company = form.cleaned_data['company']
             bill = form.cleaned_data['bill']
@@ -380,6 +397,8 @@ def full_add_edit_order(request):
                                                         queryset=Companies.objects.filter(is_deleted=0), required=False)
                         OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                        OrdersForm.base_fields['transport_campaign'] = SourceModelChoiceField(
+                                                    queryset=TransportCaTransportCampaignsmpaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                         OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -392,7 +411,8 @@ def full_add_edit_order(request):
                                            'bill_status': bill_status, 'city': city, 'comment': comment,
                                            'source': source, 'ready_date': ready_date, 'account_number': account_number,
                                            'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
-                                           'factory_comment': factory_comment})
+                                           'factory_comment': factory_comment,
+                                           'transport_campaign': transport_campaign})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -438,11 +458,12 @@ def full_add_edit_order(request):
                                               bill_status=bill_status, ready_date=ready_date, comment=comment,
                                               account_number=account_number, shipped_date=shipped_date,
                                               brought_sum=brought_sum,
-                                              factory_comment=factory_comment)
+                                              factory_comment=factory_comment, transport_campaign=transport_campaign)
                     new_order_product_link = Order_Product.objects.create(order=new_order, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products,
-                                                                          price=price_of_products)
+                                                                          price=price_of_products,
+                                                                          transport_campaign=transport_campaign)
             if is_order_create:
                 if 'only-save' in form.data:
                     get_params = '?'
@@ -457,6 +478,8 @@ def full_add_edit_order(request):
                                                 queryset=Companies.objects.filter(is_deleted=0), required=False)
                 OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                 OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                 OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -469,7 +492,7 @@ def full_add_edit_order(request):
                                    'bill_status': bill_status, 'city': city, 'comment': comment,
                                    'source': source, 'ready_date': ready_date, 'account_number': account_number,
                                    'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
-                                   'factory_comment': factory_comment})
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -488,8 +511,11 @@ def full_add_edit_order(request):
         else:
             client = request.POST['client']
             source = None
+            transport_campaign = None
             if 'source' in request.POST:
                 source = request.POST['source']
+            if 'transport_campaign' in request.POST:
+                transport_campaign = request.POST['transport_campaign']
             company = request.POST['company']
             bill = request.POST['bill']
             brought_sum = request.POST['brought_sum']
@@ -516,6 +542,8 @@ def full_add_edit_order(request):
                                             queryset=Companies.objects.filter(is_deleted=0), required=False)
             OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+            OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
             OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -529,7 +557,7 @@ def full_add_edit_order(request):
                                'bill_status': bill_status, 'city': city, 'comment': comment,
                                'source': source, 'ready_date': ready_date, 'account_number': account_number,
                                'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
-                               'factory_comment': factory_comment})
+                               'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
             form.products = Products.objects.filter(is_deleted=0)
             products_list = request.POST.getlist('products[]')
             for product in form.products:
@@ -556,6 +584,8 @@ def full_add_edit_order(request):
                                             queryset=Companies.objects.filter(is_deleted=0), required=False)
             OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+            OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
             OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -568,7 +598,8 @@ def full_add_edit_order(request):
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
-                               'brought_sum': order.brought_sum, 'factory_comment': order.factory_comment})
+                               'brought_sum': order.brought_sum, 'factory_comment': order.factory_comment,
+                               'transport_campaign': transport_campaign})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -589,6 +620,8 @@ def full_add_edit_order(request):
                                             queryset=Companies.objects.filter(is_deleted=0), required=False)
             OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+            OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
             OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -612,6 +645,8 @@ def full_add_edit_order(request):
                                             queryset=Companies.objects.filter(is_deleted=0), required=False)
                 OrdersFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                OrdersFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                 OrdersFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             else:
@@ -619,6 +654,8 @@ def full_add_edit_order(request):
                                             queryset=Companies.objects.filter(is_deleted=0), required=False)
                 OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                 OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             if user_role == 0:
@@ -636,14 +673,15 @@ def full_add_edit_order(request):
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
                                'role': order.role, 'brought_sum': order.brought_sum,
-                               'factory_comment': order.factory_comment})
+                               'factory_comment': order.factory_comment, 'transport_campaign': transport_campaign})
             else:
                 form = OrdersForm({'client': order.client, 'company': order.company, 'bill': order.bill,
                                'payment_date': order.payment_date, 'order_status': order.order_status,
                                'bill_status': order.bill_status, 'city': order.city, 'comment': order.comment,
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
-                               'brought_sum': order.brought_sum, 'factory_comment': order.factory_comment})
+                               'brought_sum': order.brought_sum, 'factory_comment': order.factory_comment,
+                               'transport_campaign': transport_campaign})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -663,6 +701,8 @@ def full_add_edit_order(request):
                                             queryset=Companies.objects.filter(is_deleted=0), required=False)
             OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+            OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
             OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -707,6 +747,7 @@ def full_get_orders(request):
         return HttpResponseRedirect('/login/')
     out = {}
     out.update({'sources': Sources.objects.filter(is_deleted=0)})
+    out.update({'transport_campaigns': TransportCampaigns.objects.filter(is_deleted=0)})
     out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])
@@ -824,6 +865,7 @@ def full_get_old_orders(request):
         return HttpResponseRedirect('/login/')
     out = {}
     out.update({'sources': Sources.objects.filter(is_deleted=0)})
+    out.update({'transport_campaigns': TransportCampaigns.objects.filter(is_deleted=0)})
     out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])

@@ -788,6 +788,7 @@ def get_reports(request):
         return HttpResponseRedirect('/login/')
     out = {}
     out.update({'sources': Sources.objects.filter(is_deleted=0)})
+    out.update({'transport_campaigns': TransportCampaigns.objects.filter(is_deleted=0)})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])
         length = int(request.GET['length'])
@@ -902,6 +903,7 @@ def get_related_claims(request):
         return HttpResponseRedirect('/login/')
     out = {}
     out.update({'sources': Sources.objects.filter(is_deleted=0)})
+    out.update({'transport_campaigns': TransportCampaigns.objects.filter(is_deleted=0)})
     out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])
@@ -994,6 +996,7 @@ def get_client_claims(request):
         return HttpResponseRedirect('/login/')
     out = {}
     out.update({'sources': Sources.objects.filter(is_deleted=0)})
+    out.update({'transport_campaigns': TransportCampaigns.objects.filter(is_deleted=0)})
     out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])

@@ -19,6 +19,8 @@ PRODUCT_STATUS_FOR_PRODUCT = (('1', 'Активный'),
                               ('0', 'Неактивный'))
 SOURCE_STATUS = (('1', 'Активный'),
                  ('0', 'Неактивный'))
+TRANSPORT_CAMPAIGNS_STATUS = (('1', 'Активный'),
+                              ('0', 'Неактивный'))
 
 
 class CompanyModelChoiceField(ModelChoiceField):
@@ -27,6 +29,11 @@ class CompanyModelChoiceField(ModelChoiceField):
 
 
 class SourceModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.title
+
+
+class TransportCampaignsModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.title
 
@@ -142,6 +149,7 @@ orders_form_widgets = {
     'comment': Textarea(attrs={'id': "inputComment",
                                'placeholder': "Комментарии"}),
     'source': Select(attrs={'id': "selectSource", 'required': 1}),
+    'transport_campaign': Select(attrs={'id': "selectTransportCampaign", 'required': 1}),
     'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                    'class': "datetime",
                                    'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
@@ -183,6 +191,7 @@ claims_form_widgets = {
     'comment': Textarea(attrs={'id': "inputComment",
                                'placeholder': "Комментарии"}),
     'source': Select(attrs={'id': "selectSource", 'required': 1}),
+    'transport_campaign': Select(attrs={'id': "selectTransportCampaign", 'required': 1}),
     'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                    'class': "datetime",
                                    'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
@@ -294,6 +303,16 @@ class SourceForm(ModelForm):
         }
 
 
+class TransportCampaignsForm(ModelForm):
+    class Meta:
+        model = TransportCampaigns
+        exclude = ['is_deleted', 'is_active']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputTitle",
+                                      'required': 1})
+        }
+
+
 class SourceEditForm(ModelForm):
     class Meta:
         model = Sources
@@ -302,6 +321,17 @@ class SourceEditForm(ModelForm):
             'title': TextInput(attrs={'id': "inputEditTitle",
                                       'required': 1}),
             'is_active': Select(attrs={'id': "selectEditStatus"}, choices=SOURCE_STATUS),
+        }
+
+
+class TransportCampaignsEditForm(ModelForm):
+    class Meta:
+        model = Sources
+        exclude = ['is_deleted']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputEditTitle",
+                                      'required': 1}),
+            'is_active': Select(attrs={'id': "selectEditStatus"}, choices=TRANSPORT_CAMPAIGNS_STATUS),
         }
 
 

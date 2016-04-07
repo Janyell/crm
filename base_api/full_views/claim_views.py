@@ -31,6 +31,7 @@ def full_add_edit_claim(request):
             pk = request.POST['pk']
             claim = Orders.objects.get(id=pk)
             source = request.POST['source']
+            transport_campaign = request.POST['transport_campaign']
             comment = request.POST['comment']
             factory_comment = None
             if 'factory_comment' in request.POST:
@@ -63,6 +64,8 @@ def full_add_edit_claim(request):
                                                                             required=False)
                     ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                    ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                     ClaimsFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                 else:
@@ -70,6 +73,8 @@ def full_add_edit_claim(request):
                                                                             required=False)
                     ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                    ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                     ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                 if user_role == 0:
@@ -80,11 +85,12 @@ def full_add_edit_claim(request):
                     form = ClaimsFormForAdmins({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                    'comment': comment, 'role': role, 'brought_sum': brought_sum,
-                                   'factory_comment': factory_comment})
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
                 else:
                     form = ClaimsForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'bill_status': bill_status, 'account_number': account_number, 'source': source,
-                                   'comment': comment, 'brought_sum': brought_sum, 'factory_comment': factory_comment})
+                                   'comment': comment, 'brought_sum': brought_sum, 'factory_comment': factory_comment,
+                                   'transport_campaign': transport_campaign})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -112,6 +118,8 @@ def full_add_edit_claim(request):
                                                                                 required=False)
                         ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                        ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                         ClaimsFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                     else:
@@ -119,6 +127,8 @@ def full_add_edit_claim(request):
                                                                                 required=False)
                         ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                        ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                         ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                     if user_role == 0:
@@ -129,12 +139,12 @@ def full_add_edit_claim(request):
                         form = ClaimsFormForAdmins({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                        'comment': comment, 'role': role, 'brought_sum': brought_sum,
-                                       'factory_comment': factory_comment})
+                                       'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
                     else:
                         form = ClaimsForm({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                        'comment': comment, 'brought_sum': brought_sum,
-                                       'factory_comment': factory_comment})
+                                       'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
                     form.products = Products.objects.filter(is_deleted=0)
                     products_list = request.POST.getlist('products[]')
                     for product in form.products:
@@ -161,6 +171,7 @@ def full_add_edit_claim(request):
             new_claim.is_comment_my = is_comment_my
             new_claim.client = client
             new_claim.source = Sources.objects.get(id=source)
+            new_claim.transport_campaign = TransportCampaigns.objects.get(id=transport_campaign)
             new_claim.company = company
             new_claim.comment = comment
             new_claim.factory_comment = factory_comment
@@ -191,6 +202,8 @@ def full_add_edit_claim(request):
                                                                                     required=False)
                             ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                            ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                             ClaimsFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         else:
@@ -198,6 +211,8 @@ def full_add_edit_claim(request):
                                                                                     required=False)
                             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                            ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         if user_role == 0:
@@ -208,12 +223,14 @@ def full_add_edit_claim(request):
                             form = ClaimsFormForAdmins({'client': client, 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
                                            'comment': comment, 'role': role, 'brought_sum': brought_sum,
-                                           'factory_comment': factory_comment})
+                                           'factory_comment': factory_comment,
+                                           'transport_campaign': transport_campaign})
                         else:
                             form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
                                            'comment': comment, 'brought_sum': brought_sum,
-                                           'factory_comment': factory_comment})
+                                           'factory_comment': factory_comment,
+                                           'transport_campaign': transport_campaign})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -278,6 +295,7 @@ def full_add_edit_claim(request):
         if form.is_valid():
             client = form.cleaned_data['client']
             source = form.cleaned_data['source']
+            transport_campaign = form.cleaned_data['transport_campaign']
             role = Roles.objects.get(id=request.user.id, is_deleted=0)
             unique_number = id_generator()
             company = form.cleaned_data['company']
@@ -310,13 +328,16 @@ def full_add_edit_claim(request):
                                                                                     required=False)
                         ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                        ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                         ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
                                            'comment': comment, 'brought_sum': brought_sum,
-                                           'factory_comment': factory_comment})
+                                           'factory_comment': factory_comment,
+                                           'transport_campaign': transport_campaign})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -363,7 +384,8 @@ def full_add_edit_claim(request):
                                               unique_number=unique_number, company=company, bill=bill,
                                               bill_status=bill_status, is_claim=is_claim,
                                               account_number=account_number, comment=comment, source=source,
-                                              brought_sum=brought_sum, factory_comment=factory_comment)
+                                              brought_sum=brought_sum, factory_comment=factory_comment,
+                                              transport_campaign=transport_campaign)
                     new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products,
@@ -390,13 +412,15 @@ def full_add_edit_claim(request):
                                                                             required=False)
                 ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                 ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                 ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                    'bill_status': bill_status, 'account_number': account_number,
                                    'comment': comment, 'brought_sum': brought_sum,
-                                   'factory_comment': factory_comment})
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -417,8 +441,11 @@ def full_add_edit_claim(request):
         else:
             client = request.POST['client']
             source = None
+            transport_campaign = None
             if 'source' in request.POST:
                 source = request.POST['source']
+            if 'transport_campaign' in request.POST:
+                transport_campaign = request.POST['transport_campaign']
             company = request.POST['company']
             comment = request.POST['comment']
             factory_comment = None
@@ -432,13 +459,15 @@ def full_add_edit_claim(request):
                                                                         required=False)
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+            ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                'bill_status': bill_status, 'account_number': account_number,
                                'comment': comment, 'brought_sum': brought_sum,
-                               'factory_comment': factory_comment})
+                               'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
             form.products = Products.objects.filter(is_deleted=0)
             products_list = request.POST.getlist('products[]')
             for product in form.products:
@@ -465,13 +494,15 @@ def full_add_edit_claim(request):
                                                                         required=False)
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+            ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             form = ClaimsForm({'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum,
-                               'factory_comment': claim.factory_comment})
+                               'factory_comment': claim.factory_comment, 'transport_campaign': transport_campaign})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -494,6 +525,8 @@ def full_add_edit_claim(request):
                                                                         required=False)
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+            ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -518,6 +551,8 @@ def full_add_edit_claim(request):
                                                                         required=False)
                 ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                 ClaimsFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                required=False)
             else:
@@ -525,6 +560,8 @@ def full_add_edit_claim(request):
                                                                         required=False)
                 ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
                 ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             if user_role == 0:
@@ -536,12 +573,14 @@ def full_add_edit_claim(request):
                 form = ClaimsFormForAdmins({'client': claim.client, 'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'role': claim.role,
-                               'brought_sum': claim.brought_sum, 'factory_comment': claim.factory_comment})
+                               'brought_sum': claim.brought_sum, 'factory_comment': claim.factory_comment,
+                               'transport_campaign': claim.transport_campaign})
             else:
                 form = ClaimsForm({'client': claim.client, 'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum,
-                               'factory_comment': claim.factory_comment})
+                               'factory_comment': claim.factory_comment,
+                               'transport_campaign': claim.transport_campaign})
             form.products = Products.objects.filter(is_deleted=0)
             ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
@@ -564,6 +603,8 @@ def full_add_edit_claim(request):
                                                                         required=False)
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+            ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))

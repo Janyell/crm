@@ -125,6 +125,12 @@ class Companies(models.Model):
 # ]
 
 
+class TransportCampaigns(models.Model):
+    title = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=1)
+    is_deleted = models.BooleanField(default=0)
+
+
 class Sources(models.Model):
     title = models.CharField(max_length=255)
     is_active = models.BooleanField(default=1)
@@ -157,6 +163,7 @@ class Orders(models.Model):
     # )
     # source = models.IntegerField(choices=ORDER_SOURCE_CHOICES, default=ZT)
     source = models.ForeignKey(Sources)
+    transport_campaign = models.ForeignKey(TransportCampaigns, null=True)
     client = models.ForeignKey(Clients)
     unique_number = models.CharField(max_length=50, unique=True)
     company = models.ForeignKey(Companies, null=True, blank=True)

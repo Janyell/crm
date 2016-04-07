@@ -225,6 +225,21 @@ def massive_delete_sources(request):
     return HttpResponseRedirect('/settings/sources/' + get_params)
 
 
+def massive_delete_transport_campaigns(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        transport_campaign = TransportCampaigns.objects.get(pk=id)
+        transport_campaign.is_deleted = 1
+        transport_campaign.save(update_fields=["is_deleted"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/settings/transport_campaigns/' + get_params)
+
+
 def massive_activate_source(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
@@ -240,6 +255,21 @@ def massive_activate_source(request):
     return HttpResponseRedirect('/settings/sources/' + get_params)
 
 
+def massive_activate_transport_campaign(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        transport_campaign = TransportCampaigns.objects.get(pk=id, is_deleted=0)
+        transport_campaign.is_active = 1
+        transport_campaign.save(update_fields=["is_active"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/settings/transport_campaigns/' + get_params)
+
+
 def massive_deactivate_source(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
@@ -253,3 +283,18 @@ def massive_deactivate_source(request):
     get_params = '?'
     get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/settings/sources/' + get_params)
+
+
+def massive_deactivate_transport_campaign(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        transport_campaign = TransportCampaigns.objects.get(pk=id, is_deleted=0)
+        transport_campaign.is_active = 0
+        transport_campaign.save(update_fields=["is_active"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/settings/transport_campaigns/' + get_params)
