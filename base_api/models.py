@@ -21,7 +21,7 @@ class UnixTimestampField(models.DateTimeField):
 
     def db_type(self, connection):
         typ = ['TIMESTAMP']
-        # See above!
+        # See above!-
         if self.isnull:
             typ += ['NULL']
         if self.auto_created:

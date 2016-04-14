@@ -17,6 +17,8 @@ def full_add_edit_order(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     out = {}
+    # хак, чтобы отсутствие этого поля не вызывало 500 (фронт пока не добавил это поле)
+    transport_campaign = None
     user_role = Roles.objects.get(id=request.user.id).role
     if user_role == 2:
         return HttpResponseRedirect('/oops/')
@@ -62,15 +64,23 @@ def full_add_edit_order(request):
             shipped_date = None
             if request.POST['order_status'] != '':
                 order_status = int(request.POST['order_status'])
-                if order_status == -1:
-                    shipped_date = request.POST['shipped_date']
-                    if shipped_date is None or shipped_date == '':
-                        is_date_for_status_exist = False
-                        shipped_date = datetime.now()
-                    else:
-                        shipped_date = datetime.strptime(shipped_date, '%Y-%m-%d').date()
             else:
                 order_status = None
+            if 'shipped_date' in request.POST and \
+                request.POST['shipped_date'] is not None and \
+                request.POST['shipped_date'] != '':
+                order_status = -1
+            if 'ready_date' in request.POST and \
+                request.POST['ready_date'] is not None and \
+                request.POST['ready_date'] != '':
+                order_status = 2
+            if order_status == -1:
+                shipped_date = request.POST['shipped_date']
+                if shipped_date is None or shipped_date == '':
+                    is_date_for_status_exist = False
+                    shipped_date = datetime.now()
+                else:
+                    shipped_date = datetime.strptime(shipped_date, '%Y-%m-%d').date()
             if request.POST['bill_status'] != '':
                 bill_status = int(request.POST['bill_status'])
             else:
@@ -106,7 +116,11 @@ def full_add_edit_order(request):
                 id_client = int(request.POST['client'])
                 client = Clients.objects.get(id=id_client, is_deleted=0)
             else:
-                out.update({"error": 1})
+                if not is_date_for_status_exist:
+                    # код ошибки когда нет даты отгрузки, а статус - есть
+                    out.update({"error": 100})
+                else:
+                    out.update({"error": 1})
                 if user_role == 0:
                     OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
                     queryset=Companies.objects.filter(is_deleted=0), required=False)
@@ -236,6 +250,10 @@ def full_add_edit_order(request):
                 new_order.brought_sum = brought_sum
             new_order.payment_date = payment_date
             new_order.order_status = order_status
+            if shipped_date is not None and shipped_date != '':
+                new_order.order_status = -1
+            if ready_date is not None and ready_date != '':
+                order_status = 2
             new_order.bill_status = bill_status
             new_order.shipped_date = shipped_date
             new_order.ready_date = ready_date
@@ -368,6 +386,14 @@ def full_add_edit_order(request):
             except Exception:
                 brought_sum = None
             shipped_date = None
+            if 'shipped_date' in request.POST and \
+                request.POST['shipped_date'] is not None and \
+                request.POST['shipped_date'] != '':
+                order_status = -1
+            if 'ready_date' in request.POST and \
+                request.POST['ready_date'] is not None and \
+                request.POST['ready_date'] != '':
+                order_status = 2
             if order_status == -1:
                 shipped_date = form.cleaned_data['shipped_date']
                 if shipped_date is None:
@@ -525,6 +551,14 @@ def full_add_edit_order(request):
                 role = request.user.id
             payment_date = request.POST['payment_date']
             order_status = request.POST['order_status']
+            if 'shipped_date' in request.POST and \
+                request.POST['shipped_date'] is not None and \
+                request.POST['shipped_date'] != '':
+                order_status = -1
+            if 'ready_date' in request.POST and \
+                request.POST['ready_date'] is not None and \
+                request.POST['ready_date'] != '':
+                order_status = 2
             bill_status = request.POST['bill_status']
             ready_date = request.POST['ready_date']
             shipped_date = request.POST['shipped_date']
@@ -976,6 +1010,14 @@ def full_edit_order_for_factory(request):
             else:
                 ready_date = None
             new_order = Orders.objects.get(id=pk, is_deleted=0)
+            if 'shipped_date' in request.POST and \
+                            request.POST['shipped_date'] is not None and \
+                            request.POST['shipped_date'] != '':
+                order_status = -1
+            if 'ready_date' in request.POST and \
+                request.POST['ready_date'] is not None and \
+                request.POST['ready_date'] != '':
+                order_status = 2
             if order_status == -1:
                 shipped_date = request.POST['shipped_date']
                 if shipped_date is None or shipped_date == '':
