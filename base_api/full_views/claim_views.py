@@ -40,6 +40,20 @@ def full_add_edit_claim(request):
                 brought_sum = int(request.POST['brought_sum'])
             except Exception:
                 brought_sum = None
+            if request.POST['payment_date'] != '':
+                payment_date = request.POST['payment_date']
+                payment_date = datetime.strptime(payment_date, '%Y-%m-%d %H:%M:%S')
+            else:
+                payment_date = None
+            city = request.POST['city']
+            if city:
+                city = Cities.objects.get(pk=city)
+            else:
+                city = None
+            if 'newCity' in request.POST:
+                newCity = request.POST['newCity']
+                if newCity:
+                    city = Cities.objects.create(name=newCity)
             if request.POST['company'] != '':
                 id_company = int(request.POST['company'])
                 company = Companies.objects.get(id=id_company, is_deleted=0)
@@ -49,6 +63,14 @@ def full_add_edit_claim(request):
                 bill_status = int(request.POST['bill_status'])
             else:
                 bill_status = None
+            order_status = None
+            if bill_status == 1 or bill_status == 2:
+                order_status = 0
+            if request.POST['ready_date'] != '':
+                ready_date = request.POST['ready_date']
+                ready_date = datetime.strptime(ready_date, '%Y-%m-%d %H:%M:%S')
+            else:
+                ready_date = None
             account_number = request.POST['account_number']
             if 'role' in request.POST:
                 role = request.POST['role']
@@ -85,12 +107,15 @@ def full_add_edit_claim(request):
                     form = ClaimsFormForAdmins({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                    'comment': comment, 'role': role, 'brought_sum': brought_sum,
-                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign,
+                                   'ready_date': ready_date, 'city': city, 'payment_date': payment_date,
+                                   'order_status': order_status})
                 else:
                     form = ClaimsForm({'client': request.POST['client'], 'company': company, 'bill': request.POST['bill'],
                                    'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                    'comment': comment, 'brought_sum': brought_sum, 'factory_comment': factory_comment,
-                                   'transport_campaign': transport_campaign})
+                                   'transport_campaign': transport_campaign, 'ready_date': ready_date, 'city': city,
+                                   'payment_date': payment_date, 'order_status': order_status})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -139,12 +164,16 @@ def full_add_edit_claim(request):
                         form = ClaimsFormForAdmins({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                        'comment': comment, 'role': role, 'brought_sum': brought_sum,
-                                       'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
+                                       'factory_comment': factory_comment, 'transport_campaign': transport_campaign,
+                                       'ready_date': ready_date, 'city': city, 'payment_date': payment_date,
+                                       'order_status': order_status})
                     else:
                         form = ClaimsForm({'client': client, 'company': company, 'bill': request.POST['bill'],
                                        'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                        'comment': comment, 'brought_sum': brought_sum,
-                                       'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
+                                       'factory_comment': factory_comment, 'transport_campaign': transport_campaign,
+                                       'ready_date': ready_date, 'city': city, 'payment_date': payment_date,
+                                       'order_status': order_status})
                     form.products = Products.objects.filter(is_deleted=0)
                     products_list = request.POST.getlist('products[]')
                     for product in form.products:
@@ -175,7 +204,10 @@ def full_add_edit_claim(request):
             new_claim.company = company
             new_claim.comment = comment
             new_claim.factory_comment = factory_comment
+            new_claim.city = city
             new_claim.bill = bill
+            new_claim.ready_date = ready_date
+            new_claim.payment_date = payment_date
             new_claim.brought_sum = brought_sum
             new_claim.bill_status = bill_status
             new_claim.role = Roles.objects.filter(id=role).first()
@@ -184,6 +216,7 @@ def full_add_edit_claim(request):
                 new_claim.is_claim = 0
                 displacement = 1
                 client.is_interested = 0
+                new_claim.order_status = 0
             new_claim.account_number = account_number
             new_claim.save(force_update=True)
             old_products = Order_Product.objects.filter(order_id=pk)
@@ -224,13 +257,15 @@ def full_add_edit_claim(request):
                                            'bill_status': bill_status, 'account_number': account_number,
                                            'comment': comment, 'role': role, 'brought_sum': brought_sum,
                                            'factory_comment': factory_comment,
-                                           'transport_campaign': transport_campaign})
+                                           'transport_campaign': transport_campaign, 'ready_date': ready_date,
+                                           'city': city, 'payment_date': payment_date, 'order_status': order_status})
                         else:
                             form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
                                            'comment': comment, 'brought_sum': brought_sum,
                                            'factory_comment': factory_comment,
-                                           'transport_campaign': transport_campaign})
+                                           'transport_campaign': transport_campaign, 'ready_date': ready_date,
+                                           'city': city, 'payment_date': payment_date, 'order_status': order_status})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -300,7 +335,25 @@ def full_add_edit_claim(request):
             unique_number = id_generator()
             company = form.cleaned_data['company']
             comment = form.cleaned_data['comment']
-            factory_comment = form.cleaned_data['factory_comment']
+            factory_comment = None
+            if 'factory_comment' in form.data:
+                factory_comment = form.cleaned_data['factory_comment']
+            city = None
+            if 'city' in form.data:
+                city = form.cleaned_data['city']
+                if 'newCity' in form.cleaned_data:
+                    newCity = form.cleaned_data['newCity']
+                    if newCity:
+                        city = Cities.objects.create(name=newCity)
+            if 'ready_date' in form.data:
+                if form.cleaned_data['ready_date'] != '':
+                    ready_date = form.cleaned_data['ready_date']
+                    ready_date = datetime.strptime(ready_date, '%Y-%m-%d %H:%M:%S')
+                else:
+                    ready_date = None
+            payment_date = None
+            if 'payment_date' in form.data:
+                payment_date = form.cleaned_data['payment_date']
             bill = form.cleaned_data['bill']
             try:
                 brought_sum = int(request.POST['brought_sum'])
@@ -308,10 +361,12 @@ def full_add_edit_claim(request):
                 brought_sum = None
             bill_status = form.cleaned_data['bill_status']
             displacement = 0
+            order_status = None
             if bill_status == 1 or bill_status == 2:
                 is_claim = 0
                 client.is_interested = 0
                 displacement = 1
+                order_status = 0
             else:
                 is_claim = 1
             account_number = form.cleaned_data['account_number']
@@ -339,7 +394,8 @@ def full_add_edit_claim(request):
                                            'bill_status': bill_status, 'account_number': account_number,
                                            'comment': comment, 'brought_sum': brought_sum,
                                            'factory_comment': factory_comment,
-                                           'transport_campaign': transport_campaign})
+                                           'transport_campaign': transport_campaign, 'ready_date': ready_date,
+                                           'city': city, 'payment_date': payment_date, 'order_status': order_status})
                         form.products = Products.objects.filter(is_deleted=0)
                         products_list = request.POST.getlist('products[]')
                         for product in form.products:
@@ -387,7 +443,8 @@ def full_add_edit_claim(request):
                                               bill_status=bill_status, is_claim=is_claim,
                                               account_number=account_number, comment=comment, source=source,
                                               brought_sum=brought_sum, factory_comment=factory_comment,
-                                              transport_campaign=transport_campaign)
+                                              transport_campaign=transport_campaign, ready_date=ready_date, city=city,
+                                              payment_date=payment_date, order_status=order_status)
                     new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products,
@@ -422,7 +479,9 @@ def full_add_edit_claim(request):
                 form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                    'bill_status': bill_status, 'account_number': account_number,
                                    'comment': comment, 'brought_sum': brought_sum,
-                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign,
+                                   'ready_date': ready_date, 'city': city, 'payment_date': payment_date,
+                                   'order_status': order_status})
                 form.products = Products.objects.filter(is_deleted=0)
                 products_list = request.POST.getlist('products[]')
                 for product in form.products:
@@ -453,10 +512,34 @@ def full_add_edit_claim(request):
             factory_comment = None
             if 'factory_comment' in request.POST:
                 factory_comment = request.POST['factory_comment']
+            if 'city' in request.POST:
+                city = request.POST['city']
+                if city:
+                    city = Cities.objects.get(pk=city)
+                else:
+                    city = None
+                if 'newCity' in request.POST:
+                    newCity = request.POST['newCity']
+                    if newCity:
+                        city = Cities.objects.create(name=newCity)
+            if 'payment_date' in request.POST:
+                if request.POST['payment_date'] != '':
+                    payment_date = request.POST['payment_date']
+                    payment_date = datetime.strptime(payment_date, '%Y-%m-%d %H:%M:%S')
+                else:
+                    payment_date = None
             bill = request.POST['bill']
             brought_sum = request.POST['brought_sum']
             bill_status = request.POST['bill_status']
+            order_status = None
+            if bill_status == 1 or bill_status == 2:
+                order_status = 0
             account_number = request.POST['account_number']
+            if request.POST['ready_date'] != '':
+                ready_date = request.POST['ready_date']
+                ready_date = datetime.strptime(ready_date, '%Y-%m-%d %H:%M:%S')
+            else:
+                ready_date = None
             if account_number:
                 bill_status = 0
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
@@ -471,7 +554,9 @@ def full_add_edit_claim(request):
             form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
                                'bill_status': bill_status, 'account_number': account_number,
                                'comment': comment, 'brought_sum': brought_sum,
-                               'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
+                               'factory_comment': factory_comment, 'transport_campaign': transport_campaign,
+                               'ready_date': ready_date, 'city': city, 'payment_date': payment_date,
+                               'order_status': order_status})
             form.products = Products.objects.filter(is_deleted=0)
             products_list = request.POST.getlist('products[]')
             for product in form.products:
@@ -506,7 +591,9 @@ def full_add_edit_claim(request):
             form = ClaimsForm({'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum,
-                               'factory_comment': claim.factory_comment, 'transport_campaign': transport_campaign})
+                               'factory_comment': claim.factory_comment, 'transport_campaign': claim.transport_campaign,
+                               'ready_date': claim.ready_date, 'city': claim.city, 'payment_date': claim.payment_date,
+                               'order_status': claim.order_status})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -578,13 +665,16 @@ def full_add_edit_claim(request):
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'role': claim.role,
                                'brought_sum': claim.brought_sum, 'factory_comment': claim.factory_comment,
-                               'transport_campaign': claim.transport_campaign})
+                               'transport_campaign': claim.transport_campaign, 'ready_date': claim.ready_date,
+                               'city': claim.city, 'order_status': claim.order_status})
             else:
                 form = ClaimsForm({'client': claim.client, 'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
                                'comment': claim.comment, 'source': claim.source, 'brought_sum': claim.brought_sum,
                                'factory_comment': claim.factory_comment,
-                               'transport_campaign': claim.transport_campaign})
+                               'transport_campaign': claim.transport_campaign, 'ready_date': claim.ready_date,
+                               'city': claim.city, 'payment_date': claim.payment_date,
+                               'order_status': claim.order_status})
             form.products = Products.objects.filter(is_deleted=0)
             ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
