@@ -1211,9 +1211,9 @@ def edit_kp(request):
     else:
         out.update({'user_role': user_role})
     out.update({'page_title': "Создание КП"})
+    id = request.GET['id']
+    claim = Orders.objects.get(pk=id)
     if request.method == 'GET':
-        id = request.GET['id']
-        claim = Orders.objects.get(pk=id)
         template = KPTemplates.objects.filter(company=claim.company).first()
         if not template:
             out.update({'page_title': "Для данной компании нет шаблона КП"})
@@ -1282,7 +1282,7 @@ def edit_kp(request):
                 organization_name)})
         page_html = Template(page).render(Context(page_out))
         out.update({'page': page_html})
-        filename = str(hash(datetime.now()))
+        filename = claim.unique_number + '_' + claim.company + '_' + str(hash(datetime.now()))
         out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/') + filename + '.pdf'
         out_filename_html = MEDIA_ROOT + '/' + str('uploads/') + filename + '.html'
         form_file = open(out_filename_html, 'wb')
