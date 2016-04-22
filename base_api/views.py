@@ -1237,6 +1237,9 @@ def edit_kp(request):
         # TODO
         added_table = ''
         temp_out.update({'number': number})
+        account_number = 'КП' + str(number)
+        claim.account_number = account_number
+        claim.save(update_fields=["account_number"])
         temp_out.update({'date': kp_date})
         temp_out.update({
             'organization_name': u'<input type="text" class="organization_name" name="organization_name" value="{}">'.format(
@@ -1282,7 +1285,10 @@ def edit_kp(request):
                 organization_name)})
         page_html = Template(page).render(Context(page_out))
         out.update({'page': page_html})
-        filename = claim.unique_number + '_' + claim.company + '_' + str(hash(datetime.now()))
+        symbols = (u"абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ ",
+                   u"abvgdeejzijklmnoprstufhzcss_y_euaABVGDEEJZIJKLMNOPRSTUFHZCSS_Y_EUA_")
+        tr = dict( [ (ord(a), ord(b)) for (a, b) in zip(*symbols) ] )
+        filename = str(claim.account_number.translate(tr)) + '_' + str(claim.company.title.translate(tr)) + '_' + str(hash(datetime.now()))
         out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/') + filename + '.pdf'
         out_filename_html = MEDIA_ROOT + '/' + str('uploads/') + filename + '.html'
         form_file = open(out_filename_html, 'wb')
