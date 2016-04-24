@@ -507,35 +507,37 @@ def full_add_edit_claim(request):
                 source = request.POST['source']
             if 'transport_campaign' in request.POST:
                 transport_campaign = request.POST['transport_campaign']
-            company = request.POST['company']
+            company = None
+            if 'company' in request.POST:
+                company = request.POST['company']
             comment = request.POST['comment']
             factory_comment = None
             if 'factory_comment' in request.POST:
                 factory_comment = request.POST['factory_comment']
+            city = None
             if 'city' in request.POST:
                 city = request.POST['city']
                 if city:
                     city = Cities.objects.get(pk=city)
-                else:
-                    city = None
                 if 'newCity' in request.POST:
                     newCity = request.POST['newCity']
                     if newCity:
                         city = Cities.objects.create(name=newCity)
+            payment_date = None
             if 'payment_date' in request.POST:
                 if request.POST['payment_date'] != '':
                     payment_date = request.POST['payment_date']
                     payment_date = datetime.strptime(payment_date, '%Y-%m-%d %H:%M:%S')
-                else:
-                    payment_date = None
             bill = request.POST['bill']
             brought_sum = request.POST['brought_sum']
-            bill_status = request.POST['bill_status']
+            bill_status = None
+            if 'bill_status' in request.POST:
+                bill_status = request.POST['bill_status']
             order_status = None
             if bill_status == 1 or bill_status == 2:
                 order_status = 0
             account_number = request.POST['account_number']
-            if request.POST['ready_date'] != '':
+            if 'ready_date' in request.POST and request.POST['ready_date'] != '':
                 ready_date = request.POST['ready_date']
                 ready_date = datetime.strptime(ready_date, '%Y-%m-%d %H:%M:%S')
             else:
