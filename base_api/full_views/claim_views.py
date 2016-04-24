@@ -83,7 +83,7 @@ def full_add_edit_claim(request):
                 out.update({"error": 1})
                 if user_role == 0:
                     ClaimsFormForAdmins.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                            required=False)
+                                                                            required=True)
                     ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                     ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
@@ -140,7 +140,7 @@ def full_add_edit_claim(request):
                     out.update({"error": 1})
                     if user_role == 0:
                         ClaimsFormForAdmins.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                                required=False)
+                                                                                required=True)
                         ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                         ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
@@ -232,7 +232,7 @@ def full_add_edit_claim(request):
                         out.update({"error": 2})
                         if user_role == 0:
                             ClaimsFormForAdmins.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                                    required=False)
+                                                                                    required=True)
                             ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                             ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
@@ -500,7 +500,6 @@ def full_add_edit_claim(request):
                 out.update({'form': client_form})
                 out.update({'page_title': "Добавление заявки"})
         else:
-            print(form.errors)
             client = request.POST['client']
             source = None
             transport_campaign = None
@@ -642,7 +641,7 @@ def full_add_edit_claim(request):
             claim = Orders.objects.get(pk=id_order, is_deleted=0, is_claim=1)
             if user_role == 0:
                 ClaimsFormForAdmins.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=False)
+                                                                        required=True)
                 ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                 ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
