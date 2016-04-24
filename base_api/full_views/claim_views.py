@@ -87,7 +87,7 @@ def full_add_edit_claim(request):
                     ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                     ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                     ClaimsFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                 else:
@@ -96,7 +96,7 @@ def full_add_edit_claim(request):
                     ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                     ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                     ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                 if user_role == 0:
@@ -144,7 +144,7 @@ def full_add_edit_claim(request):
                         ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                         ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                         ClaimsFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                     else:
@@ -153,7 +153,7 @@ def full_add_edit_claim(request):
                         ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                         ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                         ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                     if user_role == 0:
@@ -236,7 +236,7 @@ def full_add_edit_claim(request):
                             ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                             ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                             ClaimsFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         else:
@@ -245,7 +245,7 @@ def full_add_edit_claim(request):
                             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                             ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         if user_role == 0:
@@ -386,7 +386,7 @@ def full_add_edit_claim(request):
                         ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                         ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                         ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -472,7 +472,7 @@ def full_add_edit_claim(request):
                 ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                 ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                 ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                 ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -549,7 +549,7 @@ def full_add_edit_claim(request):
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -586,7 +586,7 @@ def full_add_edit_claim(request):
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -619,7 +619,7 @@ def full_add_edit_claim(request):
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -645,7 +645,7 @@ def full_add_edit_claim(request):
                 ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                 ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                 ClaimsFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                required=False)
             else:
@@ -654,7 +654,7 @@ def full_add_edit_claim(request):
                 ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                 ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                 ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             if user_role == 0:
@@ -700,7 +700,7 @@ def full_add_edit_claim(request):
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
