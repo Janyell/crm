@@ -545,55 +545,12 @@
                 var $style = $('style');
 
                 $add_client.find(".modal-body").load(url + ' .in-modal', function() {
-                    var $input_person_phone = $('#inputPersonPhone'),
-                        $input_organization_phone = $('#inputOrganizationPhone');
-                    $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
-                    $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
                     $("#inputOrganization").attr({
                         'data-provide': "typeahead",
                         'data-items': "10",
                         'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
                     });
-                    $(".person-phone-code").click(function(){
-                        if( $(this).is(':checked') ) {
-                            var person_phone_code = $(this).val();
-                            if (person_phone_code == 3) {
-                                $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
-                            }
-                            else {
-                                var input_person_phone_val = $input_person_phone.val(),
-                                    person_phone = parseInt(input_person_phone_val.replace(/\D+/g,""));
-                                if (person_phone_code == 4) {
-                                    $input_person_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
-                                    $input_person_phone.val(person_phone);
-                                }
-                                else {
-                                    $input_person_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
-                                    $input_person_phone.val(person_phone);
-                                }
-                            }
-                        }
-                    });
-                    $(".organization-phone-code").click(function(){
-                        if( $(this).is(':checked') ) {
-                            var organization_phone_code = $(this).val();
-                            if (organization_phone_code == 3) {
-                                $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
-                            }
-                            else {
-                                var input_organization_phone_val = $input_organization_phone.val(),
-                                    organization_phone = parseInt(input_organization_phone_val.replace(/\D+/g,""));
-                                if (organization_phone_code == 4) {
-                                    $input_organization_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
-                                    $input_organization_phone.val(organization_phone);
-                                }
-                                else {
-                                    $input_organization_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
-                                    $input_organization_phone.val(organization_phone);
-                                }
-                            }
-                        }
-                    });
+
                     $('.form-add-client').on('submit', function(e) {
                         e.preventDefault();
                         $.ajax({
@@ -606,56 +563,12 @@
                                 if ($in_modal.length == 0) {
                                     $add_client.modal("hide");
                                     $add_client.find(".modal-body").load(url + ' .in-modal', function() {
-                                        var $input_person_phone = $('#inputPersonPhone'),
-                                            $input_organization_phone = $('#inputOrganizationPhone');
-                                        $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
-                                        $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
                                         $("#inputOrganization").attr({
                                             'data-provide': "typeahead",
                                             'data-items': "10",
                                             'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
                                         });
                                         $style.html(".typeahead { top: 300px !important; }");
-                                        $(".person-phone-code").click(function(){
-                                            if( $(this).is(':checked') ) {
-                                                var person_phone_code = $(this).val();
-                                                if (person_phone_code == 3) {
-                                                    $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
-                                                }
-                                                else {
-                                                    var input_person_phone_val = $input_person_phone.val(),
-                                                        person_phone = parseInt(input_person_phone_val.replace(/\D+/g,""));
-                                                    if (person_phone_code == 4) {
-                                                        $input_person_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
-                                                        $input_person_phone.val(person_phone);
-                                                    }
-                                                    else {
-                                                        $input_person_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
-                                                        $input_person_phone.val(person_phone);
-                                                    }
-                                                }
-                                            }
-                                        });
-                                        $(".organization-phone-code").click(function(){
-                                            if( $(this).is(':checked') ) {
-                                                var organization_phone_code = $(this).val();
-                                                if (organization_phone_code == 3) {
-                                                    $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
-                                                }
-                                                else {
-                                                    var input_organization_phone_val = $input_organization_phone.val(),
-                                                        organization_phone = parseInt(input_organization_phone_val.replace(/\D+/g,""));
-                                                    if (organization_phone_code == 4) {
-                                                        $input_organization_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
-                                                        $input_organization_phone.val(organization_phone);
-                                                    }
-                                                    else {
-                                                        $input_organization_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
-                                                        $input_organization_phone.val(organization_phone);
-                                                    }
-                                                }
-                                            }
-                                        });
                                     });
                                     $('.form-add__client').html($(data).find(".form-add__client").children());
                                     var $select_client = $('#id_client');
@@ -667,10 +580,6 @@
                                 }
                                 else {
                                     $(".form-add-client .modal-body").html($in_modal);
-                                    var $input_person_phone = $('#inputPersonPhone'),
-                                        $input_organization_phone = $('#inputOrganizationPhone');
-                                    $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
-                                    $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
                                     $("#inputOrganization").attr({
                                         'data-provide': "typeahead",
                                         'data-items': "10",
@@ -685,46 +594,6 @@
                                             $style.html(".typeahead { top: 350px !important; }");
                                         }
                                     }
-                                    $(".person-phone-code").click(function(){
-                                        if( $(this).is(':checked') ) {
-                                            var person_phone_code = $(this).val();
-                                            if (person_phone_code == 3) {
-                                                $input_person_phone.inputmask("mask", {"mask": "(999) 999-9999"});
-                                            }
-                                            else {
-                                                var input_person_phone_val = $input_person_phone.val(),
-                                                    person_phone = parseInt(input_person_phone_val.replace(/\D+/g,""));
-                                                if (person_phone_code == 4) {
-                                                    $input_person_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
-                                                    $input_person_phone.val(person_phone);
-                                                }
-                                                else {
-                                                    $input_person_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
-                                                    $input_person_phone.val(person_phone);
-                                                }
-                                            }
-                                        }
-                                    });
-                                    $(".organization-phone-code").click(function(){
-                                        if( $(this).is(':checked') ) {
-                                            var organization_phone_code = $(this).val();
-                                            if (organization_phone_code == 3) {
-                                                $input_organization_phone.inputmask("mask", {"mask": "(999) 999-9999"});
-                                            }
-                                            else {
-                                                var input_organization_phone_val = $input_organization_phone.val(),
-                                                    organization_phone = parseInt(input_organization_phone_val.replace(/\D+/g,""));
-                                                if (organization_phone_code == 4) {
-                                                    $input_organization_phone.inputmask("mask", {"mask": "(9999) 99-9999"});
-                                                    $input_organization_phone.val(organization_phone);
-                                                }
-                                                else {
-                                                    $input_organization_phone.inputmask("mask", {"mask": "(99999) 9-9999"});
-                                                    $input_organization_phone.val(organization_phone);
-                                                }
-                                            }
-                                        }
-                                    });
                                 }
                             }
                         });
