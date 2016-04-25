@@ -72,6 +72,8 @@ def full_add_edit_claim(request):
             else:
                 ready_date = None
             account_number = request.POST['account_number']
+            if account_number:
+                bill_status = 0
             if 'role' in request.POST:
                 role = request.POST['role']
             else:
