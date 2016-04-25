@@ -88,7 +88,7 @@
                                     <a href="{% url "index" %}admin/media_tree/filenode/">Документы</a>
                                 </li>
                                 {% if user_role == 0 %}{# только для админа #}
-                                    <li class={% navactive request 'get_settings get_sources get_templates edit_template' %}>
+                                    <li class={% navactive request 'get_settings get_sources get_transport_companies get_templates edit_template' %}>
                                         <a href="{% url "get_settings" %}">Настройки</a>
                                     </li>
                                 {% endif %}

@@ -1,0 +1,42 @@
+{% url 'add_claim' as add_claim_url %}
+{% url 'edit_claim' as edit_claim_url %}
+{% block transform_claim_to_order %}
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                var $brought_sum = $('.brought-sum');
+                {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                    var $claim_to_order_group = $('.claim-to-order-group');
+                {% endif %}
+                var $select_bill_status = $('#selectBillStatus');
+
+                $select_bill_status.change(function() {
+                    var $this = $(this);
+                    if ($this.val() == 1) { // Нужна доплата
+                        $brought_sum.css({'display': 'block'});
+                        {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                            $claim_to_order_group.css({'display': 'block'});
+                        {% endif %}
+                    }
+                    else if ($this.val() == 2) { // Оплачен
+                        $brought_sum.css({'display': 'none'});
+                        {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                            $claim_to_order_group.css({'display': 'block'});
+                        {% endif %}
+                    }
+                    else {
+                        $brought_sum.css({'display': 'none'});
+                        {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                            $claim_to_order_group.css({'display': 'none'});
+                        {% endif %}
+                    }
+                });
+                {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                    {#selectBillStatus -> required + первый option сделать disabled #}
+                    $select_bill_status.prop("required", true);
+                    $select_bill_status.find('option:first').prop("disabled", true);
+                {% endif %}
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

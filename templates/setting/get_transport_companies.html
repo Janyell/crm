@@ -1,0 +1,24 @@
+{% extends "setting/get_sources.html" %}
+
+{% block error__entity-name %}Такая транспортная компания{% endblock %}
+
+{% block recond-number__entity-name %}транспортных компаний{% endblock %}
+
+{% block delete__entity-name %}эту транспортную компанию{% endblock %}
+
+{% block massive-delete__entity-name %}транспортные компании{% endblock %}
+
+{% block edit__entity-name %}транспортной компании{% endblock %}
+
+{% block no-entities__entity-name %}одной транспортной компании{% endblock %}
+
+{% block add__entity-name %}транспортной компании{% endblock %}
+
+{% block entities_urls %}
+    var get_url = '{% url 'get_transport_companies' %}';
+    var edit_url = '{% url 'edit_transport_company' %}';
+    var delete_url = '{% url 'delete_transport_company' %}';
+    var massive_delete_url = '{% url 'massive_delete_transport_companies' %}';
+    var massive_activate_url = '{% url 'massive_activate_transport_companies' %}';
+    var massive_deactivate_url = '{% url 'massive_deactivate_transport_companies' %}';
+{% endblock %}

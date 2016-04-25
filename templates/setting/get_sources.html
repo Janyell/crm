@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% block sources %}
+    {% block entities %}
         <div class="container">
         <a href="{% url "get_settings" %}" class="btn">Назад</a>
             <h2 class="center">{{ page_title }}</h2>
-                {% if error == 1 %}
-                    <div class="text-error">
-                        Такой источник уже существует!
-                    </div>
-                {% endif %}
-            {% if sources %}
+            {% if error == 1 %}
+                <div class="text-error">
+                    {% block error__entity-name %}Такой источник{% endblock %} уже существует!
+                </div>
+            {% endif %}
+            {% if entities %}
                 <form class="form-horizontal form-massive" method="POST">
-                    <table class="table table-hover table-bordered" id="source-table">
+                    <table class="table table-hover table-bordered" id="entity-table">
                         <thead>
                             <tr>
                                 <th></th>
@@ -23,32 +23,32 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for source in sources %}
+                            {% for entity in entities %}
                                 <tr>
                                     <td>
                                         <label class="checkbox">
-                                            <input class="checkbox_one" type="checkbox" name="id[]" value="{{ source.pk }}"/>
+                                            <input class="checkbox_one" type="checkbox" name="id[]" value="{{ entity.pk }}"/>
                                         </label>
                                     </td>
-                                    <td>{{ source.title }}</td>
+                                    <td>{{ entity.title }}</td>
                                     <td>
-                                        {% if source.is_active == True %}
+                                        {% if entity.is_active == True %}
                                             Активный
                                         {% else %}
                                             Неактивный
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <a class="btn btn-mini edit-button" data-toggle="modal" href="#edit-source" value="{{ source.pk }}">
+                                        <a class="btn btn-mini edit-button" data-toggle="modal" href="#edit-entity" value="{{ entity.pk }}">
                                             <i class="icon-pencil"></i>
-                                            <div class="hidden edit-source__data">
-                                                <div class="source-data__title">{{ source.title }}</div>
-                                                <div class="source-data__status">{% if source.is_active == True %}1{% else %}0{% endif %}</div>
+                                            <div class="hidden edit-entity__data">
+                                                <div class="entity-data__title">{{ entity.title }}</div>
+                                                <div class="entity-data__status">{% if entity.is_active == True %}1{% else %}0{% endif %}</div>
                                             </div>
                                         </a>
                                     </td>
                                     <td>
-                                        <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-source" value="{{ source.pk }}">
+                                        <a class="btn btn-mini delete-button" data-toggle="modal" href="#delete-entity" value="{{ entity.pk }}">
                                             <i class="icon-remove"></i>
                                         </a>
                                     </td>
@@ -77,14 +77,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="record-number datatables_massive_source">
-                    Всего источников: {{ count }}
+                <div class="record-number datatables_massive_entity">
+                    Всего {% block recond-number__entity-name %}источников{% endblock %}: {{ count }}
                 </div>
 
-                <div class="modal hide fade" id="delete-source" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal hide fade" id="delete-entity" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-header">
                         <a class="close" data-dismiss="modal">×</a>
-                        <h3>Вы уверены, что хотите удалить этот источник?</h3>
+                        <h3>Вы уверены, что хотите удалить {% block delete__entity-name %}этот источник{% endblock %}?</h3>
                     </div>
                     <div class="modal-footer">
                         <a href="" id="delete__ok" class="btn btn-danger">Удалить</a>
@@ -92,10 +92,10 @@
                     </div>
                 </div>
 
-                <div class="modal hide fade" id="massive-delete-source" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+                <div class="modal hide fade" id="massive-delete-entity" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
                     <div class="modal-header">
                         <a class="close" data-dismiss="modal">×</a>
-                        <h3>Вы уверены, что хотите удалить выделенные источники?</h3>
+                        <h3>Вы уверены, что хотите удалить выделенные {% block massive-delete__entity-name %}источники{% endblock %}?</h3>
                     </div>
                     <div class="modal-body">
                         <h5 class="form-add__please">Пожалуйста, введите слово "УДАЛИТЬ":</h5>
@@ -109,11 +109,11 @@
                     </div>
                 </div>
 
-                <div class="modal hide fade" id="edit-source" tabindex="-1" role="dialog" aria-hidden="true">
-                    <form method="post" class="form-horizontal form-add_modal form-edit-source">
+                <div class="modal hide fade" id="edit-entity" tabindex="-1" role="dialog" aria-hidden="true">
+                    <form method="post" class="form-horizontal form-add_modal form-edit-entity">
                         <div class="modal-header">
                             <a class="close" data-dismiss="modal">×</a>
-                            <h3>Редактирование источника</h3>
+                            <h3>Редактирование {% block edit__entity-name %}источника{% endblock %}</h3>
                         </div>
                         <div class="modal-body">
                             <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
@@ -123,7 +123,7 @@
                                     <span class="required-input">*</span>
                                 </label>
                                 <div class="controls">
-                                    {{ source_edit_form.title }}
+                                    {{ entity_edit_form.title }}
                                 </div>
                             </div>
                             <div class="control-group">
@@ -131,7 +131,7 @@
                                     Статус
                                 </label>
                                 <div class="controls">
-                                    {{ source_edit_form.is_active }}
+                                    {{ entity_edit_form.is_active }}
                                 </div>
                             </div>
                             <div class="form-add__tips">
@@ -150,17 +150,17 @@
                     </form>
                 </div>
             {% else %}
-               <h5 class="center">Не было добавлено ни одного источника</h5>
+               <h5 class="center">Не было добавлено ни {% block no-entities__entity-name %}одного источника{% endblock %}</h5>
             {% endif %}
-            <form action="{% url "get_sources" %}" method="post" class="form-add form-horizontal form-add-source">
-                <h5 class="form-add-heading">Для добавления источника заполните, пожалуйста, следующую форму:</h5>
+            <form action="{{ get_url }}" method="post" class="form-add form-horizontal form-add-entity">
+                <h5 class="form-add-heading">Для добавления {% block add__entity-name %}источника{% endblock %} заполните, пожалуйста, следующую форму:</h5>
                 <div class="control-group">
                     <label class="control-label" for="inputTitle">
                         Название
                         <span class="required-input">*</span>
                     </label>
                     <div class="controls">
-                        {{ source_form.title }}
+                        {{ entity_form.title }}
                     </div>
                 </div>
                 <div class="form-add__tips">
@@ -175,13 +175,22 @@
         </div>
     {% endblock %}
 
-    {% block sources__script %}
-        {% if sources %}
-            <script type="text/javascript">
-                (function($){
-                    $(document).ready(function(){
-                        var $source_table = $("#source-table");
-                        $source_table.dataTable({
+    {% block entities__script %}
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function(){
+                    {% block entities_urls %}
+                        var get_url = '{% url 'get_sources' %}';
+                        var edit_url = '{% url 'edit_source' %}';
+                        var delete_url = '{% url 'delete_source' %}';
+                        var massive_delete_url = '{% url 'massive_delete_sources' %}';
+                        var massive_activate_url = '{% url 'massive_activate_source' %}';
+                        var massive_deactivate_url = '{% url 'massive_deactivate_source' %}';
+                    {% endblock %}
+
+                    {% if entities %}
+                        var $entity_table = $("#entity-table");
+                        $entity_table.dataTable({
                             "language": {
                                 "url": "{{ STATIC_URL }}language/ru_RU_abbr.txt"
                             },
@@ -199,25 +208,25 @@
                                 "oSearch": {"sSearch": "{{ request.GET.search }}"}
                             {% endif %}
                         });
-                        var table = $source_table.DataTable();
+                        var table = $entity_table.DataTable();
                         $('.delete-button').bind('click', function(){
                             var id = $(this).attr('value');
                             var info = table.page.info();
-                            var $filter_input = $('#source-table_filter').find('input');
-                            $('#delete__ok').attr({'href': '{% url "delete_source" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
+                            var $filter_input = $('#entity-table_filter').find('input');
+                            $('#delete__ok').attr({'href': delete_url + '?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
                         });
 
-                        var $form_edit_source = $('.form-edit-source');
+                        var $form_edit_entity = $('.form-edit-entity');
                         $('.edit-button').bind('click', function(){
                             var id = $(this).attr('value');
                             var info = table.page.info();
-                            var $filter_input = $('#source-table_filter').find('input');
-                            $form_edit_source.attr({'action': '{% url "edit_source" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
-                            var $edit_source__data = $('#edit-source').find('.modal-body');
-                            var title = $(this).find('.source-data__title').text();
-                            $edit_source__data.find('#inputEditTitle').val(title);
-                            var status = $(this).find('.source-data__status').text();
-                            $edit_source__data.find('#selectEditStatus').val(status);
+                            var $filter_input = $('#entity-table_filter').find('input');
+                            $form_edit_entity.attr({'action': edit_url + '?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
+                            var $edit_entity__data = $('#edit-entity').find('.modal-body');
+                            var title = $(this).find('.entity-data__title').text();
+                            $edit_entity__data.find('#inputEditTitle').val(title);
+                            var status = $(this).find('.entity-data__status').text();
+                            $edit_entity__data.find('#selectEditStatus').val(status);
                         });
 
                         var $checkboxes_one = $('.checkbox_one');
@@ -237,13 +246,13 @@
                             if ($checkboxes_checked_length == 1) {
                                 var id = $checkboxes_checked.val();
                                 var info = table.page.info();
-                                var $filter_input = $('#source-table_filter').find('input');
-                                $('#delete__ok').attr({'href': '{% url "delete_source" %}?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
-                                $('#delete-source').modal('show');
+                                var $filter_input = $('#entity-table_filter').find('input');
+                                $('#delete__ok').attr({'href': delete_url + '?id=' + id + "&page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()});
+                                $('#delete-entity').modal('show');
                             }
                             else {
                                 if ($checkboxes_checked_length != 0) {
-                                    $('#massive-delete-source').modal('show');
+                                    $('#massive-delete-entity').modal('show');
                                 }
                             }
                         });
@@ -258,27 +267,30 @@
                         });
                         $massive_delete_ok.click(function(){
                             var info = table.page.info();
-                            var $filter_input = $('#source-table_filter').find('input');
-                            $form.attr('action', '{% url "massive_delete_sources" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
+                            var $filter_input = $('#entity-table_filter').find('input');
+                            $form.attr('action',
+                                    massive_delete_url + '?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
                         $('.massive-activate-button').click(function(){
                             var info = table.page.info();
-                            var $filter_input = $('#source-table_filter').find('input');
-                            $form.attr('action', '{% url "massive_activate_source" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
+                            var $filter_input = $('#entity-table_filter').find('input');
+                            $form.attr('action',
+                                    massive_activate_url + '?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
                         $('.massive-deactivate-button').click(function(){
                             var info = table.page.info();
-                            var $filter_input = $('#source-table_filter').find('input');
-                            $form.attr('action', '{% url "massive_deactivate_source" %}?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
+                            var $filter_input = $('#entity-table_filter').find('input');
+                            $form.attr('action',
+                                    massive_deactivate_url + '?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()).submit();
                         });
-                        $('#add__ok').click(function() {
-                            var info = table.page.info();
-                            var $filter_input = $('#source-table_filter').find('input');
-                            $('.form-add-source').attr({'action': "{% url "get_sources" %}?page=" + (info.page + 1) + "&length=" + info.length + "&search=" + $filter_input.val()}).submit();
-                        });
+                    {% endif %}
+                    $('#add__ok').click(function() {
+                        var info = table.page.info();
+                        var $filter_input = $('#entity-table_filter').find('input');
+                        $('.form-add-entity').attr({action: get_url + '?page=' + (info.page + 1) + '&length=' + info.length + "&search=" + $filter_input.val()}).submit();
                     });
-                })(jQuery);
-            </script>
-        {% endif %}
+                });
+            })(jQuery);
+        </script>
     {%endblock%}
 {%endblock%}

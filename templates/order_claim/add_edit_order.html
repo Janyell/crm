@@ -179,31 +179,25 @@
                         {{ order_form.bill_status }}
                     </div>
                 </div>
-                <div class="control-group brought-sum hide">
-                    <label class="control-label" for="inputBroughtSum">
-                        Внесена сумма
-                    </label>
-                    <div class="controls">
-                        {{ order_form.brought_sum }}
-                    </div>
-                </div>
                 {% else %}
-                <div class="control-group">
-                    <label class="control-label" for="selectStatus">
-                        Статус заказа
-                    </label>
-                    <div class="controls">
-                        {{ order_form.order_status }}
+                    <div class="control-group">
+                        <label class="control-label" for="selectStatus">
+                            Статус заказа
+                        </label>
+                        <div class="controls">
+                            {{ order_form.order_status }}
+                        </div>
                     </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="selectBillStatus">
-                        Статус оплаты
-                    </label>
-                    <div class="controls">
-                        {{ order_form.bill_status }}
+                    <div class="control-group">
+                        <label class="control-label" for="selectBillStatus">
+                            Статус оплаты
+                        </label>
+                        <div class="controls">
+                            {{ order_form.bill_status }}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
+                {# hide #}
                 <div class="control-group brought-sum hide">
                     <label class="control-label" for="inputBroughtSum">
                         Внесена сумма
@@ -212,7 +206,9 @@
                         {{ order_form.brought_sum }}
                     </div>
                 </div>
-                <div class="control-group">
+
+                {# hide if claim  #}
+                <div class="control-group claim-to-order-group payment-date{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
                     <label class="control-label" for="inputPaymentDate">
                         Дата оплаты
                     </label>
@@ -225,7 +221,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="control-group">
+
+                {# hide if claim  #}
+                <div class="control-group claim-to-order-group ready-date{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
                     <label class="control-label" for="inputReadyDate">
                         Дата готовности
                     </label>
@@ -238,20 +236,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="inputShippedDate">
-                        Дата отгрузки
-                    </label>
-                    <div class="controls">
-                        <div id="shippedDate" class="input-append date">
-                            {{ order_form.shipped_date }}
-                            <span class="add-on">
-                                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                            </span>
+
+                {% if request.path == add_order_url or request.path == edit_order_url %}
+                    <div class="control-group">
+                        <label class="control-label" for="inputShippedDate">
+                            Дата отгрузки
+                        </label>
+                        <div class="controls">
+                            <div id="shippedDate" class="input-append date">
+                                {{ order_form.shipped_date }}
+                                <span class="add-on">
+                                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="control-group">
+                {% endif %}
+
+                {# hide if claim  #}
+                <div class="control-group claim-to-order-group city{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
                     <label class="control-label" for="id_city">
                         Доставка (город)
                     </label>
@@ -263,7 +266,17 @@
                         <input id="inputCity" type="text" name="newCity"  placeholder="Название нового города"/>
                     </div>
                 </div>
-                {% endif %}
+
+                {# hide if claim  #}
+                <div class="control-group claim-to-order-group transport-campaign{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
+                    <label class="control-label" for="id_transport_campaign">
+                        Транспортная компания
+                    </label>
+                    <div class="controls">
+                        {{ order_form.transport_campaign }}
+                    </div>
+                </div>
+
                 <div class="control-group">
                     <label class="control-label" for="inputComment">
                         Комментарии
@@ -272,6 +285,17 @@
                         {{ order_form.comment }}
                     </div>
                 </div>
+
+                {# hide if claim #}
+                <div class="control-group claim-to-order-group factory-comment{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
+                    <label class="control-label" for="inputFactoryComment">
+                        Информация для производства
+                    </label>
+                    <div class="controls">
+                        {{ order_form.factory_comment }}
+                    </div>
+                </div>
+
                 <div class="control-group">
                     <label class="control-label" for="id_source">
                         Источник
@@ -281,6 +305,7 @@
                         {{ order_form.source }}
                     </div>
                 </div>
+
                 {% if request.path == edit_order_url or request.path == edit_claim_url %}
                     <div class="control-group">
                         <label class="control-label">
@@ -369,6 +394,7 @@
     {% endif %}
 
     {% include "order_claim/modules/add_edit_order_hard_links.html" %}
+    {% include "order_claim/modules/transform_claim_to_order.html" %}
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -381,7 +407,6 @@
                         { "bSearchable": false, "aTargets": [ 1 ] }
                     ]
                 });
-                {% if request.path != add_claim_url and request.path != edit_claim_url %}
                     $('#paymentDate').datetimepicker({
                         format: 'yyyy-MM-dd hh:mm:ss',
                         language: 'ru',
@@ -394,6 +419,7 @@
                         pickSeconds: false,
                         weekStart: 1
                     });
+                {% if request.path != add_claim_url and request.path != edit_claim_url %}
                     $('#shippedDate').datetimepicker({
                         format: 'yyyy-MM-dd',
                         language: 'ru',
@@ -419,21 +445,20 @@
                             $shipped_date_label.html(shipped_date_label_text);
                         }
                     });
-                    {# selectCity #}
-                    var $select_city = $('#id_city');
-                    $select_city.attr({
-                        'data-live-search': "true",
-                        'data-size': "10"
-                    });
-                    {# Первыми (после пустого -----) поставить записи с определенными value (Челябинск, Москва, Самовывоз) #}
-                    var $select_city__empty_option = $select_city.find('option[value=""]');
-                    var values = [19, 14, 10]; {# Самовывоз, Москва, Челябинск #}
-                    values.forEach(function(item) {
-                        $select_city__empty_option.after($select_city.find('option[value='+ item +']'));
-                    });
-                    $select_city.selectpicker();
-
                 {% endif %}
+                {# selectCity #}
+                var $select_city = $('#id_city');
+                $select_city.attr({
+                    'data-live-search': "true",
+                    'data-size': "10"
+                });
+                {# Первыми (после пустого -----) поставить записи с определенными value (Челябинск, Москва, Самовывоз) #}
+                var $select_city__empty_option = $select_city.find('option[value=""]');
+                var values = [19, 14, 10]; {# Самовывоз, Москва, Челябинск #}
+                values.forEach(function(item) {
+                    $select_city__empty_option.after($select_city.find('option[value='+ item +']'));
+                });
+                $select_city.selectpicker();
 
                 $('select.product-select option:selected').each(function() {
                     var $this = $(this);
@@ -468,25 +493,6 @@
 {#                    'data-size': "10"#}
 {#                });#}
 {#                $select_company.selectpicker();#}
-
-                var $brought_sum = $('.brought-sum');
-                var $select_bill_status = $('#selectBillStatus');
-                if ($select_bill_status.val() == 1) {
-                    $brought_sum.css({'display': 'block'});
-                }
-                $select_bill_status.change(function() {
-                    if ($(this).val() == 1) {
-                        $brought_sum.css({'display': 'block'});
-                    }
-                    else {
-                        $brought_sum.css({'display': 'none'});
-                    }
-                });
-                {% if request.path == add_claim_url or request.path == edit_claim_url %}
-                    {#selectBillStatus -> required + первый option сделать disabled #}
-                    $select_bill_status.prop("required", true);
-                    $select_bill_status.find('option:first').prop("disabled", true);
-                {% endif %}
 
                 {#id_source -> required + первый option сделать disabled #}
                 var $select_source = $('#id_source');
