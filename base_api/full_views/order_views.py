@@ -50,7 +50,9 @@ def full_add_edit_order(request):
                         files.append(order_file)
             out.update({'files': files})
             source = request.POST['source']
-            transport_campaign = request.POST['transport_campaign']
+            transport_campaign = None
+            if 'transport_campaign' in request.POST:
+                transport_campaign = request.POST['transport_campaign']
             if request.POST['company'] != '':
                 id_company = int(request.POST['company'])
                 company = Companies.objects.get(id=id_company, is_deleted=0)
@@ -243,7 +245,9 @@ def full_add_edit_order(request):
             new_order.is_comment_my = is_comment_my
             new_order.client = client
             new_order.source = Sources.objects.get(id=source)
-            new_order.transport_campaign = TransportCampaigns.objects.get(id=transport_campaign)
+            new_order.transport_campaign = None
+            if transport_campaign:
+                new_order.transport_campaign = TransportCampaigns.objects.get(id=transport_campaign)
             new_order.company = company
             new_order.bill = bill
             if brought_sum:
