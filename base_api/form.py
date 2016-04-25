@@ -191,7 +191,7 @@ claims_form_widgets = {
     'comment': Textarea(attrs={'id': "inputComment",
                                'placeholder': "Комментарии"}),
     'source': Select(attrs={'id': "selectSource", 'required': 1}),
-    'transport_campaign': Select(attrs={'id': "selectTransportCampaign", 'required': 1}),
+    'transport_campaign': Select(attrs={'id': "selectTransportCampaign"}),
     'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                    'class': "datetime",
                                    'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),

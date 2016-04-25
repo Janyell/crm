@@ -345,6 +345,7 @@ def full_add_edit_claim(request):
                     newCity = form.cleaned_data['newCity']
                     if newCity:
                         city = Cities.objects.create(name=newCity)
+            ready_date = None
             if 'ready_date' in form.data:
                 if form.cleaned_data['ready_date'] != '':
                     ready_date = form.cleaned_data['ready_date']
