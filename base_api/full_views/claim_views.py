@@ -54,7 +54,7 @@ def full_add_edit_claim(request):
                 newCity = request.POST['newCity']
                 if newCity:
                     city = Cities.objects.create(name=newCity)
-            if request.POST['company'] != '':
+            if 'company' in request.POST and request.POST['company'] != '':
                 id_company = int(request.POST['company'])
                 company = Companies.objects.get(id=id_company, is_deleted=0)
             else:
@@ -200,7 +200,9 @@ def full_add_edit_claim(request):
             new_claim.is_comment_my = is_comment_my
             new_claim.client = client
             new_claim.source = Sources.objects.get(id=source)
-            new_claim.transport_campaign = TransportCampaigns.objects.get(id=transport_campaign)
+            new_claim.transport_campaign = None
+            if transport_campaign:
+                new_claim.transport_campaign = TransportCampaigns.objects.get(id=transport_campaign)
             new_claim.company = company
             new_claim.comment = comment
             new_claim.factory_comment = factory_comment

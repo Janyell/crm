@@ -225,7 +225,7 @@ def massive_delete_sources(request):
     return HttpResponseRedirect('/settings/sources/' + get_params)
 
 
-def massive_delete_transport_campaigns(request):
+def massive_delete_transport_companies(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role == 2:
@@ -255,7 +255,7 @@ def massive_activate_source(request):
     return HttpResponseRedirect('/settings/sources/' + get_params)
 
 
-def massive_activate_transport_campaign(request):
+def massive_activate_transport_companies(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role != 0:
@@ -285,7 +285,7 @@ def massive_deactivate_source(request):
     return HttpResponseRedirect('/settings/sources/' + get_params)
 
 
-def massive_deactivate_transport_campaign(request):
+def massive_deactivate_transport_companies(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     if Roles.objects.get(id=request.user.id).role != 0:
