@@ -53,10 +53,10 @@ def full_get_sources(request):
     sources = Sources.objects.filter(is_deleted=0)
     source_edit_form = SourceEditForm()
     out.update({'page_title': "Источники"})
-    out.update({'sources': sources})
-    out.update({'source_form': form})
+    out.update({'entities': sources})
+    out.update({'entity_form': form})
     out.update({'count': sources.count()})
-    out.update({'source_edit_form': source_edit_form})
+    out.update({'entity_edit_form': source_edit_form})
     return render(request, 'setting/get_sources.html', out)
 
 
