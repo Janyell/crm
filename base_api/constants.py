@@ -7,7 +7,9 @@ SORT_TYPE_FOR_CLAIM = {
     'organization_d': ['-client__organization', '-client__last_name', '-client__name', '-client__patronymic'],
     'company': 'company__title',
     'company_d': '-company__title',
-    'pk': 'pk'
+    'pk': 'pk',
+    'transport_company': 'transport_campaign',
+    'transport_company_d': '-transport_campaign',
 }
 DEFAULT_SORT_TYPE_FOR_CLAIM = 'order_date_d'
 
@@ -29,6 +31,8 @@ SORT_TYPE_FOR_ORDER = {
     'order_status_d': ['-order_status', '-order_status'],
     'pk': ['-order_status', 'pk'],
     'default': ['-order_status', '-shipped_date'],
+    'transport_company': 'transport_campaign',
+    'transport_company_d': '-transport_campaign',
 }
 DEFAULT_SORT_TYPE_FOR_ORDER = 'default'
 DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE = 'order_date_d'

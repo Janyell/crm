@@ -53,10 +53,10 @@ def full_get_transport_campaigns(request):
     transport_campaigns = TransportCampaigns.objects.filter(is_deleted=0)
     transport_campaign_edit_form = TransportCampaignEditForm()
     out.update({'page_title': "Транспортные компании"})
-    out.update({'transport_campaigns': transport_campaigns})
-    out.update({'transport_campaign_form': form})
+    out.update({'entities': transport_campaigns})
+    out.update({'entity_form': form})
     out.update({'count': transport_campaigns.count()})
-    out.update({'transport_campaign_edit_form': transport_campaign_edit_form})
+    out.update({'entity_edit_form': transport_campaign_edit_form})
     return render(request, 'setting/get_transport_campaigns.html', out)
 
 
