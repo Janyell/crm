@@ -351,7 +351,7 @@ def full_add_edit_claim(request):
                         city = Cities.objects.create(name=newCity)
             ready_date = None
             if 'ready_date' in form.data:
-                if form.cleaned_data['ready_date'] != '':
+                if form.cleaned_data['ready_date'] != '' and form.cleaned_data['ready_date']:
                     ready_date = form.cleaned_data['ready_date']
                     ready_date = datetime.strptime(ready_date, '%Y-%m-%d %H:%M:%S')
                 else:
