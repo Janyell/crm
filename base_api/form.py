@@ -309,7 +309,7 @@ class SourceForm(ModelForm):
         }
 
 
-class TransportCampaignsForm(ModelForm):
+class TransportCampaignForm(ModelForm):
     class Meta:
         model = TransportCampaigns
         exclude = ['is_deleted', 'is_active']
@@ -330,7 +330,7 @@ class SourceEditForm(ModelForm):
         }
 
 
-class TransportCampaignsEditForm(ModelForm):
+class TransportCampaignEditForm(ModelForm):
     class Meta:
         model = Sources
         exclude = ['is_deleted']

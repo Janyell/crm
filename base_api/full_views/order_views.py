@@ -129,7 +129,7 @@ def full_add_edit_order(request):
                     OrdersFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                     OrdersFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                     OrdersFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                 else:
@@ -138,7 +138,7 @@ def full_add_edit_order(request):
                     OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                     OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                     OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                           required=False)
                 if user_role == 0:
@@ -188,7 +188,7 @@ def full_add_edit_order(request):
                         OrdersFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                         OrdersFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                         OrdersFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                     else:
@@ -197,7 +197,7 @@ def full_add_edit_order(request):
                         OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                         OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                         OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                     if user_role == 0:
@@ -293,7 +293,7 @@ def full_add_edit_order(request):
                             OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                             OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                             OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         if user_role == 0:
@@ -428,7 +428,7 @@ def full_add_edit_order(request):
                         OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                         OrdersForm.base_fields['transport_campaign'] = SourceModelChoiceField(
-                                                    queryset=TransportCaTransportCampaignsmpaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCaTransportCampaignsmpaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                         OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                         OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -492,8 +492,7 @@ def full_add_edit_order(request):
                     new_order_product_link = Order_Product.objects.create(order=new_order, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products,
-                                                                          price=price_of_products,
-                                                                          transport_campaign=transport_campaign)
+                                                                          price=price_of_products)
             if is_order_create:
                 if 'only-save' in form.data:
                     get_params = '?'
@@ -509,7 +508,7 @@ def full_add_edit_order(request):
                 OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                 OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                 OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
                 OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -539,6 +538,7 @@ def full_add_edit_order(request):
                 out.update({'order_form': form})
                 out.update({'page_title': "Добавление заказа"})
         else:
+            print(form.errors)
             client = request.POST['client']
             source = None
             transport_campaign = None
@@ -581,7 +581,7 @@ def full_add_edit_order(request):
             OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
             OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -623,7 +623,7 @@ def full_add_edit_order(request):
             OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
             OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -659,7 +659,7 @@ def full_add_edit_order(request):
             OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
             OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
@@ -684,7 +684,7 @@ def full_add_edit_order(request):
                 OrdersFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                 OrdersFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                 OrdersFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             else:
@@ -693,7 +693,7 @@ def full_add_edit_order(request):
                 OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                 OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
                 OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             if user_role == 0:
@@ -740,7 +740,7 @@ def full_add_edit_order(request):
             OrdersForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=True)
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
             OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects,
                                                                                    required=False)
             OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))

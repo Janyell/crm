@@ -3,7 +3,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from base_api.full_views.helper import get_request_param_as_string
-from base_api.models import Roles, Orders, Clients, Companies, Products, ProductGroups, Sources
+from base_api.models import *
 
 
 def massive_delete_orders(request):
@@ -237,7 +237,7 @@ def massive_delete_transport_companies(request):
         transport_campaign.save(update_fields=["is_deleted"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
-    return HttpResponseRedirect('/settings/transport_campaigns/' + get_params)
+    return HttpResponseRedirect('/settings/transport_companies/' + get_params)
 
 
 def massive_activate_source(request):
@@ -267,7 +267,7 @@ def massive_activate_transport_companies(request):
         transport_campaign.save(update_fields=["is_active"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
-    return HttpResponseRedirect('/settings/transport_campaigns/' + get_params)
+    return HttpResponseRedirect('/settings/transport_companies/' + get_params)
 
 
 def massive_deactivate_source(request):
@@ -297,4 +297,4 @@ def massive_deactivate_transport_companies(request):
         transport_campaign.save(update_fields=["is_active"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
-    return HttpResponseRedirect('/settings/transport_campaigns/' + get_params)
+    return HttpResponseRedirect('/settings/transport_companies/' + get_params)

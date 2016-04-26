@@ -18,7 +18,7 @@ def full_delete_transport_campaign(request):
     transport_campaign.save(update_fields=["is_deleted"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
-    return HttpResponseRedirect('/settings/transport_campaigns/' + get_params)
+    return HttpResponseRedirect('/settings/transport_companies/' + get_params)
 
 
 def full_get_transport_campaigns(request):
@@ -45,7 +45,7 @@ def full_get_transport_campaigns(request):
             if 'is_active' in request.POST:
                 is_active = int(request.POST['is_active'])
             new_transport_campaign = TransportCampaigns.objects.create(title=title, is_active=is_active)
-            return HttpResponseRedirect('/settings/transport_campaigns/' + get_params)
+            return HttpResponseRedirect('/settings/transport_companies/' + get_params)
         else:
             out.update({"error": 1})
     else:
@@ -57,7 +57,7 @@ def full_get_transport_campaigns(request):
     out.update({'entity_form': form})
     out.update({'count': transport_campaigns.count()})
     out.update({'entity_edit_form': transport_campaign_edit_form})
-    return render(request, 'setting/get_transport_campaigns.html', out)
+    return render(request, 'setting/get_transport_companies.html', out)
 
 
 def full_edit_transport_campaign(request):
@@ -79,5 +79,5 @@ def full_edit_transport_campaign(request):
         transport_campaign.title = title
         transport_campaign.is_active = is_active
         transport_campaign.save()
-        return HttpResponseRedirect('/settings/transport_campaigns/' + get_params)
-    return HttpResponseRedirect('/settings/transport_campaigns/' + get_params)
+        return HttpResponseRedirect('/settings/transport_companies/' + get_params)
+    return HttpResponseRedirect('/settings/transport_companies/' + get_params)
