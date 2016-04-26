@@ -1,0 +1,77 @@
+{% if user_role == 0 %}
+    {% block export-to-excel-modal %}
+        <div class="modal hide fade" id="export-to-excel" tabindex="-1" role="dialog" aria-hidden="true">
+            <form class="form-horizontal form-add_modal form-export-to-excel" method="post" action="{% url "made_excel" %}?table={{ entity }}">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3 class="center">Экспорт в Excel</h3>
+                </div>
+                <div class="modal-body">
+                    <h5 class="form-add__please">Пожалуйста, выберите столбцы:</h5>
+                    <div class="modal__exported-cols">
+                        <label class="checkbox bold">
+                            <input class="checkbox_export_all" type="checkbox" name="cols[]" value="all" />
+                            Выбрать все
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="export-to-excel__ok" class="btn btn-primary">Экспорт</button>
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                </div>
+            </form>
+        </div>
+    {% endblock %}
+
+    {% block export-to-excel-scripts %}
+        <script type="text/javascript">
+            (function($){
+                $(document).ready(function(){
+                    var $exported_table = $('.exported-table');
+                    var $exported_table__th = $exported_table.find('th');
+                    var $exported_table__th_size = ($exported_table__th.size() + 1) / 2; // modal cols number;
+                    var $modal__exported_cols = $('.modal__exported-cols');
+                    $exported_table__th.each(function() {
+                        var $this = $(this);
+                        var text = $this.text();
+                        if (text != '') {
+                            var value = $(this).attr('value');
+                            $modal__exported_cols.append('<label class="checkbox">' +
+                                    '<input class="checkbox_export_one" type="checkbox" name="cols[]" value="' + value + '"/>' +
+                                    text + '</label>');
+                        }
+                    });
+
+                    var $export_modal = $('#export-to-excel');
+                    var $checkboxes_one = $export_modal.find('.checkbox_export_one');
+
+                    var $checkbox_all = $export_modal.find('.checkbox_export_all');
+                    $checkbox_all.change(function() {
+                        if($(this).is(":checked")) {
+                            $checkboxes_one.prop('checked', true);
+                        }
+                        else {
+                            $checkboxes_one.prop('checked', false);
+                        }
+                    });
+
+                    $checkboxes_one.change(function() {
+                        if(!$(this).is(":checked")) {
+                            $checkbox_all.prop('checked', false);
+                        }
+                    });
+
+                    var $form = $('.form-export-to-excel');
+                    $('#export-to-excel__ok').click(function(){
+                        if ($checkboxes_one.find(":checked").length != 0) {
+                            $form.submit();
+                        }
+                        else {
+                            $export_modal.modal('hide');
+                        }
+                    });
+                });
+            })(jQuery);
+        </script>
+    {% endblock %}
+{% endif %}

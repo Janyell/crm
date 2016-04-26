@@ -10,6 +10,11 @@
         {% if request.path == get_clients_url %}
             <a href="{% url "add_client" %}" class="btn btn_add-client add-button">Добавить клиента</a>
         {% endif %}
+        {% if user_role == 0 %}
+            {% block export-to-excel-btn %}
+                <a href="#export-to-excel" role="button" data-toggle="modal" class="btn pull-right">Экспорт</a>
+            {% endblock %}
+        {% endif %}
         {% if clients %}
             {% load bootstrap_pagination %}
             <div class="row-fluid">
@@ -26,7 +31,7 @@
                 </div>
             </div>
             <form class="form-horizontal form-massive" method="POST">
-                <table class="table table-hover table-bordered" id="client-table">
+                <table class="table table-hover table-bordered exported-table" id="client-table">
                     <thead>
                         <tr>
                             {% if user_role != 1 %}
@@ -320,4 +325,7 @@
             });
         })(jQuery);
     </script>
+    {% with entity='clients' %}
+        {% include "export_to_excel_modal.html" %}
+    {% endwith %}
 {%endblock%}

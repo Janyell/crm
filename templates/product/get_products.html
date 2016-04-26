@@ -4,22 +4,27 @@
     {% block products %}
         <div class="container">
         <a href="{% url "get_product_groups" %}" class="btn">Перейти в группы товаров</a>
+        {% if user_role == 0 %}
+            {% block export-to-excel-btn %}
+                <a href="#export-to-excel" role="button" data-toggle="modal" class="btn pull-right">Экспорт</a>
+            {% endblock %}
+        {% endif %}
             <h2 class="center">{{ page_title }}</h2>
-                {% if error == 1 %}
-                    <div class="text-error">
-                        Такой товар уже существует!
-                    </div>
-                {% endif %}
+            {% if error == 1 %}
+                <div class="text-error">
+                    Такой товар уже существует!
+                </div>
+            {% endif %}
             {% if products %}
                 <form class="form-horizontal form-massive" method="POST">
-                    <table class="table table-hover table-bordered" id="product-table">
+                    <table class="table table-hover table-bordered exported-table" id="product-table">
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>Группа</th>
-                                <th>Название</th>
-                                <th>Цена</th>
-                                <th>Статус</th>
+                                <th value="group">Группа</th>
+                                <th value="title">Название</th>
+                                <th value="price">Цена</th>
+                                <th value="is_active">Статус</th>
                                 <th></th>
                                 {# delete th #}
                                 <th></th>
@@ -396,4 +401,7 @@
             </script>
         {% endif %}
     {%endblock%}
+    {% with entity='products' %}
+        {% include "export_to_excel_modal.html" %}
+    {% endwith %}
 {%endblock%}
