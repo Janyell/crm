@@ -3,7 +3,7 @@
 {%block content%}
     <div class="container container_full-width">
         <h2 class="center">Поиск по {{ request.GET.search }}</h2>
-        {% if search_results %}
+        {% if not search_results %}
             <h4>Результаты поиска:</h4>
             <ul class="search-results">
                 {% if orders %}
@@ -12,6 +12,7 @@
                         <table class="table table-hover table-bordered" id="search-order-table">
                             <thead>
                                 <tr>
+                                    {% block search-order-table-headers %}
                                     <th>Менеджер</th>
                                     <th>Название организации</th>
                                     <th>Номер заказа</th>
@@ -23,6 +24,7 @@
                                     <th>Статус</th>
                                     <th>Дата готовности</th>
                                     <th>Доставка город</th>
+                                    <th>Транспортная компания</th>
                                     <th>Комментарии</th>
                                     <th></th> {# Сменить менеджера #}
                                     <th></th>
@@ -31,11 +33,13 @@
                                     <th></th>
                                     <th></th>
                                     <th></th>
+                                    {% endblock %}
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for order in orders %}
                                     <tr{% if order.order_status|title == "Готов" %} class="tr_green"{% endif %}>
+                                        {% block order-table-body__inform_cols %}
                                         <td>{{ order.role }}</td>
                                         <td>
                                             {% if user_role != 2 %}
@@ -97,11 +101,20 @@
                                                 {{ order.city.name }}
                                             {% endif %}
                                         </td>
+                                        <td>{{ order.transport_campaign.title }}</td>
                                         <td>
                                             {% if order.comment %}
                                                 <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
                                                 <a class="comment-order-button" data-toggle="modal" href="#view-info"
                                                     value="{{ order.comment }}">...</a>
+                                            {% endif %}
+                                            {% if order.factory_comment %}
+                                                <span class="bold">Информация для пр-ва:</span>
+                                                <span class="order-factory-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">
+                                                    {{ order.factory_comment }}
+                                                </span>
+                                                <a class="factory-comment-order-button" data-toggle="modal" href="#view-info"
+                                                    value="{{ order.factory_comment }}">...</a>
                                             {% endif %}
                                         </td>
                                         <td>
@@ -114,6 +127,7 @@
                                             <a class="btn" href="{% url "add_in_archive" %}?id={{ order.pk }}&search={{ request.GET.search }}">В архив</a>
                                         {% endif %}
                                         </td>
+                                        {% endblock %}
                                         <td>
                                             {% if order.files %}
                                                 <a class="btn files-order-button" data-toggle="modal" href="#view-info" value="
@@ -138,6 +152,7 @@
                                                 <a class="btn edit-button" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             {% endif %}
                                         </td>
+                                        {% block order-table-body__delete-col %}
                                         <td>
                                             {% if user_role == 0 %}
                                                 <a class="btn delete-order-button" data-toggle="modal" href="#delete" value="{{ order.pk }}">
@@ -149,6 +164,7 @@
                                                 </a>
                                             {% endif %}
                                         </td>
+                                        {% endblock %}
                                         <td>{{ order.order_date }}</td>
                                         <td>
                                             {% if order.order_status|title == "Готов" %}
@@ -178,6 +194,7 @@
                                     <th>Статус</th>
                                     <th>Дата готовности</th>
                                     <th>Доставка город</th>
+                                    <th>Транспортная компания</th>
                                     <th>Комментарии</th>
                                     <th></th>
                                     <th></th>
@@ -251,11 +268,20 @@
                                                 {{ order.city.name }}
                                             {% endif %}
                                         </td>
+                                        <td>{{ order.transport_campaign.title }}</td>
                                         <td>
                                             {% if order.comment %}
                                                 <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
                                                 <a class="comment-order-button" data-toggle="modal" href="#view-info"
                                                     value="{{ order.comment }}">...</a>
+                                            {% endif %}
+                                            {% if order.factory_comment %}
+                                                <span class="bold">Информация для пр-ва:</span>
+                                                <span class="order-factory-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">
+                                                    {{ order.factory_comment }}
+                                                </span>
+                                                <a class="factory-comment-order-button" data-toggle="modal" href="#view-info"
+                                                    value="{{ order.factory_comment }}">...</a>
                                             {% endif %}
                                         </td>
                                         <td>
@@ -630,36 +656,37 @@
 {#                                8     <th>Статус</th>#}
 {#                                9     <th>Дата готовности</th>#}
 {#                                10    <th>Доставка город</th>#}
-{#                                11    <th>Комментарии</th>#}
-{#                                12    <th></th> {# Сменить менеджера #}
-{#                                13    <th></th> {# В архив #}
-{#                                14    <th></th> {# Аттачи #}
-{#                                15    <th></th> {# Редактировать #}
-{#                                16    <th></th> {# Удалить #}
-{#                                17    <th></th> {# Дата заказа #}
-{#                                18    <th></th> {# Признак готовности #}
+{#                                11    <th>Транспортная компания</th>#}
+{#                                12    <th>Комментарии</th>#}
+{#                                13    <th></th> {# Сменить менеджера #}
+{#                                14    <th></th> {# В архив #}
+{#                                15    <th></th> {# Аттачи #}
+{#                                16    <th></th> {# Редактировать #}
+{#                                17    <th></th> {# Удалить #}
+{#                                18    <th></th> {# Дата заказа #}
+{#                                19    <th></th> {# Признак готовности #}
                                 $("#search-order-table").dataTable({
                                     "language": {
                                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                                     },
+                                    {% block search-order-table-scripts__datatable-params %}
                                     "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17 ] },
-                                        { "sType": "de_datetime", "aTargets": [ 6, 9, 17 ]},
-                                        {% if user_role == 2 %}
-                                            { "bVisible": false,  "aTargets": [ 3, 5, 12, 16, 17, 18]},
-                                        {% elif user_role == 1 %}
-                                           { "bVisible": false,  "aTargets": [ 12, 17, 18 ]},
+                                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19 ] },
+                                        { "sType": "de_datetime", "aTargets": [ 6, 9, 18 ]},
+                                        {% if user_role == 0 %}
+                                           { "bVisible": false,  "aTargets": [ 18, 19 ]},
                                         {% else %}
-                                            { "bVisible": false,  "aTargets": [ 17, 18 ]},
+                                            { "bVisible": false,  "aTargets": [ 12, 18, 19 ]},
                                         {% endif %}
                                     ],
                                     "order": [
-                                        [ 18, 'desc' ],
+                                        [ 19, 'desc' ],
                                         [ 9, 'asc' ]
                                     ],
                                     "aaSortingFixed": [
-                                        [18, 'desc']
+                                        [19, 'desc']
                                     ],
+                                    {% endblock %}
                                     "bFilter": false
                                 });
                             {% endif %}
@@ -669,16 +696,16 @@
                                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                                     },
                                     "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16 ] },
-                                        { "sType": "de_datetime", "aTargets": [ 6, 9, 16 ] },
-                                        { "bVisible": false,  "aTargets": [ 16, 17 ]}
+                                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 12, 13, 14, 15, 16, 17 ] },
+                                        { "sType": "de_datetime", "aTargets": [ 6, 9, 17 ] },
+                                        { "bVisible": false,  "aTargets": [ 17, 18 ]}
                                     ],
                                     "order": [
-                                        [ 17, 'desc' ],
+                                        [ 18, 'desc' ],
                                         [ 9, 'asc' ]
                                     ],
                                     "aaSortingFixed": [
-                                        [17, 'desc']
+                                        [18, 'desc']
                                     ],
                                     "bFilter": false
                                 });
@@ -744,6 +771,11 @@
                                 });
                                 $('.comment-order-button').bind('click', function(){
                                     $("#view-info").find("h3").text("Комментарий к заказу");
+                                    var comment = $(this).attr('value');
+                                    $info_data.html(comment);
+                                });
+                                $('.factory-comment-order-button').bind('click', function(){
+                                    $("#view-info").find("h3").text("Информация для производства");
                                     var comment = $(this).attr('value');
                                     $info_data.html(comment);
                                 });

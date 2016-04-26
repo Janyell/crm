@@ -1,0 +1,93 @@
+{% extends "search/search.html" %}
+{% load mathfilters %}
+
+{% block search-order-table-headers %}
+    {# 0 #}<th>Название организации</th>
+    {# 1 #}<th>Менеджер</th>
+    {# 2 #}<th>Номер счета</th>
+    {# 3 #}<th>Компания</th>
+    {# 4 #}<th>Дата оплаты</th>
+    {# 5 #}<th>Процент оплаты</th>
+    {# 6 #}<th>Статус</th>
+    {# 7 #}<th>Дата отгрузки</th>
+    {# 8 #}<th>Продукция</th>
+    {# 9 #}<th>Информация для пр-ва</th>
+    {# 10 #}<th>Доставка город</th>
+    {# 11 #}<th>Транспортная компания</th>
+    {# 12 #}<th></th> {# Аттачи #}
+    {# 13 #}<th></th> {# Редактировать #}
+
+    {# 14 #}<th></th> {# Дата заказа #}
+    {# 15 #}<th></th> {# Признак готовности #}
+{% endblock %}
+
+{% block order-table-body__inform_cols %}
+    <td>{{ order.client.organization_or_full_name }}</td>
+    <td>{{ order.role }}</td>
+    <td>
+        {% if order.account_number != None %}
+            {{ order.account_number }}
+        {% endif %}
+    </td>
+    <td>{{ order.company.title }}</td>
+    <td>
+        {% if order.payment_date != None %}
+            {{ order.payment_date }}
+        {% endif %}
+    </td>
+    <td>
+        {% if order.brought_sum == None %}
+            0%
+        {% else %}
+            {{ order.brought_sum|mul:100|intdiv:order.bill }}%
+        {% endif %}
+    </td>
+    <td>
+        {{ order.order_status }}
+    </td>
+    <td>
+        {% if order.shipped_date != None %}
+            {{ order.shipped_date }}
+        {% endif %}
+    </td>
+    <td>
+        {% if order.products %}
+            {% for product in order.products %}
+                <div class="no-wrap">
+                    {{ product.product.title }} - {{ product.count_of_products }} шт.
+                </div>
+            {% endfor %}
+        {% endif %}
+    </td>
+    <td>
+        {% if order.factory_comment %}
+            <span class="order-factory-comment">
+                {{ order.factory_comment }}
+            </span>
+            <a class="factory-comment-order-button" data-toggle="modal" href="#view-info"
+                value="{{ order.factory_comment }}">...</a>
+        {% endif %}
+    </td>
+    <td>
+        {% if order.city != None %}
+            {{ order.city.name }}
+        {% endif %}
+    </td>
+    <td>{{ order.transport_campaign.title }}</td>
+{% endblock %}
+
+{% block order-table-body__delete-col %}{% endblock %}
+
+{% block search-order-table-scripts__datatable-params %}
+    "aoColumnDefs": [
+        { "bSortable": false, "aTargets": [ 2, 5, 6, 8, 9, 12, 13, 14, 15 ] },
+        { "sType": "de_datetime", "aTargets": [ 4, 7 ]},
+        { "bVisible": false,  "aTargets": [ 14, 15 ]},
+    ],
+{#    "order": [#}
+{#        [ 15, 'desc' ]#}
+{#    ],#}
+    "aaSortingFixed": [
+        [15, 'desc']
+    ],
+{% endblock %}

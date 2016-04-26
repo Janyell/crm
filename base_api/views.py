@@ -1308,27 +1308,3 @@ def edit_kp(request):
                          out_filename_pdf,
                          options=options)
         return render(request, 'edit_kp.html', out)
-
-
-def get_transport_companies(request):
-    return render(request, 'setting/get_transport_companies.html')
-
-
-def edit_transport_company(request):
-    pass
-
-
-def delete_transport_company(request):
-    pass
-
-
-def massive_delete_transport_companies(request):
-    pass
-
-
-def massive_activate_transport_companies(request):
-    pass
-
-
-def massive_deactivate_transport_companies(request):
-    pass
