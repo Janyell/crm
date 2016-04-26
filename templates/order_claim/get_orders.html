@@ -85,15 +85,13 @@
                 <table class="table table-hover table-bordered" id="order-table">
                     <thead>
                         <tr>
+                            {% block order-table-headers %}
                             {# 0 #}<th></th>
                             {# 1 #}<th class="sortable{% if request.GET.sort == "role" %} sorting_asc{% elif request.GET.sort == "role_d" %} sorting_desc{% else %} sorting{% endif %}" value="role">Менеджер</th>
                             {# 2 #}<th class="sortable{% if request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">Название организации</th>
                             {# 3 #}<th>Номер заказа</th>
-                            {% block account_number_th_factory %}{% endblock %}
                             {# 4 #}<th class="sortable{% if request.GET.sort == "company" %} sorting_asc{% elif request.GET.sort == "company_d" %} sorting_desc{% else %} sorting{% endif %}" value="company">Компания</th>
-                            {% block account_number_th %}
-                                {# 5 #}<th>Номер счета</th>
-                            {% endblock %}
+                            {# 5 #}<th>Номер счета</th>
                             {# 6 #}<th>Сумма счета</th>
                             {# 7 #}<th class="sortable{% if request.GET.sort == "payment_date" %} sorting_asc{% elif request.GET.sort == "payment_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="payment_date">Дата оплаты</th>
                             {# 8 #}<th>Продукция</th>
@@ -108,11 +106,13 @@
                             {# 17 #}<th></th>
                             {# 18 #}<th></th>
                             {# 19 #}<th class="sorting_desc"></th>
+                            {% endblock %}
                         </tr>
                     </thead>
                     <tbody>
                         {% for order in orders %}
                             <tr{% if order.order_status|title == "Готов" %} class="tr_green"{% endif %}>
+                                {% block order-table-body__inform_cols %}
                                 <td>
                                     {% if user_role == 0 %}
                                         <label class="checkbox">
@@ -152,15 +152,12 @@
                                     {% endif %}
                                 </td>
                                 <td>{{ order.unique_number }}</td>
-                                {% block account_number_td_factory %}{% endblock %}
                                 <td>{{ order.company.title }}</td>
-                                {% block account_number_td %}
-                                    <td>
-                                        {% if order.account_number != None %}
-                                            {{ order.account_number }}
-                                        {% endif %}
-                                    </td>
-                                {% endblock %}
+                                <td>
+                                    {% if order.account_number != None %}
+                                        {{ order.account_number }}
+                                    {% endif %}
+                                </td>
                                 <td class="no-wrap">
                                     {% if order.bill_right_format != None %}
                                         {% if is_in_debt.is_in_debt %}
@@ -239,6 +236,7 @@
                                     <a class="btn archive-button" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
                                 {% endif %}
                                 </td>
+                                {% endblock %}
                                 <td>
                                     {% if order.files %}
                                         <a class="btn files-button" data-toggle="modal" href="#view-order-files" value="
@@ -263,6 +261,7 @@
                                         <a class="btn edit-button" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
                                     {% endif %}
                                 </td>
+                                {% block order-table-body__delete-col %}
                                 <td>
                                     {% if user_role == 0 %}
                                         <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
@@ -274,6 +273,7 @@
                                         </a>
                                     {% endif %}
                                 </td>
+                                {% endblock %}
                                 <td> {{ order.order_date }}
                                 </td>
                                 <td>
@@ -492,10 +492,10 @@
                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                     },
                     "aoColumnDefs": [
-                        {% if user_role == 2 %}
-                            { "bVisible": false,  "aTargets": [0, 3, {# 6, #} {# 10, #} 13, {# 14, #} 17, 18, 19] },
-                        {% endif %}
-                        { "bVisible": false,  "aTargets": [ 18, 19 ]}
+{#                        {% if user_role == 2 %}#}
+{#                            { "bVisible": false,  "aTargets": [0, 3, {# 6, } {# 10, } 13, {# 14, } 17, 18, 19] },#}
+{#                        {% endif %}#}
+                        { "bVisible": false,  "aTargets": [ {% block order-table-scripts__invisible-cols %}18, 19{% endblock %} ]}
                     ],
                     "bFilter": false,
                     "bSort": false,

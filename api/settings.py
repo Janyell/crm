@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'media_tree',
     'bootstrap_pagination',
     'djangosphinx',
+    'mathfilters'
 )
 
 MIDDLEWARE_CLASSES = (
