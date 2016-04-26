@@ -7,8 +7,10 @@
                     <h3 class="center">Экспорт в Excel</h3>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" value="{{ request.get_full_path }}" />
+                    <div class="text-error hide">Ошибка в заполнении формы</div>
                     <h5 class="form-add__please">Пожалуйста, выберите столбцы:</h5>
-                    <div class="modal__exported-cols">
+                    <div class="modal__exported-cols cols2">
                         <label class="checkbox bold">
                             <input class="checkbox_export_all" type="checkbox" name="cols[]" value="all" />
                             Выбрать все
@@ -29,8 +31,8 @@
                 $(document).ready(function(){
                     var $exported_table = $('.exported-table');
                     var $exported_table__th = $exported_table.find('th');
-                    var $exported_table__th_size = ($exported_table__th.size() + 1) / 2; // modal cols number;
-                    var $modal__exported_cols = $('.modal__exported-cols');
+                    var $export_modal = $('#export-to-excel');
+                    var $modal__exported_cols = $export_modal.find('.modal__exported-cols');
                     $exported_table__th.each(function() {
                         var $this = $(this);
                         var text = $this.text();
@@ -42,7 +44,6 @@
                         }
                     });
 
-                    var $export_modal = $('#export-to-excel');
                     var $checkboxes_one = $export_modal.find('.checkbox_export_one');
 
                     var $checkbox_all = $export_modal.find('.checkbox_export_all');
@@ -62,12 +63,11 @@
                     });
 
                     var $form = $('.form-export-to-excel');
-                    $('#export-to-excel__ok').click(function(){
-                        if ($checkboxes_one.find(":checked").length != 0) {
-                            $form.submit();
-                        }
-                        else {
-                            $export_modal.modal('hide');
+                    var $text_error = $export_modal.find('.text-error');
+                    $form.submit(function(){
+                        if ($(".checkbox_export_one:checked").length == 0) {
+                            $text_error.css({display: 'block'});
+                            return false;
                         }
                     });
                 });
