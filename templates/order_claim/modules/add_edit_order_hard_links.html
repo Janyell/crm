@@ -8,7 +8,7 @@
                     {# billed hard link #}
                     var $select_bill_status = $('#selectBillStatus');
                     var $account_number = $('#id_account_number');
-                    var $account_number_label = $("label[for=\"id_account_number\"]");
+                    var $account_number_label = $('label[for="id_account_number"]');
                     var account_number_label_text = $account_number_label.text();
                     if ($select_bill_status.val() == 0) { // Выставлен
                             $account_number.prop("required", true);
@@ -26,7 +26,24 @@
                     });
                 {% else %}
                     {# shipped hard link #}
-
+                    var $select_status = $('#selectStatus');
+                    var $shipped_date = $('#inputShippedDate');
+                    var $shipped_date_label = $('label[for="inputShippedDate"]');
+                    var shipped_date_label_text = $shipped_date_label.text();
+                    if ($select_status.val() == -1) { // Отгружен
+                        $shipped_date.prop("required", true);
+                        $shipped_date_label.html(shipped_date_label_text + "<span class=\"required-input\">*</span>");
+                    }
+                    $select_status.change(function() {
+                        if ($(this).val() == -1) { // Отгружен
+                            $shipped_date.prop("required", true);
+                            $shipped_date_label.html(shipped_date_label_text + "<span class=\"required-input\">*</span>");
+                        }
+                        else {
+                            $shipped_date.prop("required", false);
+                            $shipped_date_label.html(shipped_date_label_text);
+                        }
+                    });
                 {% endif %}
             });
         })(jQuery);

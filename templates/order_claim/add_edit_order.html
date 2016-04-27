@@ -393,8 +393,6 @@
         </div>
     {% endif %}
 
-    {% include "order_claim/modules/add_edit_order_hard_links.html" %}
-    {% include "order_claim/modules/transform_claim_to_order.html" %}
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -694,4 +692,6 @@
             });
         })(jQuery);
     </script>
+    {% include "order_claim/modules/add_edit_order_hard_links.html" %}
+    {% include "order_claim/modules/transform_claim_to_order.html" %}
 {%endblock%}
