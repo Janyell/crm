@@ -22,6 +22,7 @@ from django.http import HttpResponseRedirect
 from django.template import Template, Context
 from api.settings import MEDIA_ROOT, BASE_DIR
 from base_api.models import *
+from base_api.constants import *
 
 
 def add_edit_role(request):
@@ -413,29 +414,230 @@ def made_excel(request):
     user_role = Roles.objects.get(id=request.user.id).role
     if user_role != 0:
         return HttpResponseRedirect('/oops/')
-    filename = MEDIA_ROOT + '/' + str(Order_Files.objects.get(id=1).file)
-    wb = openpyxl.load_workbook(filename=filename)
-    sheet = wb['test']
-    clients = Clients.objects.filter(is_deleted=0).all()
+
+    random_filename = str(''.join(random.choice(string.lowercase) for i in range(10))) + '.xlsx'
+    filename = MEDIA_ROOT + '/uploads/' + random_filename
+
+    wb = openpyxl.Workbook()
+    sheet = wb.active
+
+    table_name = request.GET.get('table')
+    table = EXCEL_TABLES.get(table_name)
+    cols = request.POST.getlist('cols[]')
+
+    if u'all' in cols:
+        cols.remove(u'all')
+
     row_index = 1
-    sheet.cell(row=row_index, column=1).value = "Email"
-    sheet.cell(row=row_index, column=2).value = "Организация"
-    sheet.cell(row=row_index, column=3).value = "Контактное лицо"
-    for client in clients:
-        row_index += 1
+
+    if table_name == u'products':
+        table_objects = table.objects.filter(is_deleted=0).all()
         column_index = 1
-        sheet.cell(row=row_index, column=column_index).value = client.email
-        column_index += 1
-        if client.organization_type == "" or client.organization_type is None:
-            sheet.cell(row=row_index, column=column_index).value = client.organization
-        else:
-            sheet.cell(row=row_index, column=column_index).value = client.organization + ', ' + client.organization_type
-        column_index += 1
-        sheet.cell(row=row_index, column=column_index).value = client.last_name + ' ' + client.name + ' ' + \
-                                                               client.patronymic
+        if u'group' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Группа"
+            column_index = column_index + 1
+        if u'title' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Название"
+            column_index = column_index + 1
+        if u'price' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Цена"
+            column_index = column_index + 1
+        if u'is_active' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Статус"
+
+        for table_object in table_objects:
+            row_index += 1
+            column_index = 1
+            for col in cols:
+                if col == u'group':
+                    if getattr(table_object, col):
+                        sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).title)
+                elif col == u'is_active':
+                    if getattr(table_object, col):
+                        sheet.cell(row=row_index, column=column_index).value = u'Активный'
+                    else:
+                        sheet.cell(row=row_index, column=column_index).value = u'Не активный'
+                else:
+                    sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col))
+                column_index += 1
+
+    elif table_name == u'clients':
+        table_objects = table.objects.filter(is_deleted=0).all()
+        column_index = 1
+        if u'organization' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Организация"
+            column_index = column_index + 1
+        if u'organization_phone' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Телефон организации"
+            column_index = column_index + 1
+        if u'name' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Контактное лицо"
+            column_index = column_index + 1
+        if u'person_phone' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Телефон контактного лица"
+            column_index = column_index + 1
+        if u'email' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Email"
+
+        for table_object in table_objects:
+            row_index += 1
+            column_index = 1
+            for col in cols:
+                if col == u'name':
+                    sheet.cell(row=row_index, column=column_index).value = \
+                        unicode(getattr(table_object, 'last_name')) +\
+                        ' ' + unicode(getattr(table_object, 'name')) +\
+                        ' ' + unicode(getattr(table_object, 'patronymic'))
+                else:
+                    sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col))
+                column_index += 1
+
+    elif table_name == u'claims':
+        table_objects = table.objects.filter(is_deleted=0, is_claim=1).all()
+        column_index = 1
+        if u'role' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Менеджер"
+            column_index = column_index + 1
+        if u'order_date' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Дата заявки"
+            column_index = column_index + 1
+        if u'organization' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Название организации"
+            column_index = column_index + 1
+        if u'company' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Компания"
+            column_index = column_index + 1
+        if u'account_number' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Номер счета"
+            column_index = column_index + 1
+        if u'bill' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Сумма счета"
+            column_index = column_index + 1
+        if u'products' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Продукция"
+            column_index = column_index + 1
+        if u'order_status' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Статус"
+            column_index = column_index + 1
+        if u'comment' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Комментарии"
+
+        for table_object in table_objects:
+            row_index += 1
+            column_index = 1
+            for col in cols:
+                if col == u'organization':
+                    client = getattr(table_object, 'client')
+                    if client.organization == '':
+                        organization_or_full_name = client.last_name + ' ' + client.name + ' ' + client.patronymic
+                    else:
+                        organization_or_full_name = client.organization
+                    sheet.cell(row=row_index, column=column_index).value = unicode(organization_or_full_name)
+                elif col == u'company':
+                    if getattr(table_object, col):
+                        sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).title)
+                elif col == u'products':
+                    pass
+                elif col == u'order_status':
+                    bill_status = getattr(table_object, 'bill_status')
+                    if bill_status == 0:
+                        sheet.cell(row=row_index, column=column_index).value = 'Выставлен'
+                    elif bill_status == 1:
+                        sheet.cell(row=row_index, column=column_index).value = 'Нужна доплата'
+                    elif bill_status == 2:
+                        sheet.cell(row=row_index, column=column_index).value = 'Оплачен'
+                    elif bill_status == 4:
+                        sheet.cell(row=row_index, column=column_index).value = 'Устно'
+                    elif bill_status == 5:
+                        sheet.cell(row=row_index, column=column_index).value = 'Подбор'
+                    else:
+                        sheet.cell(row=row_index, column=column_index).value = ''
+                else:
+                    sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col))
+                column_index += 1
+
+    elif table_name == u'orders':
+        table_objects = table.objects.filter(is_deleted=0, is_claim=0).all()
+        column_index = 1
+        if u'role' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Менеджер"
+            column_index = column_index + 1
+        if u'organization' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Название организации"
+            column_index = column_index + 1
+        if u'unique_number' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Номер заказа"
+            column_index = column_index + 1
+        if u'company' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Компания"
+            column_index = column_index + 1
+        if u'account_number' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Номер счета"
+            column_index = column_index + 1
+        if u'bill' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Сумма счета"
+            column_index = column_index + 1
+        if u'payment_date' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Дата оплаты"
+            column_index = column_index + 1
+        if u'products' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Продукция"
+            column_index = column_index + 1
+        if u'order_status' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Статус"
+            column_index = column_index + 1
+        if u'ready_date' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Дата готовности"
+            column_index = column_index + 1
+        if u'city' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Доставка город"
+            column_index = column_index + 1
+        if u'transport_company' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Транспортная компания"
+            column_index = column_index + 1
+        if u'comment' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Комментарии"
+
+        for table_object in table_objects:
+            row_index += 1
+            column_index = 1
+            for col in cols:
+                if col == u'organization':
+                    client = getattr(table_object, 'client')
+                    if client.organization == '':
+                        organization_or_full_name = client.last_name + ' ' + client.name + ' ' + client.patronymic
+                    else:
+                        organization_or_full_name = client.organization
+                    sheet.cell(row=row_index, column=column_index).value = unicode(organization_or_full_name)
+                elif col == u'company':
+                    if getattr(table_object, col):
+                        sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).title)
+                elif col == u'transport_company':
+                    if getattr(table_object, 'transport_campaign'):
+                        sheet.cell(row=row_index, column=column_index).value = \
+                            unicode(getattr(table_object, 'transport_campaign').title)
+                elif col == u'city':
+                    if getattr(table_object, 'transport_campaign'):
+                        sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).name)
+                elif col == u'products':
+                    pass
+                elif col == u'order_status':
+                    order_status = getattr(table_object, 'order_status')
+                    if order_status == 0:
+                        sheet.cell(row=row_index, column=column_index).value = 'В производстве'
+                    elif order_status == -1:
+                        sheet.cell(row=row_index, column=column_index).value = 'Отгружен'
+                    elif order_status == 2:
+                        sheet.cell(row=row_index, column=column_index).value = 'Готов'
+                    else:
+                        sheet.cell(row=row_index, column=column_index).value = ''
+                else:
+                    sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col))
+                column_index += 1
+
     # сохраняем данные
     wb.save(filename)
-    return HttpResponseRedirect(Order_Files.objects.get(id=1).file.url)
+    return HttpResponseRedirect('/media/uploads/' + random_filename)
 
 
 def made_excel_products(request):

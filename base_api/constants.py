@@ -1,3 +1,6 @@
+from base_api.models import *
+
+
 SORT_TYPE_FOR_CLAIM = {
     'role': 'role__username',
     'role_d': '-role__username',
@@ -82,3 +85,10 @@ SORT_TYPE_FOR_COMPANY = {
 DEFAULT_SORT_TYPE_FOR_COMPANY = 'pk'
 
 DEFAULT_NUMBER_FOR_PAGE = 10
+
+EXCEL_TABLES = {
+    u'orders': Orders,
+    u'claims': Orders,
+    u'products': Products,
+    u'clients': Clients,
+}
