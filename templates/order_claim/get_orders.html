@@ -120,7 +120,7 @@
                                 {% if order.order_status|title == "Готов" %}
                                     tr_green
                                 {% else %}
-                                    {% with became_claim_date=order.order.payment_date|date:"U" now_date=now %}
+                                    {% with became_claim_date=order.became_claim_date|date:"U" now_date=now|date:"U" %}
                                         {% if now_date|sub:became_claim_date < 144000 %}
                                             tr_orange
                                         {% endif %}
@@ -294,7 +294,7 @@
                                     {% if order.order_status|title == "Готов" %}
                                         2
                                     {% else %}
-                                        {% with became_claim_date=order.order.payment_date|date:"U" now_date=now %}
+                                        {% with became_claim_date=order.became_claim_date|date:"U" now_date=now|date:"U" %}
                                             {% if now_date|sub:became_claim_date < 144000 %}
                                                 1
                                             {% endif %}

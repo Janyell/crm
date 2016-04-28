@@ -212,6 +212,8 @@ class Orders(models.Model):
 
     factory_comment = models.TextField(null=True, blank=True)
 
+    became_claim_date = UnixTimestampField(blank=True, null=True)
+
     search = SphinxSearch()
 
 

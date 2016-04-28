@@ -218,6 +218,7 @@ def full_add_edit_claim(request):
             displacement = 0
             if bill_status == 1 or bill_status == 2:
                 new_claim.is_claim = 0
+                new_claim.became_claim_date = datetime.now()
                 displacement = 1
                 client.is_interested = 0
                 new_claim.order_status = 0
@@ -366,8 +367,10 @@ def full_add_edit_claim(request):
             bill_status = form.cleaned_data['bill_status']
             displacement = 0
             order_status = None
+            became_claim_date = None
             if bill_status == 1 or bill_status == 2:
                 is_claim = 0
+                became_claim_date = datetime.now()
                 client.is_interested = 0
                 displacement = 1
                 order_status = 0
@@ -448,7 +451,8 @@ def full_add_edit_claim(request):
                                               account_number=account_number, comment=comment, source=source,
                                               brought_sum=brought_sum, factory_comment=factory_comment,
                                               transport_campaign=transport_campaign, ready_date=ready_date, city=city,
-                                              payment_date=payment_date, order_status=order_status)
+                                              payment_date=payment_date, order_status=order_status,
+                                              became_claim_date=became_claim_date)
                     new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products,

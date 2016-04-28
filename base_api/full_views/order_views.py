@@ -893,6 +893,7 @@ def full_get_orders(request):
     out.update({'count': orders.count()})
     # IN_PRODUCTION status = 0
     out.update({'count_in_production': orders.filter(order_status=0).count()})
+    out.update({'now': datetime.now()})
     if Roles.objects.get(id=request.user.id).role == 2:
         return render(request, 'order_claim/get_orders_for_factory.html', out)
     return render(request, 'order_claim/get_orders.html', out)
