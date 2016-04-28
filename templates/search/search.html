@@ -3,7 +3,7 @@
 {%block content%}
     <div class="container container_full-width">
         <h2 class="center">Поиск по {{ request.GET.search }}</h2>
-        {% if not search_results %}
+        {% if search_results %}
             <h4>Результаты поиска:</h4>
             <ul class="search-results">
                 {% if orders %}
