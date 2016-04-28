@@ -525,6 +525,7 @@ def made_excel(request):
         for table_object in table_objects:
             row_index += 1
             column_index = 1
+            new_row_index = row_index
             for col in cols:
                 if col == u'organization':
                     client = getattr(table_object, 'client')
@@ -537,7 +538,15 @@ def made_excel(request):
                     if getattr(table_object, col):
                         sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).title)
                 elif col == u'products':
-                    pass
+                    old_row_index = row_index
+                    products = Order_Product.objects.filter(order=table_object).all()
+                    for pr in products:
+                        product_row = unicode(pr.product.title) + u' - ' + \
+                                      unicode(pr.count_of_products) + u' шт.'
+                        sheet.cell(row=row_index, column=column_index).value = product_row
+                        row_index += 1
+                    new_row_index = row_index
+                    row_index = old_row_index
                 elif col == u'order_status':
                     bill_status = getattr(table_object, 'bill_status')
                     if bill_status == 0:
@@ -555,6 +564,7 @@ def made_excel(request):
                 else:
                     sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col))
                 column_index += 1
+            row_index = new_row_index
 
     elif table_name == u'orders':
         table_objects = table.objects.filter(is_deleted=0, is_claim=0).all()
@@ -601,6 +611,7 @@ def made_excel(request):
         for table_object in table_objects:
             row_index += 1
             column_index = 1
+            new_row_index = row_index
             for col in cols:
                 if col == u'organization':
                     client = getattr(table_object, 'client')
@@ -620,7 +631,15 @@ def made_excel(request):
                     if getattr(table_object, 'transport_campaign'):
                         sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).name)
                 elif col == u'products':
-                    pass
+                    old_row_index = row_index
+                    products = Order_Product.objects.filter(order=table_object).all()
+                    for pr in products:
+                        product_row = unicode(pr.product.title) + u' - ' + \
+                                      unicode(pr.count_of_products) + u' шт.'
+                        sheet.cell(row=row_index, column=column_index).value = product_row
+                        row_index += 1
+                    new_row_index = row_index
+                    row_index = old_row_index
                 elif col == u'order_status':
                     order_status = getattr(table_object, 'order_status')
                     if order_status == 0:
@@ -634,6 +653,7 @@ def made_excel(request):
                 else:
                     sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col))
                 column_index += 1
+            row_index = new_row_index
 
     # сохраняем данные
     wb.save(filename)
