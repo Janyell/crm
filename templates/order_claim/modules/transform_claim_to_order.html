@@ -10,6 +10,10 @@
                 {% endif %}
                 var $select_bill_status = $('#selectBillStatus');
 
+                if ($select_bill_status.val() == 1) { // Нужна доплата
+                    $brought_sum.css({'display': 'block'});
+                }
+
                 $select_bill_status.change(function() {
                     var $this = $(this);
                     if ($this.val() == 1) { // Нужна доплата

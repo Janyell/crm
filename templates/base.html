@@ -16,6 +16,13 @@
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/daterangepicker-bs2.css">
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/summernote.min.css">
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/font-awesome.min.css">
+        {% if user_role == 2 %}
+            <style>
+                * {
+                    font-size: 1.03em;
+                }
+            </style>
+        {% endif %}
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dataTables.min.js"></script>

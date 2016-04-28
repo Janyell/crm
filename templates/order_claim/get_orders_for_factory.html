@@ -1,6 +1,8 @@
 {% extends "order_claim/get_orders.html" %}
 {% load mathfilters %}
 
+{% block orders-header__sources %}{% endblock %}
+
 {% block order-table-headers %}
     {# 0 #}<th class="sortable{% if request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">Название организации</th>
     {# 1 #}<th class="sortable{% if request.GET.sort == "role" %} sorting_asc{% elif request.GET.sort == "role_d" %} sorting_desc{% else %} sorting{% endif %}" value="role">Менеджер</th>
@@ -15,10 +17,9 @@
     {# 10 #}<th class="sortable{% if request.GET.sort == "city" %} sorting_asc{% elif request.GET.sort == "city_d" %} sorting_desc{% else %} sorting{% endif %}" value="city">Доставка город</th>
     {# 11 #}<th class="sortable{% if request.GET.sort == "transport_company" %} sorting_asc{% elif request.GET.sort == "transport_company_d" %} sorting_desc{% else %} sorting{% endif %}" value="transport_company">Транспортная компания</th>
     {# 12 #}<th></th>
-    {# 13 #}<th></th>
 
-    {# 14 #}<th></th>
-    {# 15 #}<th class="sorting_desc"></th>
+    {# 13 #}<th></th>
+    {# 14 #}<th class="sorting_desc"></th>
 {% endblock %}
 
 {% block order-table-body__inform_cols %}
@@ -36,7 +37,9 @@
         {% endif %}
     </td>
     <td>
-        {% if order.brought_sum == None %}
+        {% if order.bill_status == 2 %}
+            100%
+        {% elif order.brought_sum == None %}
             0%
         {% else %}
             {{ order.brought_sum|mul:100|intdiv:order.bill }}%
@@ -78,4 +81,4 @@
 
 {% block order-table-body__delete-col %}{% endblock %}
 
-{% block order-table-scripts__invisible-cols %}14, 15{% endblock %}
+{% block order-table-scripts__invisible-cols %}13, 14{% endblock %}

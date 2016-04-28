@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load mathfilters %}
 
 {%block content%}
     <div class="container container_full-width">
@@ -67,18 +68,20 @@
                     </div>
                 {% endblock manager-checkboxes %}
             </div>
-            <div class="span3">
-                {% if sources %}
-                    <div class="source">
-                        <select id="selectSource" name="source">
-                                <option value="all">Все источники</option>
-                            {% for source in sources %}
-                                <option value="{{ source.pk }}"{% if request.GET.source == source.pk|urlencode:"" %} selected="selected"{% endif %}>{{ source.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                {% endif %}
-            </div>
+            {% block orders-header__sources %}
+                <div class="span3">
+                    {% if sources %}
+                        <div class="source">
+                            <select id="selectSource" name="source">
+                                    <option value="all">Все источники</option>
+                                {% for source in sources %}
+                                    <option value="{{ source.pk }}"{% if request.GET.source == source.pk|urlencode:"" %} selected="selected"{% endif %}>{{ source.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endblock %}
         </div>
         {% block table %}
         {% if orders %}
@@ -113,7 +116,16 @@
                     </thead>
                     <tbody>
                         {% for order in orders %}
-                            <tr{% if order.order_status|title == "Готов" %} class="tr_green"{% endif %}>
+                            <tr class="
+                                {% if order.order_status|title == "Готов" %}
+                                    tr_green
+                                {% else %}
+                                    {% with became_claim_date=order.order.payment_date|date:"U" now_date=now %}
+                                        {% if now_date|sub:became_claim_date < 144000 %}
+                                            tr_orange
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endif %}">
                                 {% block order-table-body__inform_cols %}
                                 <td>
                                     {% if user_role == 0 %}
@@ -238,7 +250,6 @@
                                     <a class="btn archive-button" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
                                 {% endif %}
                                 </td>
-                                {% endblock %}
                                 <td>
                                     {% if order.files %}
                                         <a class="btn files-button" data-toggle="modal" href="#view-order-files" value="
@@ -252,6 +263,7 @@
                                         "><i class="icon-file"></i></a>
                                     {% endif %}
                                 </td>
+                                {% endblock %}
                                 <td>
                                     {% if user_role == 0 %}
                                         <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}{% if request.path == get_old_orders_url %}&archive=1{% endif %}"><i class="icon-pencil"></i></a>
@@ -281,6 +293,12 @@
                                 <td>
                                     {% if order.order_status|title == "Готов" %}
                                         2
+                                    {% else %}
+                                        {% with became_claim_date=order.order.payment_date|date:"U" now_date=now %}
+                                            {% if now_date|sub:became_claim_date < 144000 %}
+                                                1
+                                            {% endif %}
+                                        {% endwith %}
                                     {% endif %}
                                 </td>
                             </tr>
