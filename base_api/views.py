@@ -1530,3 +1530,7 @@ def edit_kp(request):
                          out_filename_pdf,
                          options=options)
         return render(request, 'edit_kp.html', out)
+
+
+def get_tasks(request):
+    return render(request, 'task/get_tasks.html')

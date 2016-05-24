@@ -39,6 +39,8 @@
                     {#selectBillStatus -> required + первый option сделать disabled #}
                     $select_bill_status.prop("required", true);
                     $select_bill_status.find('option:first').prop("disabled", true);
+                    var line_option = '<option disabled="">----------</option>';
+                    $select_bill_status.find('option:nth-of-type(4)').after(line_option);
                 {% endif %}
             });
         })(jQuery);
