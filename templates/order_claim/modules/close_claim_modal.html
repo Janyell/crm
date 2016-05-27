@@ -1,0 +1,38 @@
+{% block close_claim_modal %}
+    <div class="modal hide fade" id="close-claim" tabindex="-1" role="dialog" aria-hidden="true">
+        <form class="form-horizontal form-add_modal form-add-client" method="post" action="{% url "close_claim" %}">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3 class="center">Закрытие заявки</h3>
+            </div>
+            <div class="modal-body">
+                <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
+                <div class="control-group">
+                    <label class="control-label" for="id_reason">
+                        Причина
+                        <span class="required-input">*</span>
+                    </label>
+                    <div class="controls">
+                        {{ close_claim_form.reason }}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="id_final_comment">
+                        Финальный комментарий
+                        <span class="required-input">*</span>
+                    </label>
+                    <div class="controls">
+                        {{ close_claim_form.final_comment }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-add__submits">
+                    <button type="submit" class="btn btn-danger">Закрыть заявку</button>
+                    <button type="reset" class="btn">Очистить</button>
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

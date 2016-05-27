@@ -162,8 +162,7 @@ select.hidden, div.hidden {
     display: none;
 }
 .container_fixed_width {
-    width: 95%;
-    min-width: 2000px;
+    width: 1040px;
 }
 .nav>li:nth-of-type(3) {
     border-left:2px solid #777;

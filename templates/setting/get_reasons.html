@@ -1,0 +1,24 @@
+{% extends "setting/get_sources.html" %}
+
+{% block error__entity-name %}Такая пользовательская причина{% endblock %}
+
+{% block recond-number__entity-name %}пользовательских причин{% endblock %}
+
+{% block delete__entity-name %}эту пользовательскую причину{% endblock %}
+
+{% block massive-delete__entity-name %}пользовательские причины{% endblock %}
+
+{% block edit__entity-name %}пользовательской причины{% endblock %}
+
+{% block no-entities__entity-name %}одной пользовательской причины{% endblock %}
+
+{% block add__entity-name %}пользовательской причины{% endblock %}
+
+{% block entities_urls %}
+    var get_url = '{% url 'get_reasons' %}';
+    var edit_url = '{% url 'edit_reason' %}';
+    var delete_url = '{% url 'delete_reason' %}';
+    var massive_delete_url = '{% url 'massive_delete_reasons' %}';
+    var massive_activate_url = '{% url 'massive_activate_reasons' %}';
+    var massive_deactivate_url = '{% url 'massive_deactivate_reasons' %}';
+{% endblock %}

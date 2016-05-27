@@ -21,7 +21,7 @@
             {% url "get_orders" %}{% endif %}" class="btn back-button">Назад</a>
 
         {% if request.path == edit_claim_url %}
-            <a href="{% url 'close_claim' %}" class="btn pull-right btn-danger">Закрыть заявку</a>
+            <a class="btn pull-right btn-danger" data-toggle="modal" href="#close-claim">Закрыть заявку</a>
         {% endif %}
         {% if request.path == edit_claim_url or request.path == edit_order_url %}
             <a href="
@@ -365,7 +365,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="form-add__submits">
-                        <button type="submit" class="btn btn-primary" name="save-and-add-order" value="save-and-add-order">Сохранить</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
                         <button type="reset" class="btn">Очистить</button>
                         <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                     </div>
@@ -708,5 +708,8 @@
     {% include "order_claim/modules/transform_claim_to_order.html" %}
     {% if request.path == add_claim_url %}
         {% include "order_claim/modules/no_our_products_script.html" %}
+    {% endif %}
+    {% if request.path == edit_claim_url %}
+        {% include "order_claim/modules/close_claim_modal.html" %}
     {% endif %}
 {%endblock%}

@@ -1538,3 +1538,27 @@ def get_tasks(request):
 
 def close_claim(request):
     pass
+
+
+def get_reasons(request):
+    return render(request, 'setting/get_reasons.html')
+
+
+def edit_reason(request):
+    pass
+
+
+def delete_reason(request):
+    pass
+
+
+def massive_activate_reasons(request):
+    pass
+
+
+def massive_deactivate_reasons(request):
+    pass
+
+
+def massive_delete_reasons(request):
+    pass
