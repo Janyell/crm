@@ -1,0 +1,30 @@
+{% block no_our_products_script %}
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                var $input_no_our_products = $('#input-no-out-products');
+                var $input_comment = $('#inputComment');
+                var $comment_label = $('label[for="inputComment"]');
+                var comment_label_text = $comment_label.text();
+
+                $input_no_our_products.change(function() {
+                    if ($(this).prop('checked')) {
+                        $('.input_out_products').hide();
+                        /* Клиента (чтобы занести контакты)
+                        Прикрепленные файлы
+                        Источник
+                        */
+                        $input_comment.prop('required', true);
+                        $comment_label.html(comment_label_text + "<span class=\"required-input\">*</span>");
+                        // убрать лишние required
+                    }
+                    else {
+                        $('.input_out_products').show();
+                        $input_comment.prop('required', false);
+                        $comment_label.html(comment_label_text);
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}
