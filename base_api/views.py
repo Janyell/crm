@@ -1534,3 +1534,7 @@ def edit_kp(request):
 
 def get_tasks(request):
     return render(request, 'task/get_tasks.html')
+
+
+def close_claim(request):
+    pass

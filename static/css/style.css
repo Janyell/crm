@@ -81,6 +81,13 @@ body {
 .client-info__item, .bill-info__item {
     margin: 5px 0;
 }
+.inline-block {
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    zoom: 1;
+    *display: inline;
+}
 #add-product-table_wrapper, .select-product-table_wrapper {
     width: 500px;
     padding: 10px;
@@ -155,7 +162,8 @@ select.hidden, div.hidden {
     display: none;
 }
 .container_fixed_width {
-    width: 1040px;
+    width: 95%;
+    min-width: 2000px;
 }
 .nav>li:nth-of-type(3) {
     border-left:2px solid #777;

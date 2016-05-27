@@ -6,23 +6,31 @@
                 var $input_comment = $('#inputComment');
                 var $comment_label = $('label[for="inputComment"]');
                 var comment_label_text = $comment_label.text();
+                var $our_products = $('.only-for-our-products');
+                var $our_products_required = $our_products.find(':required');
+                var $select_bill_status = $('#selectBillStatus');
+                var $form = $('.form-add-order');
+                var $select_product_table = $('.select-product-table');
 
                 $input_no_our_products.change(function() {
                     if ($(this).prop('checked')) {
-                        $('.input_out_products').hide();
-                        /* Клиента (чтобы занести контакты)
-                        Прикрепленные файлы
-                        Источник
-                        */
+                        $our_products.hide();
+                        $our_products_required.prop('required', false);
                         $input_comment.prop('required', true);
                         $comment_label.html(comment_label_text + "<span class=\"required-input\">*</span>");
-                        // убрать лишние required
                     }
                     else {
-                        $('.input_out_products').show();
+                        $our_products.show();
+                        $our_products_required.prop('required', true);
                         $input_comment.prop('required', false);
                         $comment_label.html(comment_label_text);
                     }
+                });
+                $form.submit(function() {
+                    $select_bill_status.val(4); // Устно
+                    $select_product_table.find('.minus').click();
+                    $select_product_table.find('.plus').click();
+                    $select_product_table.find('.select-product__title').val('Другое');
                 });
             });
         })(jQuery);

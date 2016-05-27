@@ -71,6 +71,8 @@ urlpatterns = patterns('',
                        url(r'^claims/delete/$', 'base_api.views.delete_claim', name='delete_claim'),
                        url(r'^claims/bind/$', 'base_api.views.bind_claim', name='bind_claim'),
                        url(r'^claims/unbind/$', 'base_api.views.unbind_claim', name='unbind_claim'),
+                       url(r'^claims/close/$', 'base_api.views.close_claim', name='close_claim'),
+
                        url(r'^claims/kp/edit/$', 'base_api.views.edit_kp', name='edit_kp'),
                        url(r'^uploads/order/$', 'base_api.views.upload_order_files', name='upload_order_files'),
                        url(r'^uploads/delete/order/$', 'base_api.views.delete_order_files', name='delete_order_files'),
