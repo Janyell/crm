@@ -18,7 +18,7 @@ def full_add_edit_order(request):
         return HttpResponseRedirect('/login/')
     out = {}
     # хак, чтобы отсутствие этого поля не вызывало 500 (фронт пока не добавил это поле)
-    transport_campaign = None
+    # transport_campaign = None
     user_role = Roles.objects.get(id=request.user.id).role
     if user_role == 2:
         return HttpResponseRedirect('/oops/')
@@ -68,14 +68,14 @@ def full_add_edit_order(request):
                 order_status = int(request.POST['order_status'])
             else:
                 order_status = None
-            if 'shipped_date' in request.POST and \
-                request.POST['shipped_date'] is not None and \
-                request.POST['shipped_date'] != '':
-                order_status = -1
-            if 'ready_date' in request.POST and \
-                request.POST['ready_date'] is not None and \
-                request.POST['ready_date'] != '':
-                order_status = 2
+            # if 'shipped_date' in request.POST and \
+            #     request.POST['shipped_date'] is not None and \
+            #     request.POST['shipped_date'] != '':
+            #     order_status = -1
+            # if 'ready_date' in request.POST and \
+            #     request.POST['ready_date'] is not None and \
+            #     request.POST['ready_date'] != '':
+            #     order_status = 2
             if order_status == -1:
                 shipped_date = request.POST['shipped_date']
                 if shipped_date is None or shipped_date == '':
@@ -390,14 +390,14 @@ def full_add_edit_order(request):
             except Exception:
                 brought_sum = None
             shipped_date = None
-            if 'shipped_date' in request.POST and \
-                request.POST['shipped_date'] is not None and \
-                request.POST['shipped_date'] != '':
-                order_status = -1
-            if 'ready_date' in request.POST and \
-                request.POST['ready_date'] is not None and \
-                request.POST['ready_date'] != '':
-                order_status = 2
+            # if 'shipped_date' in request.POST and \
+            #     request.POST['shipped_date'] is not None and \
+            #     request.POST['shipped_date'] != '':
+            #     order_status = -1
+            # if 'ready_date' in request.POST and \
+            #     request.POST['ready_date'] is not None and \
+            #     request.POST['ready_date'] != '':
+            #     order_status = 2
             if order_status == -1:
                 shipped_date = form.cleaned_data['shipped_date']
                 if shipped_date is None:
@@ -555,14 +555,14 @@ def full_add_edit_order(request):
                 role = request.user.id
             payment_date = request.POST['payment_date']
             order_status = request.POST['order_status']
-            if 'shipped_date' in request.POST and \
-                request.POST['shipped_date'] is not None and \
-                request.POST['shipped_date'] != '':
-                order_status = -1
-            if 'ready_date' in request.POST and \
-                request.POST['ready_date'] is not None and \
-                request.POST['ready_date'] != '':
-                order_status = 2
+            # if 'shipped_date' in request.POST and \
+            #     request.POST['shipped_date'] is not None and \
+            #     request.POST['shipped_date'] != '':
+            #     order_status = -1
+            # if 'ready_date' in request.POST and \
+            #     request.POST['ready_date'] is not None and \
+            #     request.POST['ready_date'] != '':
+            #     order_status = 2
             bill_status = request.POST['bill_status']
             ready_date = request.POST['ready_date']
             shipped_date = request.POST['shipped_date']
@@ -637,7 +637,7 @@ def full_add_edit_order(request):
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
                                'brought_sum': order.brought_sum, 'factory_comment': order.factory_comment,
-                               'transport_campaign': transport_campaign})
+                               'transport_campaign': order.transport_campaign})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -711,7 +711,8 @@ def full_add_edit_order(request):
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
                                'role': order.role, 'brought_sum': order.brought_sum,
-                               'factory_comment': order.factory_comment, 'transport_campaign': transport_campaign})
+                               'factory_comment': order.factory_comment,
+                               'transport_campaign': order.transport_campaign})
             else:
                 form = OrdersForm({'client': order.client, 'company': order.company, 'bill': order.bill,
                                'payment_date': order.payment_date, 'order_status': order.order_status,
@@ -719,7 +720,7 @@ def full_add_edit_order(request):
                                'source': order.source, 'ready_date': order.ready_date,
                                'account_number': order.account_number, 'shipped_date': shipped_day_month,
                                'brought_sum': order.brought_sum, 'factory_comment': order.factory_comment,
-                               'transport_campaign': transport_campaign})
+                               'transport_campaign': order.transport_campaign})
             form.products = Products.objects.filter(is_deleted=0)
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             products_list = []
@@ -1015,14 +1016,14 @@ def full_edit_order_for_factory(request):
             else:
                 ready_date = None
             new_order = Orders.objects.get(id=pk, is_deleted=0)
-            if 'shipped_date' in request.POST and \
-                            request.POST['shipped_date'] is not None and \
-                            request.POST['shipped_date'] != '':
-                order_status = -1
-            if 'ready_date' in request.POST and \
-                request.POST['ready_date'] is not None and \
-                request.POST['ready_date'] != '':
-                order_status = 2
+            # if 'shipped_date' in request.POST and \
+            #                 request.POST['shipped_date'] is not None and \
+            #                 request.POST['shipped_date'] != '':
+            #     order_status = -1
+            # if 'ready_date' in request.POST and \
+            #     request.POST['ready_date'] is not None and \
+            #     request.POST['ready_date'] != '':
+            #     order_status = 2
             if order_status == -1:
                 shipped_date = request.POST['shipped_date']
                 if shipped_date is None or shipped_date == '':

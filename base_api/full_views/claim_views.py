@@ -72,8 +72,8 @@ def full_add_edit_claim(request):
             else:
                 ready_date = None
             account_number = request.POST['account_number']
-            if account_number:
-                bill_status = 0
+            # if account_number:
+            #     bill_status = 0
             if 'role' in request.POST:
                 role = request.POST['role']
             else:
@@ -377,8 +377,8 @@ def full_add_edit_claim(request):
             else:
                 is_claim = 1
             account_number = form.cleaned_data['account_number']
-            if account_number:
-                bill_status = 0
+            # if account_number:
+            #     bill_status = 0
             products_list = request.POST.getlist('products[]')
             is_claim_create = False
             new_claim_was_not_created = True
@@ -550,8 +550,8 @@ def full_add_edit_claim(request):
                 ready_date = datetime.strptime(ready_date, '%Y-%m-%d %H:%M:%S')
             else:
                 ready_date = None
-            if account_number:
-                bill_status = 0
+            # if account_number:
+            #     bill_status = 0
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=True)
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
