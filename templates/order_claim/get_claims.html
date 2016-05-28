@@ -8,6 +8,11 @@
                 Заявка успешно перемещена в заказы
                 <a class="close" data-dismiss="alert">×</a>
             </div>
+        {% elif request.GET.closure %}
+            <div class="alert alert-danger fade in closures">
+                Заявка закрыта. Это печально… :(
+                <a class="close" data-dismiss="alert">×</a>
+            </div>
         {% endif %}
         <a href="{% url "add_claim" %}" class="btn btn_add-claim add-button">Добавить заявку</a>
         {% if user_role == 0 %}

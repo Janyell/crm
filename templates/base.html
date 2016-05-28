@@ -99,6 +99,9 @@
                                         <a href="{% url "get_settings" %}">Настройки</a>
                                     </li>
                                 {% endif %}
+                                <li class={% navactive request 'get_tasks' %}>
+                                    <a href="{% url "get_tasks" %}">Задачи</a>
+                                </li>
                             {% endif %}
                             {% if user_role == 1 %}{# только для менеджеров #}
                                 <li class={% navactive request 'get_reports' %}>

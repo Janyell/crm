@@ -81,6 +81,13 @@ body {
 .client-info__item, .bill-info__item {
     margin: 5px 0;
 }
+.inline-block {
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    zoom: 1;
+    *display: inline;
+}
 #add-product-table_wrapper, .select-product-table_wrapper {
     width: 500px;
     padding: 10px;
@@ -375,4 +382,8 @@ div.source {
 }
 .tr_orange {
     background-color: #FFE0B2;
+}
+
+.no-our-products {
+    padding: 10px;
 }
