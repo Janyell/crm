@@ -10,18 +10,33 @@
                     var $account_number = $('#id_account_number');
                     var $account_number_label = $('label[for="id_account_number"]');
                     var account_number_label_text = $account_number_label.text();
-                    if ($select_bill_status.val() == 0) { // Выставлен
-                            $account_number.prop("required", true);
-                            $account_number_label.html(account_number_label_text + "<span class=\"required-input\">*</span>");
-                        }
+                    var $set_via_kp_wrap = $('.set-via-kp');
+                    var $checkbox_set_via_kp = $set_via_kp_wrap.find('input[type=checkbox]');
+
+                    if ($select_bill_status.val() == 0) { // Выставлен;
+                        $account_number.prop("required", true);
+                        $account_number_label.html(account_number_label_text + "<span class=\"required-input\">*</span>");
+                    }
                     $select_bill_status.change(function() {
                         if ($(this).val() == 0) { // Выставлен
+                            $set_via_kp_wrap.show();
                             $account_number.prop("required", true);
                             $account_number_label.html(account_number_label_text + "<span class=\"required-input\">*</span>");
                         }
                         else {
+                            $set_via_kp_wrap.hide();
                             $account_number.prop("required", false);
                             $account_number_label.html(account_number_label_text);
+                        }
+                    });
+                    $checkbox_set_via_kp.change(function() {
+                        if ($(this).is(':checked')) {
+                            $account_number.prop("required", false);
+                            $account_number_label.html(account_number_label_text);
+                        }
+                        else {
+                            $account_number.prop("required", true);
+                            $account_number_label.html(account_number_label_text + "<span class=\"required-input\">*</span>");
                         }
                     });
                 {% else %}
