@@ -3,26 +3,7 @@
 {% block content %}
     <div class="container">
         <h2 class="center">{{ page_title }}</h2>
-    <input class="do" type="checkbox" value="123"/>
-        <div class="tasks-settings">
-            <label for="select-period">Задачи на</label>
-            <select id="select-period" name="period">
-                <option value="today"{% if request.GET.period == "today" %} selected="selected"{% endif %}>сегодня</option>
-                <option value="week"{% if request.GET.period == "week" %} selected="selected"{% endif %}>неделя</option>
-                <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>месяц</option>
-                <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>год</option>
-            </select>
-            {% if is_senior == True %}
-                <label for="select-manager">для</label>
-                <select id="select-manager" name="manager">
-                    {% for manager in roles %}
-                        <option value="{{ manager.pk }}"{% if manager.pk|upper == user.pk|upper or manager.pk|upper == request.GET.manager %} selected="selected"{% endif %}>
-                            {{ manager.username }}
-                        </option>
-                    {% endfor %}
-                </select>
-            {% endif %}
-        </div>
+        {% include "task/modules/get_tasks__settings.html" %}
         {% if tasks %}
             <table class="table table-hover table-bordered" id="task-table">
                 <thead>
@@ -102,20 +83,6 @@
                                 "oSearch": {"sSearch": "{{ request.GET.search }}"}
                             {% endif %}
                         });
-
-                        var path = "{{ request.path }}";
-                        var period = "{% if request.GET.period %}period={{ request.GET.period }}{% endif %}";
-                        var manager = "{% if request.GET.manager %}manager={{ request.GET.manager }}{% endif %}";
-
-                        function get_get_params() {
-                            var get_params = "";
-                            if (period) { get_params += "&" + period; }
-                            if (manager) { get_params += "&" + manager; }
-                            return get_params;
-                        }
-
-                        var get_params = get_get_params();
-                        var get_params__slice = get_params.slice(1);
                     });
                 })(jQuery);
             </script>
