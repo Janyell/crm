@@ -25,7 +25,9 @@
                                     <img src="{{ STATIC_URL }}img/important.png" alt="Важно!" />
                                 {% endif %}
                             </td>
-                            <td></td>
+                            <td>
+                                {{ task.type.title }}
+                            </td>
                             {% if task.order %}
                                 <td>
                                     <a href="{% url "edit_order" %}?id={{ task.order.pk }}" target="_blank">{{ task.order.unique_number }}</a>
