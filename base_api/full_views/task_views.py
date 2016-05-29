@@ -8,6 +8,9 @@ from base_api.form import *
 from django.http import *
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import timedelta
+from datetime import date
+from django.db.models import Q
 
 
 def full_do_task(request):
@@ -38,9 +41,30 @@ def full_get_tasks(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0) | Q(role=3)).all()})
     if user_role == 0 or user_role == 3:
         out.update({'is_senior': True})
     tasks = Tasks.objects.filter(is_deleted=0)
+    period = 'today'
+    if 'period' in request.GET:
+        period = request.GET['period']
+    if period == 'today':
+        start_date = datetime.today() - timedelta(days=1)
+        end_date = datetime.today()
+    elif period == 'week':
+        start_date = datetime.today() - timedelta(days=7)
+        end_date = datetime.today()
+    elif period == 'month':
+        start_date = datetime.today() - timedelta(days=32)
+        end_date = datetime.today()
+    elif period == 'year':
+        start_date = datetime.today() - timedelta(days=366)
+        end_date = datetime.today()
+    tasks = tasks.filter(date__range=[start_date, end_date])
+    if 'manager' in request.GET:
+        manager_id = request.GET['manager']
+        role = Roles.objects.get(id=manager_id)
+        tasks = tasks.filter(role=role)
     out.update({'page_title': "Задачи"})
     out.update({'tasks': tasks})
     out.update({'count': tasks.count()})

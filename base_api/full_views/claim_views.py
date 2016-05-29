@@ -518,8 +518,8 @@ def full_add_edit_claim(request):
                 out.update({'form': client_form})
                 out.update({'page_title': "Добавление заявки"})
         else:
-            # print(form.errors)
-            # ftgyhuij
+            print(form.errors)
+            ftgyhuij
             client = request.POST['client']
             source = None
             transport_campaign = None
@@ -565,7 +565,7 @@ def full_add_edit_claim(request):
             # if account_number:
             #     bill_status = 0
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=True)
+                                                                        required=False)
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
@@ -607,7 +607,7 @@ def full_add_edit_claim(request):
             out.update({"error": 0})
             claim = Orders.objects.get(pk=id_order, is_deleted=0, is_claim=1)
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=True)
+                                                                        required=False)
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
@@ -640,7 +640,7 @@ def full_add_edit_claim(request):
             out.update({'page_title': "Добавление заявки"})
         elif 'client-id' in request.GET:
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=True)
+                                                                        required=False)
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
@@ -666,7 +666,7 @@ def full_add_edit_claim(request):
             claim = Orders.objects.get(pk=id_order, is_deleted=0, is_claim=1)
             if user_role == 0:
                 ClaimsFormForAdmins.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=True)
+                                                                        required=False)
                 ClaimsFormForAdmins.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                 ClaimsFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
@@ -675,7 +675,7 @@ def full_add_edit_claim(request):
                                                                                required=False)
             else:
                 ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=True)
+                                                                        required=False)
                 ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
                 ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
@@ -726,7 +726,7 @@ def full_add_edit_claim(request):
             out.update({'page_title': "Редактирование заявки"})
         else:
             ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                        required=True)
+                                                                        required=False)
             ClaimsForm.base_fields['source'] = SourceModelChoiceField(
                                                     queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
             ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
@@ -756,7 +756,7 @@ def full_get_claims(request):
         return HttpResponseRedirect('/login/')
     out = {}
     out.update({'sources': Sources.objects.filter(is_deleted=0)})
-    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
+    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0) | Q(role=3)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])
         length = int(request.GET['length'])

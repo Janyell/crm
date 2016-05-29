@@ -787,7 +787,7 @@ def full_get_orders(request):
     out = {}
     out.update({'sources': Sources.objects.filter(is_deleted=0)})
     out.update({'transport_campaigns': TransportCampaigns.objects.filter(is_deleted=0)})
-    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
+    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0) | Q(role=3)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])
         length = int(request.GET['length'])
@@ -906,7 +906,7 @@ def full_get_old_orders(request):
     out = {}
     out.update({'sources': Sources.objects.filter(is_deleted=0)})
     out.update({'transport_campaigns': TransportCampaigns.objects.filter(is_deleted=0)})
-    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0)).all()})
+    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0) | Q(role=3)).all()})
     if 'page' in request.GET and 'length' in request.GET:
         page = int(request.GET['page'])
         length = int(request.GET['length'])

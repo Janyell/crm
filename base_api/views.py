@@ -1544,9 +1544,7 @@ def close_claim(request):
     get_params = '?'
     get_params += get_request_param_as_string(request)
     if request.method == 'POST':
-        # TODO
-        # id = request.GET['id']
-        id = 6448
+        id = request.GET['id']
         order = Orders.objects.get(id=id)
         reason = request.POST['reason']
         final_comment = request.POST['final_comment']

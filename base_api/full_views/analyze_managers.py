@@ -19,7 +19,7 @@ def full_analyze_managers(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    managers = Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0))
+    managers = Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0) | Q(role=3))
     for one_manager in managers:
         one_manager.full_name = one_manager.surname + ' ' + one_manager.name + ' ' + one_manager.patronymic
         if one_manager.full_name == '  ':
