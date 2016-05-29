@@ -414,10 +414,11 @@ class TaskForm(ModelForm):
         exclude = ['order', 'is_done', 'is_deleted', 'role']
         widgets = {
             'comment': Textarea(attrs={'id': "inputComment",
-                                       'placeholder': "Комментарии"}),
-            'date': TextInput(attrs={'id': "inputTaskDate",
+                                       'placeholder': "Комментарии",
+                                       'rows': "1"}),
+            'date': TextInput(attrs={'id': "inputDate",
                                            'class': "datetime",
                                            'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
             'is_important': CheckboxInput(attrs={'id': "id_is_important"}),
-            'type': Select(attrs={'id': "id_task_type"})
+            'type': Select(attrs={'id': "selectType"})
         }

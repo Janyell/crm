@@ -1,23 +1,66 @@
 <div class="inline-block form-add_mini only-for-our-products">
-    <div class="control-group">
-        <label class="control-label" for="id_task_type">
-            Задачи
-        </label>
-        <div class="controls">
-            {{ order_form.task.type }}
+    <div class="repeatable">
+        <div class="control-group">
+            <label class="control-label" for="selectType">
+                Задача
+            </label>
+            <div class="controls">
+                {{ task_form.type }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputDate">
+                Дата
+            </label>
+            <div class="controls">
+                <div class="input-append date task-date">
+                    {{ task_form.date }}
+                    <span class="add-on">
+                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputComment">
+                Примечание
+            </label>
+            <div class="controls">
+                {{ task_form.comment }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="id_is_important">
+                ВАЖНО!
+                <img src="{{ STATIC_URL }}img/important.png" alt="Важно!" />
+            </label>
+            <div class="controls">
+                {{ task_form.is_important }}<span class="minus-item-wrap"></span>
+            </div>
         </div>
     </div>
-    <div class="control-group">
-        <label class="control-label" for="inputTaskDate">
-            Дата
-        </label>
-        <div class="controls">
-            <div id="taskDate" class="input-append date">
-                {{ order_form.shipped_date }}
-                <span class="add-on">
-                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                </span>
+
+    <div class="repeat">
+        <div class="control-group">
+            <label class="control-label">
+                Еще
+            </label>
+            <div class="controls">
+                <a class="btn btn-success plus_item">+</a>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    (function($) {
+        $(document).ready(function() {
+            $('.task-date').datetimepicker({
+                format: 'yyyy-MM-dd hh:mm:ss',
+                language: 'ru',
+                pickSeconds: false,
+                weekStart: 1
+            });
+        });
+    })(jQuery);
+</script>
