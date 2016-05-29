@@ -1550,12 +1550,14 @@ def close_claim(request):
     if request.method == 'POST':
         # TODO
         # id = request.GET['id']
-        id = 6449
+        id = 6448
         order = Orders.objects.get(id=id)
         reason = request.POST['reason']
         final_comment = request.POST['final_comment']
         reason = CloseReasons.objects.get(id=reason)
         CloseClaims.objects.create(order=order, reason=reason, final_comment=final_comment)
+        order.is_deleted = 1
+        order.save(update_fields=["is_deleted"])
         return HttpResponseRedirect('/claims/?closure=1' + get_params)
     CloseClaimForm.base_fields['reason'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(is_deleted=0),
                                                                         required=True)
