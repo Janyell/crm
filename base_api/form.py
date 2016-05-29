@@ -43,6 +43,11 @@ class ProductGroupModelChoiceField(ModelChoiceField):
         return obj.title
 
 
+class CloseReasonsModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.title
+
+
 class CityModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.name
@@ -358,4 +363,34 @@ class KPTemplatesForm(ModelForm):
         exclude = ['html_text', 'html_text_for_kp', 'company']
         widgets = {
             'number': NumberInput(attrs={'id': "inputNumber"}),
+        }
+
+
+class CloseClaimForm(ModelForm):
+    class Meta:
+        model = CloseClaims
+        exclude = ['is_deleted', 'is_closed', 'order']
+        widgets = {
+            'final_comment': Textarea(attrs={'id': "id_final_comment", 'required': 1}),
+            'reason': Select(attrs={'id': "id_reason", 'required': 1, 'class': 'selectpicker'}),
+        }
+
+
+class CloseReasonsForm(ModelForm):
+    class Meta:
+        model = CloseReasons
+        exclude = ['is_deleted']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputTitle",
+                                      'required': 1})
+        }
+
+
+class CloseReasonsEditForm(ModelForm):
+    class Meta:
+        model = CloseReasons
+        exclude = ['is_deleted']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputEditTitle",
+                                      'required': 1}),
         }

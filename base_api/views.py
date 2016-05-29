@@ -1537,7 +1537,37 @@ def get_tasks(request):
 
 
 def close_claim(request):
-    pass
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    if request.method == 'POST':
+        id = request.GET['id']
+        product = Products.objects.get(id=id)
+        title = request.POST['title']
+        price = request.POST['price']
+        group = request.POST['group']
+        is_active = int(request.POST['is_active'])
+        product.title = title
+        product.price = price
+        if group:
+            product.group = ProductGroups.objects.get(id=group)
+        else:
+            product.group = None
+        product.is_active = is_active
+        product.save()
+        return HttpResponseRedirect('/claims/?closure=1' + get_params)
+    CloseClaimForm.base_fields['group'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(is_deleted=0),
+                                                                       required=True)
+    form = CloseClaimForm()
+    out.update({'close_claim_form': form})
+    return render(request, "order_claim/modules/close_claim_modal.html", out)
 
 
 def get_reasons(request):

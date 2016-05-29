@@ -49,10 +49,12 @@ class Roles(User):
     LEADERSHIP = 0
     MANAGER = 1
     PRODUCTION = 2
+    SENIOR_MANAGER = 3
     ROLES_CHOICES = (
         (MANAGER, 'Менеджер'),
         (PRODUCTION, 'Производство'),
         (LEADERSHIP, 'Руководство'),
+        (SENIOR_MANAGER, 'Старший менеджер'),
     )
     role = models.IntegerField(choices=ROLES_CHOICES, default=MANAGER)
     name = models.CharField(max_length=25, null=True, blank=True)
@@ -82,6 +84,28 @@ class Clients(models.Model):
     organization_type = models.CharField(max_length=255, blank=True, default='')
 
     search = SphinxSearch()
+
+
+class ContactFaces(models.Model):
+    name = models.CharField(max_length=25, null=True, blank=True)
+    last_name = models.CharField(max_length=50, null=True, blank=True)
+    patronymic = models.CharField(max_length=50, null=True, blank=True)
+    is_deleted = models.BooleanField(default=0)
+    organization = models.ForeignKey(Clients, null=True, blank=True)
+
+    search = SphinxSearch()
+
+
+class ContactEmail(models.Model):
+    face = models.ForeignKey(ContactFaces, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    is_deleted = models.BooleanField(default=0)
+
+
+class ContactPhone(models.Model):
+    face = models.ForeignKey(ContactFaces, null=True, blank=True)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    is_deleted = models.BooleanField(default=0)
 
 
 class Companies(models.Model):
@@ -163,8 +187,9 @@ class Orders(models.Model):
     # )
     # source = models.IntegerField(choices=ORDER_SOURCE_CHOICES, default=ZT)
     source = models.ForeignKey(Sources)
-    transport_campaign = models.ForeignKey(TransportCampaigns, null=True)
+    transport_campaign = models.ForeignKey(TransportCampaigns, null=True, blank=True)
     client = models.ForeignKey(Clients)
+    # contact_face = models.ForeignKey(ContactFaces, null=False, default=None)
     unique_number = models.CharField(max_length=50, unique=True)
     company = models.ForeignKey(Companies, null=True, blank=True)
     bill = models.IntegerField(null=True, blank=True)
@@ -258,3 +283,26 @@ class KPTemplates(models.Model):
     html_text_for_kp = models.TextField(default='')
     company = models.ForeignKey(Companies, null=True, blank=True)
     number = models.IntegerField(null=True, blank=True)
+
+
+class Tasks(models.Model):
+    order = models.ForeignKey(Orders, null=False, blank=True)
+    comment = models.TextField(default='')
+    is_done = models.BooleanField(default=0)
+    is_important = models.BooleanField(default=0)
+    role = models.ForeignKey(Roles, null=False, blank=True)
+    is_deleted = models.BooleanField(default=0)
+
+
+class CloseReasons(models.Model):
+    title = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=1)
+    is_deleted = models.BooleanField(default=0)
+
+
+class CloseClaims(models.Model):
+    order = models.ForeignKey(Orders, null=False, blank=False)
+    reason = models.ForeignKey(CloseReasons, null=True, blank=True)
+    final_comment = models.TextField(default='')
+    is_deleted = models.BooleanField(default=0)
+    is_closed = models.BooleanField(default=1)

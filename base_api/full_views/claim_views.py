@@ -596,6 +596,11 @@ def full_add_edit_claim(request):
             out.update({'form': client_form})
             out.update({'page_title': "Добавление заявки"})
     else:
+        CloseClaimForm.base_fields['group'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(
+                                                                                    is_deleted=0),
+                                                                           required=True)
+        close_claim_form = CloseClaimForm()
+        out.update({'close_claim_form': close_claim_form})
         if 'copy' in request.GET:
             id_order = request.GET['copy']
             out.update({"error": 0})
