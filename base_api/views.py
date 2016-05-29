@@ -1548,23 +1548,17 @@ def close_claim(request):
     get_params = '?'
     get_params += get_request_param_as_string(request)
     if request.method == 'POST':
-        id = request.GET['id']
-        product = Products.objects.get(id=id)
-        title = request.POST['title']
-        price = request.POST['price']
-        group = request.POST['group']
-        is_active = int(request.POST['is_active'])
-        product.title = title
-        product.price = price
-        if group:
-            product.group = ProductGroups.objects.get(id=group)
-        else:
-            product.group = None
-        product.is_active = is_active
-        product.save()
+        # TODO
+        # id = request.GET['id']
+        id = 6449
+        order = Orders.objects.get(id=id)
+        reason = request.POST['reason']
+        final_comment = request.POST['final_comment']
+        reason = CloseReasons.objects.get(id=reason)
+        CloseClaims.objects.create(order=order, reason=reason, final_comment=final_comment)
         return HttpResponseRedirect('/claims/?closure=1' + get_params)
-    CloseClaimForm.base_fields['group'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(is_deleted=0),
-                                                                       required=True)
+    CloseClaimForm.base_fields['reason'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(is_deleted=0),
+                                                                        required=True)
     form = CloseClaimForm()
     out.update({'close_claim_form': form})
     return render(request, "order_claim/modules/close_claim_modal.html", out)

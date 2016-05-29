@@ -596,7 +596,8 @@ def full_add_edit_claim(request):
             out.update({'form': client_form})
             out.update({'page_title': "Добавление заявки"})
     else:
-        CloseClaimForm.base_fields['group'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(
+        print(CloseReasons.objects.filter(is_deleted=0))
+        CloseClaimForm.base_fields['reason'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(
                                                                                     is_deleted=0),
                                                                            required=True)
         close_claim_form = CloseClaimForm()
@@ -704,8 +705,8 @@ def full_add_edit_claim(request):
             form.products = Products.objects.filter(is_deleted=0)
             form.task = Tasks.objects.filter(is_deleted=0)
 
-            Form = modelform_factory(Tasks, form=TaskForm,
-                         widgets={"title": Textarea()})
+            # Form = modelform_factory(Tasks, form=TaskForm,
+            #              widgets={"title": Textarea()})
             ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
