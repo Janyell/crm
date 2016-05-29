@@ -21,6 +21,8 @@ SOURCE_STATUS = (('1', 'Активный'),
                  ('0', 'Неактивный'))
 TRANSPORT_CAMPAIGNS_STATUS = (('1', 'Активный'),
                               ('0', 'Неактивный'))
+CLOSE_REASONS_STATUS = (('1', 'Активный'),
+                        ('0', 'Неактивный'))
 
 
 class CompanyModelChoiceField(ModelChoiceField):
@@ -393,4 +395,14 @@ class CloseReasonsEditForm(ModelForm):
         widgets = {
             'title': TextInput(attrs={'id': "inputEditTitle",
                                       'required': 1}),
+            'is_active': Select(attrs={'id': "selectEditStatus"}, choices=CLOSE_REASONS_STATUS),
+        }
+
+
+class TaskForm(ModelForm):
+    class Meta:
+        model = Tasks
+        exclude = ['is_deleted']
+        widgets = {
+            'comment': TextInput(attrs={'id': "inputComment"}),
         }

@@ -240,6 +240,21 @@ def massive_delete_transport_companies(request):
     return HttpResponseRedirect('/settings/transport_companies/' + get_params)
 
 
+def massive_delete_reasons(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        reason = CloseReasons.objects.get(pk=id)
+        reason.is_deleted = 1
+        reason.save(update_fields=["is_deleted"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/settings/reasons/' + get_params)
+
+
 def massive_activate_source(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
@@ -270,6 +285,21 @@ def massive_activate_transport_companies(request):
     return HttpResponseRedirect('/settings/transport_companies/' + get_params)
 
 
+def massive_activate_reasons(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        reason = CloseReasons.objects.get(pk=id, is_deleted=0)
+        reason.is_active = 1
+        reason.save(update_fields=["is_active"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/settings/reasons/' + get_params)
+
+
 def massive_deactivate_source(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
@@ -298,3 +328,18 @@ def massive_deactivate_transport_companies(request):
     get_params = '?'
     get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/settings/transport_companies/' + get_params)
+
+
+def massive_deactivate_reasons(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    ids = request.POST.getlist('id[]')
+    for id in ids:
+        reason = CloseReasons.objects.get(pk=id, is_deleted=0)
+        reason.is_active = 0
+        reason.save(update_fields=["is_active"])
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/settings/reasons/' + get_params)

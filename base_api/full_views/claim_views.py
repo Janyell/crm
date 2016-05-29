@@ -702,6 +702,10 @@ def full_add_edit_claim(request):
                                'city': claim.city, 'payment_date': claim.payment_date,
                                'order_status': claim.order_status})
             form.products = Products.objects.filter(is_deleted=0)
+            form.task = Tasks.objects.filter(is_deleted=0)
+
+            Form = modelform_factory(Tasks, form=TaskForm,
+                         widgets={"title": Textarea()})
             ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)

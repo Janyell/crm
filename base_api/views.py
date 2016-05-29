@@ -1570,29 +1570,5 @@ def close_claim(request):
     return render(request, "order_claim/modules/close_claim_modal.html", out)
 
 
-def get_reasons(request):
-    return render(request, 'setting/get_reasons.html')
-
-
-def edit_reason(request):
-    pass
-
-
-def delete_reason(request):
-    pass
-
-
-def massive_activate_reasons(request):
-    pass
-
-
-def massive_deactivate_reasons(request):
-    pass
-
-
-def massive_delete_reasons(request):
-    pass
-
-
 def do_task(request):
     pass

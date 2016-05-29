@@ -71,11 +71,11 @@ def full_edit_reason(request):
     get_params += get_request_param_as_string(request)
     if request.method == 'POST':
         id = request.GET['id']
-        reason = TransportCampaigns.objects.get(id=id)
+        reason = CloseReasons.objects.get(id=id)
         title = request.POST['title']
         is_active = int(request.POST['is_active'])
         reason.title = title
         reason.is_active = is_active
         reason.save()
-        return HttpResponseRedirect('/settings/transport_companies/' + get_params)
-    return HttpResponseRedirect('/settings/transport_companies/' + get_params)
+        return HttpResponseRedirect('/settings/reasons/' + get_params)
+    return HttpResponseRedirect('/settings/reasons/' + get_params)
