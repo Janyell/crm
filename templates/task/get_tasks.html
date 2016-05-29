@@ -1,65 +1,124 @@
 {%extends "base.html" %}
 
-{%block content%}
-    <h2 class="center">{{ page_title }}</h2>
-    {% if is_senior %}
-        {% block get_users_tasks__nav %}{% endblock %}
-    {% endif %}
+{% block content %}
     <div class="container">
-{#        {% if tasks %}#}
-            <form class="form-horizontal" method="POST">
-                <table class="table table-hover table-bordered" id="task-table">
-                    <thead>
+        <h2 class="center">{{ page_title }}</h2>
+    <input class="do" type="checkbox" value="123"/>
+        <div class="tasks-settings">
+            <label for="select-period">Задачи на</label>
+            <select id="select-period" name="period">
+                <option value="today"{% if request.GET.period == "today" %} selected="selected"{% endif %}>сегодня</option>
+                <option value="week"{% if request.GET.period == "week" %} selected="selected"{% endif %}>неделя</option>
+                <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>месяц</option>
+                <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>год</option>
+            </select>
+            {% if is_senior == True %}
+                <label for="select-manager">для</label>
+                <select id="select-manager" name="manager">
+                    {% for manager in roles %}
+                        <option value="{{ manager.pk }}"{% if manager.pk|upper == user.pk|upper or manager.pk|upper == request.GET.manager %} selected="selected"{% endif %}>
+                            {{ manager.username }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+        </div>
+        {% if tasks %}
+            <table class="table table-hover table-bordered" id="task-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Задача</th>
+                        <th>Заявка</th>
+                        <th>Организация</th>
+                        <th>Контакт</th>
+                        <th>Последний комментарий</th>
+                        <th>Выполнено</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
                         <tr>
-                            <th></th>
-                            <th>Задача</th>
-                            <th>Заявка</th>
-                            <th>Организация</th>
-                            <th>Контакт</th>
-                            <th>Последний комментарий</th>
-                            <th>Выполнено</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for task in tasks %}
-                            <tr>
-                                <td>
-                                    {% if task.is_important == True %}
-                                        <img src="{{ STATIC_URL }}img/important.png" alt="Важно!" />
-                                    {% endif %}
-                                </td>
-                                <td></td>
-                                {% if task.claim %}
-                                    <td>
-                                        {{ task.claim }}
-                                    </td>
-                                    <td>
-                                        {{ task.claim.client.organization }}
-                                    </td>
-                                    <td>
-                                        {{ task.claim.client }}
-                                    </td>
-                                    <td>
-                                        {{ task.last_comment }}
-                                    </td>
+                            <td>
+                                {% if task.is_important == True %}
+                                    <img src="{{ STATIC_URL }}img/important.png" alt="Важно!" />
                                 {% endif %}
+                            </td>
+                            <td></td>
+                            {% if task.order %}
                                 <td>
-                                    <label class="checkbox">
-                                        <input type="checkbox" value="{{ task.pk }}"{% if task.is_done == True %} checked="checked"{% endif %} />
-                                    </label>
+                                    <a href="{% url "edit_order" %}?id={{ order.pk }}" target="_blank">{{ task.order.unique_number }}</a>
                                 </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </form>
+                                <td>
+                                    {{ task.order.client.organization_type }} {{ task.order.client.organization }}
+                                </td>
+                                <td>
+                                    {{ task.order.contact_face.name }} {{ task.order.contact_face.last_name }}
+                                </td>
+                                <td>
+                                    {{ task.comment }}
+                                </td>
+                            {% endif %}
+                            <td>
+                                <label class="checkbox">
+                                    <input class="do-checkbox" type="checkbox" value="{{ task.pk }}"{% if task.is_done == True %} checked="checked"{% endif %}{% if is_senior == True and task.role|urlencode:"" != user.username|urlencode:"" %} disabled readonly{% endif %}/>
+                                </label>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             <div class="row-fluid datatables_massive datatables_massive_task">
                 <div class="record-number">
                     Всего задач: {{ count }}
                 </div>
             </div>
-{#        {% else %}#}
-{#            <h5 class="center">Не было добавлено ни одной задачи</h5>#}
-{#        {% endif %}#}
+        {% else %}
+            <h5 class="center">Не было добавлено ни одной задачи</h5>
+        {% endif %}
     </div>
+
+    {% block tasks_script %}
+        {% if tasks %}
+            <script type="text/javascript">
+                (function($){
+                    $(document).ready(function(){
+                        // dataTable
+                        var $task_table = $("#task-table");
+                        $task_table.dataTable({
+                            "language": {
+                                "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                            },
+                            "aoColumnDefs": [
+                                { "bSearchable": false, "aTargets": [0, 6 ] }
+                            ],
+                            "bSort": false,
+                            "bInfo": false,
+                            {% if request.GET.length and start >= 0 %}
+                                "iDisplayLength": {{ request.GET.length }},
+                                "iDisplayStart": {{ start }},
+                            {% endif %}
+                            {% if request.GET.search %}
+                                "oSearch": {"sSearch": "{{ request.GET.search }}"}
+                            {% endif %}
+                        });
+
+                        var path = "{{ request.path }}";
+                        var period = "{% if request.GET.period %}period={{ request.GET.period }}{% endif %}";
+                        var manager = "{% if request.GET.manager %}manager={{ request.GET.manager }}{% endif %}";
+
+                        function get_get_params() {
+                            var get_params = "";
+                            if (period) { get_params += "&" + period; }
+                            if (manager) { get_params += "&" + manager; }
+                            return get_params;
+                        }
+
+                        var get_params = get_get_params();
+                        var get_params__slice = get_params.slice(1);
+                    });
+                })(jQuery);
+            </script>
+        {% endif %}
+    {% endblock %}
 {% endblock %}

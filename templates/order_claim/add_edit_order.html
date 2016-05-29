@@ -1,16 +1,16 @@
 {%extends "base.html" %}
 
 {%block content%}
-    <div class="container container_fixed_width">
+    {% url 'add_claim' as add_claim_url %}
+    {% url 'edit_claim' as edit_claim_url %}
+    {% url 'add_order' as add_order_url %}
+    {% url 'edit_order' as edit_order_url %}
+    <div class="container container_horizontal-scroll{% if request.path == add_order_url or request.path == edit_order_url %} container_horizontal-scroll_order{% endif %}">
         <style scoped="">
             .typeahead {
                 top: 300px !important;
             }
         </style>
-        {% url 'add_claim' as add_claim_url %}
-        {% url 'edit_claim' as edit_claim_url %}
-        {% url 'add_order' as add_order_url %}
-        {% url 'edit_order' as edit_order_url %}
         <a href="{% if request.GET.search %}
             {% url "search" %}{% elif request.path == add_claim_url and client_id >= 0 %}
             {% url "get_interested_clients" %}{% elif request.GET.archive %}
@@ -18,7 +18,7 @@
             {% url "get_orders" %}?client-id={{ client_id }}{% elif request.path == add_order_url and client_id >= 0 %}
             {% url "get_clients" %}{% elif request.path == add_claim_url or request.path == edit_claim_url %}
             {% url "get_claims" %}{% else %}
-            {% url "get_orders" %}{% endif %}" class="btn back-button">Назад</a>
+            {% url "get_orders" %}{% endif %}" class="btn back-button text-align_initial">Назад</a>
 
         {% if request.path == edit_claim_url %}
             <a class="btn pull-right btn-danger" data-toggle="modal" href="#close-claim">Закрыть заявку</a>
@@ -36,7 +36,7 @@
         {% endif %}
         <form class="form-horizontal form-add form-add-order" method="post" action="">
             <h2 class="form-add__head">{{ page_title }}</h2>
-            <h5 class="form-add__please">Пожалуйста, заполните следующую форму:</h5>
+            <h5 class="form-add__please text-align_initial">Пожалуйста, заполните следующую форму:</h5>
             {% if error == 1 %}
                 <div class="text-error">
                     Ошибка в заполнении формы заказа.
@@ -56,220 +56,231 @@
                 <input type="hidden" name="pk" value="{{ request.GET.id }}">
             {% endif %}
             <div class="inline-block">
-                {# Менеджер #}
-                {% if request.path == edit_claim_url or request.path == edit_order_url %}
-                    {% if user_role == 0 and order_form.role %}
-                        <div class="control-group">
-                            <label class="control-label" for="selectRole">
-                                Менеджер
-                                <span class="required-input">*</span>
-                            </label>
-                            <div class="controls">
-                                {{ order_form.role }}
+                <div class="inline-block form-add_mini">
+                    {# Менеджер #}
+                    {% if request.path == edit_claim_url or request.path == edit_order_url %}
+                        {% if user_role == 0 and order_form.role %}
+                            <div class="control-group">
+                                <label class="control-label" for="selectRole">
+                                    Менеджер
+                                    <span class="required-input">*</span>
+                                </label>
+                                <div class="controls">
+                                    {{ order_form.role }}
+                                </div>
                             </div>
-                        </div>
-                    {% endif %}
-                {% endif %}
-                {# Клиент #}
-                <div class="control-group form-add__client">
-                    <label class="control-label" for="selectClient">
-                        Клиент
-                        <span class="required-input">*</span>
-                    </label>
-                    <div class="controls">
-                        {{ order_form.client }}
-                        {% url 'edit_order' as edit_order_url %}
-                        {% if not request.GET.id %}
-                            <a class="btn btn-success plus_client" data-toggle="modal" href="#add-client">+</a>
                         {% endif %}
-                    </div>
-                </div>
-                <div class="only-for-our-products">
-                    {# Номер счета #}
-                    <div class="control-group">
-                        <label class="control-label" for="id_account_number">
-                            Номер счета
-                        </label>
-                        <div class="controls">
-                            {{ order_form.account_number }}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="selectCompany">
-                            Компания
-                            {% if request.path == add_claim_url or request.path == edit_claim_url %}
-                                <span class="required-input">*</span>
-                            {% endif %}
-                        </label>
-                        <div class="controls">
-                            {{ order_form.company }}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="inputBill">
-                            Сумма счета
-                        </label>
-                        <div class="controls">
-                            {{ order_form.bill }}
-                        </div>
-                    </div>
-                    {% if request.path == add_claim_url or request.path == edit_claim_url %}
-                    <div class="control-group">
-                        <label class="control-label" for="selectBillStatus">
-                            Статус заявки
+                    {% endif %}
+                    {# Клиент #}
+                    <div class="control-group form-add__client">
+                        <label class="control-label" for="selectClient">
+                            Клиент
                             <span class="required-input">*</span>
                         </label>
                         <div class="controls">
-                            {{ order_form.bill_status }}
-                            <label class="checkbox set-via-kp hide">
-                                <input type="checkbox" name="set-via-kp" />
-                                Через КП
-                            </label>
+                            {{ order_form.client }}
+                            {% url 'edit_order' as edit_order_url %}
+                            {% if not request.GET.id %}
+                                <a class="btn btn-success plus_client" data-toggle="modal" href="#add-client">+</a>
+                            {% endif %}
                         </div>
                     </div>
-                    {% else %}
+                    <div class="only-for-our-products">
+                        {# Номер счета #}
                         <div class="control-group">
-                            <label class="control-label" for="selectStatus">
-                                Статус заказа
+                            <label class="control-label" for="id_account_number">
+                                Номер счета
                             </label>
                             <div class="controls">
-                                {{ order_form.order_status }}
+                                {{ order_form.account_number }}
                             </div>
                         </div>
                         <div class="control-group">
+                            <label class="control-label" for="selectCompany">
+                                Компания
+                                {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                                    <span class="required-input">*</span>
+                                {% endif %}
+                            </label>
+                            <div class="controls">
+                                {{ order_form.company }}
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="inputBill">
+                                Сумма счета
+                            </label>
+                            <div class="controls">
+                                {{ order_form.bill }}
+                            </div>
+                        </div>
+                        {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                        <div class="control-group">
                             <label class="control-label" for="selectBillStatus">
-                                Статус оплаты
+                                Статус заявки
+                                <span class="required-input">*</span>
                             </label>
                             <div class="controls">
                                 {{ order_form.bill_status }}
+                                <label class="checkbox set-via-kp hide">
+                                    <input type="checkbox" name="set-via-kp" />
+                                    Через КП
+                                </label>
                             </div>
                         </div>
-                    {% endif %}
-                    {# hide #}
-                    <div class="control-group brought-sum hide">
-                        <label class="control-label" for="inputBroughtSum">
-                            Внесена сумма
-                        </label>
-                        <div class="controls">
-                            {{ order_form.brought_sum }}
-                        </div>
-                    </div>
-
-                    {# hide if claim  #}
-                    <div class="control-group claim-to-order-group payment-date{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
-                        <label class="control-label" for="inputPaymentDate">
-                            Дата оплаты
-                        </label>
-                        <div class="controls">
-                            <div id="paymentDate" class="input-append date">
-                                {{ order_form.payment_date }}
-                                <span class="add-on">
-                                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                                </span>
+                        {% else %}
+                            <div class="control-group">
+                                <label class="control-label" for="selectStatus">
+                                    Статус заказа
+                                </label>
+                                <div class="controls">
+                                    {{ order_form.order_status }}
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    {# hide if claim  #}
-                    <div class="control-group claim-to-order-group ready-date{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
-                        <label class="control-label" for="inputReadyDate">
-                            Дата готовности
-                        </label>
-                        <div class="controls">
-                            <div id="readyDate" class="input-append date">
-                                {{ order_form.ready_date }}
-                                <span class="add-on">
-                                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                                </span>
+                            <div class="control-group">
+                                <label class="control-label" for="selectBillStatus">
+                                    Статус оплаты
+                                </label>
+                                <div class="controls">
+                                    {{ order_form.bill_status }}
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    {% if request.path == add_order_url or request.path == edit_order_url %}
-                        <div class="control-group">
-                            <label class="control-label" for="inputShippedDate">
-                                Дата отгрузки
+                        {% endif %}
+                        {# hide #}
+                        <div class="control-group brought-sum hide">
+                            <label class="control-label" for="inputBroughtSum">
+                                Внесена сумма
                             </label>
                             <div class="controls">
-                                <div id="shippedDate" class="input-append date">
-                                    {{ order_form.shipped_date }}
+                                {{ order_form.brought_sum }}
+                            </div>
+                        </div>
+
+                        {# hide if claim  #}
+                        <div class="control-group claim-to-order-group payment-date{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
+                            <label class="control-label" for="inputPaymentDate">
+                                Дата оплаты
+                            </label>
+                            <div class="controls">
+                                <div id="paymentDate" class="input-append date">
+                                    {{ order_form.payment_date }}
                                     <span class="add-on">
                                         <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                                     </span>
                                 </div>
                             </div>
                         </div>
-                    {% endif %}
 
-                    {# hide if claim  #}
-                    <div class="control-group claim-to-order-group city{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
-                        <label class="control-label" for="id_city">
-                            Доставка (город)
-                        </label>
-                        <div class="controls">
-                            {{ order_form.city }}
-                            <label for="inputCity" class="label_between">
-                                или добавьте новый город
+                        {# hide if claim  #}
+                        <div class="control-group claim-to-order-group ready-date{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
+                            <label class="control-label" for="inputReadyDate">
+                                Дата готовности
                             </label>
-                            <input id="inputCity" type="text" name="newCity"  placeholder="Название нового города"/>
+                            <div class="controls">
+                                <div id="readyDate" class="input-append date">
+                                    {{ order_form.ready_date }}
+                                    <span class="add-on">
+                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if request.path == add_order_url or request.path == edit_order_url %}
+                            <div class="control-group">
+                                <label class="control-label" for="inputShippedDate">
+                                    Дата отгрузки
+                                </label>
+                                <div class="controls">
+                                    <div id="shippedDate" class="input-append date">
+                                        {{ order_form.shipped_date }}
+                                        <span class="add-on">
+                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {# hide if claim  #}
+                        <div class="control-group claim-to-order-group city{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
+                            <label class="control-label" for="id_city">
+                                Доставка (город)
+                            </label>
+                            <div class="controls">
+                                {{ order_form.city }}
+                                <label for="inputCity" class="label_between">
+                                    или добавьте новый город
+                                </label>
+                                <input id="inputCity" type="text" name="newCity"  placeholder="Название нового города"/>
+                            </div>
+                        </div>
+
+                        {# hide if claim  #}
+                        <div class="control-group claim-to-order-group transport-campaign{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
+                            <label class="control-label" for="id_transport_campaign">
+                                Транспортная компания
+                            </label>
+                            <div class="controls">
+                                {{ order_form.transport_campaign }}
+                            </div>
                         </div>
                     </div>
 
-                    {# hide if claim  #}
-                    <div class="control-group claim-to-order-group transport-campaign{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
-                        <label class="control-label" for="id_transport_campaign">
-                            Транспортная компания
-                        </label>
-                        <div class="controls">
-                            {{ order_form.transport_campaign }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="inputComment">
-                        Комментарии
-                    </label>
-                    <div class="controls">
-                        {{ order_form.comment }}
-                    </div>
-                </div>
-
-                {# hide if claim #}
-                <div class="control-group claim-to-order-group factory-comment{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
-                    <label class="control-label" for="inputFactoryComment">
-                        Информация для производства
-                    </label>
-                    <div class="controls">
-                        {{ order_form.factory_comment }}
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="id_source">
-                        Источник
-                        <span class="required-input">*</span>
-                    </label>
-                    <div class="controls">
-                        {{ order_form.source }}
-                    </div>
-                </div>
-
-                {% if request.path == edit_order_url or request.path == edit_claim_url %}
                     <div class="control-group">
-                        <label class="control-label">
-                            Прикрепленные файлы
+                        <label class="control-label" for="inputComment">
+                            Комментарии
                         </label>
                         <div class="controls">
-                            <a class="btn" data-toggle="modal" href="#manage-attachments">Управление файлами</a>
+                            {{ order_form.comment }}
                         </div>
                     </div>
+
+                    {# hide if claim #}
+                    <div class="control-group claim-to-order-group factory-comment{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
+                        <label class="control-label" for="inputFactoryComment">
+                            Информация для производства
+                        </label>
+                        <div class="controls">
+                            {{ order_form.factory_comment }}
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="id_source">
+                            Источник
+                            <span class="required-input">*</span>
+                        </label>
+                        <div class="controls">
+                            {{ order_form.source }}
+                        </div>
+                    </div>
+
+                    {% if request.path == edit_order_url or request.path == edit_claim_url %}
+                        <div class="control-group">
+                            <label class="control-label">
+                                Прикрепленные файлы
+                            </label>
+                            <div class="controls">
+                                <a class="btn" data-toggle="modal" href="#manage-attachments">Управление файлами</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                    {% include "order_claim/modules/edit_claim__task.html" %}
                 {% endif %}
-            </div>
-            {% if request.path == add_claim_url %}
-                {% include "order_claim/modules/no_our_products.html" %}
-            {% endif %}
-            <div class="only-for-our-products">
+                {% include "order_claim/modules/edit_claim__related_with.html" %}
+                <div class="form-add__tips">
+                    <div class="form-add-tips__tip">
+                        <span class="required-input">*</span> - поля, обязательные для заполнения
+                    </div>
+                </div>
+            </div><!--
+            --><div class="only-for-our-products inline-block">
+                {% if request.path == add_claim_url %}
+                    {% include "order_claim/modules/no_our_products.html" %}
+                {% endif %}
                 <table class="table table-hover table-bordered input" id="add-product-table">
                     <thead>
                         <tr>
@@ -333,23 +344,15 @@
                     {% endfor %}
                 </select>
             {% endif %}
-            {% include "order_claim/modules/edit_claim__related_with.html" %}
-            <div class="form-add">
-                <div class="form-add__tips">
-                    <div class="form-add-tips__tip">
-                        <span class="required-input">*</span> - поля, обязательные для заполнения
-                    </div>
-                </div>
-                <div class="form-add__submits">
-                    <button type="submit" class="btn btn-primary" name="only-save" value="only-save">Сохранить</button>
-                    {% if request.path == add_claim_url %}
-                        <button type="submit" class="btn only-for-our-products" name="save-and-generate-kp" value="save-and-generate-kp">Сохранить и перейти к формированию КП</button>
-                    {% endif %}
-                    {% if request.path == add_order_url or request.path == add_claim_url %}
-                        <button type="submit" class="btn" name="save-and-upload-file" value="save-and-upload-file">Сохранить и перейти к загрузке файлов</button>
-                    {% endif %}
-                    <button type="button" class="btn">Очистить</button>
-                </div>
+            <div class="form-add__submits">
+                <button type="submit" class="btn btn-primary" name="only-save" value="only-save">Сохранить</button>
+                {% if request.path == add_claim_url %}
+                    <button type="submit" class="btn only-for-our-products" name="save-and-generate-kp" value="save-and-generate-kp">Сохранить и перейти к формированию КП</button>
+                {% endif %}
+                {% if request.path == add_order_url or request.path == add_claim_url %}
+                    <button type="submit" class="btn" name="save-and-upload-file" value="save-and-upload-file">Сохранить и перейти к загрузке файлов</button>
+                {% endif %}
+                <button type="button" class="btn">Очистить</button>
             </div>
         </form>
     </div>

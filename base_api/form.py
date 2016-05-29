@@ -153,7 +153,8 @@ orders_form_widgets = {
     'city': Select(attrs={'id': "selectCity",
                           'placeholder': "Город"}),
     'comment': Textarea(attrs={'id': "inputComment",
-                               'placeholder': "Комментарии"}),
+                               'placeholder': "Комментарии",
+                               'rows': "1"}),
     'source': Select(attrs={'id': "selectSource", 'required': 1}),
     'transport_campaign': Select(attrs={'id': "selectTransportCampaign", 'required': 1}),
     'ready_date': TextInput(attrs={'id': "inputReadyDate",
@@ -164,7 +165,8 @@ orders_form_widgets = {
                                      'placeholder': "ГГГГ-ММ-ДД"}),
     'brought_sum': NumberInput(attrs={'id': "inputBroughtSum"}),
     'factory_comment': Textarea(attrs={'id': "inputFactoryComment",
-                                       'placeholder': "Информация для производства"})
+                                       'placeholder': "Информация для производства",
+                                       'rows': "1"})
 }
 
 

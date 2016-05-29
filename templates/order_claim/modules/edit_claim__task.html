@@ -1,0 +1,23 @@
+<div class="inline-block form-add_mini">
+    <div class="control-group">
+        <label class="control-label" for="id_task_type">
+            Задачи
+        </label>
+        <div class="controls">
+            {{ order_form.task.type }}
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputTaskDate">
+            Дата
+        </label>
+        <div class="controls">
+            <div id="taskDate" class="input-append date">
+                {{ order_form.shipped_date }}
+                <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

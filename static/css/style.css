@@ -50,7 +50,7 @@ body {
     text-align: center;
 }
 .form-add__submits {
-    text-align: right;
+    text-align: center;
 }
 .form-add__submits > button {
     margin: 5px;
@@ -81,13 +81,7 @@ body {
 .client-info__item, .bill-info__item {
     margin: 5px 0;
 }
-.inline-block {
-    display: -moz-inline-stack;
-    display: inline-block;
-    vertical-align: top;
-    zoom: 1;
-    *display: inline;
-}
+
 #add-product-table_wrapper, .select-product-table_wrapper {
     width: 500px;
     padding: 10px;
@@ -390,4 +384,47 @@ div.source {
 
 .set-via-kp {
     padding-top: 5px;
+}
+.container_horizontal-scroll {
+    width: 1925px;
+    padding: 0 20px;
+    /*text-align: center;*/
+}
+.container_horizontal-scroll_order {
+    width: 1480px;
+}
+.text-align_initial {
+    text-align: initial;
+}
+.inline-block {
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    zoom: 1;
+    *display: inline;
+    text-align: initial;
+}
+.form-add-order__inputs {
+    width: 420px;
+}
+.form-add-claim__inputs {
+    width: 840px;
+}
+.form-add_mini {
+    width: 420px;
+    padding: 10px;
+}
+.container_horizontal-scroll .control-label {
+    width: 120px;
+}
+.container_horizontal-scroll .form-horizontal .controls {
+    margin-left: 140px;
+}
+.tasks-settings > select {
+    width: 100px;
+    margin-right: 5px;
+}
+.tasks-settings > label {
+    display: initial;
+    margin-right: 5px;
 }

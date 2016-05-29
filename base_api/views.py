@@ -1562,3 +1562,7 @@ def massive_deactivate_reasons(request):
 
 def massive_delete_reasons(request):
     pass
+
+
+def do_task(request):
+    pass
