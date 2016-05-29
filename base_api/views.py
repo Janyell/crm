@@ -1537,31 +1537,33 @@ def get_tasks(request):
 
 
 def close_claim(request):
-    pass
-
-
-def get_reasons(request):
-    return render(request, 'setting/get_reasons.html')
-
-
-def edit_reason(request):
-    pass
-
-
-def delete_reason(request):
-    pass
-
-
-def massive_activate_reasons(request):
-    pass
-
-
-def massive_deactivate_reasons(request):
-    pass
-
-
-def massive_delete_reasons(request):
-    pass
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    if request.method == 'POST':
+        # TODO
+        # id = request.GET['id']
+        id = 6448
+        order = Orders.objects.get(id=id)
+        reason = request.POST['reason']
+        final_comment = request.POST['final_comment']
+        reason = CloseReasons.objects.get(id=reason)
+        CloseClaims.objects.create(order=order, reason=reason, final_comment=final_comment)
+        order.is_deleted = 1
+        order.save(update_fields=["is_deleted"])
+        return HttpResponseRedirect('/claims/?closure=1' + get_params)
+    CloseClaimForm.base_fields['reason'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(is_deleted=0),
+                                                                        required=True)
+    form = CloseClaimForm()
+    out.update({'close_claim_form': form})
+    return render(request, "order_claim/modules/close_claim_modal.html", out)
 
 
 def do_task(request):

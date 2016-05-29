@@ -21,6 +21,8 @@ SOURCE_STATUS = (('1', 'Активный'),
                  ('0', 'Неактивный'))
 TRANSPORT_CAMPAIGNS_STATUS = (('1', 'Активный'),
                               ('0', 'Неактивный'))
+CLOSE_REASONS_STATUS = (('1', 'Активный'),
+                        ('0', 'Неактивный'))
 
 
 class CompanyModelChoiceField(ModelChoiceField):
@@ -39,6 +41,11 @@ class TransportCampaignsModelChoiceField(ModelChoiceField):
 
 
 class ProductGroupModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.title
+
+
+class CloseReasonsModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.title
 
@@ -358,4 +365,44 @@ class KPTemplatesForm(ModelForm):
         exclude = ['html_text', 'html_text_for_kp', 'company']
         widgets = {
             'number': NumberInput(attrs={'id': "inputNumber"}),
+        }
+
+
+class CloseClaimForm(ModelForm):
+    class Meta:
+        model = CloseClaims
+        exclude = ['is_deleted', 'is_closed', 'order']
+        widgets = {
+            'final_comment': Textarea(attrs={'id': "id_final_comment", 'required': 1}),
+            'reason': Select(attrs={'id': "id_reason", 'required': 1, 'class': 'selectpicker'}),
+        }
+
+
+class CloseReasonsForm(ModelForm):
+    class Meta:
+        model = CloseReasons
+        exclude = ['is_deleted']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputTitle",
+                                      'required': 1})
+        }
+
+
+class CloseReasonsEditForm(ModelForm):
+    class Meta:
+        model = CloseReasons
+        exclude = ['is_deleted']
+        widgets = {
+            'title': TextInput(attrs={'id': "inputEditTitle",
+                                      'required': 1}),
+            'is_active': Select(attrs={'id': "selectEditStatus"}, choices=CLOSE_REASONS_STATUS),
+        }
+
+
+class TaskForm(ModelForm):
+    class Meta:
+        model = Tasks
+        exclude = ['is_deleted']
+        widgets = {
+            'comment': TextInput(attrs={'id': "inputComment"}),
         }
