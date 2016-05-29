@@ -1,6 +1,6 @@
 {% block close_claim_modal %}
     <div class="modal hide fade" id="close-claim" tabindex="-1" role="dialog" aria-hidden="true">
-        <form class="form-horizontal form-add_modal form-add-client" method="post" action="{% url "close_claim" %}">
+        <form class="form-horizontal form-add_modal form-add-client" method="post" action="{% url "close_claim" %}?id={{ request.GET.id }}">
             <div class="modal-header">
                 <a class="close" data-dismiss="modal">×</a>
                 <h3 class="center">Закрытие заявки</h3>

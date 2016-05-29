@@ -1,13 +1,13 @@
 {% block related_with %}
     {% if request.path == edit_claim_url %}
-        <div class="form-horizontal form-add">
+        <div class="form-horizontal">
             <div class="control-group_inline">
                 <label class="control-label">
                     Заявка связана с
                 </label>
             </div>
         </div>
-        <div class="container" id="related-claims"></div>
+        <div id="related-claims"></div>
         <div class="form-horizontal form-add add-related-claim">
             <div class="control-group add-related-claim__ctrl">
                 <div class="controls">
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div id="client-claims" class="pre-scrollable pre-scrollable_auto hide container"></div>
+        <div id="client-claims" class="pre-scrollable pre-scrollable_auto hide"></div>
         <div class="modal hide fade" id="delete-claim" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
             <div class="modal-header">
                 <a class="close" data-dismiss="modal">×</a>

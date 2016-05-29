@@ -277,56 +277,58 @@
                     </div>
                 </div>
             </div><!--
-            --><div class="only-for-our-products inline-block">
+            --><div class="inline-block">
                 {% if request.path == add_claim_url %}
                     {% include "order_claim/modules/no_our_products.html" %}
                 {% endif %}
-                <table class="table table-hover table-bordered input" id="add-product-table">
-                    <thead>
-                        <tr>
-                            <th>Продукция</th>
-                            <th>Цена</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if order_form.products %}
-                            {% for product in order_form.products %}
-                                {% if product.is_active == True %}
-                                    <tr>
-                                        <td>{{ product.title }}</td>
-                                        <td class="product-wrap">
-                                            {{ product.price_right_format }}
-                                            <div class="hidden">{{ product.price }}</div>
-                                        </td>
-                                        <td>
-                                            <span class="btn btn-success plus pull-right" data-productId="{{ product.pk }}">+</span>
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    </tbody>
-                </table><!--
-                --><div class="select-product-table_wrapper">
-                    <table class="select-product-table table table-hover table-bordered">
+                <div class="only-for-our-products">
+                    <table class="table table-hover table-bordered input" id="add-product-table">
                         <thead>
                             <tr>
-                                <th>Выбранная продукция <span class="required-input">*</span></th>
+                                <th>Продукция</th>
                                 <th>Цена</th>
-                                <th>Количество</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="select-product-table__plus">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td><span class="btn btn-success plus pull-right">+</span></td>
-                            </tr>
+                            {% if order_form.products %}
+                                {% for product in order_form.products %}
+                                    {% if product.is_active == True %}
+                                        <tr>
+                                            <td>{{ product.title }}</td>
+                                            <td class="product-wrap">
+                                                {{ product.price_right_format }}
+                                                <div class="hidden">{{ product.price }}</div>
+                                            </td>
+                                            <td>
+                                                <span class="btn btn-success plus pull-right" data-productId="{{ product.pk }}">+</span>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                         </tbody>
-                    </table>
+                    </table><!--
+                    --><div class="select-product-table_wrapper">
+                        <table class="select-product-table table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Выбранная продукция <span class="required-input">*</span></th>
+                                    <th>Цена</th>
+                                    <th>Количество</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="select-product-table__plus">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><span class="btn btn-success plus pull-right">+</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             {% if order_form.products %}
@@ -371,11 +373,9 @@
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <div class="form-add__submits">
-                        <button type="submit" class="btn btn-primary">Сохранить</button>
-                        <button type="reset" class="btn">Очистить</button>
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="reset" class="btn">Очистить</button>
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                 </div>
             </form>
         </div>
@@ -394,9 +394,7 @@
                 </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="form-add__submits">
-                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-                    </div>
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                 </div>
             </form>
         </div>

@@ -204,7 +204,8 @@ claims_form_widgets = {
     'city': Select(attrs={'id': "selectCity",
                           'placeholder': "Город"}),
     'comment': Textarea(attrs={'id': "inputComment",
-                               'placeholder': "Комментарии"}),
+                               'placeholder': "Комментарии",
+                               'rows': "1"}),
     'source': Select(attrs={'id': "selectSource", 'required': 1}),
     'transport_campaign': Select(attrs={'id': "selectTransportCampaign"}),
     'ready_date': TextInput(attrs={'id': "inputReadyDate",
@@ -212,7 +213,8 @@ claims_form_widgets = {
                                    'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
     'brought_sum': NumberInput(attrs={'id': "inputBroughtSum"}),
     'factory_comment': Textarea(attrs={'id': "inputFactoryComment",
-                                       'placeholder': "Информация для производства"})
+                                       'placeholder': "Информация для производства",
+                                       'rows': "1"})
 }
 
 
@@ -373,7 +375,9 @@ class CloseClaimForm(ModelForm):
         model = CloseClaims
         exclude = ['is_deleted', 'is_closed', 'order']
         widgets = {
-            'final_comment': Textarea(attrs={'id': "id_final_comment", 'required': 1}),
+            'final_comment': Textarea(attrs={'id': "id_final_comment",
+                                             'required': 1,
+                                             'rows': "1"}),
             'reason': Select(attrs={'id': "id_reason", 'required': 1, 'class': 'selectpicker'}),
         }
 

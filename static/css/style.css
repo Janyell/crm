@@ -43,7 +43,7 @@ body {
     width: 550px;
     padding: 0 20px; 
 }
-.form-add-order {
+.container_horizontal-scroll .form-add-order {
     width: 100%;
 }
 .form-add__head {
@@ -392,6 +392,7 @@ div.source {
 }
 .container_horizontal-scroll_order {
     width: 1480px;
+    margin: 0 auto;
 }
 .text-align_initial {
     text-align: initial;
@@ -411,13 +412,17 @@ div.source {
     width: 840px;
 }
 .form-add_mini {
+    width: 550px;
+}
+.container_horizontal-scroll .form-add_mini {
     width: 420px;
     padding: 10px;
+    margin: 0 auto;
 }
-.container_horizontal-scroll .control-label {
+.container_horizontal-scroll .form-add_mini .control-label {
     width: 120px;
 }
-.container_horizontal-scroll .form-horizontal .controls {
+.container_horizontal-scroll .form-add_mini .controls {
     margin-left: 140px;
 }
 .tasks-settings > select {
@@ -427,4 +432,7 @@ div.source {
 .tasks-settings > label {
     display: initial;
     margin-right: 5px;
+}
+.container_horizontal-scroll  #client-claims {
+    width: 874px;
 }

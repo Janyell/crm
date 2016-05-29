@@ -10,27 +10,36 @@
                 var $our_products_required = $our_products.find(':required');
                 var $select_bill_status = $('#selectBillStatus');
                 var $form = $('.form-add-order');
+                var $add_product_table = $('#add-product-table');
                 var $select_product_table = $('.select-product-table');
+                var $inline_block = $('.inline-block');
+                var $container = $('.container');
 
                 $input_no_our_products.change(function() {
                     if ($(this).prop('checked')) {
                         $our_products.hide();
+                        $container.removeClass('container_horizontal-scroll');
                         $our_products_required.prop('required', false);
                         $input_comment.prop('required', true);
                         $comment_label.html(comment_label_text + "<span class=\"required-input\">*</span>");
                     }
                     else {
                         $our_products.show();
+                        $container.addClass('container_horizontal-scroll');
                         $our_products_required.prop('required', true);
                         $input_comment.prop('required', false);
                         $comment_label.html(comment_label_text);
                     }
                 });
                 $form.submit(function() {
-                    $select_bill_status.val(4); // Устно
-                    $select_product_table.find('.minus').click();
-                    $select_product_table.find('.plus').click();
-                    $select_product_table.find('.select-product__title').val('Другое');
+                    if ($input_no_our_products.is(":checked")) {
+                        $select_bill_status.val(4); // Устно
+                        $select_product_table.find('.minus').click();
+                        var table = $add_product_table.DataTable();
+                        table.search("Другое").draw();
+                        $add_product_table.find(".plus[data-productId='{{ no_our_product_id }}']").click();
+                        return false;
+                    }
                 });
             });
         })(jQuery);
