@@ -414,7 +414,7 @@ class TaskForm(ModelForm):
         exclude = ['order', 'is_done', 'is_deleted', 'role']
         widgets = {
             'comment': Textarea(attrs={'id': "inputComment",
-                                       'placeholder': "Комментарии",
+                                       'placeholder': "Примечание",
                                        'rows': "1"}),
             'date': TextInput(attrs={'id': "inputDate",
                                            'class': "datetime",
