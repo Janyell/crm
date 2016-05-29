@@ -189,7 +189,7 @@ class Orders(models.Model):
     source = models.ForeignKey(Sources)
     transport_campaign = models.ForeignKey(TransportCampaigns, null=True, blank=True)
     client = models.ForeignKey(Clients)
-    # contact_face = models.ForeignKey(ContactFaces, null=False, default=None)
+    contact_face = models.ForeignKey(ContactFaces, null=False, default=None)
     unique_number = models.CharField(max_length=50, unique=True)
     company = models.ForeignKey(Companies, null=True, blank=True)
     bill = models.IntegerField(null=True, blank=True)
