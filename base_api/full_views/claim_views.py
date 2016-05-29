@@ -29,6 +29,8 @@ def full_add_edit_claim(request):
     else:
         no_our_product_id = no_our_product_id.first().id
     out.update({'no_our_product_id': no_our_product_id})
+    TaskForm.base_fields['type'] = TaskTypeChoiceField(queryset=TaskTypes.objects.filter(is_deleted=0))
+    out.update({'task_form': TaskForm()})
     if request.method == 'POST':
         form = ClaimsForm(request.POST)
         if 'client-id' in request.GET:
@@ -327,6 +329,12 @@ def full_add_edit_claim(request):
                                                                               count_of_products=count_of_products,
                                                                               price=price_of_products)
                         client.save(update_fields=["is_interested"])
+            # tasks = request.POST.getlist('tasks[]')
+            # for task in tasks:
+            #         name_of_pr = 'select-product__title_' + task
+            #         title_of_product = request.POST[name_of_pr]
+            #         if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
+            #             pass
             if 'search' in request.GET:
                 search = request.GET.get('search')
                 get_params = '?search=' + unicode(search)
@@ -466,6 +474,13 @@ def full_add_edit_claim(request):
                                                                           count_of_products=count_of_products,
                                                                           price=price_of_products)
                     client.save(update_fields=["is_interested"])
+            # tasks = request.POST.getlist('tasks[]')
+            # gvbkunl
+            # for task in tasks:
+            #         name_of_pr = 'select-product__title_' + task
+            #         title_of_product = request.POST[name_of_pr]
+            #         if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
+            #             pass
             if is_claim_create:
                 if 'only-save' in form.data:
                     if displacement == 1:

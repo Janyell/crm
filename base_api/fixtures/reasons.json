@@ -1,0 +1,38 @@
+[
+  {
+    "pk": 1,
+    "model": "base_api.closereasons",
+    "fields": {
+      "title": "Отложенная потребность",
+      "is_active": true,
+      "is_deleted": false
+    }
+  },
+  {
+    "pk": 2,
+    "model": "base_api.closereasons",
+    "fields": {
+      "title": "Нашли дешевле",
+      "is_active": true,
+      "is_deleted": false
+    }
+  },
+  {
+    "pk": 3,
+    "model": "base_api.closereasons",
+    "fields": {
+      "title": "Нужно в наличии",
+      "is_active": true,
+      "is_deleted": false
+    }
+  },
+  {
+    "pk": 4,
+    "model": "base_api.closereasons",
+    "fields": {
+      "title": "Не устраивают сроки",
+      "is_active": true,
+      "is_deleted": false
+    }
+  }
+]
