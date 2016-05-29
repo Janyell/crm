@@ -1532,10 +1532,6 @@ def edit_kp(request):
         return render(request, 'edit_kp.html', out)
 
 
-def get_tasks(request):
-    return render(request, 'task/get_tasks.html')
-
-
 def close_claim(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')

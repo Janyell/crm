@@ -1,0 +1,29 @@
+[
+  {
+    "pk": 1,
+    "model": "base_api.tasktypes",
+    "fields": {
+      "title": "Позвонить",
+      "is_active": true,
+      "is_deleted": false
+    }
+  },
+  {
+    "pk": 2,
+    "model": "base_api.tasktypes",
+    "fields": {
+      "title": "Написать",
+      "is_active": true,
+      "is_deleted": false
+    }
+  },
+  {
+    "pk": 3,
+    "model": "base_api.tasktypes",
+    "fields": {
+      "title": "Напоминание",
+      "is_active": true,
+      "is_deleted": false
+    }
+  }
+]

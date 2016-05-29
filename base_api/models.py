@@ -285,6 +285,12 @@ class KPTemplates(models.Model):
     number = models.IntegerField(null=True, blank=True)
 
 
+class TaskTypes(models.Model):
+    title = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=1)
+    is_deleted = models.BooleanField(default=0)
+
+
 class Tasks(models.Model):
     order = models.ForeignKey(Orders, null=False, blank=True)
     comment = models.TextField(default='')
@@ -292,6 +298,8 @@ class Tasks(models.Model):
     is_important = models.BooleanField(default=0)
     role = models.ForeignKey(Roles, null=False, blank=True)
     is_deleted = models.BooleanField(default=0)
+    date = UnixTimestampField(blank=True, null=True)
+    type = models.ForeignKey(TaskTypes, null=True, blank=True)
 
 
 class CloseReasons(models.Model):

@@ -28,7 +28,7 @@
                             <td></td>
                             {% if task.order %}
                                 <td>
-                                    <a href="{% url "edit_order" %}?id={{ order.pk }}" target="_blank">{{ task.order.unique_number }}</a>
+                                    <a href="{% url "edit_order" %}?id={{ task.order.pk }}" target="_blank">{{ task.order.unique_number }}</a>
                                 </td>
                                 <td>
                                     {{ task.order.client.organization_type }} {{ task.order.client.organization }}

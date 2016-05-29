@@ -55,6 +55,11 @@ class CityModelChoiceField(ModelChoiceField):
         return obj.name
 
 
+class TaskTypeChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.title
+
+
 class ClientModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         if obj.organization == '':
@@ -406,7 +411,13 @@ class CloseReasonsEditForm(ModelForm):
 class TaskForm(ModelForm):
     class Meta:
         model = Tasks
-        exclude = ['is_deleted']
+        exclude = ['order', 'is_done', 'is_deleted', 'role']
         widgets = {
-            'comment': TextInput(attrs={'id': "inputComment"}),
+            'comment': Textarea(attrs={'id': "inputComment",
+                                       'placeholder': "Комментарии"}),
+            'date': TextInput(attrs={'id': "inputTaskDate",
+                                           'class': "datetime",
+                                           'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
+            'is_important': CheckboxInput(attrs={'id': "id_is_important"}),
+            'type': Select(attrs={'id': "id_task_type"})
         }

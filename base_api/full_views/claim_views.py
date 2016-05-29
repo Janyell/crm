@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
+from django.forms.models import modelform_factory
 from django.shortcuts import render
 from base_api.constants import DEFAULT_SORT_TYPE_FOR_CLAIM, SORT_TYPE_FOR_CLAIM, DEFAULT_NUMBER_FOR_PAGE
 from base_api.full_views.helper import get_request_param_as_string
@@ -596,7 +597,6 @@ def full_add_edit_claim(request):
             out.update({'form': client_form})
             out.update({'page_title': "Добавление заявки"})
     else:
-        print(CloseReasons.objects.filter(is_deleted=0))
         CloseClaimForm.base_fields['reason'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(
                                                                                     is_deleted=0),
                                                                            required=True)
@@ -703,10 +703,11 @@ def full_add_edit_claim(request):
                                'city': claim.city, 'payment_date': claim.payment_date,
                                'order_status': claim.order_status})
             form.products = Products.objects.filter(is_deleted=0)
-            form.task = Tasks.objects.filter(is_deleted=0)
-
-            # Form = modelform_factory(Tasks, form=TaskForm,
-            #              widgets={"title": Textarea()})
+            TaskForm.base_fields['type'] = TaskTypeChoiceField(queryset=TaskTypes.objects.filter(is_active=1,
+                                                                                                 is_deleted=0),
+                                                               required=False)
+            form.task = TaskForm
+            # print modelform_factory(Tasks, form=TaskForm)
             ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
             order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
