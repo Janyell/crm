@@ -151,6 +151,8 @@ def full_get_roles(request):
             r.role = "Производство"
         elif r.role == 0:
             r.role = "Руководство"
+        elif r.role == 3:
+            r.role = "Старший менеджер"
     out.update({'page_title': "Роли"})
     out.update({'roles': roles})
     out.update({'count': roles.count()})

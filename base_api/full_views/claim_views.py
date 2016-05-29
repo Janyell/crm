@@ -22,6 +22,12 @@ def full_add_edit_claim(request):
     else:
         out.update({'user_role': user_role})
     out.update({'modal_title': 'Добавление человека'})
+    no_our_product_id = Products.objects.filter(title='Другое')
+    if not no_our_product_id:
+        no_our_product_id = -1
+    else:
+        no_our_product_id = no_our_product_id.first().id
+    out.update({'no_our_product_id': no_our_product_id})
     if request.method == 'POST':
         form = ClaimsForm(request.POST)
         if 'client-id' in request.GET:
@@ -386,6 +392,7 @@ def full_add_edit_claim(request):
                 if int(id_of_pr) < 0:
                     name_of_pr = 'select-product__title_' + id_of_pr
                     title_of_product = request.POST[name_of_pr]
+                    # vjbkjb
                     if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
                         out.update({"error": 2})
                         ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
@@ -470,6 +477,8 @@ def full_add_edit_claim(request):
                         return HttpResponseRedirect('/claims/' + get_params)
                 elif 'save-and-generate-kp' in form.data:
                     get_params = '&'
+                    if 'set-via-kp' in form.data:
+                        get_params += 'set_via_kp&'
                     get_params += get_request_param_as_string(request)
                     return HttpResponseRedirect('/claims/kp/edit/?id=%s' % new_claim.id + get_params)
                 else:
@@ -508,6 +517,8 @@ def full_add_edit_claim(request):
                 out.update({'form': client_form})
                 out.update({'page_title': "Добавление заявки"})
         else:
+            # print(form.errors)
+            # ftgyhuij
             client = request.POST['client']
             source = None
             transport_campaign = None
