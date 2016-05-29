@@ -329,12 +329,18 @@ def full_add_edit_claim(request):
                                                                               count_of_products=count_of_products,
                                                                               price=price_of_products)
                         client.save(update_fields=["is_interested"])
-            # tasks = request.POST.getlist('tasks[]')
-            # for task in tasks:
-            #         name_of_pr = 'select-product__title_' + task
-            #         title_of_product = request.POST[name_of_pr]
-            #         if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
-            #             pass
+            if request.POST['task_comment'] and request.POST['type'] and request.POST['date']:
+                task_comment = request.POST['task_comment']
+                task_type_id = request.POST['type']
+                task_type = TaskTypes.objects.get(id=task_type_id)
+                task_date = request.POST['date']
+                task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
+                task_is_important = False
+                if 'is_important' in request.POST:
+                    task_is_important = True
+                task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
+                                            is_important=task_is_important, order=new_claim,
+                                            role=Roles.objects.get(id=request.user.id))
             if 'search' in request.GET:
                 search = request.GET.get('search')
                 get_params = '?search=' + unicode(search)
@@ -474,13 +480,18 @@ def full_add_edit_claim(request):
                                                                           count_of_products=count_of_products,
                                                                           price=price_of_products)
                     client.save(update_fields=["is_interested"])
-            # tasks = request.POST.getlist('tasks[]')
-            # gvbkunl
-            # for task in tasks:
-            #         name_of_pr = 'select-product__title_' + task
-            #         title_of_product = request.POST[name_of_pr]
-            #         if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
-            #             pass
+            if request.POST['task_comment'] and request.POST['type'] and request.POST['date']:
+                task_comment = request.POST['task_comment']
+                task_type_id = request.POST['type']
+                task_type = TaskTypes.objects.get(id=task_type_id)
+                task_date = request.POST['date']
+                task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
+                task_is_important = False
+                if 'is_important' in request.POST:
+                    task_is_important = True
+                task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
+                                            is_important=task_is_important, order=new_claim,
+                                            role=Roles.objects.get(id=request.user.id))
             if is_claim_create:
                 if 'only-save' in form.data:
                     if displacement == 1:
@@ -533,8 +544,6 @@ def full_add_edit_claim(request):
                 out.update({'form': client_form})
                 out.update({'page_title': "Добавление заявки"})
         else:
-            print(form.errors)
-            ftgyhuij
             client = request.POST['client']
             source = None
             transport_campaign = None

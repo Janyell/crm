@@ -408,7 +408,17 @@ class CloseReasonsEditForm(ModelForm):
         }
 
 
+FIELD_NAME_MAPPING = {
+    'comment': 'task_comment',
+}
+
+
 class TaskForm(ModelForm):
+    def add_prefix(self, field_name):
+        field_name = FIELD_NAME_MAPPING.get(field_name, field_name)
+        print field_name
+        return super(TaskForm, self).add_prefix(field_name)
+
     class Meta:
         model = Tasks
         exclude = ['order', 'is_done', 'is_deleted', 'role']
