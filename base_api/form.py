@@ -7,11 +7,11 @@ from django.forms import ModelChoiceField
 
 
 BILL_STATUS_CHOICES_FOR_CLAIM = (('', '----------'),
+                                 ('4', 'Устно'),
+                                 ('5', 'Подбор'),
                                  ('0', 'Выставлен'),
                                  ('1', 'Нужна доплата'),
-                                 ('2', 'Оплачен'),
-                                 ('4', 'Устно'),
-                                 ('5', 'Подбор'))
+                                 ('2', 'Оплачен'))
 BILL_STATUS_CHOICES_FOR_ORDER = (('1', 'Нужна доплата'),
                                  ('3', 'Отсрочка платежа'),
                                  ('2', 'Оплачен'))
@@ -156,7 +156,7 @@ orders_form_widgets = {
                                'placeholder': "Комментарии",
                                'rows': "1"}),
     'source': Select(attrs={'id': "selectSource", 'required': 1}),
-    'transport_campaign': Select(attrs={'id': "selectTransportCampaign", 'required': 1}),
+    'transport_campaign': Select(attrs={'id': "selectTransportCampaign", 'required': 0}),
     'ready_date': TextInput(attrs={'id': "inputReadyDate",
                                    'class': "datetime",
                                    'placeholder': "ГГГГ-ММ-ДД ЧЧ:ММ:СС"}),
@@ -187,7 +187,7 @@ class OrdersFormForAdmins(forms.ModelForm):
 
 claims_form_widgets = {
     'client': Select(attrs={'id': "selectClient", 'required': 1, 'class': 'selectpicker'}),
-    'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker', 'required': 1}),
+    'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker', 'required': 0}),
     'bill': NumberInput(attrs={'id': "inputBill"}),
     'payment_date': TextInput(attrs={'id': "inputPaymentDate",
                                      'class': "datetime",

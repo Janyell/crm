@@ -63,7 +63,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-
+#
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -73,6 +73,13 @@ DATABASES = {
     }
 }
 
+# PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(PROJECT_DIR, 'yourdatabasename.db'),
+#     }
+# }
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -209,7 +216,7 @@ MEDIA_TREE_UPLOAD_SUBDIR = 'uploads'
 
 SPHINX_API_VERSION = 0x116
 SPHINX_PORT = 9312
-SPHINX_SERVER = '127.0.0.1'
+SPHINX_SERVER = '178.62.234.158'
 
 SPHINX_ROOT = '/var/sphinx-search/'
 
