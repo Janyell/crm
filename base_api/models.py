@@ -294,6 +294,7 @@ class TaskTypes(models.Model):
 class Tasks(models.Model):
     order = models.ForeignKey(Orders, null=False, blank=True)
     comment = models.TextField(default='')
+    results = models.TextField(default='')
     is_done = models.BooleanField(default=0)
     is_important = models.BooleanField(default=0)
     role = models.ForeignKey(Roles, null=False, blank=True)

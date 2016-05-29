@@ -50,22 +50,23 @@ def full_get_tasks(request):
         period = request.GET['period']
     if period == 'today':
         start_date = datetime.today() - timedelta(days=1)
-        end_date = datetime.today()
+        end_date = datetime.today() + timedelta(days=1)
     elif period == 'week':
-        start_date = datetime.today() - timedelta(days=7)
-        end_date = datetime.today()
+        start_date = datetime.today() - timedelta(days=1)
+        end_date = datetime.today() + timedelta(days=7)
     elif period == 'month':
-        start_date = datetime.today() - timedelta(days=32)
-        end_date = datetime.today()
+        start_date = datetime.today() - timedelta(days=1)
+        end_date = datetime.today() + timedelta(days=32)
     elif period == 'year':
-        start_date = datetime.today() - timedelta(days=366)
-        end_date = datetime.today()
+        start_date = datetime.today() - timedelta(days=1)
+        end_date = datetime.today() + timedelta(days=366)
     tasks = tasks.filter(date__range=[start_date, end_date])
     if 'manager' in request.GET:
         manager_id = request.GET['manager']
         role = Roles.objects.get(id=manager_id)
         tasks = tasks.filter(role=role)
     out.update({'page_title': "Задачи"})
-    out.update({'tasks': tasks})
+    out.update({'task_do_form': TaskForm()})
+    out.update({'tasks': tasks.order_by('is_done', '-date')})
     out.update({'count': tasks.count()})
     return render(request, 'task/get_tasks.html', out)
