@@ -37,8 +37,11 @@
                 ВАЖНО!
                 <img src="{{ STATIC_URL }}img/important.png" alt="Важно!" />
             </label>
-            <div class="controls">
-                {{ task_form.is_important }}<span class="minus-item-wrap"></span>
+            <div class="controls{% if minus == True %} width_form-field{% endif %}">
+                {{ task_form.is_important }}
+                {% if minus == True %}
+                    <a class="btn btn-danger minus-item pull-right">-</a>
+                {% endif %}
             </div>
         </div>
     </div>

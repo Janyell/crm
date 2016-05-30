@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="deferred-demand-task hide">
-                    {% with required=True %}
+                    {% with required=True task_form=close_claim_form.task_form %}
                         {% include "order_claim/modules/task_block.html" %}
                     {% endwith %}
                 </div>

@@ -1,26 +1,39 @@
-<div class="inline-block form-add_mini only-for-our-products">
-{#    {% for task_form in tasks_forms %}#}
-        <div class="repeatable">
-            {% include "order_claim/modules/task_block.html" %}
+<div class="inline-block form-add_mini only-for-our-products repeatable-wrap">
+    {% if task_form %}
+        <div class="repeatable hide"> {# reference #}
+            {% with minus=True %}
+                {% include "order_claim/modules/task_block.html" %}
+            {% endwith %}
         </div>
-{#    {% endfor %}#}
-
-{#    <div class="repeat">#}
-{#        <div class="control-group">#}
-{#            <label class="control-label">#}
-{#                Еще#}
-{#            </label>#}
-{#            <div class="controls">#}
-{#                <a class="btn btn-success plus_item">+</a>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
+    {% endif %}
+    <div class="repeat">
+        <div class="control-group">
+            <label class="control-label">
+                Еще
+            </label>
+            <div class="controls">
+                <a class="btn btn-success plus-item">+</a>
+            </div>
+        </div>
+    </div>
+    <select multiple class="repeatable-items hidden" name="items[]"></select>
 </div>
-
+<script type="text/javascript" src="{{ STATIC_URL }}js/repeat-item.js"></script>
 <script type="text/javascript">
     (function($) {
         $(document).ready(function() {
-
+            var task_date_options = {
+                format: 'yyyy-MM-dd hh:mm:ss',
+                language: 'ru',
+                pickSeconds: false,
+                weekStart: 1,
+                startDate: new Date()
+            };
+            var $plus_item = $('.plus-item');
+            $plus_item.click(function() {
+                $('.task-date').datetimepicker(task_date_options);
+            });
+            $plus_item.click();
         });
     })(jQuery);
 </script>
