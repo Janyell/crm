@@ -1,4 +1,4 @@
-{% block close_claim_modal %}
+{% block close-claim_modal %}
     <div class="modal hide fade" id="close-claim" tabindex="-1" role="dialog" aria-hidden="true">
         <form class="form-horizontal form-add_modal form-add-client" method="post" action="{% url "close_claim" %}?id={{ request.GET.id }}">
             <div class="modal-header">
@@ -15,6 +15,11 @@
                     <div class="controls">
                         {{ close_claim_form.reason }}
                     </div>
+                </div>
+                <div class="deferred-demand-task hide">
+                    {% with required=True %}
+                        {% include "order_claim/modules/task_block.html" %}
+                    {% endwith %}
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="id_final_comment">
@@ -35,4 +40,28 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block close-claim_script %}
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                var $select_reason = $('#id_reason');
+                var $deferred_demand_task = $('.deferred-demand-task');
+                var $deferred_demand_task_type = $deferred_demand_task.find('.task-type')
+                        .find('select, input, textarea');
+                $select_reason.prop('required', true);
+                $select_reason.change(function() {
+                    if ($(this).val() == 1) { //Отложенная потребность
+                        $deferred_demand_task.show();
+                        $deferred_demand_task_type.prop('required', true);
+                    }
+                    else {
+                        $deferred_demand_task.hide();
+                        $deferred_demand_task_type.prop('required', false);
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
 {% endblock %}

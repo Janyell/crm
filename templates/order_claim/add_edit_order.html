@@ -268,7 +268,7 @@
                     {% endif %}
                 </div>
                 {% if request.path == add_claim_url or request.path == edit_claim_url %}
-                    {% include "order_claim/modules/edit_claim__task.html" %}
+                    {% include "order_claim/modules/edit_claim_tasks_block.html" %}
                 {% endif %}
                 {% include "order_claim/modules/edit_claim__related_with.html" %}
                 <div class="form-add__tips">
@@ -716,5 +716,8 @@
     {% endif %}
     {% if request.path == edit_claim_url %}
         {% include "order_claim/modules/close_claim_modal.html" %}
+    {% endif %}
+    {% if request.path == add_claim_url or request.path == edit_claim_url %}
+        {% include "order_claim/modules/task_block_script.html" %}
     {% endif %}
 {%endblock%}

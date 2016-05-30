@@ -1,0 +1,45 @@
+{% block task %}
+    <div class="control-group task-type task-required">
+        <label class="control-label">
+            Задача
+            {% if required == True %}<span class="required-input">*</span>{% endif %}
+        </label>
+        <div class="controls">
+            {{ task_form.type }}
+        </div>
+    </div>
+    <div class="task-details hide">
+        <div class="control-group task-required">
+            <label class="control-label">
+                Дата
+                <span class="required-input">*</span>
+            </label>
+            <div class="controls">
+                <div class="input-append date task-date">
+                    {{ task_form.date }}
+                    <span class="add-on">
+                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="control-group task-required">
+            <label class="control-label">
+                Примечание
+                <span class="required-input">*</span>
+            </label>
+            <div class="controls">
+                {{ task_form.comment }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="id_is_important">
+                ВАЖНО!
+                <img src="{{ STATIC_URL }}img/important.png" alt="Важно!" />
+            </label>
+            <div class="controls">
+                {{ task_form.is_important }}<span class="minus-item-wrap"></span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

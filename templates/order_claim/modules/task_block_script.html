@@ -1,0 +1,29 @@
+{% block task_script %}
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                var task_date_options = {
+                    format: 'yyyy-MM-dd hh:mm:ss',
+                    language: 'ru',
+                    pickSeconds: false,
+                    weekStart: 1,
+                    startDate: new Date()
+                };
+                $('.task-date').datetimepicker(task_date_options);
+            });
+            $(document).on('change', '.task-type select', function(){
+                var $this = $(this);
+                var $task_details = $this.parents('.task-type').next();
+                var $task_required = $task_details.find('.task-required').find('select, input, textarea');
+                if ($this.val()) {
+                    $task_details.show();
+                    $task_required.prop('required', true);
+                }
+                else {
+                    $task_details.hide();
+                    $task_required.prop('required', false);
+                }
+            });
+        })(jQuery);
+    </script>
+{% endblock %}
