@@ -627,8 +627,10 @@ def full_add_edit_claim(request):
         CloseClaimForm.base_fields['reason'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(
                                                                                     is_deleted=0),
                                                                            required=True)
+        CloseClaimForm.base_fields['task_form'] = TaskForm()
         close_claim_form = CloseClaimForm()
         out.update({'close_claim_form': close_claim_form})
+        out.update({'close_claim_form_task_form': TaskForm()})
         if 'copy' in request.GET:
             id_order = request.GET['copy']
             out.update({"error": 0})

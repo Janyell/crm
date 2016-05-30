@@ -1558,6 +1558,18 @@ def close_claim(request):
         CloseClaims.objects.create(order=order, reason=reason, final_comment=final_comment)
         order.bill_status = 6
         order.save(update_fields=["bill_status"])
+        if request.POST['type']:
+            task_comment = request.POST['task_comment']
+            task_type_id = request.POST['type']
+            task_type = TaskTypes.objects.get(id=task_type_id)
+            task_date = request.POST['date']
+            task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
+            task_is_important = False
+            if 'is_important' in request.POST:
+                task_is_important = True
+            task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
+                                        is_important=task_is_important, order=order,
+                                        role=Roles.objects.get(id=request.user.id))
         return HttpResponseRedirect('/claims/?closure=1' + get_params)
     CloseClaimForm.base_fields['reason'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(is_deleted=0),
                                                                         required=True)
