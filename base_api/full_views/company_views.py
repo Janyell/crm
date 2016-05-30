@@ -15,7 +15,7 @@ def full_add_edit_company(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2 or user_role == 1:
+    if user_role == 2 or user_role == 1  or user_role == 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -66,7 +66,7 @@ def full_delete_company(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2 or user_role == 1:
+    if user_role == 2 or user_role == 1 or user_role == 3:
         return HttpResponseRedirect('/oops/')
     id = request.GET['id']
     company = Companies.objects.get(pk=id)
@@ -95,7 +95,7 @@ def full_get_companies(request):
         start = (page - 1) * length
         out.update({'start': start})
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2 or user_role == 1:
+    if user_role == 2 or user_role == 1 or user_role == 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})

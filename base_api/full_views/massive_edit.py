@@ -66,7 +66,7 @@ def massive_delete_companies(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2 or user_role == 1:
+    if user_role == 2 or user_role == 1 or user_role == 3:
         return HttpResponseRedirect('/oops/')
     ids = request.POST.getlist('id[]')
     for id in ids:

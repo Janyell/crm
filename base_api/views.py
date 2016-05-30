@@ -1347,7 +1347,7 @@ def edit_template(request):
         start = (page - 1) * length
         out.update({'start': start})
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2 or user_role == 1:
+    if user_role == 2 or user_role == 1 or user_role == 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -1381,7 +1381,7 @@ def get_templates(request):
         start = (page - 1) * length
         out.update({'start': start})
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2 or user_role == 1:
+    if user_role == 2 or user_role == 1 or user_role == 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -1406,7 +1406,7 @@ def edit_number_template(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role == 2 or user_role == 1:
+    if user_role == 2 or user_role == 1 or user_role == 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
