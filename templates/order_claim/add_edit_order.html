@@ -87,36 +87,16 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="only-for-our-products">
-                        {# Номер счета #}
+                    {% if request.path == add_claim_url or request.path == edit_claim_url %}
                         <div class="control-group">
-                            <label class="control-label" for="id_account_number">
-                                Номер счета
+                            <label class="control-label" for="id_source">
+                                Источник
+                                <span class="required-input">*</span>
                             </label>
                             <div class="controls">
-                                {{ order_form.account_number }}
+                                {{ order_form.source }}
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label" for="selectCompany">
-                                Компания
-                                {% if request.path == add_claim_url or request.path == edit_claim_url %}
-                                    <span class="required-input">*</span>
-                                {% endif %}
-                            </label>
-                            <div class="controls">
-                                {{ order_form.company }}
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="inputBill">
-                                Сумма счета
-                            </label>
-                            <div class="controls">
-                                {{ order_form.bill }}
-                            </div>
-                        </div>
-                        {% if request.path == add_claim_url or request.path == edit_claim_url %}
                         <div class="control-group">
                             <label class="control-label" for="selectBillStatus">
                                 Статус заявки
@@ -130,7 +110,50 @@
                                 </label>
                             </div>
                         </div>
-                        {% else %}
+                        <div class="control-group">
+                            <label class="control-label" for="selectCompany">
+                                Компания
+                                {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                                    <span class="required-input">*</span>
+                                {% endif %}
+                            </label>
+                            <div class="controls">
+                                {{ order_form.company }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="only-for-our-products">
+                        {# Номер счета #}
+                        <div class="control-group">
+                            <label class="control-label" for="id_account_number">
+                                Номер счета
+                            </label>
+                            <div class="controls">
+                                {{ order_form.account_number }}
+                            </div>
+                        </div>
+                        {% if request.path == add_order_url or request.path == edit_order_url %}
+                            <div class="control-group">
+                                <label class="control-label" for="selectCompany">
+                                    Компания
+                                    {% if request.path == add_claim_url or request.path == edit_claim_url %}
+                                        <span class="required-input">*</span>
+                                    {% endif %}
+                                </label>
+                                <div class="controls">
+                                    {{ order_form.company }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="control-group">
+                            <label class="control-label" for="inputBill">
+                                Сумма счета
+                            </label>
+                            <div class="controls">
+                                {{ order_form.bill }}
+                            </div>
+                        </div>
+                        {% if request.path == add_order_url or request.path == edit_order_url %}
                             <div class="control-group">
                                 <label class="control-label" for="selectStatus">
                                     Статус заказа
@@ -248,15 +271,17 @@
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label" for="id_source">
-                            Источник
-                            <span class="required-input">*</span>
-                        </label>
-                        <div class="controls">
-                            {{ order_form.source }}
+                    {% if request.path == add_order_url or request.path == edit_order_url %}
+                        <div class="control-group">
+                            <label class="control-label" for="id_source">
+                                Источник
+                                <span class="required-input">*</span>
+                            </label>
+                            <div class="controls">
+                                {{ order_form.source }}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
 
                     {% if request.path == edit_order_url or request.path == edit_claim_url %}
                         <div class="control-group">

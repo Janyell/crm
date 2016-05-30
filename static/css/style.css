@@ -442,3 +442,7 @@ div.source {
 input.select-product__title {
     width: 125px;
 }
+.bill-status_close {
+    font-weight: bold;
+    color: red;
+}

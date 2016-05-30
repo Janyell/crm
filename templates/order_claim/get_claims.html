@@ -142,7 +142,9 @@
                             </td>
                             <td>
                                 {% if claim.bill_status != None %}
-                                    {{ claim.bill_status }}
+                                    <div {% if claim.bill_status|title == "Закрыта" %}class="bill-status_close"{% endif %}>
+                                        {{ claim.bill_status }}
+                                    </div>
                                 {% endif %}
                             </td>
                             <td>

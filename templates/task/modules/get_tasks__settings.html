@@ -11,7 +11,7 @@
             <label for="select-manager">для</label>
             <select id="select-manager" name="manager">
                 {% for manager in roles %}
-                    <option value="{{ manager.pk }}"{% if manager.pk|upper == user.pk|upper or manager.pk|upper == request.GET.manager %} selected="selected"{% endif %}>
+                    <option value="{{ manager.pk }}"{% if not request.GET.manager and manager.pk|upper == 0 or manager.pk|upper == request.GET.manager %} selected="selected"{% endif %}>
                         {{ manager.username }}
                     </option>
                 {% endfor %}
