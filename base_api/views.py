@@ -863,6 +863,8 @@ def search(request):
             order.bill_status = 'Устно'
         elif order.bill_status == 5:
             order.bill_status = 'Подбор'
+        elif order.bill_status == 6:
+            order.bill_status = 'ЗАКРЫТА'
         else:
             order.bill_status = ''
         if order.bill != None:
@@ -1177,6 +1179,8 @@ def get_related_claims(request):
             order.bill_status = 'Устно'
         elif order.bill_status == 5:
             order.bill_status = 'Подбор'
+        elif order.bill_status == 6:
+            order.bill_status = 'ЗАКРЫТА'
         else:
             order.bill_status = ''
         if order.bill != None:
@@ -1276,6 +1280,8 @@ def get_client_claims(request):
             order.bill_status = 'Устно'
         elif order.bill_status == 5:
             order.bill_status = 'Подбор'
+        elif order.bill_status == 6:
+            order.bill_status = 'ЗАКРЫТА'
         else:
             order.bill_status = ''
         if order.bill != None:
@@ -1550,8 +1556,8 @@ def close_claim(request):
         final_comment = request.POST['final_comment']
         reason = CloseReasons.objects.get(id=reason)
         CloseClaims.objects.create(order=order, reason=reason, final_comment=final_comment)
-        order.is_deleted = 1
-        order.save(update_fields=["is_deleted"])
+        order.bill_status = 6
+        order.save(update_fields=["bill_status"])
         return HttpResponseRedirect('/claims/?closure=1' + get_params)
     CloseClaimForm.base_fields['reason'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(is_deleted=0),
                                                                         required=True)
