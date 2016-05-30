@@ -41,7 +41,9 @@ def full_get_tasks(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0) | Q(role=3)).all()})
+    roles = [Roles(username='все менеджеры', pk=0)]
+    roles += list(Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0) | Q(role=3)).all())
+    out.update({'roles': roles})
     is_senior = False
     if user_role == 0 or user_role == 3:
         is_senior = True
@@ -61,8 +63,9 @@ def full_get_tasks(request):
     tasks = tasks.filter(date__lte=end_date)
     if 'manager' in request.GET:
         manager_id = request.GET['manager']
-        role = Roles.objects.get(id=manager_id)
-        tasks = tasks.filter(role=role)
+        if manager_id != '0':
+            role = Roles.objects.get(id=manager_id)
+            tasks = tasks.filter(role=role)
     if not is_senior:
         tasks = tasks.filter(role=Roles.objects.get(id=request.user.id))
     out.update({'page_title': "Задачи"})
