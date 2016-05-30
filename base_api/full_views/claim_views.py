@@ -30,7 +30,7 @@ def full_add_edit_claim(request):
         no_our_product_id = no_our_product_id.first().id
     out.update({'no_our_product_id': no_our_product_id})
     TaskForm.base_fields['type'] = TaskTypeChoiceField(queryset=TaskTypes.objects.filter(is_deleted=0))
-    out.update({'task_form': TaskForm()})
+    out.update({'task_form': TaskForm(initial={'is_important': False})})
     if request.method == 'POST':
         form = ClaimsForm(request.POST)
         if 'client-id' in request.GET:
@@ -627,10 +627,10 @@ def full_add_edit_claim(request):
         CloseClaimForm.base_fields['reason'] = CloseReasonsModelChoiceField(queryset=CloseReasons.objects.filter(
                                                                                     is_deleted=0),
                                                                            required=True)
-        CloseClaimForm.base_fields['task_form'] = TaskForm()
+        CloseClaimForm.base_fields['task_form'] = TaskForm(initial={'is_important': False})
         close_claim_form = CloseClaimForm()
         out.update({'close_claim_form': close_claim_form})
-        out.update({'close_claim_form_task_form': TaskForm()})
+        out.update({'close_claim_form_task_form': TaskForm(initial={'is_important': False})})
         if 'copy' in request.GET:
             id_order = request.GET['copy']
             out.update({"error": 0})
@@ -735,7 +735,7 @@ def full_add_edit_claim(request):
             TaskForm.base_fields['type'] = TaskTypeChoiceField(queryset=TaskTypes.objects.filter(is_active=1,
                                                                                                  is_deleted=0),
                                                                required=False)
-            form.task = TaskForm
+            form.task = TaskForm(initial={'is_important': False})
             # print modelform_factory(Tasks, form=TaskForm)
             ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_form = ClientRelatedForm()
