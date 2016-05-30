@@ -209,6 +209,7 @@ class Orders(models.Model):
     DELAY = 3
     VERBAL = 4
     SELECTION = 5
+    CLOSE = 6
     BILL_STATUS_CHOICES = (
         (SET, 'Выставлен'),
         (NEED_SURCHARGE, 'Нужна доплата'),
@@ -216,6 +217,7 @@ class Orders(models.Model):
         (DELAY, 'Отсрочка платежа'),
         (VERBAL, 'Устно'),
         (SELECTION, 'Подбор'),
+        (CLOSE, 'ЗАКРЫТА'),
     )
     bill_status = models.IntegerField(null=True, blank=True)
     ready_date = UnixTimestampField(blank=True, null=True)

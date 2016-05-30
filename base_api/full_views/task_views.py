@@ -42,8 +42,10 @@ def full_get_tasks(request):
     else:
         out.update({'user_role': user_role})
     out.update({'roles': Roles.objects.filter(is_deleted=0).filter(Q(role=1) | Q(role=0) | Q(role=3)).all()})
+    is_senior = False
     if user_role == 0 or user_role == 3:
-        out.update({'is_senior': True})
+        is_senior = True
+        out.update({'is_senior': is_senior})
     tasks = Tasks.objects.filter(is_deleted=0)
     period = 'today'
     if 'period' in request.GET:
@@ -61,6 +63,8 @@ def full_get_tasks(request):
         manager_id = request.GET['manager']
         role = Roles.objects.get(id=manager_id)
         tasks = tasks.filter(role=role)
+    if not is_senior:
+        tasks = tasks.filter(role=Roles.objects.get(id=request.user.id))
     out.update({'page_title': "Задачи"})
     out.update({'task_do_form': TaskForm()})
     out.update({'tasks': tasks.order_by('is_done', 'date')})

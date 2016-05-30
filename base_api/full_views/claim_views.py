@@ -839,6 +839,8 @@ def full_get_claims(request):
             order.bill_status = 'Устно'
         elif order.bill_status == 5:
             order.bill_status = 'Подбор'
+        elif order.bill_status == 6:
+            order.bill_status = 'ЗАКРЫТА'
         else:
             order.bill_status = ''
         if order.bill != None:
