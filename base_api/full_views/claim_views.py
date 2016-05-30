@@ -329,14 +329,16 @@ def full_add_edit_claim(request):
                                                                               count_of_products=count_of_products,
                                                                               price=price_of_products)
                         client.save(update_fields=["is_interested"])
-            if request.POST['task_comment'] and request.POST['type'] and request.POST['date']:
-                task_comment = request.POST['task_comment']
-                task_type_id = request.POST['type']
+            tasks_list = int(request.POST.get('items[]')) * -1
+            for task_id in range(1, tasks_list+1):
+                task_id = str(task_id)
+                task_comment = request.POST['task_comment_-' + task_id]
+                task_type_id = request.POST['type_-' + task_id]
                 task_type = TaskTypes.objects.get(id=task_type_id)
-                task_date = request.POST['date']
+                task_date = request.POST['date_-' + task_id]
                 task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
                 task_is_important = False
-                if 'is_important' in request.POST:
+                if 'is_important_-' + task_id in request.POST:
                     task_is_important = True
                 task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
                                             is_important=task_is_important, order=new_claim,
@@ -407,7 +409,6 @@ def full_add_edit_claim(request):
                 if int(id_of_pr) < 0:
                     name_of_pr = 'select-product__title_' + id_of_pr
                     title_of_product = request.POST[name_of_pr]
-                    # vjbkjb
                     if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
                         out.update({"error": 2})
                         ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
@@ -480,14 +481,16 @@ def full_add_edit_claim(request):
                                                                           count_of_products=count_of_products,
                                                                           price=price_of_products)
                     client.save(update_fields=["is_interested"])
-            if request.POST['task_comment'] and request.POST['type'] and request.POST['date']:
-                task_comment = request.POST['task_comment']
-                task_type_id = request.POST['type']
+            tasks_list = int(request.POST.get('items[]')) * -1
+            for task_id in range(1, tasks_list+1):
+                task_id = str(task_id)
+                task_comment = request.POST['task_comment_-' + task_id]
+                task_type_id = request.POST['type_-' + task_id]
                 task_type = TaskTypes.objects.get(id=task_type_id)
-                task_date = request.POST['date']
+                task_date = request.POST['date_-' + task_id]
                 task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
                 task_is_important = False
-                if 'is_important' in request.POST:
+                if 'is_important_-' + task_id in request.POST:
                     task_is_important = True
                 task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
                                             is_important=task_is_important, order=new_claim,
