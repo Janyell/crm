@@ -81,7 +81,9 @@
                             {{ order_form.client }}
                             {% url 'edit_order' as edit_order_url %}
                             {% if not request.GET.id %}
-                                <a class="btn btn-success plus_client" data-toggle="modal" href="#add-client">+</a>
+                                <div class="btn-wrap">
+                                    <a class="btn btn-success plus_client pull-right" data-toggle="modal" href="#add-client">+</a>
+                                </div>
                             {% endif %}
                         </div>
                     </div>
@@ -420,20 +422,21 @@
                     "aoColumnDefs": [
                         { "bSortable": false, "aTargets": [ 1 ] },
                         { "bSearchable": false, "aTargets": [ 1 ] }
-                    ]
+                    ],
+                    "bInfo": false
                 });
-                    $('#paymentDate').datetimepicker({
-                        format: 'yyyy-MM-dd hh:mm:ss',
-                        language: 'ru',
-                        pickSeconds: false,
-                        weekStart: 1
-                    });
-                    $('#readyDate').datetimepicker({
-                        format: 'yyyy-MM-dd hh:mm:ss',
-                        language: 'ru',
-                        pickSeconds: false,
-                        weekStart: 1
-                    });
+                $('#paymentDate').datetimepicker({
+                    format: 'yyyy-MM-dd hh:mm:ss',
+                    language: 'ru',
+                    pickSeconds: false,
+                    weekStart: 1
+                });
+                $('#readyDate').datetimepicker({
+                    format: 'yyyy-MM-dd hh:mm:ss',
+                    language: 'ru',
+                    pickSeconds: false,
+                    weekStart: 1
+                });
                 {% if request.path != add_claim_url and request.path != edit_claim_url %}
                     $('#shippedDate').datetimepicker({
                         format: 'yyyy-MM-dd',
@@ -705,6 +708,9 @@
                 {% endif %}
             });
             $(window).load(function () {
+                var $paginate_wrap = $('#add-product-table_paginate').parent();
+                $paginate_wrap.prev().remove();
+                $paginate_wrap.removeClass('span6');
                 $("#add-product-table_filter").find("input[type='search']").attr("placeholder", "Поиск");
             });
         })(jQuery);

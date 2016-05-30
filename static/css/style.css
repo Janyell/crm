@@ -83,8 +83,8 @@ body {
 }
 
 #add-product-table_wrapper, .select-product-table_wrapper {
-    width: 500px;
-    padding: 10px;
+    width: 400px;
+    padding: 10px 10px 0 0;
     display: -moz-inline-stack;
     display: inline-block;
     vertical-align: top;
@@ -386,12 +386,12 @@ div.source {
     padding-top: 5px;
 }
 .container_horizontal-scroll {
-    width: 1925px;
-    padding: 0 20px;
+    width: 1485px;
+    padding: 0 10px;
     /*text-align: center;*/
 }
 .container_horizontal-scroll_order {
-    width: 1480px;
+    width: 1150px;
     margin: 0 auto;
 }
 .text-align_initial {
@@ -405,25 +405,22 @@ div.source {
     *display: inline;
     text-align: initial;
 }
-.form-add-order__inputs {
-    width: 420px;
-}
-.form-add-claim__inputs {
-    width: 840px;
-}
 .form-add_mini {
     width: 550px;
 }
 .container_horizontal-scroll .form-add_mini {
-    width: 420px;
-    padding: 10px;
+    width: 320px;
+    padding: 10px 10px 0 0;
     margin: 0 auto;
 }
 .container_horizontal-scroll .form-add_mini .control-label {
-    width: 120px;
+    width: 90px;
 }
 .container_horizontal-scroll .form-add_mini .controls {
-    margin-left: 140px;
+    margin-left: 100px;
+}
+.container_horizontal-scroll .form-add-order {
+    padding: 0;
 }
 .tasks-settings > select {
     width: 100px;
@@ -433,9 +430,15 @@ div.source {
     display: initial;
     margin-right: 5px;
 }
-.container_horizontal-scroll  #client-claims {
-    width: 874px;
+.container_horizontal-scroll  #client-claims, .container_horizontal-scroll #related-claims {
+    width: 655px;
 }
 .width_form-field {
     width: 220px;
+}
+.btn-wrap {
+    margin-top: 5px;
+}
+input.select-product__title {
+    width: 125px;
 }
