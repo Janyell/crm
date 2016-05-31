@@ -9,7 +9,9 @@
                 <thead>
                     <tr>
                         <th></th>
+                        {% if is_senior == True %}<th>Менеджер</th>{% endif %}
                         <th>Задача</th>
+                        <th>Дата</th>
                         <th>Заявка</th>
                         <th>Организация</th>
                         <th>Контакт</th>
@@ -25,8 +27,16 @@
                                     <img src="{{ STATIC_URL }}img/important.png" alt="Важно!" />
                                 {% endif %}
                             </td>
+                            {% if is_senior == True %}
+                                <td>
+                                    {{ task.role }}
+                                </td>
+                            {% endif %}
                             <td>
                                 {{ task.type.title }}
+                            </td>
+                            <td>
+                                {{ task.date }}
                             </td>
                             {% if task.order %}
                                 <td>
@@ -36,7 +46,7 @@
                                     {{ task.order.client.organization_type }} {{ task.order.client.organization }}
                                 </td>
                                 <td>
-                                    {{ task.order.contact_face.name }} {{ task.order.contact_face.last_name }}
+                                    {{ task.order.client.name }} {{ task.order.client.last_name }}
                                 </td>
                                 <td>
                                     {{ task.comment }}
@@ -71,7 +81,7 @@
                                 "url": "{{ STATIC_URL }}language/ru_RU.txt"
                             },
                             "aoColumnDefs": [
-                                { "bSearchable": false, "aTargets": [0, 6 ] }
+                                { "bSearchable": false, "aTargets": [0{% if is_senior == True %}, 8{% else %}, 7{% endif %}] }
                             ],
                             "bSort": false,
                             "bInfo": false,
