@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from datetime import timedelta
 from datetime import date
 from django.db.models import Q
+from django.db.models import Count
 
 
 def full_do_task(request):
@@ -48,7 +49,7 @@ def full_get_tasks(request):
     if user_role == 0 or user_role == 3:
         is_senior = True
         out.update({'is_senior': is_senior})
-    tasks = Tasks.objects.filter(is_deleted=0)
+    tasks = Tasks.objects.filter(is_deleted=0, order__is_deleted=0)
     period = 'today'
     if 'period' in request.GET:
         period = request.GET['period']

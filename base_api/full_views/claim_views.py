@@ -334,15 +334,16 @@ def full_add_edit_claim(request):
                 task_id = str(task_id)
                 task_comment = request.POST['task_comment_-' + task_id]
                 task_type_id = request.POST['type_-' + task_id]
-                task_type = TaskTypes.objects.get(id=task_type_id)
-                task_date = request.POST['date_-' + task_id]
-                task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
-                task_is_important = False
-                if 'is_important_-' + task_id in request.POST:
-                    task_is_important = True
-                task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
-                                            is_important=task_is_important, order=new_claim,
-                                            role=Roles.objects.get(id=request.user.id))
+                if task_type_id:
+                    task_type = TaskTypes.objects.get(id=task_type_id)
+                    task_date = request.POST['date_-' + task_id]
+                    task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
+                    task_is_important = False
+                    if 'is_important_-' + task_id in request.POST:
+                        task_is_important = True
+                    task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
+                                                is_important=task_is_important, order=new_claim,
+                                                role=Roles.objects.get(id=request.user.id))
             if 'search' in request.GET:
                 search = request.GET.get('search')
                 get_params = '?search=' + unicode(search)
@@ -486,15 +487,16 @@ def full_add_edit_claim(request):
                 task_id = str(task_id)
                 task_comment = request.POST['task_comment_-' + task_id]
                 task_type_id = request.POST['type_-' + task_id]
-                task_type = TaskTypes.objects.get(id=task_type_id)
-                task_date = request.POST['date_-' + task_id]
-                task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
-                task_is_important = False
-                if 'is_important_-' + task_id in request.POST:
-                    task_is_important = True
-                task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
-                                            is_important=task_is_important, order=new_claim,
-                                            role=Roles.objects.get(id=request.user.id))
+                if task_type_id:
+                    task_type = TaskTypes.objects.get(id=task_type_id)
+                    task_date = request.POST['date_-' + task_id]
+                    task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
+                    task_is_important = False
+                    if 'is_important_-' + task_id in request.POST:
+                        task_is_important = True
+                    task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
+                                                is_important=task_is_important, order=new_claim,
+                                                role=Roles.objects.get(id=request.user.id))
             if is_claim_create:
                 if 'only-save' in form.data:
                     if displacement == 1:
