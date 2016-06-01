@@ -81,7 +81,7 @@
                             {{ order_form.client }}
                             {% url 'edit_order' as edit_order_url %}
                             {% if not request.GET.id %}
-                                <div class="btn-wrap">
+                                <div class="btn-wrap width_form-field">
                                     <a class="btn btn-success plus_client pull-right" data-toggle="modal" href="#add-client">+</a>
                                 </div>
                             {% endif %}
@@ -295,7 +295,7 @@
                     {% endif %}
                 </div>
                 {% if request.path == add_claim_url or request.path == edit_claim_url %}
-                    {% include "order_claim/modules/edit_claim_tasks_block.html" %}
+                    {% include "order_claim/modules/add_edit_claim__tasks_block.html" %}
                 {% endif %}
                 {% include "order_claim/modules/edit_claim__related_with.html" %}
                 <div class="form-add__tips">

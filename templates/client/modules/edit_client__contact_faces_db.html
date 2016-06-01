@@ -1,0 +1,42 @@
+{% block contact-faces_db %}
+    {% if contact_faces %}
+        <ul class="contact-faces repeatable-items_db">
+            {% for contact_face in contact_faces %}
+            <li class="contact-face" data-id="{{ contact_face.pk }}"
+                data-name="{{ contact_face.name }}" data-lastname="{{ contact_face.last_name }}" data-patronymic="{{ contact_face.patronymic }}">
+                <ul class="contact-face__data">
+                    {% if contact_face.phones %}
+                        <li class="contact-face__data-item">
+                            <ul class="contact-face-phones">
+                                {% for phone in contact_face.phones %}
+                                    <li class="contact-face-phone" data-id="{{ phone.pk }}" data-phone="{{ phone.phone }}"></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                    {% if contact_face.emails %}
+                        <li class="contact-face__data-item">
+                            <ul class="contact-face-emails">
+                                {% for email in contact_face.emails %}
+                                    <li class="contact-face-email" data-id="{{ email.pk }}" data-email="{{ email.email }}"></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+        <script type="text/javascript">
+            (function($) {
+                $(document).ready(function() {
+                    var $repeatable_items_db = $('ul.repeatable-items_db');
+                    $repeatable_items_db.children('li').each(function() {
+                        /* todo */
+                    });
+
+                });
+            })(jQuery);
+        </script>
+    {% endif %}
+{% endblock %}
