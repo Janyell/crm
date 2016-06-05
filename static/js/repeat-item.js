@@ -18,14 +18,34 @@ function update_item_id ($new_item, item_id) {
     });
     $new_control_group.find('.minus-item').attr('data-itemId', item_id);
 }
+
+function add_item_option($this, i) {
+    $this.children('select.repeatable-items').append('<option value="' + i + '" selected="selected">' + i + '</option>');
+}
+function remove_item_option($this, i) {
+    $this.children('select.repeatable-items option[value="' + i + '"]').remove();
+}
+
+function handle_click($this, item_id, click_children) {
+    var $repeatable_wrap = $this.closest('.repeatable-wrap');
+    var repeatable_html = $repeatable_wrap.children('.repeatable')[0].outerHTML;
+    var $repeat = $repeatable_wrap.children('.repeat');
+    $repeat.before(repeatable_html);
+    var $new_item = $repeat.prev();
+    update_item_id($new_item, item_id);
+    var $new_children_repeatable_wrap = $new_item.children('.repeatable-wrap');
+    if ($new_children_repeatable_wrap.size()) {
+        update_attr_name($new_children_repeatable_wrap.children('select.repeatable-items'), item_id);
+        if (click_children) {
+            $new_children_repeatable_wrap.children('.repeat').find('.plus-item').click();
+        }
+    }
+    $new_item.show();
+    add_item_option($repeatable_wrap, item_id);
+    return $new_item;
+}
 (function($){
     var ij = 0;
-	function add_item_option($this, i) {
-		$this.children('select.repeatable-items').append('<option value="' + i + '" selected="selected">' + i + '</option>');
-	}
-	function remove_item_option($this, i) {
-		$this.children('select.repeatable-items option[value="' + i + '"]').remove();
-	}
     $(document).on('click', '.minus-item', function(){
         var $this = $(this);
         var $repeatable_wrap = $this.closest('.repeatable-wrap');
@@ -34,21 +54,6 @@ function update_item_id ($new_item, item_id) {
         $repeatable_wrap.find('.repeatable_' + item_id).remove();
     });
     $(document).on('click', '.plus-item', function() {
-        var $this = $(this);
-        var $repeatable_wrap = $this.closest('.repeatable-wrap');
-        var repeatable_html = $repeatable_wrap.children('.repeatable')[0].outerHTML;
-        var $repeat = $repeatable_wrap.children('.repeat');
-        $repeat.before(repeatable_html);
-        var $new_item = $repeat.prev();
-        update_item_id($new_item, --ij);
-        var $new_children_repeatable_wrap = $new_item.children('.repeatable-wrap');
-        if ($('ul.repeatable-items_db').size() != 0) {
-            if ($new_children_repeatable_wrap.size()) {
-                update_attr_name($new_children_repeatable_wrap.children('select.repeatable-items'), item_id);
-                $new_children_repeatable_wrap.children('.repeat').find('.plus-item').click();
-            }
-        }
-        $new_item.show();
-        add_item_option($repeatable_wrap, item_id);
+        handle_click($(this), --ij, true);
     });
 })(jQuery);

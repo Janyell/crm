@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for task in tasks %}
+                    {% for key, task in tasks %}
                         <tr>
                             <td>
                                 {% if task.is_important == True %}
