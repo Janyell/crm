@@ -37,7 +37,7 @@
                 {% endif %}
             {% endif %}
         {% endblock add-bar %}
-        <div class="row-fluid">
+        <div class="row-fluid no-print">
             <div class="span3">
                 {% if orders %}
                     <div class="dataTables_length">
@@ -336,7 +336,7 @@
                         Количество заказов: {{ count }}
                     </div>
                 </div>
-                <div class="span5">
+                <div class="span5 no-print">
                     <div class="dataTables_paginate paging_bootstrap pagination">
                         {% bootstrap_paginate orders range=5 previous_label="← Предыдущая" next_label="Следующая →" %}
                     </div>

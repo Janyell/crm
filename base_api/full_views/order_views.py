@@ -854,6 +854,9 @@ def full_get_orders(request):
         order.products = products_list
         if order.order_status == 0:
             order.order_status = 'В производстве'
+            if user_role == 2:
+                order.is_ready = 1
+                order.order_status = 'Производство'
         elif order.order_status == -1:
             order.order_status = 'Отгружен'
             if order.shipped_date is not None:

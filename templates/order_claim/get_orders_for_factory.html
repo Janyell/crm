@@ -11,7 +11,6 @@
     {# 4 #}<th class="sortable{% if request.GET.sort == "payment_date" %} sorting_asc{% elif request.GET.sort == "payment_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="payment_date">Дата оплаты</th>
     {# 5 #}<th>Процент оплаты</th>
     {# 6 #}<th>Статус</th>
-    {# 7 #}<th class="sortable{% if request.GET.sort == "shipped_date" %} sorting_asc{% elif request.GET.sort == "shipped_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="shipped_date">Дата отгрузки</th>
     {# 8 #}<th>Продукция</th>
     {# 9 #}<th>Информация для пр-ва</th>
     {# 10 #}<th class="sortable{% if request.GET.sort == "city" %} sorting_asc{% elif request.GET.sort == "city_d" %} sorting_desc{% else %} sorting{% endif %}" value="city">Доставка город</th>
@@ -47,10 +46,11 @@
     </td>
     <td>
         {{ order.order_status }}
-    </td>
-    <td>
-        {% if order.shipped_date != None %}
+        {% if order.is_shipped %}
             {{ order.shipped_date }}
+        {% endif %}
+        {% if order.is_ready %}
+            {{ order.ready_date }}
         {% endif %}
     </td>
     <td>
@@ -81,4 +81,4 @@
 
 {% block order-table-body__delete-col %}{% endblock %}
 
-{% block order-table-scripts__invisible-cols %}13, 14{% endblock %}
+{% block order-table-scripts__invisible-cols %}12, 13{% endblock %}
