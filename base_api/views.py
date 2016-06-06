@@ -1037,9 +1037,9 @@ def get_reports(request):
     orders = orders.filter(shipped_date__year=month_date[:4],
                            shipped_date__month=month_date[5:7])
     try:
-        orders = orders.filter(in_archive=0).order_by(sort)
+        orders = orders.order_by(sort)
     except TypeError:
-        orders = orders.filter(in_archive=0).order_by(*sort)
+        orders = orders.order_by(*sort)
     shipped_sum = 0
     for order in orders:
         shipped_sum += order.bill
