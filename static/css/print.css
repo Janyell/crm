@@ -10,9 +10,12 @@
 		width: 100% !important;
 		padding: 0 !important;
 	}
-}
 
-.table th, .table td {
-    padding:1!important;
-    vertical-align: top!important;
+    .table .no-wrap {
+        white-space: normal !important;
+    }
+    .table th, .table td {
+        padding: 2px !important;
+        vertical-align: top !important;
+    }
 }
