@@ -832,15 +832,17 @@ def full_get_orders(request):
         except TypeError:
             orders = orders.filter(in_archive=0).order_by(*sort)
         out.update({'page_title': "Заказы"})
-    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
-    orders_pages = Paginator(orders, number)
-    page = request.GET.get('page')
-    try:
-        order_list = orders_pages.page(page)
-    except PageNotAnInteger:
-        order_list = orders_pages.page(1)
-    except EmptyPage:
-        order_list = orders_pages.page(orders_pages.num_pages)
+    order_list = orders.all()
+    if Roles.objects.get(id=request.user.id).role != 2:
+        number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
+        orders_pages = Paginator(orders, number)
+        page = request.GET.get('page')
+        try:
+            order_list = orders_pages.page(page)
+        except PageNotAnInteger:
+            order_list = orders_pages.page(1)
+        except EmptyPage:
+            order_list = orders_pages.page(orders_pages.num_pages)
     for order in order_list:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
@@ -855,8 +857,10 @@ def full_get_orders(request):
         if order.order_status == 0:
             order.order_status = 'В производстве'
             if user_role == 2:
-                order.is_ready = 1
                 order.order_status = 'Производство'
+                if order.ready_date:
+                    order.is_ready = 1
+                    order.ready_date = date(order.ready_date.year, order.ready_date.month, order.ready_date.day)
         elif order.order_status == -1:
             order.order_status = 'Отгружен'
             if order.shipped_date is not None:

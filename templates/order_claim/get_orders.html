@@ -38,6 +38,7 @@
             {% endif %}
         {% endblock add-bar %}
         <div class="row-fluid no-print">
+            {% if user_role != 2 %}
             <div class="span3">
                 {% if orders %}
                     <div class="dataTables_length">
@@ -53,6 +54,7 @@
                     </div>
                 {% endif %}
             </div>
+            {% endif %}
             <div class="span6">
                 {% block manager-checkboxes %}
                     <div class="manager">
@@ -337,9 +339,11 @@
                     </div>
                 </div>
                 <div class="span5 no-print">
+                    {% if user_role != 2 %}
                     <div class="dataTables_paginate paging_bootstrap pagination">
                         {% bootstrap_paginate orders range=5 previous_label="← Предыдущая" next_label="Следующая →" %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
             {% block get-reports__sum-number %}{% endblock %}
