@@ -89,7 +89,19 @@
         {% if orders %}
             {% load bootstrap_pagination %}
             <form class="form-horizontal form-massive" method="POST">
+            {% if user_role == 2 %}
+             <style>
+               th {
+                border: 2px solid black; /* Граница вокруг ячеек */
+               }
+               td {
+                border: 2px solid black; /* Граница вокруг ячеек */
+               }
+              </style>
+                <table class="table table-hover table-bordered exported-table" id="order-table" style="border: 2px solid black;">
+            {% else %}
                 <table class="table table-hover table-bordered exported-table" id="order-table">
+            {% endif %}
                     <thead>
                         <tr>
                             {% block order-table-headers %}

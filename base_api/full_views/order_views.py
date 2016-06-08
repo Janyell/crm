@@ -798,6 +798,8 @@ def full_get_orders(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_ORDER)
+    if Roles.objects.get(id=request.user.id).role == 2:
+        sort_key = 'factory'
     sort = SORT_TYPE_FOR_ORDER.get(sort_key, DEFAULT_SORT_TYPE_FOR_ORDER)
     orders = Orders.objects.filter(is_deleted=0, is_claim=0)
     if 'source' in request.GET:
@@ -832,7 +834,6 @@ def full_get_orders(request):
         except TypeError:
             orders = orders.filter(in_archive=0).order_by(*sort)
         out.update({'page_title': "Заказы"})
-    order_list = orders.all()
     if Roles.objects.get(id=request.user.id).role != 2:
         number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
         orders_pages = Paginator(orders, number)
@@ -843,6 +844,9 @@ def full_get_orders(request):
             order_list = orders_pages.page(1)
         except EmptyPage:
             order_list = orders_pages.page(orders_pages.num_pages)
+    else:
+        orders = orders.exclude(order_status=-1)
+        order_list = orders.all()
     for order in order_list:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
