@@ -5,7 +5,7 @@
         <h2 class="center">{{ page_title }}</h2>
         {% include "task/modules/get_tasks__settings.html" %}
         {% if tasks %}
-            <table class="table table-hover table-bordered" id="task-table">
+            <table class="table table-hover table-bordered table-hover_blank-row" id="task-table">
                 <thead>
                     <tr>
                         <th></th>
@@ -20,44 +20,53 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for task in tasks %}
-                        <tr>
-                            <td>
-                                {% if task.is_important == True %}
-                                    <img src="{{ STATIC_URL }}img/important.png" alt="Важно!" />
+                    {% for date, tasks in tasks_dict.items %}
+                        {% for task in tasks %}
+                            <tr>
+                                <td>
+                                    {% if task.is_important == True %}
+                                        <img src="{{ STATIC_URL }}img/important.png" alt="Важно!" />
+                                    {% endif %}
+                                </td>
+                                {% if is_senior == True %}
+                                    <td>
+                                        {{ task.role }}
+                                    </td>
                                 {% endif %}
-                            </td>
-                            {% if is_senior == True %}
                                 <td>
-                                    {{ task.role }}
-                                </td>
-                            {% endif %}
-                            <td>
-                                {{ task.type.title }}
-                            </td>
-                            <td>
-                                {{ task.date }}
-                            </td>
-                            {% if task.order %}
-                                <td>
-                                    <a href="{% url "edit_claim" %}?id={{ task.order.pk }}" target="_blank">{{ task.order.unique_number }}</a>
+                                    {{ task.type.title }}
                                 </td>
                                 <td>
-                                    {{ task.order.client.organization_type }} {{ task.order.client.organization }}
+                                    {{ task.date }}
                                 </td>
+                                {% if task.order %}
+                                    <td>
+                                        <a href="{% url "edit_claim" %}?id={{ task.order.pk }}" target="_blank">{{ task.order.unique_number }}</a>
+                                    </td>
+                                    <td>
+                                        {{ task.order.client.organization_type }} {{ task.order.client.organization }}
+                                    </td>
+                                    <td>
+                                        {{ task.order.client.last_name }} {{ task.order.client.last_name }} {{ task.order.client.patronymic }}
+                                    </td>
+                                    <td>
+                                        {{ task.comment }}
+                                    </td>
+                                {% endif %}
                                 <td>
-                                    {{ task.order.client.last_name }} {{ task.order.client.last_name }} {{ task.order.client.patronymic }}
+                                    <label class="checkbox">
+                                        <input class="do-checkbox" type="checkbox" value="{{ task.pk }}" data-results='{{ task.results }}'{% if task.is_done == True %} checked="checked"{% endif %}{% if is_senior == True and task.role|urlencode:"" != user.username|urlencode:"" %} disabled readonly{% endif %}/>
+                                    </label>
                                 </td>
-                                <td>
-                                    {{ task.comment }}
-                                </td>
-                            {% endif %}
-                            <td>
-                                <label class="checkbox">
-                                    <input class="do-checkbox" type="checkbox" value="{{ task.pk }}" data-results='{{ task.results }}'{% if task.is_done == True %} checked="checked"{% endif %}{% if is_senior == True and task.role|urlencode:"" != user.username|urlencode:"" %} disabled readonly{% endif %}/>
-                                </label>
-                            </td>
-                        </tr>
+                            </tr>
+                        {% endfor %}
+                        {% block order-table-body__blank-row %}
+                            <tr class="blank-row">
+                                <td></td>{% if is_senior == True %}<td></td>{% endif %}
+                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                            {% include "order_claim/modules/get_orders_for_factory__rows.html" %}
+                        {% endblock %}
                     {% endfor %}
                 </tbody>
             </table>

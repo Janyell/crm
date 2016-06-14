@@ -447,7 +447,7 @@ input.select-product__title {
     color: red;
 }
 .table-bordered_black, .table-bordered_black th, .table-bordered_black td {
-    border-color: black;
+    border-color: black !important;
 }
 .blank-row > td {
     border-left: none;
@@ -462,5 +462,5 @@ input.select-product__title {
 }
 .table-hover_blank-row td:last-child,
 .table-hover_blank-row th:last-child {
-    border-right: 1px solid;
+    border-right: 1px solid #ddd;
 }
