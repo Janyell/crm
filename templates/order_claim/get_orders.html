@@ -17,7 +17,7 @@
             {% endif %}
         {% endblock navigation-bar %}
         <h2 class="center">{{ page_title }}{{ organization_or_full_name }}</h2>
-        {% if request.path == get_orders_url %}
+        {% if request.path == get_orders_url or request.path == index_url %}
             <div class="center in-production-number">Заказов в производстве: {{ count_in_production }}</div>
         {% endif %}
         {% block get-reports__period-form %}{% endblock %}
