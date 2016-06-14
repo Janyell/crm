@@ -92,7 +92,7 @@
                                     <label class="checkbox">
                                         <input class="checkbox_one" type="checkbox" name="id[]" value="{{ claim.pk }}"/>
                                     </label>
-                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
+                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" and claim.bill_status|title != "Закрыта" %}
                                     <label class="checkbox">
                                         <input class="checkbox_one" type="checkbox" name="id[]" value="{{ claim.pk }}"/>
                                     </label>
@@ -141,11 +141,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if claim.bill_status != None %}
-                                    <div {% if claim.bill_status|title == "Закрыта" %}class="bill-status_close"{% endif %}>
-                                        {{ claim.bill_status }}
-                                    </div>
-                                {% endif %}
+                                {% include "order_claim/modules/get_claims__bill_status.html" %}
                             </td>
                             <td>
                                 {% if claim.comment %}
@@ -170,10 +166,12 @@
                             <td>
                                 {% if user_role == 0 %}
                                     <a class="btn edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
-                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                    <a class="btn edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
-                                {% else %}
-                                    <a class="btn edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                {% elif claim.bill_status|title != "Закрыта" %}
+                                    {% if user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
+                                        <a class="btn edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                    {% else %}
+                                        <a class="btn edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}"><i class="icon-pencil"></i></a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td>
@@ -181,7 +179,7 @@
                                     <a class="btn delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
                                         <i class="icon-remove"></i>
                                     </a>
-                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
+                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" and claim.bill_status|title != "Закрыта" %}
                                     <a class="btn delete-button" data-toggle="modal" href="#delete-claim" value="{{ claim.pk }}">
                                         <i class="icon-remove"></i>
                                     </a>
@@ -600,6 +598,7 @@
         })(jQuery);
     </script>
     {% include "order_claim/modules/related_claim_modal.html" %}
+    {% include "order_claim/modules/get_claims__closed_claim_info_modal.html" %}
     {% with entity='claims' %}
         {% include "export_to_excel_modal.html" %}
     {% endwith %}

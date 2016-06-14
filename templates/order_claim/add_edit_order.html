@@ -20,7 +20,7 @@
             {% url "get_claims" %}{% else %}
             {% url "get_orders" %}{% endif %}" class="btn back-button text-align_initial">Назад</a>
 
-        {% if request.path == edit_claim_url %}
+        {% if request.path == edit_claim_url and not is_closed %}
             <a class="btn pull-right btn-danger" data-toggle="modal" href="#close-claim">Закрыть заявку</a>
         {% endif %}
         {% if request.path == edit_claim_url or request.path == edit_order_url %}

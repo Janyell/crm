@@ -69,16 +69,16 @@ body {
 .dataTables_length select {
     margin: 0 5px;
 }
-.client-info__head, .bill-info__head {
+.client-info__head, .bill-info__head, .closed-claim-info__head {
     float: left;
     width: 160px;
     text-align: right;
     font-weight: bold;
 }
-.client-info__data, .bill-info__data {
+.client-info__data, .bill-info__data, .closed-claim-info__data {
     margin-left: 180px;
 }
-.client-info__item, .bill-info__item {
+.client-info__item, .bill-info__item, .closed-claim-info__item {
     margin: 5px 0;
 }
 
@@ -442,7 +442,13 @@ div.source {
 input.select-product__title {
     width: 125px;
 }
-.bill-status_close {
+.get-closed-claim-info {
     font-weight: bold;
     color: red;
+}
+.table-bordered_black, .table-bordered_black th, .table-bordered_black td {
+    border-color: black;
+}
+.blank-row > td {
+    border-left-width: 0;
 }

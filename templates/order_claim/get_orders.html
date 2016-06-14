@@ -38,23 +38,23 @@
             {% endif %}
         {% endblock add-bar %}
         <div class="row-fluid no-print">
-            {% if user_role != 2 %}
             <div class="span3">
-                {% if orders %}
-                    <div class="dataTables_length">
-                        <label>Показать
-                            <select id="selectLength" name="length">
-                                <option value="10"{% if request.GET.length == "10" %} selected="selected"{% endif %}>10</option>
-                                <option value="25"{% if request.GET.length == "25" %} selected="selected"{% endif %}>25</option>
-                                <option value="50"{% if request.GET.length == "50" %} selected="selected"{% endif %}>50</option>
-                                <option value="100"{% if request.GET.length == "100" %} selected="selected"{% endif %}>100</option>
-                            </select>
-                            записей
-                        </label>
-                    </div>
+                {% if user_role != 2 %}
+                    {% if orders %}
+                        <div class="dataTables_length">
+                            <label>Показать
+                                <select id="selectLength" name="length">
+                                    <option value="10"{% if request.GET.length == "10" %} selected="selected"{% endif %}>10</option>
+                                    <option value="25"{% if request.GET.length == "25" %} selected="selected"{% endif %}>25</option>
+                                    <option value="50"{% if request.GET.length == "50" %} selected="selected"{% endif %}>50</option>
+                                    <option value="100"{% if request.GET.length == "100" %} selected="selected"{% endif %}>100</option>
+                                </select>
+                                записей
+                            </label>
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
-            {% endif %}
             <div class="span6">
                 {% block manager-checkboxes %}
                     <div class="manager">
@@ -90,15 +90,7 @@
             {% load bootstrap_pagination %}
             <form class="form-horizontal form-massive" method="POST">
             {% if user_role == 2 %}
-             <style>
-               th {
-                border: 2px solid black; /* Граница вокруг ячеек */
-               }
-               td {
-                border: 2px solid black; /* Граница вокруг ячеек */
-               }
-              </style>
-                <table class="table table-hover table-bordered exported-table" id="order-table" style="border: 2px solid black;">
+                <table class="table table-hover table-bordered exported-table table-bordered_black" id="order-table">
             {% else %}
                 <table class="table table-hover table-bordered exported-table" id="order-table">
             {% endif %}
@@ -316,6 +308,7 @@
                                     {% endif %}
                                 </td>
                             </tr>
+                            {% block order-table-body__blank-row %}{% endblock %}
                         {% endfor %}
                     </tbody>
                 </table>
