@@ -23,7 +23,7 @@
                         $repeatable_block.find('.input_task-date').val($item_db.attr('data-date'));
                         $repeatable_block.find('.input_task-comment').val($item_db.attr('data-comment'));
                         var $input_task_is_important = $repeatable_block.find('.input_task-is-important');
-                        if ($item_db.attr('data-isimportant') == 'true') {
+                        if ($item_db.attr('data-isimportant') == 'True') {
                             $input_task_is_important.prop('checked', true);
                         }
                     });
