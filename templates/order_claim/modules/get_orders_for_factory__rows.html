@@ -1,0 +1,63 @@
+{% extends "order_claim/modules/get_orders__rows.html" %}
+{% load mathfilters %}
+
+{% block order-table-body__inform_cols %}
+    <td>{{ forloop.counter }}</td>
+    <td>{{ order.client.organization_or_full_name }}</td>
+    <td>{{ order.role }}</td>
+    <td>
+        {% if order.account_number != None %}
+            {{ order.account_number }}
+        {% endif %}
+    </td>
+    <td>{{ order.company.title }}</td>
+    <td>
+        {% if order.payment_date != None %}
+            {{ order.payment_date }}
+        {% endif %}
+    </td>
+    <td>
+        {% if order.bill_status == 2 %}
+            100%
+        {% elif order.brought_sum == None %}
+            0%
+        {% else %}
+            {{ order.brought_sum|mul:100|intdiv:order.bill }}%
+        {% endif %}
+    </td>
+    <td>
+        {{ order.order_status }}
+        {% if order.is_shipped %}
+            {{ order.shipped_date }}
+        {% endif %}
+        {% if order.is_ready %}
+            {{ order.ready_date }}
+        {% endif %}
+    </td>
+    <td>
+        {% if order.products %}
+            {% for product in order.products %}
+                <div class="no-wrap">
+                    {{ product.product.title }} - {{ product.count_of_products }} шт.
+                </div>
+            {% endfor %}
+        {% endif %}
+    </td>
+    <td>
+        {% if order.factory_comment %}
+            <span class="order-factory-comment">
+                {{ order.factory_comment }}
+            </span>
+            <a class="factory-comment-button no-print" data-toggle="modal" href="#view-order-comment"
+                value="{{ order.factory_comment }}">...</a>
+        {% endif %}
+    </td>
+    <td>
+        {% if order.city != None %}
+            {{ order.city.name }}
+        {% endif %}
+    </td>
+    <td>{{ order.transport_campaign.title }}</td>
+{% endblock %}
+
+{% block order-table-body__delete-col %}{% endblock %}

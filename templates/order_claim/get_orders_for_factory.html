@@ -1,16 +1,18 @@
 {% extends "order_claim/get_orders.html" %}
-{% load mathfilters %}
 
 {% block orders-header__sources %}{% endblock %}
 
+{% block order-table-class %}table-bordered_black table-hover_blank-row{% endblock %}
+
 {% block order-table-headers %}
-    {# 0 #}<th class="sortable{% if request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">Название организации</th>
-    {# 1 #}<th class="sortable{% if request.GET.sort == "role" %} sorting_asc{% elif request.GET.sort == "role_d" %} sorting_desc{% else %} sorting{% endif %}" value="role">Менеджер</th>
-    {# 2 #}<th>Номер счета</th>
-    {# 3 #}<th class="sortable{% if request.GET.sort == "company" %} sorting_asc{% elif request.GET.sort == "company_d" %} sorting_desc{% else %} sorting{% endif %}" value="company">Компания</th>
-    {# 4 #}<th class="sortable{% if request.GET.sort == "payment_date" %} sorting_asc{% elif request.GET.sort == "payment_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="payment_date">Дата оплаты</th>
-    {# 5 #}<th>Процент оплаты</th>
-    {# 6 #}<th>Статус</th>
+    {# 0 #}<th>№</th>
+    {# 1 #}<th class="sortable{% if request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">Название организации</th>
+    {# 2 #}<th class="sortable{% if request.GET.sort == "role" %} sorting_asc{% elif request.GET.sort == "role_d" %} sorting_desc{% else %} sorting{% endif %}" value="role">Менеджер</th>
+    {# 3 #}<th>Номер счета</th>
+    {# 4 #}<th class="sortable{% if request.GET.sort == "company" %} sorting_asc{% elif request.GET.sort == "company_d" %} sorting_desc{% else %} sorting{% endif %}" value="company">Компания</th>
+    {# 5 #}<th class="sortable{% if request.GET.sort == "payment_date" %} sorting_asc{% elif request.GET.sort == "payment_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="payment_date">Дата оплаты</th>
+    {# 6 #}<th>Процент оплаты</th>
+    {# 7 #}<th>Статус</th>
     {# 8 #}<th>Продукция</th>
     {# 9 #}<th>Информация для пр-ва</th>
     {# 10 #}<th class="sortable{% if request.GET.sort == "city" %} sorting_asc{% elif request.GET.sort == "city_d" %} sorting_desc{% else %} sorting{% endif %}" value="city">Доставка город</th>
@@ -21,64 +23,18 @@
     {# 14 #}<th class="sorting_desc"></th>
 {% endblock %}
 
-{% block order-table-body__inform_cols %}
-    <td>{{ order.client.organization_or_full_name }}</td>
-    <td>{{ order.role }}</td>
-    <td>
-        {% if order.account_number != None %}
-            {{ order.account_number }}
-        {% endif %}
-    </td>
-    <td>{{ order.company.title }}</td>
-    <td>
-        {% if order.payment_date != None %}
-            {{ order.payment_date }}
-        {% endif %}
-    </td>
-    <td>
-        {% if order.bill_status == 2 %}
-            100%
-        {% elif order.brought_sum == None %}
-            0%
-        {% else %}
-            {{ order.brought_sum|mul:100|intdiv:order.bill }}%
-        {% endif %}
-    </td>
-    <td>
-        {{ order.order_status }}
-        {% if order.is_shipped %}
-            {{ order.shipped_date }}
-        {% endif %}
-        {% if order.is_ready %}
-            {{ order.ready_date }}
-        {% endif %}
-    </td>
-    <td>
-        {% if order.products %}
-            {% for product in order.products %}
-                <div class="no-wrap">
-                    {{ product.product.title }} - {{ product.count_of_products }} шт.
-                </div>
-            {% endfor %}
-        {% endif %}
-    </td>
-    <td>
-        {% if order.factory_comment %}
-            <span class="order-factory-comment">
-                {{ order.factory_comment }}
-            </span>
-            <a class="factory-comment-button no-print" data-toggle="modal" href="#view-order-comment"
-                value="{{ order.factory_comment }}">...</a>
-        {% endif %}
-    </td>
-    <td>
-        {% if order.city != None %}
-            {{ order.city.name }}
-        {% endif %}
-    </td>
-    <td>{{ order.transport_campaign.title }}</td>
+{% block orders_block %}
+    {% with orders=ready_orders %}
+        {% include "order_claim/modules/get_orders_for_factory__rows.html" %}
+    {% endwith %}
+    {% block order-table-body__blank-row %}
+        <tr class="blank-row">
+            <td></td><td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td><td></td><td></td>
+            <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+        {% include "order_claim/modules/get_orders_for_factory__rows.html" %}
+    {% endblock %}
 {% endblock %}
 
-{% block order-table-body__delete-col %}{% endblock %}
-
-{% block order-table-scripts__invisible-cols %}12, 13{% endblock %}
+{% block order-table-scripts__invisible-cols %}13, 14{% endblock %}
