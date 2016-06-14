@@ -12,13 +12,14 @@
                 Еще
             </label>
             <div class="controls">
-                <a class="btn btn-success plus-item">+</a>
+                <a id="plus-root-item" class="btn btn-success plus-item">+</a>
             </div>
         </div>
     </div>
     <select multiple class="repeatable-items hidden" name="items[]"></select>
 </div>
 <script type="text/javascript" src="{{ STATIC_URL }}js/repeat-item.js"></script>
+
 <script type="text/javascript">
     (function($) {
         $(document).ready(function() {
@@ -29,11 +30,23 @@
                 weekStart: 1,
                 startDate: new Date()
             };
-            var $plus_item = $('.plus-item');
-            $plus_item.click(function() {
+            var $plus_root_item = $('#plus-root-item');
+            $plus_root_item.click(function() {
                 $('.task-date').datetimepicker(task_date_options);
             });
-            $plus_item.click();
         });
     })(jQuery);
 </script>
+
+{% url "edit_claim" as edit_claim_url %}
+{% if request.path == edit_claim_url %}
+    {% include "order_claim/modules/edit_claim__tasks_db.html" %}
+{% else %}
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                $('#plus-root-item').click();
+            });
+        })(jQuery);
+    </script>
+{% endif %}
