@@ -844,9 +844,13 @@ def full_get_orders(request):
             order_list = orders_pages.page(1)
         except EmptyPage:
             order_list = orders_pages.page(orders_pages.num_pages)
+        ready_orders = None
     else:
         orders = orders.exclude(order_status=-1)
+        ready_orders = orders.filter(order_status=2)
+        orders = orders.exclude(order_status=2)
         order_list = orders.all()
+        ready_order_list = ready_orders.all()
     for order in order_list:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
@@ -899,10 +903,66 @@ def full_get_orders(request):
                     order_file.name = order_file.title
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
+    if ready_orders:
+        for order in ready_order_list:
+            if order.client.organization == '':
+                order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+            else:
+                order.client.organization_or_full_name = order.client.organization
+            order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+            prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
+            products_list = []
+            for pr in prs:
+                products_list.append(pr)
+            order.products = products_list
+            if order.order_status == 0:
+                order.order_status = 'В производстве'
+                if user_role == 2:
+                    order.order_status = 'Производство'
+                    if order.ready_date:
+                        order.is_ready = 1
+                        order.ready_date = date(order.ready_date.year, order.ready_date.month, order.ready_date.day)
+            elif order.order_status == -1:
+                order.order_status = 'Отгружен'
+                if order.shipped_date is not None:
+                    order.is_shipped = 1
+                    order.shipped_date = date(order.shipped_date.year, order.shipped_date.month, order.shipped_date.day)
+            elif order.order_status == 2:
+                order.order_status = 'Готов'
+            else:
+                order.order_status = ''
+            if order.bill is not None:
+                order.bill_right_format = right_money_format(order.bill)
+            order.brought_sum_right_format = 0
+            order.debt_right_format = 0
+            order.is_in_debt = False
+            if order.bill_status == 2:
+                order.is_full_pay = True
+            else:
+                order.is_full_pay = False
+            if order.brought_sum is not None and order.bill is not None:
+                if (order.bill - order.brought_sum) > 0:
+                    order.is_in_debt = True
+                else:
+                    order.is_in_debt = False
+                order.brought_sum_right_format = right_money_format(order.brought_sum)
+                order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
+            if order.is_full_pay or order.bill_status == 3:
+                order.is_in_debt = False
+            order.files = []
+            if Order_Files.objects.filter(order_id=order.id).all() is not None:
+                for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                    if order_file.file is not None and order_file.file != '':
+                        order_file.name = order_file.title
+                        order_file.url = order_file.file.url
+                        order.files.append(order_file)
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'orders': order_list})
     out.update({'count': orders.count()})
+    if ready_orders:
+        out.update({'ready_orders': ready_order_list})
+        out.update({'count': orders.count() + ready_orders.count()})
     # IN_PRODUCTION status = 0
     out.update({'count_in_production': orders.filter(order_status=0).count()})
     out.update({'now': datetime.now()})
