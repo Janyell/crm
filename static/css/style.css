@@ -464,3 +464,6 @@ input.select-product__title {
 .table-hover_blank-row th:last-child {
     border-right: 1px solid #ddd;
 }
+.blank-row:last-child {
+    display: none;
+}
