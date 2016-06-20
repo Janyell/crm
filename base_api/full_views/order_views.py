@@ -1186,6 +1186,26 @@ def full_delete_from_archive(request):
     return HttpResponseRedirect('/orders/archive/' + get_params)
 
 
+def full_make_claim(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops/')
+    id = request.GET['id']
+    order = Orders.objects.get(pk=id, is_deleted=0)
+    if str(request.user.username) != str(order.role) and Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    order.is_claim = 0
+    order.save(update_fields=["is_claim"])
+    get_params = '?'
+    if 'search' in request.GET:
+        search = request.GET.get('search')
+        get_params += 'search=' + unicode(search)
+        return HttpResponseRedirect('/search/' + get_params)
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/orders/' + get_params)
+
+
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
