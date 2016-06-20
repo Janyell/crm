@@ -893,6 +893,7 @@ def search(request):
                     order_file.name = order_file.title
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
+        order.reason = CloseClaims.objects.filter(order=order.id).first()
 
     client_list = list(Clients.search.query(search_word).filter(is_deleted=0, is_interested=0))
     for c in client_list:

@@ -22,7 +22,8 @@ def full_do_task(request):
     id = request.GET['id']
     task = Tasks.objects.get(pk=id)
     task.is_done = 1
-    task.save(update_fields=["is_done"])
+    task.results = request.POST.get('results', '')
+    task.save(update_fields=["is_done", "results"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/tasks/' + get_params)
@@ -69,8 +70,20 @@ def full_get_tasks(request):
             tasks = tasks.filter(role=role)
     if not is_senior:
         tasks = tasks.filter(role=Roles.objects.get(id=request.user.id))
+    task_count = tasks.count()
+    from collections import defaultdict
+    from collections import OrderedDict
+    task_date_dict = defaultdict(list)
+    for task in tasks.order_by('date', 'is_done').all():
+        if task.is_done:
+            task.comment = task.results
+        task_date = task.date.date()
+        if task_date not in task_date_dict:
+            task_date_dict.update({task_date: []})
+        task_date_dict[task_date].append(task)
+    out.update({'tasks_dict': OrderedDict(sorted(task_date_dict.items()))})
     out.update({'page_title': "Задачи"})
     out.update({'task_do_form': TaskForm()})
-    out.update({'tasks': tasks.order_by('is_done', 'date')})
-    out.update({'count': tasks.count()})
+    out.update({'tasks': tasks})
+    out.update({'count': task_count})
     return render(request, 'task/get_tasks.html', out)

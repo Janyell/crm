@@ -238,6 +238,8 @@ def full_add_edit_order(request):
                     return render(request, 'order_claim/add_edit_order.html', out)
             else:
                 bill = None
+            if bill_status == 2:
+                brought_sum = bill
             new_order = Orders.objects.get(id=pk, is_deleted=0)
             is_comment_my = False
             if new_order.role_id == request.user.id:
@@ -389,6 +391,8 @@ def full_add_edit_order(request):
                 brought_sum = int(request.POST['brought_sum'])
             except Exception:
                 brought_sum = None
+            if bill_status == 2:
+                brought_sum = bill
             shipped_date = None
             # if 'shipped_date' in request.POST and \
             #     request.POST['shipped_date'] is not None and \
@@ -564,6 +568,8 @@ def full_add_edit_order(request):
             #     request.POST['ready_date'] != '':
             #     order_status = 2
             bill_status = request.POST['bill_status']
+            if bill_status == 2:
+                brought_sum = bill
             ready_date = request.POST['ready_date']
             shipped_date = request.POST['shipped_date']
             comment = request.POST['comment']

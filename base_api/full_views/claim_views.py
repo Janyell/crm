@@ -329,21 +329,24 @@ def full_add_edit_claim(request):
                                                                               count_of_products=count_of_products,
                                                                               price=price_of_products)
                         client.save(update_fields=["is_interested"])
-            tasks_list = int(request.POST.get('items[]')) * -1
-            for task_id in range(1, tasks_list+1):
-                task_id = str(task_id)
-                task_comment = request.POST['task_comment_-' + task_id]
-                task_type_id = request.POST['type_-' + task_id]
-                if task_type_id:
-                    task_type = TaskTypes.objects.get(id=task_type_id)
-                    task_date = request.POST['date_-' + task_id]
-                    task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
-                    task_is_important = False
-                    if 'is_important_-' + task_id in request.POST:
-                        task_is_important = True
-                    task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
-                                                is_important=task_is_important, order=new_claim,
-                                                role=Roles.objects.get(id=request.user.id))
+            if 'items[]' in request.POST:
+                tasks_list = int(request.POST.get('items[]')) * -1
+                for task_id in range(1, tasks_list+1):
+                    task_id = str(task_id)
+                    task_comment = request.POST.get('task_comment', '')
+                    # task_comment = request.POST['task_comment_-' + task_id]
+                    task_type_id = request.POST['type_-' + task_id]
+                    if task_type_id:
+                        task_type = TaskTypes.objects.get(id=task_type_id)
+                        task_date = request.POST.get('date', datetime.now())
+                        # task_date = request.POST['date_-' + task_id]
+                        task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
+                        task_is_important = False
+                        if 'is_important_-' + task_id in request.POST:
+                            task_is_important = True
+                        task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
+                                                    is_important=task_is_important, order=new_claim,
+                                                    role=Roles.objects.get(id=request.user.id))
             if 'search' in request.GET:
                 search = request.GET.get('search')
                 get_params = '?search=' + unicode(search)
@@ -398,6 +401,8 @@ def full_add_edit_claim(request):
                 client.is_interested = 0
                 displacement = 1
                 order_status = 0
+                if bill_status == 2:
+                    brought_sum = bill
             else:
                 is_claim = 1
             account_number = form.cleaned_data['account_number']
@@ -482,21 +487,24 @@ def full_add_edit_claim(request):
                                                                           count_of_products=count_of_products,
                                                                           price=price_of_products)
                     client.save(update_fields=["is_interested"])
-            tasks_list = int(request.POST.get('items[]')) * -1
-            for task_id in range(1, tasks_list+1):
-                task_id = str(task_id)
-                task_comment = request.POST['task_comment_-' + task_id]
-                task_type_id = request.POST['type_-' + task_id]
-                if task_type_id:
-                    task_type = TaskTypes.objects.get(id=task_type_id)
-                    task_date = request.POST['date_-' + task_id]
-                    task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
-                    task_is_important = False
-                    if 'is_important_-' + task_id in request.POST:
-                        task_is_important = True
-                    task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
-                                                is_important=task_is_important, order=new_claim,
-                                                role=Roles.objects.get(id=request.user.id))
+            if 'items[]' in request.POST:
+                tasks_list = int(request.POST.get('items[]')) * -1
+                for task_id in range(1, tasks_list+1):
+                    task_id = str(task_id)
+                    task_comment = request.POST.get('task_comment', '')
+                    # task_comment = request.POST['task_comment_-' + task_id]
+                    task_type_id = request.POST['type_-' + task_id]
+                    if task_type_id:
+                        task_type = TaskTypes.objects.get(id=task_type_id)
+                        task_date = request.POST.get('date', datetime.now())
+                        # task_date = request.POST['date_-' + task_id]
+                        task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
+                        task_is_important = False
+                        if 'is_important_-' + task_id in request.POST:
+                            task_is_important = True
+                        task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
+                                                    is_important=task_is_important, order=new_claim,
+                                                    role=Roles.objects.get(id=request.user.id))
             if is_claim_create:
                 if 'only-save' in form.data:
                     if displacement == 1:
@@ -585,6 +593,8 @@ def full_add_edit_claim(request):
             order_status = None
             if bill_status == 1 or bill_status == 2:
                 order_status = 0
+                if bill_status == 2:
+                    brought_sum = bill
             account_number = request.POST['account_number']
             if 'ready_date' in request.POST and request.POST['ready_date'] != '':
                 ready_date = request.POST['ready_date']
@@ -695,6 +705,8 @@ def full_add_edit_claim(request):
             id_order = request.GET['id']
             out.update({"error": 0})
             claim = Orders.objects.get(pk=id_order, is_deleted=0, is_claim=1)
+            if claim.bill_status == 6:
+                out.update({'is_closed': True})
             if user_role == 0:
                 ClaimsFormForAdmins.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                         required=False)
@@ -874,6 +886,7 @@ def full_get_claims(request):
                     order_file.name = order_file.title
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
+        order.reason = CloseClaims.objects.filter(order=order).first()
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'page_title': "Заявки"})

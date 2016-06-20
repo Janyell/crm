@@ -6,7 +6,7 @@
         {{ claim.bill_status }}
         {% if claim.bill_status|title == "Закрыта" %}
             <div class="hidden closed-claim-info__data">
-                <div class="closed-claim-data__reason">{{ claim.reason.reason }}</div>
+                <div class="closed-claim-data__reason">{{ claim.reason.reason.title }}</div>
                 <div class="closed-claim-data__final-comment">{{ claim.reason.final_comment }}</div>
             </div>
         </a>

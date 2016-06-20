@@ -16,7 +16,8 @@ def full_analyze_debtors(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    orders = Orders.objects.filter(is_deleted=0, is_claim=0, brought_sum__isnull=False).exclude(bill__lt=F('brought_sum'))
+    orders = Orders.objects.exclude(bill_status=2)
+    orders = orders.filter(is_deleted=0, is_claim=0, brought_sum__isnull=False).exclude(bill__lt=F('brought_sum'))
     for order in orders:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
