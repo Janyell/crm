@@ -87,3 +87,30 @@ def full_get_tasks(request):
     out.update({'tasks': tasks})
     out.update({'count': task_count})
     return render(request, 'task/get_tasks.html', out)
+
+
+def full_edit_task(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role != 0:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    if request.method == 'POST':
+        id = request.GET['id']
+        task = Tasks.objects.get(id=id)
+        comment = request.POST['comment']
+        date = request.POST['date']
+        is_important = request.POST['is_important']
+        type = TaskTypes.objects.get(id=request.POST['type'])
+        task.comment = comment
+        task.date = date
+        task.is_important = is_important
+        task.type = type
+        task.save()
+        return HttpResponseRedirect('/tasks/' + get_params)
+    return HttpResponseRedirect('/tasks/' + get_params)
