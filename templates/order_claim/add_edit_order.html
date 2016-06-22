@@ -400,7 +400,10 @@
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="submit" class="btn btn-primary" name="save" value="save">Сохранить</button>
+                    {% if request.path == add_claim_url %}
+                        <button type="submit" class="btn" name="save-and-bind" value="save-and-bind">Сохранить и связать</button>
+                    {% endif %}
                     <button type="reset" class="btn">Очистить</button>
                     <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                 </div>

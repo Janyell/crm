@@ -186,5 +186,16 @@
                 {% endwith %}
             {% endif %}
         </td>
+        <td>
+            {% if user_role == 0 %}
+                <a class="btn make-claim-button" href="{% url "make_claim" %}?id={{ order.pk }}">
+                    В заявки
+                </a>
+            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                <a class="btn make-claim-button" href="{% url "make_claim" %}?id={{ order.pk }}">
+                    В заявки
+                </a>
+            {% endif %}
+        </td>
     </tr>
 {% endfor %}
