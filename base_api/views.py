@@ -1581,3 +1581,7 @@ def close_claim(request):
 
 def do_task(request):
     pass
+
+
+def bind_claims(request):
+    return render(request, "order_claim/related_claims.html")

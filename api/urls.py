@@ -187,6 +187,8 @@ urlpatterns = patterns('',
                        url(r'^tasks/edit/$', 'base_api.full_views.task_views.full_edit_task', name='edit_task'),
                        url(r'^tasks/do/$', 'base_api.full_views.task_views.full_do_task', name='do_task'),
 
+                       url(r'^related/claim/$', 'base_api.views.bind_claims', name='related_claims'),
+
                        # hidden page
                        url(r'^claims/related/$', 'base_api.views.get_related_claims', name='get_related_claims'),
                        url(r'^claims/client/$', 'base_api.views.get_client_claims', name='get_client_claims'),

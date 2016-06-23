@@ -65,7 +65,7 @@
                                 <a href="{% url "get_orders" %}">Заказы</a>
                             </li>
                             {% if user_role != 2 %}
-                                <li class={% navactive request 'get_claims add_claim edit_claim edit_kp' %}{% if request.path == upload_files_url and is_claim == 1 %}active{% endif %}>
+                                <li class={% navactive request 'get_claims add_claim edit_claim edit_kp related_claims' %}{% if request.path == upload_files_url and is_claim == 1 %}active{% endif %}>
                                     <a href="{% url "get_claims" %}">Заявки</a>
                                 </li>
                             {% endif %}

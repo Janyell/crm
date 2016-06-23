@@ -297,7 +297,9 @@
                 {% if request.path == add_claim_url or request.path == edit_claim_url %}
                     {% include "order_claim/modules/edit_claim_tasks_block.html" %}
                 {% endif %}
-                {% include "order_claim/modules/edit_claim__related_with.html" %}
+                {% if request.path == edit_claim_url %}
+                    {% include "order_claim/modules/edit_claim__related_with.html" %}
+                {% endif %}
                 <div class="form-add__tips">
                     <div class="form-add-tips__tip">
                         <span class="required-input">*</span> - поля, обязательные для заполнения
