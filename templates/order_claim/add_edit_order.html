@@ -376,6 +376,7 @@
             <div class="form-add__submits">
                 <button type="submit" class="btn btn-primary" name="only-save" value="only-save">Сохранить</button>
                 {% if request.path == add_claim_url %}
+                    <button type="submit" class="btn only-for-our-products" name="save-and-bind" value="save-and-bind">Сохранить и связать</button>
                     <button type="submit" class="btn only-for-our-products" name="save-and-generate-kp" value="save-and-generate-kp">Сохранить и перейти к формированию КП</button>
                 {% endif %}
                 {% if request.path == add_order_url or request.path == add_claim_url %}
@@ -400,10 +401,7 @@
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" name="save" value="save">Сохранить</button>
-                    {% if request.path == add_claim_url %}
-                        <button type="submit" class="btn" name="save-and-bind" value="save-and-bind">Сохранить и связать</button>
-                    {% endif %}
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
                     <button type="reset" class="btn">Очистить</button>
                     <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                 </div>
