@@ -17,6 +17,7 @@
                         <th>Контакт</th>
                         <th>Последний комментарий</th>
                         <th>Выполнено</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,12 +59,23 @@
                                         <input class="do-checkbox" type="checkbox" value="{{ task.pk }}" data-results='{{ task.results }}'{% if task.is_done == True %} checked="checked"{% endif %}{% if is_senior == True and task.role|urlencode:"" != user.username|urlencode:"" %} disabled readonly{% endif %}/>
                                     </label>
                                 </td>
+                                <td>
+                                    <a class="btn edit-button" data-toggle="modal" href="#edit-task" value="{{ task.pk }}">
+                                        <i class="icon-pencil"></i>
+                                        <div class="hidden edit-task__data">
+                                            <div class="task-data__type">{{ task.type.pk }}</div>
+                                            <div class="task-data__date">{{ task.date }}</div>
+                                            <div class="task-data__comment">{{ task.comment }}</div>
+                                            <div class="task-data__is-important">{% if task.is_important == True %}1{% else %}0{% endif %}</div>
+                                        </div>
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                         {% block order-table-body__blank-row %}
                             <tr class="blank-row">
                                 <td></td>{% if is_senior == True %}<td></td>{% endif %}
-                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                             </tr>
                             {% include "order_claim/modules/get_orders_for_factory__rows.html" %}
                         {% endblock %}
@@ -90,7 +102,7 @@
                                 "url": "{{ STATIC_URL }}language/ru_RU.txt"
                             },
                             "aoColumnDefs": [
-                                { "bSearchable": false, "aTargets": [0{% if is_senior == True %}, 8{% else %}, 7{% endif %}] }
+                                { "bSearchable": false, "aTargets": [0{% if is_senior == True %}, 9{% else %}, 8{% endif %}] }
                             ],
                             "bSort": false,
                             "bInfo": false,
@@ -110,5 +122,6 @@
 
     {% if tasks %}
         {% include "task/modules/do_modal.html" %}
+        {% include "task/modules/edit_task_modal.html" %}
     {% endif %}
 {% endblock %}
