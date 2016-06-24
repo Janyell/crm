@@ -1,6 +1,5 @@
 function update_attr_name ($this, i) {
     var name = $this.attr('name');
-    console.log(name);
     var new_name;
     var brackets_index = name.indexOf('[]');
     if (brackets_index == -1) {
@@ -35,14 +34,13 @@ function handle_click($this, item_id, click_children) {
     var $new_item = $repeat.prev();
     update_item_id($new_item, item_id);
     var $new_children_repeatable_wrap = $new_item.children('.repeatable-wrap');
-    if ($new_children_repeatable_wrap.size()) {
-        update_attr_name($new_children_repeatable_wrap.children('select.repeatable-items'), item_id);
+    $new_children_repeatable_wrap.each(function() {
+        var $this = $(this);
+        update_attr_name($this.children('select.repeatable-items'), item_id);
         if (click_children) {
-            $new_children_repeatable_wrap.each(function(){
-                $(this).children('.repeat').find('.plus-item').click();
-            })
+            $this.children('.repeat').find('.plus-item').click();
         }
-    }
+    });
     $new_item.show();
     add_item_option($repeatable_wrap, item_id);
     return $new_item;
