@@ -76,14 +76,16 @@ def full_get_tasks(request):
     task_date_dict = defaultdict(list)
     for task in tasks.order_by('date', 'is_done').all():
         if task.is_done:
-            task.comment = task.results
+            task.results = task.results
         task_date = task.date.date()
         if task_date not in task_date_dict:
             task_date_dict.update({task_date: []})
         task_date_dict[task_date].append(task)
     out.update({'tasks_dict': OrderedDict(sorted(task_date_dict.items()))})
     out.update({'page_title': "Задачи"})
+    TaskForm.base_fields['type'] = TaskTypeChoiceField(queryset=TaskTypes.objects.filter(is_deleted=0))
     out.update({'task_do_form': TaskForm()})
+    out.update({'edit_task_form': TaskForm(initial={'is_important': False})})
     out.update({'tasks': tasks})
     out.update({'count': task_count})
     return render(request, 'task/get_tasks.html', out)
@@ -103,9 +105,19 @@ def full_edit_task(request):
     if request.method == 'POST':
         id = request.GET['id']
         task = Tasks.objects.get(id=id)
-        comment = request.POST['comment']
+        comment = request.POST['task_comment']
         date = request.POST['date']
-        is_important = request.POST['is_important']
+        if date:
+            try:
+                date = datetime.strptime(date, '%d.%m.%Y %H:%M')
+            except Exception:
+                date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+        else:
+            date = None
+        if 'is_important' in request.POST:
+            is_important = True
+        else:
+            is_important = False
         type = TaskTypes.objects.get(id=request.POST['type'])
         task.comment = comment
         task.date = date

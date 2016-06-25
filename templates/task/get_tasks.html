@@ -8,7 +8,7 @@
             <table class="table table-hover table-bordered table-hover_blank-row" id="task-table">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>_____</th>
                         {% if is_senior == True %}<th>Менеджер</th>{% endif %}
                         <th>Задача</th>
                         <th>Дата</th>
@@ -48,10 +48,10 @@
                                         {{ task.order.client.organization_type }} {{ task.order.client.organization }}
                                     </td>
                                     <td>
-                                        {{ task.order.client.last_name }} {{ task.order.client.last_name }} {{ task.order.client.patronymic }}
+                                        {{ task.order.client.last_name }} {{ task.order.client.name }} {{ task.order.client.patronymic }}
                                     </td>
                                     <td>
-                                        {{ task.comment }}
+                                        {{ task.comment }} {{ task.results }}
                                     </td>
                                 {% endif %}
                                 <td>

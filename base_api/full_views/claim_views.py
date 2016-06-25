@@ -521,6 +521,10 @@ def full_add_edit_claim(request):
                         get_params += 'set_via_kp&'
                     get_params += get_request_param_as_string(request)
                     return HttpResponseRedirect('/claims/kp/edit/?id=%s' % new_claim.id + get_params)
+                elif 'save-and-bind' in form.data:
+                    get_params = '&'
+                    get_params += get_request_param_as_string(request)
+                    return HttpResponseRedirect('/related/claim/?id=%s' % new_claim.id + get_params)
                 else:
                     return HttpResponseRedirect('/uploads/order/?id=%s' % new_claim.id)
             else:
@@ -913,6 +917,26 @@ def full_delete_claim(request):
         return HttpResponseRedirect('/search/' + get_params)
     get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/claims/' + get_params)
+
+
+def full_bind_claims(request):
+    out = {}
+    out.update({'page_title': 'Связывание заявок'})
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops/')
+    out.update({'user_role': Roles.objects.get(id=request.user.id).role})
+    if 'id' in request.GET:
+        order_id = request.GET['id']
+        is_claim = int(Orders.objects.get(id=order_id).is_claim)
+        out.update({'is_claim': is_claim})
+    else:
+        return HttpResponseRedirect('/oops/')
+    ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+    client_form = ClientRelatedForm()
+    out.update({'form': client_form})
+    return render(request, "order_claim/related_claims.html", out)
 
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):

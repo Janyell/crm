@@ -1195,7 +1195,7 @@ def full_make_claim(request):
     order = Orders.objects.get(pk=id, is_deleted=0)
     if str(request.user.username) != str(order.role) and Roles.objects.get(id=request.user.id).role != 0:
         return HttpResponseRedirect('/oops/')
-    order.is_claim = 0
+    order.is_claim = 1
     order.save(update_fields=["is_claim"])
     get_params = '?'
     if 'search' in request.GET:
