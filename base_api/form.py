@@ -222,7 +222,8 @@ claims_form_widgets = {
     'brought_sum': NumberInput(attrs={'id': "inputBroughtSum"}),
     'factory_comment': Textarea(attrs={'id': "inputFactoryComment",
                                        'placeholder': "Информация для производства",
-                                       'rows': "1"})
+                                       'rows': "1"}),
+    'is_set_via_kp': CheckboxInput()
 }
 
 
