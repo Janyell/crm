@@ -241,6 +241,8 @@ class Orders(models.Model):
 
     became_claim_date = UnixTimestampField(blank=True, null=True)
 
+    is_set_via_kp = models.BooleanField(default=0)
+
     search = SphinxSearch()
 
 

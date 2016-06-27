@@ -40,6 +40,9 @@ def full_add_edit_claim(request):
             pk = request.POST['pk']
             claim = Orders.objects.get(id=pk)
             source = request.POST['source']
+            is_set_via_kp = 0
+            if 'is_set_via_kp' in request.POST:
+                is_set_via_kp = request.POST['is_set_via_kp']
             transport_campaign = request.POST['transport_campaign']
             comment = request.POST['comment']
             factory_comment = None
@@ -223,6 +226,7 @@ def full_add_edit_claim(request):
             new_claim.payment_date = payment_date
             new_claim.brought_sum = brought_sum
             new_claim.bill_status = bill_status
+            new_claim.is_set_via_kp = is_set_via_kp
             new_claim.role = Roles.objects.filter(id=role).first()
             displacement = 0
             if bill_status == 1 or bill_status == 2:
@@ -367,6 +371,8 @@ def full_add_edit_claim(request):
             unique_number = id_generator()
             company = form.cleaned_data['company']
             comment = form.cleaned_data['comment']
+            is_set_via_kp = form.cleaned_data['is_set_via_kp']
+            print is_set_via_kp
             factory_comment = None
             if 'factory_comment' in form.data:
                 factory_comment = form.cleaned_data['factory_comment']
@@ -481,7 +487,7 @@ def full_add_edit_claim(request):
                                               brought_sum=brought_sum, factory_comment=factory_comment,
                                               transport_campaign=transport_campaign, ready_date=ready_date, city=city,
                                               payment_date=payment_date, order_status=order_status,
-                                              became_claim_date=became_claim_date)
+                                              became_claim_date=became_claim_date, is_set_via_kp=is_set_via_kp)
                     new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products,
@@ -740,7 +746,8 @@ def full_add_edit_claim(request):
                                'comment': claim.comment, 'source': claim.source, 'role': claim.role,
                                'brought_sum': claim.brought_sum, 'factory_comment': claim.factory_comment,
                                'transport_campaign': claim.transport_campaign, 'ready_date': claim.ready_date,
-                               'city': claim.city, 'order_status': claim.order_status})
+                               'city': claim.city, 'order_status': claim.order_status,
+                               'is_set_via_kp': claim.is_set_via_kp})
             else:
                 form = ClaimsForm({'client': claim.client, 'company': claim.company, 'bill': claim.bill,
                                'bill_status': claim.bill_status, 'account_number': claim.account_number,
@@ -748,7 +755,7 @@ def full_add_edit_claim(request):
                                'factory_comment': claim.factory_comment,
                                'transport_campaign': claim.transport_campaign, 'ready_date': claim.ready_date,
                                'city': claim.city, 'payment_date': claim.payment_date,
-                               'order_status': claim.order_status})
+                               'order_status': claim.order_status, 'is_set_via_kp': claim.is_set_via_kp})
             form.products = Products.objects.filter(is_deleted=0)
             TaskForm.base_fields['type'] = TaskTypeChoiceField(queryset=TaskTypes.objects.filter(is_active=1,
                                                                                                  is_deleted=0),

@@ -104,8 +104,8 @@
                             </label>
                             <div class="controls">
                                 {{ order_form.bill_status }}
-                                <label class="checkbox set-via-kp hide">
-                                    <input type="checkbox" name="set-via-kp" />
+                                <label class="checkbox set-via-kp">
+                                    {{ order_form.is_set_via_kp }}
                                     Через КП
                                 </label>
                             </div>
