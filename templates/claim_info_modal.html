@@ -1,0 +1,106 @@
+{% block claim-info_modal %}
+    <div class="modal hide fade" id="claim-info" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 class="center">Информация о заявке</h3>
+        </div>
+        <div class="modal-body claim-info">
+            <div class="claim-info__item claim-info__role clearfix">
+                <div class="claim-info__head">
+                    Менеджер
+                </div>
+                <div class="claim-info__data">
+                </div>
+            </div>
+            <div class="claim-info__item claim-info__order-date clearfix">
+                <div class="claim-info__head">
+                    Дата заявки
+                </div>
+                <div class="claim-info__data">
+                </div>
+            </div>
+            <div class="claim-info__item claim-info__client clearfix">
+                <div class="claim-info__head">
+                    Название организации
+                </div>
+                <div class="claim-info__data">
+                </div>
+            </div>
+            <div class="claim-info__item claim-info__company clearfix">
+                <div class="claim-info__head">
+                    Компания
+                </div>
+                <div class="claim-info__data">
+                </div>
+            </div>
+            <div class="claim-info__item claim-info__account-number clearfix">
+                <div class="claim-info__head">
+                    Номер счета
+                </div>
+                <div class="claim-info__data">
+                </div>
+            </div>
+            <div class="claim-info__item claim-info__bill clearfix">
+                <div class="claim-info__head">
+                    Сумма счета
+                </div>
+                <div class="claim-info__data">
+                </div>
+            </div>
+            <div class="claim-info__item claim-info__products clearfix">
+                <div class="claim-info__head">
+                    Продукция
+                </div>
+                <div class="claim-info__data">
+                </div>
+            </div>
+            <div class="claim-info__item claim-info__bill-status clearfix">
+                <div class="claim-info__head">
+                    Статус
+                </div>
+                <div class="claim-info__data">
+                </div>
+            </div>
+            <div class="claim-info__item claim-info__comment clearfix">
+                <div class="claim-info__head">
+                    Комментарии
+                </div>
+                <div class="claim-info__data">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block claim-info_script %}
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                $('.get-claim-info').bind('click', function () {
+                    var $claim_info__data = $('#claim-info').find('.modal-body');
+                    var role = $(this).find('.claim-data__role').text();
+                    $claim_info__data.find('.claim-info__role > .claim-info__data').text(role);
+                    var order_date = $(this).find('.claim-data__order-date').text();
+                    $claim_info__data.find('.claim-info__order-date > .claim-info__data').text(order_date);
+                    var client = $(this).find('.claim-data__client').text();
+                    $claim_info__data.find('.claim-info__client > .claim-info__data').text(client);
+                    var company = $(this).find('.claim-data__company').text();
+                    $claim_info__data.find('.claim-info__company > .claim-info__data').text(company);
+                    var account_number = $(this).find('.claim-data__account-number').text();
+                    $claim_info__data.find('.claim-info__account-number > .claim-info__data').text(account_number);
+                    var bill = $(this).find('.claim-data__bill').text();
+                    $claim_info__data.find('.claim-info__bill > .claim-info__data').text(bill);
+                    var products = $(this).find('.claim-data__products').text();
+                    $claim_info__data.find('.claim-info__products > .claim-info__data').text(products);
+                    var bill_status = $(this).find('.claim-data__bill-status').text();
+                    $claim_info__data.find('.claim-info__bill-status > .claim-info__data').text(bill_status);
+                    var comment = $(this).find('.claim-data__comment').text();
+                    $claim_info__data.find('.claim-info__comment > .claim-info__data').text(comment);
+                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}
