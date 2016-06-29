@@ -48,7 +48,7 @@
                                         {{ task.order.client.organization_type }} {{ task.order.client.organization }}
                                     </td>
                                     <td>
-                                        {{ task.order.client.last_name }} {{ task.order.client.name }} {{ task.order.client.patronymic }}
+                                        {% include "task/modules/get_tasks_client_cell.html" %}
                                     </td>
                                     <td>
                                         {{ task.comment }} {{ task.results }}
@@ -123,5 +123,6 @@
     {% if tasks %}
         {% include "task/modules/do_modal.html" %}
         {% include "task/modules/edit_task_modal.html" %}
+        {% include "client_info_modal.html" %}
     {% endif %}
 {% endblock %}
