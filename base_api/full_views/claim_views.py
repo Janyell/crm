@@ -898,6 +898,7 @@ def full_get_claims(request):
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
         order.reason = CloseClaims.objects.filter(order=order).first()
+        order.tasks = Tasks.objects.filter(order=order).all()
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'page_title': "Заявки"})

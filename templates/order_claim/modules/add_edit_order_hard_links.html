@@ -17,6 +17,7 @@
                         $account_number.prop("required", true);
                         $account_number_label.html(account_number_label_text + "<span class=\"required-input\">*</span>");
                     }
+                    $set_via_kp_wrap.show()
                     $select_bill_status.change(function() {
                         if ($(this).val() == 0) { // Выставлен
                             $set_via_kp_wrap.show();

@@ -149,6 +149,11 @@
                                     <a class="comment-button" data-toggle="modal" href="#view-claim-comment"
                                         value="{{ claim.comment }}">...</a>
                                 {% endif %}
+                                {% if claim.tasks %}
+                                    <span class="bold" style="color:#EEEE10">Комментарии из задач:</span>
+                                    <a class="task-comment-button no-print" data-toggle="modal" href="#view-claim-comment"
+                                        value="{% for task in claim.tasks %} {{ task.comment }}. {% if task.results %}Результат:{% endif %} {{ task.results }} <br>{% endfor %}">...</a>
+                                {% endif %}
                             </td>
                             <td>
                                 {% if claim.files %}
@@ -452,6 +457,11 @@
                 });
                 $(".edit-button").click(function() {
                     $(this).attr("href", $(this).attr('href') + get_params);
+                });
+                $('.task-comment-button').bind('click', function(){
+                    $("#view-order-comment").find("h3").text("Комментарии из задач");
+                    var comment = $(this).attr('value');
+                    $('.comment__data_modal').html(comment);
                 });
                 $(".add-button").click(function() {
                     $(this).attr("href", $(this).attr('href') + "?" + get_params__slice);
