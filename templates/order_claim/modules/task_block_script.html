@@ -1,14 +1,14 @@
 {% block task_script %}
     <script type="text/javascript">
         (function($) {
+            var task_date_options = {
+                format: 'yyyy-MM-dd hh:mm:ss',
+                language: 'ru',
+                pickSeconds: false,
+                weekStart: 1,
+                startDate: new Date()
+            };
             $(document).ready(function() {
-                var task_date_options = {
-                    format: 'yyyy-MM-dd hh:mm:ss',
-                    language: 'ru',
-                    pickSeconds: false,
-                    weekStart: 1,
-                    startDate: new Date()
-                };
                 $('.task-date').datetimepicker(task_date_options);
             });
 {#            #}
@@ -26,6 +26,7 @@
                 if ($this.val()) {
                     $task_details.show();
                     $task_required.prop('required', true);
+                    $('.task-date').datetimepicker(task_date_options);
                 }
                 else {
                     $task_details.hide();
