@@ -871,7 +871,7 @@ def full_get_orders(request):
         if order.order_status == 0:
             order.order_status = 'В производстве'
             if user_role == 2:
-                order.order_status = 'Производство'
+                order.order_status = 'Пр-во'
                 if order.ready_date:
                     order.is_ready = 1
                     order.ready_date = date(order.ready_date.year, order.ready_date.month, order.ready_date.day)
@@ -909,6 +909,8 @@ def full_get_orders(request):
                     order_file.name = order_file.title
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
+        if order.payment_date:
+            order.payment_date = order.payment_date.date()
     if ready_orders:
         for order in ready_order_list:
             if order.client.organization == '':
@@ -924,7 +926,7 @@ def full_get_orders(request):
             if order.order_status == 0:
                 order.order_status = 'В производстве'
                 if user_role == 2:
-                    order.order_status = 'Производство'
+                    order.order_status = 'Пр-во'
                     if order.ready_date:
                         order.is_ready = 1
                         order.ready_date = date(order.ready_date.year, order.ready_date.month, order.ready_date.day)
@@ -962,6 +964,8 @@ def full_get_orders(request):
                         order_file.name = order_file.title
                         order_file.url = order_file.file.url
                         order.files.append(order_file)
+            if order.payment_date:
+                order.payment_date = order.payment_date.date()
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'orders': order_list})

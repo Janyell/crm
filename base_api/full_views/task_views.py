@@ -99,7 +99,7 @@ def full_edit_task(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role != 0:
+    if user_role == 2:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})

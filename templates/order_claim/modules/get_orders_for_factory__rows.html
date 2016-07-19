@@ -18,11 +18,11 @@
     </td>
     <td>
         {% if order.bill_status == 2 %}
-            100%
+            100
         {% elif order.brought_sum == None %}
-            0%
+            0
         {% else %}
-            {{ order.brought_sum|mul:100|intdiv:order.bill }}%
+            {{ order.brought_sum|mul:100|intdiv:order.bill }}
         {% endif %}
     </td>
     <td>

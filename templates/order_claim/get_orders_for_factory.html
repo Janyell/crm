@@ -7,16 +7,17 @@
 {% block order-table-headers %}
     {# 0 #}<th>№</th>
     {# 1 #}<th class="sortable{% if request.GET.sort == "organization" %} sorting_asc{% elif request.GET.sort == "organization_d" %} sorting_desc{% else %} sorting{% endif %}" value="organization">Название организации</th>
-    {# 2 #}<th class="sortable{% if request.GET.sort == "role" %} sorting_asc{% elif request.GET.sort == "role_d" %} sorting_desc{% else %} sorting{% endif %}" value="role">Менеджер</th>
+    {# 2 #}<th class="sortable{% if request.GET.sort == "role" %} sorting_asc{% elif request.GET.sort == "role_d" %} sorting_desc{% else %} sorting{% endif %}" value="role">Менед
+    жер</th>
     {# 3 #}<th>Номер счета</th>
     {# 4 #}<th class="sortable{% if request.GET.sort == "company" %} sorting_asc{% elif request.GET.sort == "company_d" %} sorting_desc{% else %} sorting{% endif %}" value="company">Компания</th>
     {# 5 #}<th class="sortable{% if request.GET.sort == "payment_date" %} sorting_asc{% elif request.GET.sort == "payment_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="payment_date">Дата оплаты</th>
-    {# 6 #}<th>Процент оплаты</th>
+    {# 6 #}<th>%</th>
     {# 7 #}<th>Статус</th>
     {# 8 #}<th>Продукция</th>
     {# 9 #}<th>Информация для пр-ва</th>
     {# 10 #}<th class="sortable{% if request.GET.sort == "city" %} sorting_asc{% elif request.GET.sort == "city_d" %} sorting_desc{% else %} sorting{% endif %}" value="city">Доставка город</th>
-    {# 11 #}<th class="sortable{% if request.GET.sort == "transport_company" %} sorting_asc{% elif request.GET.sort == "transport_company_d" %} sorting_desc{% else %} sorting{% endif %}" value="transport_company">Транспортная компания</th>
+    {# 11 #}<th class="sortable{% if request.GET.sort == "transport_company" %} sorting_asc{% elif request.GET.sort == "transport_company_d" %} sorting_desc{% else %} sorting{% endif %}" value="transport_company">ТК</th>
     {# 12 #}<th class="no-print"></th>
 
     {# 13 #}<th></th>
