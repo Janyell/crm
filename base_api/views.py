@@ -628,7 +628,7 @@ def made_excel(request):
                         sheet.cell(row=row_index, column=column_index).value = \
                             unicode(getattr(table_object, 'transport_campaign').title)
                 elif col == u'city':
-                    if getattr(table_object, 'transport_campaign'):
+                    if getattr(table_object, 'transport_campaign') and getattr(table_object, col):
                         sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).name)
                 elif col == u'products':
                     old_row_index = row_index

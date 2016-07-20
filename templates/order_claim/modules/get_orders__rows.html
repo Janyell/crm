@@ -131,8 +131,6 @@
             {% else %}
                 <a class="btn archive-button" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
             {% endif %}
-        {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
-            <a class="btn archive-button" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
         {% endif %}
         </td>
         <td>
@@ -166,10 +164,6 @@
                 <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
                     <i class="icon-remove"></i>
                 </a>
-            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
-                <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
-                    <i class="icon-remove"></i>
-                </a>
             {% endif %}
         </td>
         {% endblock %}
@@ -188,10 +182,6 @@
         </td>
         <td>
             {% if user_role == 0 %}
-                <a class="btn make-claim-button" href="{% url "make_claim" %}?id={{ order.pk }}">
-                    В заявки
-                </a>
-            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
                 <a class="btn make-claim-button" href="{% url "make_claim" %}?id={{ order.pk }}">
                     В заявки
                 </a>
