@@ -140,6 +140,8 @@ def full_edit_product(request):
         group = request.POST['group']
         is_active = int(request.POST['is_active'])
         product.title = title
+        if price == '':
+            price = 0
         product.price = price
         if group:
             product.group = ProductGroups.objects.get(id=group)

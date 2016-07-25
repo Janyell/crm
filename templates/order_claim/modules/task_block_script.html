@@ -1,16 +1,24 @@
 {% block task_script %}
     <script type="text/javascript">
         (function($) {
+            var task_date_options = {
+                format: 'yyyy-MM-dd hh:mm:ss',
+                language: 'ru',
+                pickSeconds: false,
+                weekStart: 1,
+                startDate: new Date()
+            };
             $(document).ready(function() {
-                var task_date_options = {
-                    format: 'yyyy-MM-dd hh:mm:ss',
-                    language: 'ru',
-                    pickSeconds: false,
-                    weekStart: 1,
-                    startDate: new Date()
-                };
                 $('.task-date').datetimepicker(task_date_options);
             });
+{#            #}
+{#            $('.task-type select').each(function() {#}
+{#                var $this = $(this);#}
+{#                if ($this.val()) {#}
+{#                    $this.parents('.task-type').next().show();#}
+{#                }#}
+{#            });#}
+
             $(document).on('change', '.task-type select', function(){
                 var $this = $(this);
                 var $task_details = $this.parents('.task-type').next();
@@ -18,6 +26,7 @@
                 if ($this.val()) {
                     $task_details.show();
                     $task_required.prop('required', true);
+                    $('.task-date').datetimepicker(task_date_options);
                 }
                 else {
                     $task_details.hide();

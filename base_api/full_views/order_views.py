@@ -238,6 +238,8 @@ def full_add_edit_order(request):
                     return render(request, 'order_claim/add_edit_order.html', out)
             else:
                 bill = None
+            if bill_status == 2:
+                brought_sum = bill
             new_order = Orders.objects.get(id=pk, is_deleted=0)
             is_comment_my = False
             if new_order.role_id == request.user.id:
@@ -389,6 +391,8 @@ def full_add_edit_order(request):
                 brought_sum = int(request.POST['brought_sum'])
             except Exception:
                 brought_sum = None
+            if bill_status == 2:
+                brought_sum = bill
             shipped_date = None
             # if 'shipped_date' in request.POST and \
             #     request.POST['shipped_date'] is not None and \
@@ -564,6 +568,8 @@ def full_add_edit_order(request):
             #     request.POST['ready_date'] != '':
             #     order_status = 2
             bill_status = request.POST['bill_status']
+            if bill_status == 2:
+                brought_sum = bill
             ready_date = request.POST['ready_date']
             shipped_date = request.POST['shipped_date']
             comment = request.POST['comment']
@@ -798,6 +804,8 @@ def full_get_orders(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_ORDER)
+    if Roles.objects.get(id=request.user.id).role == 2:
+        sort_key = 'factory'
     sort = SORT_TYPE_FOR_ORDER.get(sort_key, DEFAULT_SORT_TYPE_FOR_ORDER)
     orders = Orders.objects.filter(is_deleted=0, is_claim=0)
     if 'source' in request.GET:
@@ -832,15 +840,23 @@ def full_get_orders(request):
         except TypeError:
             orders = orders.filter(in_archive=0).order_by(*sort)
         out.update({'page_title': "Заказы"})
-    number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
-    orders_pages = Paginator(orders, number)
-    page = request.GET.get('page')
-    try:
-        order_list = orders_pages.page(page)
-    except PageNotAnInteger:
-        order_list = orders_pages.page(1)
-    except EmptyPage:
-        order_list = orders_pages.page(orders_pages.num_pages)
+    if Roles.objects.get(id=request.user.id).role != 2:
+        number = request.GET.get('length', DEFAULT_NUMBER_FOR_PAGE)
+        orders_pages = Paginator(orders, number)
+        page = request.GET.get('page')
+        try:
+            order_list = orders_pages.page(page)
+        except PageNotAnInteger:
+            order_list = orders_pages.page(1)
+        except EmptyPage:
+            order_list = orders_pages.page(orders_pages.num_pages)
+        ready_orders = None
+    else:
+        orders = orders.exclude(order_status=-1)
+        ready_orders = orders.filter(order_status=2)
+        orders = orders.exclude(order_status=2)
+        order_list = orders.all()
+        ready_order_list = ready_orders.all()
     for order in order_list:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
@@ -854,6 +870,11 @@ def full_get_orders(request):
         order.products = products_list
         if order.order_status == 0:
             order.order_status = 'В производстве'
+            if user_role == 2:
+                order.order_status = 'Пр-во'
+                if order.ready_date:
+                    order.is_ready = 1
+                    order.ready_date = date(order.ready_date.year, order.ready_date.month, order.ready_date.day)
         elif order.order_status == -1:
             order.order_status = 'Отгружен'
             if order.shipped_date is not None:
@@ -888,10 +909,70 @@ def full_get_orders(request):
                     order_file.name = order_file.title
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
+        if order.payment_date:
+            order.payment_date = order.payment_date.date()
+    if ready_orders:
+        for order in ready_order_list:
+            if order.client.organization == '':
+                order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+            else:
+                order.client.organization_or_full_name = order.client.organization
+            order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+            prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
+            products_list = []
+            for pr in prs:
+                products_list.append(pr)
+            order.products = products_list
+            if order.order_status == 0:
+                order.order_status = 'В производстве'
+                if user_role == 2:
+                    order.order_status = 'Пр-во'
+                    if order.ready_date:
+                        order.is_ready = 1
+                        order.ready_date = date(order.ready_date.year, order.ready_date.month, order.ready_date.day)
+            elif order.order_status == -1:
+                order.order_status = 'Отгружен'
+                if order.shipped_date is not None:
+                    order.is_shipped = 1
+                    order.shipped_date = date(order.shipped_date.year, order.shipped_date.month, order.shipped_date.day)
+            elif order.order_status == 2:
+                order.order_status = 'Готов'
+            else:
+                order.order_status = ''
+            if order.bill is not None:
+                order.bill_right_format = right_money_format(order.bill)
+            order.brought_sum_right_format = 0
+            order.debt_right_format = 0
+            order.is_in_debt = False
+            if order.bill_status == 2:
+                order.is_full_pay = True
+            else:
+                order.is_full_pay = False
+            if order.brought_sum is not None and order.bill is not None:
+                if (order.bill - order.brought_sum) > 0:
+                    order.is_in_debt = True
+                else:
+                    order.is_in_debt = False
+                order.brought_sum_right_format = right_money_format(order.brought_sum)
+                order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))
+            if order.is_full_pay or order.bill_status == 3:
+                order.is_in_debt = False
+            order.files = []
+            if Order_Files.objects.filter(order_id=order.id).all() is not None:
+                for order_file in Order_Files.objects.filter(order_id=order.id).all():
+                    if order_file.file is not None and order_file.file != '':
+                        order_file.name = order_file.title
+                        order_file.url = order_file.file.url
+                        order.files.append(order_file)
+            if order.payment_date:
+                order.payment_date = order.payment_date.date()
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'orders': order_list})
     out.update({'count': orders.count()})
+    if ready_orders:
+        out.update({'ready_orders': ready_order_list})
+        out.update({'count': orders.count() + ready_orders.count()})
     # IN_PRODUCTION status = 0
     out.update({'count_in_production': orders.filter(order_status=0).count()})
     out.update({'now': datetime.now()})
@@ -1107,6 +1188,26 @@ def full_delete_from_archive(request):
     if 'client-id' in request.GET:
         return HttpResponseRedirect('/orders/' + get_params)
     return HttpResponseRedirect('/orders/archive/' + get_params)
+
+
+def full_make_claim(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    if Roles.objects.get(id=request.user.id).role == 2:
+        return HttpResponseRedirect('/oops/')
+    id = request.GET['id']
+    order = Orders.objects.get(pk=id, is_deleted=0)
+    if str(request.user.username) != str(order.role) and Roles.objects.get(id=request.user.id).role != 0:
+        return HttpResponseRedirect('/oops/')
+    order.is_claim = 1
+    order.save(update_fields=["is_claim"])
+    get_params = '?'
+    if 'search' in request.GET:
+        search = request.GET.get('search')
+        get_params += 'search=' + unicode(search)
+        return HttpResponseRedirect('/search/' + get_params)
+    get_params += get_request_param_as_string(request)
+    return HttpResponseRedirect('/orders/' + get_params)
 
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):

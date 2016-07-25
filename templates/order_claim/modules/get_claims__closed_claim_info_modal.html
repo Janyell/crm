@@ -1,0 +1,42 @@
+{% block closed_claim_info_modal %}
+    <div class="modal hide fade" id="closed-claim-info" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3 class="center">Информация о закрытой заявке</h3>
+        </div>
+        <div class="modal-body">
+            <div class="closed-claim-info__item closed-claim-info__reason clearfix">
+                <div class="closed-claim-info__head">
+                    Причина
+                </div>
+                <div class="closed-claim-info__data">
+                </div>
+            </div>
+            <div class="closed-claim-info__item closed-claim-info__final-comment clearfix">
+                <div class="closed-claim-info__head">
+                    Финальный комментарий
+                </div>
+                <div class="closed-claim-info__data">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                var $closed_claim_info__data = $('#closed-claim-info').find('.modal-body');
+                var $closed_claim_info__reason = $closed_claim_info__data.find('.closed-claim-info__reason > .closed-claim-info__data');
+                var $closed_claim_info__final_comment = $closed_claim_info__data.find('.closed-claim-info__final-comment > .closed-claim-info__data');
+                $('.get-closed-claim-info').bind('click', function(){
+                    var reason = $(this).find('.closed-claim-data__reason').text();
+                    $closed_claim_info__reason.text(reason);
+                    var final_comment = $(this).find('.closed-claim-data__final-comment').text();
+                    $closed_claim_info__final_comment.text(final_comment);
+                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

@@ -22,7 +22,8 @@ def full_do_task(request):
     id = request.GET['id']
     task = Tasks.objects.get(pk=id)
     task.is_done = 1
-    task.save(update_fields=["is_done"])
+    task.results = request.POST.get('results', '')
+    task.save(update_fields=["is_done", "results"])
     get_params = '?'
     get_params += get_request_param_as_string(request)
     return HttpResponseRedirect('/tasks/' + get_params)
@@ -50,6 +51,9 @@ def full_get_tasks(request):
         is_senior = True
         out.update({'is_senior': is_senior})
     tasks = Tasks.objects.filter(is_deleted=0, order__is_deleted=0)
+    # because fuck the logic
+    if request.GET.get('is_done', 0) == '1':
+        tasks = tasks.filter(is_done=0)
     period = 'today'
     if 'period' in request.GET:
         period = request.GET['period']
@@ -69,8 +73,59 @@ def full_get_tasks(request):
             tasks = tasks.filter(role=role)
     if not is_senior:
         tasks = tasks.filter(role=Roles.objects.get(id=request.user.id))
+    task_count = tasks.count()
+    from collections import defaultdict
+    from collections import OrderedDict
+    task_date_dict = defaultdict(list)
+    for task in tasks.order_by('date', 'is_done').all():
+        if task.is_done:
+            task.results = task.results
+        task_date = task.date.date()
+        if task_date not in task_date_dict:
+            task_date_dict.update({task_date: []})
+        task_date_dict[task_date].append(task)
+    out.update({'tasks_dict': OrderedDict(sorted(task_date_dict.items()))})
     out.update({'page_title': "Задачи"})
+    TaskForm.base_fields['type'] = TaskTypeChoiceField(queryset=TaskTypes.objects.filter(is_deleted=0))
     out.update({'task_do_form': TaskForm()})
-    out.update({'tasks': tasks.order_by('is_done', 'date')})
-    out.update({'count': tasks.count()})
+    out.update({'edit_task_form': TaskForm(initial={'is_important': False})})
+    out.update({'tasks': tasks})
+    out.update({'count': task_count})
     return render(request, 'task/get_tasks.html', out)
+
+
+def full_edit_task(request):
+    if not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    out = {}
+    user_role = Roles.objects.get(id=request.user.id).role
+    if user_role == 2:
+        return HttpResponseRedirect('/oops/')
+    else:
+        out.update({'user_role': user_role})
+    get_params = '?'
+    get_params += get_request_param_as_string(request)
+    if request.method == 'POST':
+        id = request.GET['id']
+        task = Tasks.objects.get(id=id)
+        comment = request.POST['task_comment']
+        date = request.POST['date']
+        if date:
+            try:
+                date = datetime.strptime(date, '%d.%m.%Y %H:%M')
+            except Exception:
+                date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+        else:
+            date = None
+        if 'is_important' in request.POST:
+            is_important = True
+        else:
+            is_important = False
+        type = TaskTypes.objects.get(id=request.POST['type'])
+        task.comment = comment
+        task.date = date
+        task.is_important = is_important
+        task.type = type
+        task.save()
+        return HttpResponseRedirect('/tasks/' + get_params)
+    return HttpResponseRedirect('/tasks/' + get_params)

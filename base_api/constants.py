@@ -36,6 +36,7 @@ SORT_TYPE_FOR_ORDER = {
     'default': ['-order_status', '-became_claim_date', '-shipped_date'],
     'transport_company': ['-order_status', '-became_claim_date', 'transport_campaign'],
     'transport_company_d': ['-order_status', '-became_claim_date', '-transport_campaign'],
+    'factory': ['-order_status', 'ready_date'],
 }
 DEFAULT_SORT_TYPE_FOR_ORDER = 'default'
 DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE = 'order_date_d'

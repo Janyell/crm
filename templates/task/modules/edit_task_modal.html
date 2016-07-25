@@ -1,0 +1,65 @@
+{% block edit-task-modal %}
+    <div class="modal hide fade" id="edit-task" tabindex="-1" role="dialog" aria-hidden="true">
+        <form method="post" class="form-horizontal form-add_modal form-edit-task">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3 class="form-add__head">Редактирование задачи</h3>
+            </div>
+            <div class="modal-body">
+                <h5 class="form-add-heading">Пожалуйста, заполните следующую форму:</h5>
+                {% with task_form=edit_task_form edit_task=True %}
+                    {% include "order_claim/modules/task_block.html" %}
+                {% endwith %}
+                <div class="form-add__tips">
+                    <div class="form-add-tips__tip">
+                        <span class="required-input">*</span> - поля, обязательные для заполнения
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button type="reset" class="btn">Очистить</button>
+                <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block edit-task-modal_script %}
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                var task_date_options = {
+                format: 'yyyy-MM-dd hh:mm:ss',
+                language: 'ru',
+                pickSeconds: false,
+                weekStart: 1,
+                startDate: new Date()
+                };
+                $('.task-date').datetimepicker(task_date_options);
+                
+                var $form_edit_task = $('.form-edit-task');
+                $('.edit-button').bind('click', function(){
+                    var $this = $(this);
+                    var id = $this.attr('value');
+                    $form_edit_task.attr({'action': '{% url "edit_task" %}?id=' + id });
+                    var $edit_task__data = $('#edit-task').find('.modal-body');
+                    var type = $this.find('.task-data__type').text();
+                    $edit_task__data.find('.task-type select').val(type);
+                    var date = $this.find('.task-data__date').text();
+                    $edit_task__data.find('.input_task-date').val(date);
+                    var comment = $this.find('.task-data__comment').text();
+                    $edit_task__data.find('.input_task-comment').val(comment);
+                    var is_important = $this.find('.task-data__is-important').text();
+                    $edit_task__data.find('.input_task-comment').val(comment);
+                    if (is_important == 1) {
+                        $edit_task__data.find('.input_task-is-important').prop('checked', true);
+                    }
+                    else {
+                        $edit_task__data.find('.input_task-is-important').prop('checked', false);
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
+{% endblock %}

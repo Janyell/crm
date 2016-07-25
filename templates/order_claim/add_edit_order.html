@@ -20,7 +20,7 @@
             {% url "get_claims" %}{% else %}
             {% url "get_orders" %}{% endif %}" class="btn back-button text-align_initial">Назад</a>
 
-        {% if request.path == edit_claim_url %}
+        {% if request.path == edit_claim_url and not is_closed %}
             <a class="btn pull-right btn-danger" data-toggle="modal" href="#close-claim">Закрыть заявку</a>
         {% endif %}
         {% if request.path == edit_claim_url or request.path == edit_order_url %}
@@ -297,7 +297,9 @@
                 {% if request.path == add_claim_url or request.path == edit_claim_url %}
                     {% include "order_claim/modules/add_edit_claim__tasks_block.html" %}
                 {% endif %}
-                {% include "order_claim/modules/edit_claim__related_with.html" %}
+                {% if request.path == edit_claim_url %}
+                    {% include "order_claim/modules/edit_claim__related_with.html" %}
+                {% endif %}
                 <div class="form-add__tips">
                     <div class="form-add-tips__tip">
                         <span class="required-input">*</span> - поля, обязательные для заполнения
@@ -376,6 +378,7 @@
             <div class="form-add__submits">
                 <button type="submit" class="btn btn-primary" name="only-save" value="only-save">Сохранить</button>
                 {% if request.path == add_claim_url %}
+                    <button type="submit" class="btn only-for-our-products" name="save-and-bind" value="save-and-bind">Сохранить и связать</button>
                     <button type="submit" class="btn only-for-our-products" name="save-and-generate-kp" value="save-and-generate-kp">Сохранить и перейти к формированию КП</button>
                 {% endif %}
                 {% if request.path == add_order_url or request.path == add_claim_url %}

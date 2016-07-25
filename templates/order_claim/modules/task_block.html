@@ -8,7 +8,7 @@
             {{ task_form.type }}
         </div>
     </div>
-    <div class="task-details hide">
+    <div class="task-details{% if not edit_task %} hide{% endif %}">
         <div class="control-group task-required">
             <label class="control-label">
                 Дата

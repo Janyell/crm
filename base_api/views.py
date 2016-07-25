@@ -628,7 +628,7 @@ def made_excel(request):
                         sheet.cell(row=row_index, column=column_index).value = \
                             unicode(getattr(table_object, 'transport_campaign').title)
                 elif col == u'city':
-                    if getattr(table_object, 'transport_campaign'):
+                    if getattr(table_object, 'transport_campaign') and getattr(table_object, col):
                         sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).name)
                 elif col == u'products':
                     old_row_index = row_index
@@ -893,6 +893,7 @@ def search(request):
                     order_file.name = order_file.title
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
+        order.reason = CloseClaims.objects.filter(order=order.id).first()
 
     client_list = list(Clients.search.query(search_word).filter(is_deleted=0, is_interested=0))
     for c in client_list:
@@ -1057,9 +1058,9 @@ def get_reports(request):
     orders = orders.filter(shipped_date__year=month_date[:4],
                            shipped_date__month=month_date[5:7])
     try:
-        orders = orders.filter(in_archive=0).order_by(sort)
+        orders = orders.order_by(sort)
     except TypeError:
-        orders = orders.filter(in_archive=0).order_by(*sort)
+        orders = orders.order_by(*sort)
     shipped_sum = 0
     for order in orders:
         shipped_sum += order.bill

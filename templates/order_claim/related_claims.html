@@ -1,0 +1,38 @@
+{%extends "base.html"%}
+
+{%block content%}
+    <div class="container">
+        <a href="{% url "edit_claim" %}?id={{ request.GET.id }}" class="btn">Перейти к редактированию заявки</a>
+        <h2 class="form-add__head">{{ page_title }}</h2>
+            {% include "order_claim/modules/edit_claim__related_with.html" %}
+    <div class="text-center">
+        <a href="{% url "get_claims" %}" class="btn btn_finish">Закончить работу со связыванием заявок</a>
+    </div>
+    </div>
+
+    {% if request.path == upload_order_files_url %}
+        {% url "delete_order_files" as delete_files_url %}
+    {% else %}
+        {% url "delete_client_files" as delete_files_url %}
+    {% endif %}
+    <script type="text/javascript">
+        (function ($){
+            $('.btn-file').each(function (){
+                var self = this;
+                $('input[type=file]', this).change(function (){
+                    $(self).next().remove();
+                    var value = $(this).val();
+                    var fileName = value.substring(value.lastIndexOf('/') + 1);
+                    fileName = value.substring(value.lastIndexOf('\\') + 1);
+                    var fileExt = fileName.split('.').pop().toLowerCase();
+                    $('<span><i class="icon-file icon-' + fileExt + '"></i> ' + fileName + '</span>').insertAfter(self);
+                });
+            });
+
+            $('.delete-button').bind('click', function(){
+                var id = $(this).attr('value');
+                $('#delete__ok').attr({'href': '{{ delete_files_url }}?id=' +id});
+            });
+        })(jQuery);
+    </script>
+{%endblock%}

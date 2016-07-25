@@ -40,6 +40,7 @@ urlpatterns = patterns('',
                        url(r'^orders/edit/foreign/$', 'base_api.views.edit_order_for_other_managers',
                            name='edit_order_for_other_managers'),
                        url(r'^orders/delete/$', 'base_api.views.delete_order', name='delete_order'),
+                       url(r'^orders/make_claim/$', 'base_api.full_views.order_views.full_make_claim', name='make_claim'),
                        url(r'^clients/$', 'base_api.views.get_clients', name='get_clients'),
                        url(r'^clients/interested/$', 'base_api.views.get_interested_clients',
                            name='get_interested_clients'),
@@ -183,7 +184,10 @@ urlpatterns = patterns('',
                        url(r'^reports/$', 'base_api.views.get_reports', name='get_reports'),
 
                        url(r'^tasks/$', 'base_api.full_views.task_views.full_get_tasks', name='get_tasks'),
+                       url(r'^tasks/edit/$', 'base_api.full_views.task_views.full_edit_task', name='edit_task'),
                        url(r'^tasks/do/$', 'base_api.full_views.task_views.full_do_task', name='do_task'),
+
+                       url(r'^related/claim/$', 'base_api.full_views.claim_views.full_bind_claims', name='related_claims'),
 
                        # hidden page
                        url(r'^claims/related/$', 'base_api.views.get_related_claims', name='get_related_claims'),

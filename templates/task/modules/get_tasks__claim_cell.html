@@ -1,0 +1,44 @@
+{% block claim_cell %}
+    <a href="#claim-info" role="button" data-toggle="modal" class="get-claim-info">
+        <div class="get-claim-info__head">
+            {{ task.order.unique_number }}
+        </div>
+        <div class="hidden get-claim-info__data">
+            <div class="claim-data__role">{{ task.order.role }}</div>
+            <div class="claim-data__order-date">{{ task.order.order_date }}</div>
+            <div class="claim-data__client">
+                {% if task.order.client.organization %}
+                    {{ task.order.client.organization }}{% if task.order.client.organization_type %}, {{ task.order.client.organization_type }}{% endif %}
+                {% else %}
+                    {{ task.order.client.full_name }}
+                {% endif %}
+            </div>
+            <div class="claim-data__company">{{ task.order.company.title }}</div>
+            <div class="claim-data__account-number">
+                {% if task.order.account_number != None %}
+                    {{ task.order.account_number }}
+                {% endif %}
+            </div>
+            <div class="claim-data__bill">
+                {% if task.order.bill != None %}
+                    {{ task.order.bill }}
+                {% endif %}
+            </div>
+            <div class="claim-data__products">
+                {% if task.order.products %}
+                    {% for product in task.order.products %}
+                        <div class="no-wrap">
+                            {{ product.product.title }} - {{ product.count_of_products }} шт.
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="claim-data__bill-status">
+                {% if task.order.bill_status != None %}
+                    {{ task.order.bill_status }}
+                {% endif %}
+            </div>
+            <div class="claim-data__comment">{{ task.order.comment }}</div>
+        </div>
+    </a>
+{% endblock %}

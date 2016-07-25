@@ -1,22 +1,31 @@
 {% block tasks-settings %}
-    <div class="tasks-settings">
-        <label for="select-period">Задачи на</label>
-        <select id="select-period" name="period">
-            <option value="today"{% if request.GET.period == "today" %} selected="selected"{% endif %}>сегодня</option>
-            <option value="week"{% if request.GET.period == "week" %} selected="selected"{% endif %}>неделя</option>
-            <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>месяц</option>
-            <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>год</option>
-        </select>
-        {% if is_senior == True %}
-            <label for="select-manager">для</label>
-            <select id="select-manager" name="manager">
-                {% for manager in roles %}
-                    <option value="{{ manager.pk }}"{% if not request.GET.manager and manager.pk|upper == 0 or manager.pk|upper == request.GET.manager %} selected="selected"{% endif %}>
-                        {{ manager.username }}
-                    </option>
-                {% endfor %}
+    <div class="row-fluid">
+        <div class="span6 tasks-settings">
+            <label for="select-period">Задачи на</label>
+            <select id="select-period" name="period">
+                <option value="today"{% if request.GET.period == "today" %} selected="selected"{% endif %}>сегодня</option>
+                <option value="week"{% if request.GET.period == "week" %} selected="selected"{% endif %}>неделя</option>
+                <option value="month"{% if request.GET.period == "month" %} selected="selected"{% endif %}>месяц</option>
+                <option value="year"{% if request.GET.period == "year" %} selected="selected"{% endif %}>год</option>
             </select>
-        {% endif %}
+            {% if is_senior == True %}
+                <label for="select-manager">для</label>
+                <select id="select-manager" name="manager">
+                    {% for manager in roles %}
+                        <option value="{{ manager.pk }}"{% if not request.GET.manager and manager.pk|upper == 0 or manager.pk|upper == request.GET.manager %} selected="selected"{% endif %}>
+                            {{ manager.username }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+        </div>
+        <div class="span6">
+            <label class="checkbox">
+                <input type="checkbox" name="is_done" class="checkbox_is-done" value="1"
+                    {% if request.GET.is_done == "1" %} checked="checked"{% endif %} />
+                Только невыполненные
+            </label>
+        </div>
     </div>
 {% endblock %}
 
@@ -26,19 +35,29 @@
             $(document).ready(function(){
                 var path = "{{ request.path }}";
                 var period = "{% if request.GET.period %}period={{ request.GET.period }}&{% endif %}";
-                var manager = "{% if is_senior == True %}{% if request.GET.manager %}manager={{ request.GET.manager }}&{% endif %}{% endif %}";
+                var is_done = "{% if request.GET.is_done %}is_done={{ request.GET.is_done }}&{% endif %}";
+                var manager = "{% if is_senior == True and request.GET.manager %}manager={{ request.GET.manager }}&{% endif %}";
 
                 $('#select-period').change(function() {
                     var value = $(this).val();
                     if (!period || value != "{{ request.GET.period }}") {
-                        document.location.href = path + "?" + manager + "period=" + value;
+                        document.location.href = path + "?" + manager + is_done + "period=" + value;
                     }
+                });
+                $('.checkbox_is-done').change(function() {
+                    var value;
+                    if ($(this).is(":checked")) {
+                        value = 1;
+                    } else {
+                        value = 0;
+                    }
+                    document.location.href = path + "?" + manager + period + "is_done=" + value;
                 });
                 {% if is_senior %}
                     $('#select-manager').change(function() {
                         var value = $(this).val();
                         if (!manager || value != "{{ request.GET.manager }}") {
-                            document.location.href = path + "?" + period + "manager=" + value;
+                            document.location.href = path + "?" + period + is_done + "manager=" + value;
                         }
                     });
                 {% endif %}

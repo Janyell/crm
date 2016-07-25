@@ -1,0 +1,191 @@
+{% load mathfilters %}
+
+{% for order in orders %}
+    <tr class="
+        {% if order.order_status|title == "Готов" %}
+            tr_green
+        {% else %}
+            {% with became_claim_date=order.became_claim_date|date:"U" now_date=now|date:"U" %}
+                {% if now_date|sub:became_claim_date < 144000 %}
+                    tr_orange
+                {% endif %}
+            {% endwith %}
+        {% endif %}">
+        {% block order-table-body__inform_cols %}
+        <td>
+            {% if user_role == 0 %}
+                <label class="checkbox">
+                    <input class="checkbox_one" type="checkbox" name="id[]" value="{{ order.pk }}"/>
+                </label>
+            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                <label class="checkbox">
+                    <input class="checkbox_one" type="checkbox" name="id[]" value="{{ order.pk }}"/>
+                </label>
+            {% endif %}
+        </td>
+        <td>{{ order.role }}</td>
+        <td>
+            {% if user_role != 2 %}
+                <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
+                    <div class="get-client-info__head">
+                        {% if order.client.organization %}
+                            {{ order.client.organization }}{% if order.client.organization_type %}, {{ order.client.organization_type }}{% endif %}
+                        {% else %}
+                            {{ order.client.full_name }}
+                        {% endif %}
+                    </div>
+                    <div class="hidden get-client-info__data">
+                        <div class="client-data__full-name">{{ order.client.full_name }}</div>
+                        <div class="client-data__contact-person-phone">{{ order.client.person_phone }}</div>
+                        <div class="client-data__organization">
+                            {% if order.client.organization %}
+                                {{ order.client.organization }}{% if order.client.organization_type %}, {{ order.client.organization_type }}{% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="client-data__organization-phone">{{ order.client.organization_phone }}</div>
+                        <div class="client-data__email">{{ order.client.email }}</div>
+                    </div>
+                </a>
+            {% else %}
+                {{ order.client.organization_or_full_name }}
+            {% endif %}
+        </td>
+        <td>{{ order.unique_number }}</td>
+        <td>{{ order.company.title }}</td>
+        <td>
+            {% if order.account_number != None %}
+                {{ order.account_number }}
+            {% endif %}
+        </td>
+        <td class="no-wrap">
+            {% if order.bill_right_format != None %}
+                {% if is_in_debt.is_in_debt %}
+                    <a href="#bill-info" role="button" data-toggle="modal" class="get-bill-info red">
+                        <div class="get-bill-info__head">
+                            {{ order.bill_right_format }}
+                        </div>
+                        <div class="hidden get-bill-info__data">
+                            <div class="bill-data__bill">{{ order.bill_right_format }}</div>
+                            <div class="bill-data__brought_sum">{{ order.brought_sum_right_format }}</div>
+                            <div class="bill-data__debt">{{ order.debt_right_format }}</div>
+                        </div>
+                    </a>
+                {% elif is_in_debt.is_full_pay %}
+                    <span class="blue">
+                        {{ order.bill_right_format }}
+                    </span>
+                {% else %}
+                    {{ order.bill_right_format }}
+                {% endif %}
+            {% endif %}
+        </td>
+        <td>{% if order.payment_date != None %}
+                {{ order.payment_date }}
+            {% endif %}
+        </td>
+        <td>
+            {% if order.products %}
+                {% for product in order.products %}
+                    <div class="no-wrap">
+                        {{ product.product.title }} - {{ product.count_of_products }} шт.
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </td>
+        <td>{{ order.order_status }}
+            {% if order.is_shipped %}
+                {{ order.shipped_date }}
+            {% endif %}
+        </td>
+        <td>
+            {% if order.ready_date != None %}
+                {{ order.ready_date }}
+            {% endif %}
+        </td>
+        <td>
+            {% if order.city != None %}
+                {{ order.city.name }}
+            {% endif %}
+        </td>
+        <td>{{ order.transport_campaign.title }}</td>
+        <td>
+            {% if order.comment %}
+                <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
+                <a class="comment-button" data-toggle="modal" href="#view-order-comment"
+                    value="{{ order.comment }}">...</a>
+            {% endif %}
+            {% if order.factory_comment %}
+                <span class="bold">Информация для пр-ва:</span>
+                <span class="order-factory-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">
+                    {{ order.factory_comment }}
+                </span>
+                <a class="factory-comment-button no-print" data-toggle="modal" href="#view-order-comment"
+                    value="{{ order.factory_comment }}">...</a>
+            {% endif %}
+        </td>
+        <td>
+        {% if user_role == 0 %}
+            {% url 'get_old_orders' as get_old_orders_url %}
+            {% if request.path == get_old_orders_url or client_id and order.in_archive %}
+                <a class="btn archive-button" href="{% url "delete_from_archive" %}?id={{ order.pk }}">В заказы</a>
+            {% else %}
+                <a class="btn archive-button" href="{% url "add_in_archive" %}?id={{ order.pk }}">В архив</a>
+            {% endif %}
+        {% endif %}
+        </td>
+        <td>
+            {% if order.files %}
+                <a class="btn files-button" data-toggle="modal" href="#view-order-files" value="
+                    {% for file in order.files %}
+                        <div class=&quot;file&quot;>
+                            <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
+                                <i class=&quot;icon-file&quot;></i>{{ file.name }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                "><i class="icon-file"></i></a>
+            {% endif %}
+        </td>
+        {% endblock %}
+        <td class="no-print">
+            {% if user_role == 0 %}
+                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}{% if request.path == get_old_orders_url %}&archive=1{% endif %}"><i class="icon-pencil"></i></a>
+            {% elif user_role == 1 and order.role|urlencode:"" == user.username|urlencode:"" %}
+                <a class="btn edit-button" href="{% url "edit_order" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+            {% elif user_role != 2 %}
+                <a class="btn edit-button" href="{% url "edit_order_for_other_managers" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+            {% else %}
+                <a class="btn edit-button" href="{% url "edit_order_for_factory" %}?id={{ order.pk }}"><i class="icon-pencil"></i></a>
+            {% endif %}
+        </td>
+        {% block order-table-body__delete-col %}
+        <td>
+            {% if user_role == 0 %}
+                <a class="btn delete-button" data-toggle="modal" href="#delete-order" value="{{ order.pk }}">
+                    <i class="icon-remove"></i>
+                </a>
+            {% endif %}
+        </td>
+        {% endblock %}
+        <td> {{ order.order_date }}
+        </td>
+        <td>
+            {% if order.order_status|title == "Готов" %}
+                2
+            {% else %}
+                {% with became_claim_date=order.became_claim_date|date:"U" now_date=now|date:"U" %}
+                    {% if now_date|sub:became_claim_date < 144000 %}
+                        1
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+        </td>
+        <td>
+            {% if user_role == 0 %}
+                <a class="btn make-claim-button" href="{% url "make_claim" %}?id={{ order.pk }}">
+                    В заявки
+                </a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}

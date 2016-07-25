@@ -1,0 +1,34 @@
+{% block tasks_db %}
+    {% if tasks %}
+        <ul class="tasks repeatable-items_db hide">
+            {% for task in tasks %}
+                <li class="task" data-id="{{ task.pk }}"
+                    data-type="{{ task.type }}" data-date="{{ task.date }}"
+                    data-comment='{{ task.comment }}' data-isimportant="{{ task.is_important }}">
+                </li>
+            {% endfor %}
+        </ul>
+        <script type="text/javascript">
+            (function($) {
+                $(document).ready(function() {
+                    var $plus_root_item = $('#plus-root-item');
+                    var $repeatable_items_db = $('ul.repeatable-items_db');
+                    $repeatable_items_db.children('li').each(function() {
+                        var $item_db = $(this);
+                        var item_db_id = $item_db.attr('data-id');
+                        var $repeatable_block = handle_click($plus_root_item, item_db_id, false);
+                        var $select_task_type = $repeatable_block.find('.task-type select');
+                        $select_task_type.val($item_db.attr('data-type'));
+                        $select_task_type.change();
+                        $repeatable_block.find('.input_task-date').val($item_db.attr('data-date'));
+                        $repeatable_block.find('.input_task-comment').val($item_db.attr('data-comment'));
+                        var $input_task_is_important = $repeatable_block.find('.input_task-is-important');
+                        if ($item_db.attr('data-isimportant') == 'True') {
+                            $input_task_is_important.prop('checked', true);
+                        }
+                    });
+                });
+            })(jQuery);
+        </script>
+    {% endif %}
+{% endblock %}

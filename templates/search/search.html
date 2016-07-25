@@ -399,9 +399,7 @@
                                                 {% endif %}
                                             </td>
                                             <td>
-                                                {% if claim.bill_status != None %}
-                                                    {{ claim.bill_status }}
-                                                {% endif %}
+                                                {% include "order_claim/modules/get_claims__bill_status.html" %}
                                             </td>
                                             <td>
                                                 {% if claim.comment %}
@@ -415,7 +413,7 @@
                                             </td>
                                             <td>
                                                 {% if claim.files %}
-                                                    <a class="btn btn-mini files-claim-button" data-toggle="modal" href="#view-info" value="
+                                                    <a class="btn files-claim-button" data-toggle="modal" href="#view-info" value="
                                                         {% for file in claim.files %}
                                                             <div class=&quot;file&quot;>
                                                                 <a class=&quot;file__link&quot; href=&quot;{{ file.url }}&quot; target=&quot;_blank&quot;>
@@ -428,20 +426,22 @@
                                             </td>
                                             <td>
                                                 {% if user_role == 0 %}
-                                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
-                                                 {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
-                                                {% else %}
-                                                    <a class="btn btn-mini edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                    <a class="btn edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                {% elif claim.bill_status|title != "Закрыта" %}
+                                                    {% if user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
+                                                        <a class="btn edit-button" href="{% url "edit_claim" %}?id={{ claim.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                    {% else %}
+                                                        <a class="btn edit-button" href="{% url "edit_claim_for_other_managers" %}?id={{ claim.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
+                                                    {% endif %}
                                                 {% endif %}
                                             </td>
                                             <td>
                                                 {% if user_role == 0 %}
-                                                    <a class="btn btn-mini delete-claim-button" data-toggle="modal" href="#delete" value="{{ claim.pk }}">
+                                                    <a class="btn delete-claim-button" data-toggle="modal" href="#delete" value="{{ claim.pk }}">
                                                         <i class="icon-remove"></i>
                                                     </a>
-                                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" %}
-                                                    <a class="btn btn-mini delete-claim-button" data-toggle="modal" href="#delete" value="{{ claim.pk }}">
+                                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" and claim.bill_status|title != "Закрыта" %}
+                                                    <a class="btn delete-claim-button" data-toggle="modal" href="#delete" value="{{ claim.pk }}">
                                                         <i class="icon-remove"></i>
                                                     </a>
                                                 {% endif %}
@@ -848,6 +848,7 @@
                     })(jQuery);
                 </script>
             {% include "search/modules/change_manager.html" %}
+            {% include "order_claim/modules/get_claims__closed_claim_info_modal.html" %}
         {% else %}
            <h4 class="center">Ничего не найдено по Вашему запросу. Попробуйте еще раз.</h4>
         {% endif %}

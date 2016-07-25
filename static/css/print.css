@@ -1,0 +1,24 @@
+@media print {
+	.no-print {
+		display: none !important;
+	}
+	body {
+		padding: 0 !important;
+	}
+
+	.container_full-width {
+		width: 100% !important;
+		padding: 0 !important;
+	}
+
+    .table .no-wrap {
+        white-space: normal !important;
+    }
+    .table th, .table td {
+        padding: 2px !important;
+        vertical-align: top !important;
+    }
+	#order-table_wrapper .table {
+		width: auto !important;
+	}
+}
