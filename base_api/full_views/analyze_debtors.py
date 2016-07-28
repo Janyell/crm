@@ -24,6 +24,19 @@ def full_analyze_debtors(request):
         else:
             order.client.organization_or_full_name = order.client.organization
         order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
+        for contact_face in contact_faces:
+            order.client.full_name = order.client.full_name + ', ' + contact_face.last_name + ' ' \
+                                 + contact_face.name + ' ' + contact_face.patronymic
+            for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                if email.email:
+                    order.client.email = order.client.email + ', ' + email.email + ' (' + contact_face.last_name + ' ' \
+                                         + contact_face.name + ' ' + contact_face.patronymic + ')'
+            for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                if phone.phone:
+                    order.client.person_phone = order.client.person_phone + ', ' + phone.phone + ' (' + \
+                                                contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                                                contact_face.patronymic + ')'
         order.debt_right_format = 0
         if order.brought_sum is not None and order.bill is not None:
             order.debt_right_format = right_money_format(int(order.bill) - int(order.brought_sum))

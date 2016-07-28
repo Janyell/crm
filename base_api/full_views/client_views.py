@@ -560,16 +560,18 @@ def full_get_clients(request):
         client_list = clients_pages.page(clients_pages.num_pages)
     for c in client_list:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
-        contact_faces = ContactFaces.objects.filter(organization=c, is_deleted=0).all()
+        contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
         for contact_face in contact_faces:
             c.person_full_name = c.person_full_name + ', ' + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
-                c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
-                          contact_face.patronymic + '), '
+                if email.email:
+                    c.email = c.email + ', ' + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                              contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
-                c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
-                                 contact_face.name + ' ' + contact_face.patronymic + '), '
+                if phone.phone:
+                    c.person_phone = c.person_phone + ', ' + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                     contact_face.name + ' ' + contact_face.patronymic + ')'
         c.files = []
         if Client_Files.objects.filter(client_id=c.id).all() is not None:
             for client_file in Client_Files.objects.filter(client_id=c.id).all():
@@ -614,16 +616,18 @@ def full_get_interested_clients(request):
         client_list = clients_pages.page(clients_pages.num_pages)
     for c in client_list:
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
-        contact_faces = ContactFaces.objects.filter(organization=c, is_deleted=0).all()
+        contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
         for contact_face in contact_faces:
             c.person_full_name = c.person_full_name + ', ' + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
-                c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
-                          contact_face.patronymic + '), '
+                if email.email:
+                    c.email = c.email + ', ' + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                              contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
-                c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
-                                 contact_face.name + ' ' + contact_face.patronymic + '), '
+                if phone.phone:
+                    c.person_phone = c.person_phone + ', ' + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                     contact_face.name + ' ' + contact_face.patronymic + ')'
         c.files = []
         if Client_Files.objects.filter(client_id=c.id).all() is not None:
             for client_file in Client_Files.objects.filter(client_id=c.id).all():
