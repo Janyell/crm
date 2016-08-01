@@ -81,6 +81,16 @@
                             </select>
                         </div>
                     {% endif %}
+                    {% if bill_status %}
+                        <div class="bill-status pull-right">
+                            <select id="selectBillStatus" name="status">
+                                    <option value="all">Все статусы</option>
+                                {% for status in bill_status %}
+                                    <option value="{{ status.pk }}"{% if request.GET.status == status.pk|urlencode:"" %} selected="selected"{% endif %}>{{ status.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
                 </div>
             {% endblock %}
         </div>
@@ -347,6 +357,7 @@
                 var length = "{% if request.GET.length %}length={{ request.GET.length }}{% endif %}";
                 var sort = "{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}";
                 var source = "{% if request.GET.source %}source={{ request.GET.source }}{% endif %}";
+                var status = "{% if request.GET.status %}status={{ request.GET.status }}{% endif %}";
                 var managers = "";
                 {% if managers %}
                     {% for manager in managers %}
@@ -362,6 +373,7 @@
                     if (length) { get_params += "&" + length; }
                     if (sort) { get_params += "&" + sort; }
                     if (source) { get_params += "&" + source; }
+                    if (status) { get_params += "&" + status; }
                     if (managers) { get_params += "&" + managers; }
                     return get_params;
                 }
@@ -375,18 +387,29 @@
                     if (without == "length") {
                         if (sort) { url += sort + "&";}
                         if (source) { url += source + "&";}
+                        if (status) { url += status + "&";}
                         if (managers) { url += managers;}
                     }
                     else {
                         if (without == "sort") {
                             if (length) { url += length + "&"; }
                             if (source) { url += source + "&";}
+                            if (status) { url += status + "&";}
                             if (managers) { url += managers;}
                         }
                         else {
-                            if (length) { url += length + "&"; }
-                            if (sort) { url += sort + "&";}
-                            if (managers) { url += managers;}
+                            if (without == "source") {
+                                if (length) { url += length + "&"; }
+                                if (sort) { url += sort + "&";}
+                                if (status) { url += status + "&";}
+                                if (managers) { url += managers;}
+                            }
+                            else {
+                                if (length) { url += length + "&"; }
+                                if (sort) { url += sort + "&";}
+                                if (source) { url += source + "&";}
+                                if (managers) { url += managers;}
+                            }
                         }
                     }
                     return url;
@@ -485,6 +508,24 @@
                     {% endif %}
                 });
 
+                $('#selectBillStatus').change(function() {
+                    var value = $(this).val();
+                    {% if request.GET.status %}
+                        if (value == "all") {
+                            document.location.href = get_url("status");
+                        }
+                        else {
+                            if (value != {{ request.GET.status }}) {
+                                document.location.href = get_url("status") + "status=" + value;
+                            }
+                        }
+                    {% else %}
+                        if (value != "all") {
+                            document.location.href = get_url("status") + "status=" + value;
+                        }
+                    {% endif %}
+                });
+
                 var $th_sorting = $('th.sortable');
 
                 $th_sorting.click(function(){
@@ -505,6 +546,7 @@
                     if (length) { url += length + "&"; }
                     if (sort) { url += sort + "&";}
                     if (source) { url += source + "&";}
+                    if (status) { url += status + "&";}
                     if (managers) {
                         {% if managers %}
                             {% for manager in managers %}
