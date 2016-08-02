@@ -732,17 +732,22 @@ def search(request):
         order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            order.client.full_name = order.client.full_name + ', ' + contact_face.last_name + ' ' \
+            if order.client.full_name != '  ':
+                order.client.full_name += ', '
+            order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
                 if email.email:
-                    order.client.email = order.client.email + ', ' + email.email + ' (' + contact_face.last_name + ' ' \
-                                         + contact_face.name + ' ' + contact_face.patronymic + ')'
+                    if order.client.email:
+                        order.client.email += ', '
+                    v.email = order.client.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                              contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
                 if phone.phone:
-                    order.client.person_phone = order.client.person_phone + ', ' + phone.phone + ' (' + \
-                                                contact_face.last_name + ' ' + contact_face.name + ' ' + \
-                                                contact_face.patronymic + ')'
+                    if order.client.person_phone:
+                        order.client.person_phone += ', '
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                     contact_face.name + ' ' + contact_face.patronymic + ')'
         prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
         products_list = []
         for pr in prs:
@@ -804,17 +809,22 @@ def search(request):
         order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            order.client.full_name = order.client.full_name + ', ' + contact_face.last_name + ' ' \
+            if order.client.full_name != '  ':
+                order.client.full_name += ', '
+            order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
                 if email.email:
-                    order.client.email = order.client.email + ', ' + email.email + ' (' + contact_face.last_name + ' ' \
-                                         + contact_face.name + ' ' + contact_face.patronymic + ')'
+                    if order.client.email:
+                        order.client.email += ', '
+                    order.client.email = order.client.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                              contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
                 if phone.phone:
-                    order.client.person_phone = order.client.person_phone + ', ' + phone.phone + ' (' + \
-                                                contact_face.last_name + ' ' + contact_face.name + ' ' + \
-                                                contact_face.patronymic + ')'
+                    if order.client.person_phone:
+                        order.client.person_phone += ', '
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                     contact_face.name + ' ' + contact_face.patronymic + ')'
         prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
         products_list = []
         for pr in prs:
@@ -876,17 +886,22 @@ def search(request):
         order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            order.client.full_name = order.client.full_name + ', ' + contact_face.last_name + ' ' \
+            if order.client.full_name != '  ':
+                order.client.full_name += ', '
+            order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
                 if email.email:
-                    order.client.email = order.client.email + ', ' + email.email + ' (' + contact_face.last_name + ' ' \
-                                         + contact_face.name + ' ' + contact_face.patronymic + ')'
+                    if order.client.email:
+                        order.client.email += ', '
+                    order.client.email = order.client.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                              contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
                 if phone.phone:
-                    order.client.person_phone = order.client.person_phone + ', ' + phone.phone + ' (' + \
-                                                contact_face.last_name + ' ' + contact_face.name + ' ' + \
-                                                contact_face.patronymic + ')'
+                    if order.client.person_phone:
+                        order.client.person_phone += ', '
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                     contact_face.name + ' ' + contact_face.patronymic + ')'
         prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
         products_list = []
         for pr in prs:
@@ -939,15 +954,21 @@ def search(request):
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
         contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            c.person_full_name = c.person_full_name + ', ' + contact_face.last_name + ' ' \
+            if c.person_full_name != '  ':
+                c.person_full_name += ', '
+            c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
                 if email.email:
-                    c.email = c.email + ', ' + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                    if c.email:
+                        c.email += ', '
+                    c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
                               contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
                 if phone.phone:
-                    c.person_phone = c.person_phone + ', ' + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                    if c.person_phone:
+                        c.person_phone += ', '
+                    c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
                                      contact_face.name + ' ' + contact_face.patronymic + ')'
         c.files = []
         if Client_Files.objects.filter(client_id=c.id).all() is not None:
@@ -962,15 +983,21 @@ def search(request):
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
         contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            c.person_full_name = c.person_full_name + ', ' + contact_face.last_name + ' ' \
+            if c.person_full_name != '  ':
+                c.person_full_name += ', '
+            c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
                 if email.email:
-                    c.email = c.email + ', ' + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                    if c.email:
+                        c.email += ', '
+                    c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
                               contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
                 if phone.phone:
-                    c.person_phone = c.person_phone + ', ' + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                    if c.person_phone:
+                        c.person_phone += ', '
+                    c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
                                      contact_face.name + ' ' + contact_face.patronymic + ')'
         c.files = []
         if Client_Files.objects.filter(client_id=c.id).all() is not None:

@@ -36,34 +36,49 @@ def full_add_edit_client(request):
             items = request.POST.getlist('items[]')
             contact_faces = []
             for item in items:
-                last_name = request.POST['last_name_{}'.format(item)]
-                name = request.POST['name_{}'.format(item)]
-                patronymic = request.POST['patronymic_{}'.format(item)]
-                emails = []
-                phones = []
-                email_ids = request.POST.getlist('emails_{}[]'.format(item))
-                for email_id in email_ids:
-                    emails.append(request.POST.get('email_{}'.format(email_id)))
-                phone_ids = request.POST.getlist('phones_{}[]'.format(item))
-                for phone_id in phone_ids:
-                    phones.append(request.POST.get('person_phone_{}'.format(phone_id)))
-                if organization == '' and last_name == '' and name == '' and patronymic == '':
-                    out.update({"error": 3})
-                    out.update({'client_form': form})
-                    out.update({'page_title': "Редактирование клиента"})
-                    return render(request, 'client/add_edit_client.html', out)
-                # if ''.join(phones) == '' and organization_phone == '' and ''.join(emails) == '':
-                #     out.update({"error": 2})
-                #     out.update({'client_form': form})
-                #     out.update({'page_title': "Редактирование клиента"})
-                #     return render(request, 'client/add_edit_client.html', out)
-                contact_faces.append({
-                    'last_name': last_name,
-                    'name': name,
-                    'patronymic': patronymic,
-                    'emails': emails,
-                    'phones': phones,
-                })
+                contact_face = {}
+                contact_face.update({'id': 0})
+                contact_face.update({'is_deleted': 0})
+                flag_is_deleted = 0
+                not_add_item = 0
+                if int(item) > 0:
+                    contact_face.update({'id': int(item)})
+                    if not 'last_name_{}'.format(item) in request.POST and \
+                            not 'name_{}'.format(item) in request.POST and \
+                            not 'patronymic_{}'.format(item) in request.POST:
+                        contact_face.update({'is_deleted': 1})
+                        flag_is_deleted = 1
+                if not flag_is_deleted:
+                    last_name = request.POST.get('last_name_{}'.format(item), '')
+                    name = request.POST.get('name_{}'.format(item), '')
+                    patronymic = request.POST.get('patronymic_{}'.format(item), '')
+                    if last_name == '' and name == '' and patronymic == '':
+                        not_add_item = 1
+                    emails = []
+                    phones = []
+                    email_ids = request.POST.getlist('emails_{}[]'.format(item))
+                    for email_id in email_ids:
+                        emails.append(request.POST.get('email_{}'.format(email_id)))
+                    phone_ids = request.POST.getlist('phones_{}[]'.format(item))
+                    for phone_id in phone_ids:
+                        phones.append(request.POST.get('person_phone_{}'.format(phone_id)))
+                    if organization == '' and last_name == '' and name == '' and patronymic == '':
+                        out.update({"error": 3})
+                        out.update({'client_form': form})
+                        out.update({'page_title': "Редактирование клиента"})
+                        return render(request, 'client/add_edit_client.html', out)
+                    # if ''.join(phones) == '' and organization_phone == '' and ''.join(emails) == '':
+                    #     out.update({"error": 2})
+                    #     out.update({'client_form': form})
+                    #     out.update({'page_title': "Редактирование клиента"})
+                    #     return render(request, 'client/add_edit_client.html', out)
+                    contact_face.update({'last_name': last_name})
+                    contact_face.update({'name': name})
+                    contact_face.update({'patronymic': patronymic})
+                    contact_face.update({'emails': emails})
+                    contact_face.update({'phones': phones})
+                if not not_add_item:
+                    contact_faces.append(contact_face)
             last_name = ''
             name = ''
             patronymic = ''
@@ -149,15 +164,39 @@ def full_add_edit_client(request):
                                                    "person_phone", "organization_phone", "email", "is_interested",
                                                    "organization_type"])
                 for contact_face in contact_faces:
-                    new_contact_face = ContactFaces(last_name=contact_face['last_name'], name=contact_face['name'],
-                                                    patronymic=contact_face['patronymic'], organization=new_client)
-                    new_contact_face.save()
-                    for email in contact_face['emails']:
-                        new_email = ContactEmail(face=new_contact_face, email=email)
-                        new_email.save()
-                    for phone in contact_face['phones']:
-                        new_phone = ContactPhone(face=new_contact_face, phone=phone)
-                        new_phone.save()
+                    if contact_face['id'] != 0:
+                        if contact_face.get('is_deleted'):
+                            new_contact_face = ContactFaces(id=contact_face['id'],
+                                                            is_deleted=contact_face.get('is_deleted'))
+                            new_contact_face.save(update_fields=["is_deleted"])
+                        else:
+                            new_contact_face = ContactFaces(id=contact_face['id'],
+                                                            last_name=contact_face.get('last_name'),
+                                                            name=contact_face.get('name'),
+                                                            is_deleted=contact_face.get('is_deleted'),
+                                                            patronymic=contact_face.get('patronymic'),
+                                                            organization=new_client)
+                            new_contact_face.save()
+                        for email in ContactEmail.objects.filter(face=new_contact_face):
+                            email.is_deleted = 1
+                            email.save()
+                        for phone in ContactPhone.objects.filter(face=new_contact_face):
+                            phone.is_deleted = 1
+                            phone.save()
+                    else:
+                        new_contact_face = ContactFaces(last_name=contact_face.get('last_name'),
+                                                        name=contact_face.get('name'),
+                                                        patronymic=contact_face.get('patronymic'),
+                                                        organization=new_client)
+                        new_contact_face.save()
+                    for email in contact_face.get('emails', []):
+                        if email:
+                            new_email = ContactEmail(face=new_contact_face, email=email)
+                            new_email.save()
+                    for phone in contact_face.get('phones', []):
+                        if phone:
+                            new_phone = ContactPhone(face=new_contact_face, phone=phone)
+                            new_phone.save()
                 if is_interested == 1:
                         return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                 return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
@@ -170,15 +209,39 @@ def full_add_edit_client(request):
                                                    "person_phone", "organization_phone", "email", "is_interested",
                                                    "organization_type"])
                 for contact_face in contact_faces:
-                    new_contact_face = ContactFaces(last_name=contact_face['last_name'], name=contact_face['name'],
-                                                    patronymic=contact_face['patronymic'], organization=new_client)
-                    new_contact_face.save()
-                    for email in contact_face['emails']:
-                        new_email = ContactEmail(face=new_contact_face, email=email)
-                        new_email.save()
-                    for phone in contact_face['phones']:
-                        new_phone = ContactPhone(face=new_contact_face, phone=phone)
-                        new_phone.save()
+                    if contact_face['id'] != 0:
+                        if contact_face.get('is_deleted'):
+                            new_contact_face = ContactFaces(id=contact_face['id'],
+                                                            is_deleted=contact_face.get('is_deleted'))
+                            new_contact_face.save(update_fields=["is_deleted"])
+                        else:
+                            new_contact_face = ContactFaces(id=contact_face['id'],
+                                                            last_name=contact_face.get('last_name'),
+                                                            name=contact_face.get('name'),
+                                                            is_deleted=contact_face.get('is_deleted'),
+                                                            patronymic=contact_face.get('patronymic'),
+                                                            organization=new_client)
+                            new_contact_face.save()
+                        for email in ContactEmail.objects.filter(face=new_contact_face):
+                            email.is_deleted = 1
+                            email.save()
+                        for phone in ContactPhone.objects.filter(face=new_contact_face):
+                            phone.is_deleted = 1
+                            phone.save()
+                    else:
+                        new_contact_face = ContactFaces(last_name=contact_face.get('last_name'),
+                                                        name=contact_face.get('name'),
+                                                        patronymic=contact_face.get('patronymic'),
+                                                        organization=new_client)
+                        new_contact_face.save()
+                    for email in contact_face.get('emails', []):
+                        if email:
+                            new_email = ContactEmail(face=new_contact_face, email=email)
+                            new_email.save()
+                    for phone in contact_face.get('phones', []):
+                        if phone:
+                            new_phone = ContactPhone(face=new_contact_face, phone=phone)
+                            new_phone.save()
                 return HttpResponseRedirect('/uploads/client/?id=%s' % new_client.id)
             else:
                 new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
@@ -189,15 +252,39 @@ def full_add_edit_client(request):
                                                    "person_phone", "organization_phone", "email", "is_interested",
                                                    "organization_type"])
                 for contact_face in contact_faces:
-                    new_contact_face = ContactFaces(last_name=contact_face['last_name'], name=contact_face['name'],
-                                                    patronymic=contact_face['patronymic'], organization=new_client)
-                    new_contact_face.save()
-                    for email in contact_face['emails']:
-                        new_email = ContactEmail(face=new_contact_face, email=email)
-                        new_email.save()
-                    for phone in contact_face['phones']:
-                        new_phone = ContactPhone(face=new_contact_face, phone=phone)
-                        new_phone.save()
+                    if contact_face['id'] != 0:
+                        if contact_face.get('is_deleted'):
+                            new_contact_face = ContactFaces(id=contact_face['id'],
+                                                            is_deleted=contact_face.get('is_deleted'))
+                            new_contact_face.save(update_fields=["is_deleted"])
+                        else:
+                            new_contact_face = ContactFaces(id=contact_face['id'],
+                                                            last_name=contact_face.get('last_name'),
+                                                            name=contact_face.get('name'),
+                                                            is_deleted=contact_face.get('is_deleted'),
+                                                            patronymic=contact_face.get('patronymic'),
+                                                            organization=new_client)
+                            new_contact_face.save()
+                        for email in ContactEmail.objects.filter(face=new_contact_face):
+                            email.is_deleted = 1
+                            email.save()
+                        for phone in ContactPhone.objects.filter(face=new_contact_face):
+                            phone.is_deleted = 1
+                            phone.save()
+                    else:
+                        new_contact_face = ContactFaces(last_name=contact_face.get('last_name'),
+                                                        name=contact_face.get('name'),
+                                                        patronymic=contact_face.get('patronymic'),
+                                                        organization=new_client)
+                        new_contact_face.save()
+                    for email in contact_face.get('emails', []):
+                        if email:
+                            new_email = ContactEmail(face=new_contact_face, email=email)
+                            new_email.save()
+                    for phone in contact_face.get('phones', []):
+                        if phone:
+                            new_phone = ContactPhone(face=new_contact_face, phone=phone)
+                            new_phone.save()
                 get_params = '?'
                 if 'search' in request.GET:
                     search = request.GET.get('search')
@@ -482,7 +569,11 @@ def full_add_edit_client(request):
                                'organization': client.organization, 'person_phone': client.person_phone, 'pk': id_client,
                                'organization_phone': client.organization_phone, 'email': client.email,
                                'organization_type': client.organization_type})
-            form.items = ContactFaces.objects.filter(is_deleted=0, organization=client)
+            contact_faces = ContactFaces.objects.filter(is_deleted=0, organization=client).all()
+            for contact_face in contact_faces:
+                contact_face.phones = ContactPhone.objects.filter(is_deleted=0, face=contact_face.id).all()
+                contact_face.emails = ContactEmail.objects.filter(is_deleted=0, face=contact_face.id).all()
+            out.update({'contact_faces': contact_faces})
             # order_products = Order_Product.objects.filter(order_id=id_order, is_deleted=0)
             # products_list = []
             # for pr in order_products:
@@ -562,15 +653,21 @@ def full_get_clients(request):
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
         contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            c.person_full_name = c.person_full_name + ', ' + contact_face.last_name + ' ' \
+            if c.person_full_name != '  ':
+                c.person_full_name += ', '
+            c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
                 if email.email:
-                    c.email = c.email + ', ' + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                    if c.email:
+                        c.email += ', '
+                    c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
                               contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
                 if phone.phone:
-                    c.person_phone = c.person_phone + ', ' + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                    if c.person_phone:
+                        c.person_phone += ', '
+                    c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
                                      contact_face.name + ' ' + contact_face.patronymic + ')'
         c.files = []
         if Client_Files.objects.filter(client_id=c.id).all() is not None:
@@ -618,15 +715,21 @@ def full_get_interested_clients(request):
         c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
         contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            c.person_full_name = c.person_full_name + ', ' + contact_face.last_name + ' ' \
+            if c.person_full_name != '  ':
+                c.person_full_name += ', '
+            c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
                 if email.email:
-                    c.email = c.email + ', ' + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                    if c.email:
+                        c.email += ', '
+                    c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
                               contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
                 if phone.phone:
-                    c.person_phone = c.person_phone + ', ' + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                    if c.person_phone:
+                        c.person_phone += ', '
+                    c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
                                      contact_face.name + ' ' + contact_face.patronymic + ')'
         c.files = []
         if Client_Files.objects.filter(client_id=c.id).all() is not None:
