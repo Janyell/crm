@@ -354,7 +354,7 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th></th>
+                                        {% if user_role == 0 %}<th></th>{% endif %}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -435,17 +435,13 @@
                                                     {% endif %}
                                                 {% endif %}
                                             </td>
-                                            <td>
-                                                {% if user_role == 0 %}
+                                            {% if user_role == 0 %}
+                                                <td>
                                                     <a class="btn delete-claim-button" data-toggle="modal" href="#delete" value="{{ claim.pk }}">
                                                         <i class="icon-remove"></i>
                                                     </a>
-                                                {% elif user_role == 1 and claim.role|urlencode:"" == user.username|urlencode:"" and claim.bill_status|title != "Закрыта" %}
-                                                    <a class="btn delete-claim-button" data-toggle="modal" href="#delete" value="{{ claim.pk }}">
-                                                        <i class="icon-remove"></i>
-                                                    </a>
-                                                {% endif %}
-                                            </td>
+                                                </td>
+                                            {% endif %}
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -467,7 +463,7 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th></th>
+                                        {% if user_role == 0 %}<th></th>{% endif %}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -501,9 +497,13 @@
                                             <td>
                                                 <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             </td>
-                                            <td><a class="btn delete-client-button" data-toggle="modal" href="#delete" value="{{ client.pk }}">
-                                                <i class="icon-remove"></i></a>
-                                            </td>
+                                            {% if user_role == 0 %}
+                                                <td>
+                                                    <a class="btn delete-client-button" data-toggle="modal" href="#delete" value="{{ client.pk }}">
+                                                        <i class="icon-remove"></i>
+                                                    </a>
+                                                </td>
+                                            {% endif %}
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -524,7 +524,7 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th></th>
+                                        {% if user_role == 0 %}<th></th>{% endif %}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -557,9 +557,13 @@
                                             <td>
                                                 <a class="btn edit-button" href="{% url "edit_client" %}?id={{ client.pk }}&is_interested=1&search={{ request.GET.search }}"><i class="icon-pencil"></i></a>
                                             </td>
-                                            <td><a class="btn delete-client-button" data-toggle="modal" href="#delete" value="{{ client.pk }}">
-                                                <i class="icon-remove"></i></a>
-                                            </td>
+                                            {% if user_role == 0 %}
+                                                <td>
+                                                    <a class="btn delete-client-button" data-toggle="modal" href="#delete" value="{{ client.pk }}">
+                                                        <i class="icon-remove"></i>
+                                                    </a>
+                                                </td>
+                                            {% endif %}
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -729,7 +733,7 @@
                                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                                     },
                                     "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 4, 5, 6, 7, 8, 9, 10, 11, 12 ] },
+                                        { "bSortable": false, "aTargets": [ 4, 5, 6, 7, 8, 9, 10, 11{% if user_role == 0 %}, 12{% endif %} ] },
                                         { "sType": "de_datetime", "aTargets": [ 1 ]},
                                         {% if user_role == 1 %}
                                             { "bVisible": false,  "aTargets": [ 9 ]}
@@ -747,7 +751,7 @@
                                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                                     },
                                     "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 5, 6, 7, 8, 9 ] }
+                                        { "bSortable": false, "aTargets": [ 5, 6, 7, 8{% if user_role == 0 %}, 9{% endif %} ] }
                                     ],
                                     "bFilter": false
                                 });
@@ -758,7 +762,7 @@
                                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                                     },
                                     "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 5, 6, 7, 8 ] }
+                                        { "bSortable": false, "aTargets": [ 5, 6, 7{% if user_role == 0 %}, 8{% endif %}] }
                                     ],
                                     "bFilter": false
                                 });
