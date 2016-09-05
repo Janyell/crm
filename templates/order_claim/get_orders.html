@@ -220,6 +220,20 @@
                 <div class="client-info__data">
                 </div>
             </div>
+            <div class="client-info__item client-info__city clearfix">
+                <div class="client-info__head">
+                    Город
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__comment clearfix">
+                <div class="client-info__head">
+                    Коментарий
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
@@ -428,6 +442,10 @@
                     var email = $(this).find('.client-data__email').text();
                     $client_info__data.find('.client-info__email > .client-info__data')
                             .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
+                    var city = $(this).find('.client-data__city').text();
+                    $client_info__data.find('.client-info__city > .client-info__data').text(city);
+                    var comment = $(this).find('.client-data__comment').text();
+                    $client_info__data.find('.client-info__comment > .client-info__data').text(comment);
                 });
                 $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');

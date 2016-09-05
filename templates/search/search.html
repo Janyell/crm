@@ -57,6 +57,8 @@
                                                         <div class="client-data__organization">{{ order.client.organization }}</div>
                                                         <div class="client-data__organization-phone">{{ order.client.organization_phone }}</div>
                                                         <div class="client-data__email">{{ order.client.email }}</div>
+                                                        <div class="client-data__city">{{ order.client.city }}</div>
+                                                        <div class="client-data__comment">{{ order.client.comment }}</div>
                                                     </div>
                                                 </a>
                                             {% else %}
@@ -104,7 +106,7 @@
                                         <td>{{ order.transport_campaign.title }}</td>
                                         <td>
                                             {% if order.comment %}
-                                                <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
+                                                <span class="comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
                                                 <a class="comment-order-button" data-toggle="modal" href="#view-info"
                                                     value="{{ order.comment }}">...</a>
                                             {% endif %}
@@ -224,6 +226,8 @@
                                                         <div class="client-data__organization">{{ order.client.organization }}</div>
                                                         <div class="client-data__organization-phone">{{ order.client.organization_phone }}</div>
                                                         <div class="client-data__email">{{ order.client.email }}</div>
+                                                        <div class="client-data__city">{{ order.client.city }}</div>
+                                                        <div class="client-data__comment">{{ order.client.comment }}</div>
                                                     </div>
                                                 </a>
                                             {% else %}
@@ -271,7 +275,7 @@
                                         <td>{{ order.transport_campaign.title }}</td>
                                         <td>
                                             {% if order.comment %}
-                                                <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
+                                                <span class="comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
                                                 <a class="comment-order-button" data-toggle="modal" href="#view-info"
                                                     value="{{ order.comment }}">...</a>
                                             {% endif %}
@@ -377,6 +381,8 @@
                                                         <div class="client-data__organization">{{ claim.client.organization }}</div>
                                                         <div class="client-data__organization-phone">{{ claim.client.organization_phone }}</div>
                                                         <div class="client-data__email">{{ claim.client.email }}</div>
+                                                        <div class="client-data__city">{{ claim.client.city }}</div>
+                                                        <div class="client-data__comment">{{ claim.client.comment }}</div>
                                                     </div>
                                                 </a>
                                             </td>
@@ -403,7 +409,7 @@
                                             </td>
                                             <td>
                                                 {% if claim.comment %}
-                                                    <span class="order-comment{% if claim.role|urlencode:"" == user.username|urlencode:"" and not claim.is_comment_my %} comment_highlighted{% endif %}">{{ claim.comment }}</span>
+                                                    <span class="comment{% if claim.role|urlencode:"" == user.username|urlencode:"" and not claim.is_comment_my %} comment_highlighted{% endif %}">{{ claim.comment }}</span>
                                                     <a class="comment-claim-button" data-toggle="modal" href="#view-info"
                                                         value="{{ claim.comment }}">...</a>
                                                 {% endif %}
@@ -459,6 +465,8 @@
                                         <th>Контактное лицо</th>
                                         <th>Телефон контактного лица</th>
                                         <th>E-mail</th>
+                                        <th>Город</th>
+                                        <th>Комментарий</th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -477,6 +485,18 @@
                                             <td>{{ client.person_full_name }}</td>
                                             <td>{{ client.person_phone }}</td>
                                             <td>{{ client.email }}</td>
+                                            <td>
+                                                {% if client.city != None %}
+                                                    {{ client.city.name }}
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if client.comment %}
+                                                    <span class="comment{% if client.role|urlencode:"" == user.username|urlencode:"" and not client.is_comment_my %} comment_highlighted{% endif %}">{{ client.comment }}</span>
+                                                    <a class="comment-button" data-toggle="modal" href="#view-info"
+                                                        value="{{ client.comment }}">...</a>
+                                                {% endif %}
+                                            </td>
                                             <td><a class="btn" href="{% url "get_orders" %}?client-id={{ client.pk }}">Заказы</a></td>
                                             <td>
                                                 <a class="btn add-order-button" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a>
@@ -521,6 +541,8 @@
                                         <th>Контактное лицо</th>
                                         <th>Телефон контактного лица</th>
                                         <th>E-mail</th>
+                                        <th>Город</th>
+                                        <th>Комментарий</th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -538,6 +560,18 @@
                                             <td>{{ client.person_full_name }}</td>
                                             <td>{{ client.person_phone }}</td>
                                             <td>{{ client.email }}</td>
+                                            <td>
+                                                {% if client.city != None %}
+                                                    {{ client.city.name }}
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if client.comment %}
+                                                    <span class="comment{% if client.role|urlencode:"" == user.username|urlencode:"" and not client.is_comment_my %} comment_highlighted{% endif %}">{{ client.comment }}</span>
+                                                    <a class="comment-button" data-toggle="modal" href="#view-info"
+                                                        value="{{ client.comment }}">...</a>
+                                                {% endif %}
+                                            </td>
                                             <td>
                                                 <a class="btn add-order-button" href="{% url "add_claim" %}?client-id={{ client.pk }}">Добавить заявку</a>
                                             </td>
@@ -610,6 +644,20 @@
                         <div class="client-info__item client-info__email clearfix">
                             <div class="client-info__head">
                                 E-mail
+                            </div>
+                            <div class="client-info__data">
+                            </div>
+                        </div>
+                        <div class="client-info__item client-info__city clearfix">
+                            <div class="client-info__head">
+                                Город
+                            </div>
+                            <div class="client-info__data">
+                            </div>
+                        </div>
+                        <div class="client-info__item client-info__comment clearfix">
+                            <div class="client-info__head">
+                                Коментарий
                             </div>
                             <div class="client-info__data">
                             </div>
@@ -751,7 +799,7 @@
                                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                                     },
                                     "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 5, 6, 7, 8{% if user_role == 0 %}, 9{% endif %} ] }
+                                        { "bSortable": false, "aTargets": [ 6, 7, 8, 9, 10{% if user_role == 0 %}, 11{% endif %} ] }
                                     ],
                                     "bFilter": false
                                 });
@@ -762,7 +810,7 @@
                                         "url": "{{ STATIC_URL }}language/ru_RU.txt"
                                     },
                                     "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 5, 6, 7{% if user_role == 0 %}, 8{% endif %}] }
+                                        { "bSortable": false, "aTargets": [ 6, 7, 8, 9{% if user_role == 0 %}, 10{% endif %}] }
                                     ],
                                     "bFilter": false
                                 });
@@ -818,21 +866,21 @@
                                     $info_data.html(files);
                                 });
                             {% endif %}
+                            $('.comment').each(function() {
+                                var $this = $(this);
+                                var comment = $this.text();
+                                var MAX_LENGTH = 30;
+                                if (comment.length < MAX_LENGTH) {
+                                    return;
+                                }
+                                comment = comment.substring(0, MAX_LENGTH);
+                                var last_space = comment.regexLastIndexOf(/\s/m);
+                                if (last_space != -1) {
+                                    comment = comment.substring(0, last_space);
+                                }
+                                $this.text(comment);
+                            });
                             {% if orders or claims or user.role == 0 and old_orders %}
-                                $('.order-comment').each(function() {
-                                    var comment = $(this).text();
-                                    var MAX_LENGTH = 30;
-                                    if (comment.length < MAX_LENGTH) {
-                                        return;
-                                    }
-                                    comment = comment.substring(0, MAX_LENGTH);
-                                    var last_space = comment.regexLastIndexOf(/\s/m);
-                                    if (last_space != -1) {
-                                        comment = comment.substring(0, last_space);
-                                    }
-                                    $(this).text(comment);
-                                });
-
                                 $('.get-client-info').bind('click', function(){
                                     var $client_info__data = $('#client-info').find('.modal-body');
                                     var full_name = $(this).find('.client-data__full-name').text();
@@ -846,6 +894,10 @@
                                     var email = $(this).find('.client-data__email').text();
                                     $client_info__data.find('.client-info__email > .client-info__data')
                                             .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
+                                    var city = $(this).find('.client-data__city').text();
+                                    $client_info__data.find('.client-info__city > .client-info__data').text(city);
+                                    var comment = $(this).find('.client-data__comment').text();
+                                    $client_info__data.find('.client-info__comment > .client-info__data').text(comment);
                                 });
                             {% endif %}
                         });
