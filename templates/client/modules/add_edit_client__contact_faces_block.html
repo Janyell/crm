@@ -1,0 +1,35 @@
+{% block contact-faces %}
+    <div class="repeatable-wrap">
+        <div class="repeatable hide"> {# reference #}
+            {% with minus=True %}
+                {% include "client/modules/contact_face_block.html" %}
+            {% endwith %}
+        </div>
+        <div class="repeat">
+            <div class="control-group">
+                <label class="control-label">
+                    Еще контактное лицо
+                </label>
+                <div class="controls">
+                    <a id="plus-root-item" class="btn btn-success plus-item">+</a>
+                </div>
+            </div>
+        </div>
+        <select multiple class="repeatable-items hidden" name="items[]"></select>
+    </div>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/repeat-item.js"></script>
+
+    {% url "edit_client" as edit_client_url %}
+    {% if request.path == edit_client_url %}
+        {% include "client/modules/edit_client__contact_faces_db.html" %}
+    {% else %}
+        <script type="text/javascript">
+            (function($) {
+                $(document).ready(function() {
+                    $('#plus-root-item').click();
+                });
+            })(jQuery);
+        </script>
+    {% endif %}
+{% endblock %}

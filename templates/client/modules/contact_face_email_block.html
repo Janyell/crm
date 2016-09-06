@@ -1,0 +1,14 @@
+{% block contact-face-email %}
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">
+            E-mail
+            <span class="required-input_second">*</span>
+        </label>
+        <div class="controls">
+            {{ client_form.email }}
+            {% if minus == True %}
+                <a class="btn btn-danger minus-item">-</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

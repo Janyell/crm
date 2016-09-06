@@ -201,14 +201,14 @@
             </div>
             <div class="client-info__item client-info__contact-person clearfix">
                 <div class="client-info__head">
-                    Контактное лицо
+                    Контактные лица
                 </div>
                 <div class="client-info__data">
                 </div>
             </div>
             <div class="client-info__item client-info__contact-person-phone clearfix">
                 <div class="client-info__head">
-                    Телефон контактного лица
+                    Телефоны контактных лиц
                 </div>
                 <div class="client-info__data">
                 </div>
@@ -372,6 +372,7 @@
                 var sort = "{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}";
                 var source = "{% if request.GET.source %}source={{ request.GET.source }}{% endif %}";
                 var status = "{% if request.GET.status %}status={{ request.GET.status }}{% endif %}";
+                var month_date = "month_date={{ request.GET.month_date }}";
                 var managers = "";
                 {% if managers %}
                     {% for manager in managers %}
@@ -389,6 +390,7 @@
                     if (source) { get_params += "&" + source; }
                     if (status) { get_params += "&" + status; }
                     if (managers) { get_params += "&" + managers; }
+                    if (month_date) { get_params += "&" + month_date; }
                     return get_params;
                 }
 
@@ -398,6 +400,7 @@
                 function get_url(without) {
                     var url = path + "?";
                     if (page) { url += page + "&"; }
+                    if (month_date) { url += month_date + "&"; }
                     if (without == "length") {
                         if (sort) { url += sort + "&";}
                         if (source) { url += source + "&";}
@@ -443,7 +446,7 @@
                     $client_info__data.find('.client-info__email > .client-info__data')
                             .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
                     var city = $(this).find('.client-data__city').text();
-                    $client_info__data.find('.client-info__city > .client-info__data').text(city);
+                    if (city != 'None') { $client_info__data.find('.client-info__city > .client-info__data').text(city); }
                     var comment = $(this).find('.client-data__comment').text();
                     $client_info__data.find('.client-info__comment > .client-info__data').text(comment);
                 });
@@ -565,6 +568,7 @@
                     if (sort) { url += sort + "&";}
                     if (source) { url += source + "&";}
                     if (status) { url += status + "&";}
+                    if (month_date) { url += month_date + "&";}
                     if (managers) {
                         {% if managers %}
                             {% for manager in managers %}

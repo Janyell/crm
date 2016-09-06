@@ -1,0 +1,34 @@
+<div class="inline-block form-add_mini only-for-our-products repeatable-wrap">
+    {% if task_form %}
+        <div class="repeatable hide"> {# reference #}
+            {% with minus=True %}
+                {% include "order_claim/modules/task_block.html" %}
+            {% endwith %}
+        </div>
+    {% endif %}
+    <div class="repeat">
+        <div class="control-group">
+            <label class="control-label">
+                Еще
+            </label>
+            <div class="controls">
+                <a id="plus-root-item" class="btn btn-success plus-item">+</a>
+            </div>
+        </div>
+    </div>
+    <select multiple class="repeatable-items hidden" name="items[]"></select>
+</div>
+<script type="text/javascript" src="{{ STATIC_URL }}js/repeat-item.js"></script>
+
+{#{% url "edit_claim" as edit_claim_url %}#}
+{#{% if request.path == edit_claim_url %}#}
+{#    {% include "order_claim/modules/edit_claim__tasks_db.html" %}#}
+{#{% else %}#}
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                $('#plus-root-item').click();
+            });
+        })(jQuery);
+    </script>
+{#{% endif %}#}

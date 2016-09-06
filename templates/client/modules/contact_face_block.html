@@ -1,0 +1,60 @@
+{% block contact-face %}
+    <div class="control-group">
+        <label class="control-label" for="inputСontactPerson">
+            Контактное лицо
+            <span class="required-input">*</span>
+        </label>
+        <div class="controls">
+            <div class="form-add__input">
+                {{ client_form.last_name }}
+            </div>
+            <div class="form-add__input">
+                {{ client_form.name }}
+            </div>
+            <div class="form-add__input_last">
+                {{ client_form.patronymic }}
+                {% if minus == True %}
+                    <a class="btn btn-danger minus-item">-</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="repeatable-wrap">
+        <div class="repeatable hide"> {# reference #}
+            {% with minus=True %}
+                {% include "client/modules/contact_face_phone_block.html" %}
+            {% endwith %}
+        </div>
+        <div class="repeat">
+            <div class="control-group">
+                <label class="control-label">
+                    Еще телефон
+                </label>
+                <div class="controls">
+                    <a class="btn btn-success plus-item">+</a>
+                </div>
+            </div>
+        </div>
+        <select multiple class="repeatable-items hidden" name="phones[]"></select>
+    </div>
+
+    <div class="repeatable-wrap">
+        <div class="repeatable hide"> {# reference #}
+            {% with minus=True %}
+                {% include "client/modules/contact_face_email_block.html" %}
+            {% endwith %}
+        </div>
+        <div class="repeat">
+            <div class="control-group">
+                <label class="control-label">
+                    Еще e-mail
+                </label>
+                <div class="controls">
+                    <a class="btn btn-success plus-item">+</a>
+                </div>
+            </div>
+        </div>
+        <select multiple class="repeatable-items hidden" name="emails[]"></select>
+    </div>
+{% endblock %}

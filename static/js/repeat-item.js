@@ -14,7 +14,7 @@ function update_item_id ($new_item, item_id) {
     $new_item.addClass('repeatable_' + item_id);
     var $new_control_group = $new_item.children('.control-group');
     $new_control_group.find('select, input, textarea').each(function () {
-        update_attr_name($(this), item_id)
+        update_attr_name($(this), item_id);
     });
     $new_control_group.find('.minus-item').attr('data-itemId', item_id);
 }
@@ -34,12 +34,13 @@ function handle_click($this, item_id, click_children) {
     var $new_item = $repeat.prev();
     update_item_id($new_item, item_id);
     var $new_children_repeatable_wrap = $new_item.children('.repeatable-wrap');
-    if ($new_children_repeatable_wrap.size()) {
-        update_attr_name($new_children_repeatable_wrap.children('select.repeatable-items'), item_id);
+    $new_children_repeatable_wrap.each(function() {
+        var $this = $(this);
+        update_attr_name($this.children('select.repeatable-items'), item_id);
         if (click_children) {
-            $new_children_repeatable_wrap.children('.repeat').find('.plus-item').click();
+            $this.children('.repeat').find('.plus-item').click();
         }
-    }
+    });
     $new_item.show();
     add_item_option($repeatable_wrap, item_id);
     return $new_item;
@@ -57,4 +58,3 @@ function handle_click($this, item_id, click_children) {
         handle_click($(this), --ij, true);
     });
 })(jQuery);
-

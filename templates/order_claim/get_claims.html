@@ -119,7 +119,7 @@
                                         </div>
                                         <div class="client-data__organization-phone">{{ claim.client.organization_phone }}</div>
                                         <div class="client-data__email">{{ claim.client.email }}</div>
-                                        <div class="client-data__city">{{ claim.client.city }}</div>
+                                        <div class="client-data__city">{{ claim.client.city.name }}</div>
                                         <div class="client-data__comment">{{ claim.client.comment }}</div>
                                     </div>
                                 </a>
@@ -442,7 +442,7 @@
                     $client_info__data.find('.client-info__email > .client-info__data')
                             .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
                     var city = $(this).find('.client-data__city').text();
-                    $client_info__data.find('.client-info__city > .client-info__data').text(city);
+                    if (city != 'None') { $client_info__data.find('.client-info__city > .client-info__data').text(city); }
                     var comment = $(this).find('.client-data__comment').text();
                     $client_info__data.find('.client-info__comment > .client-info__data').text(comment);
                 });

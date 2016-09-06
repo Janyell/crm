@@ -408,6 +408,33 @@ def fix_bd_org_type(request):
     return HttpResponseRedirect('/clients/interested/')
 
 
+def fix_bd_client_faces(request):
+    clients = Clients.objects.all()
+    for client in clients:
+        client.last_name = ''
+        client.name = ''
+        client.patronymic = ''
+        client.email = ''
+        client.person_phone = ''
+        client.save()
+    return HttpResponseRedirect('/')
+
+
+# def fix_bd_client_faces(request):
+#     clients = Clients.objects.all()
+#     for client in clients:
+#         if client.last_name or client.name or client.patronymic:
+#             new_contact_face = ContactFaces.objects.create(last_name=client.last_name,
+#                                                            name=client.name,
+#                                                            patronymic=client.patronymic,
+#                                                            organization=client)
+#             if client.email:
+#                 new_email = ContactEmail.objects.create(face=new_contact_face, email=client.email)
+#             if client.person_phone:
+#                 new_phone = ContactPhone.objects.create(face=new_contact_face, phone=client.person_phone)
+#     return HttpResponseRedirect('/')
+
+
 def made_excel(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
@@ -484,10 +511,36 @@ def made_excel(request):
             column_index = 1
             for col in cols:
                 if col == u'name':
-                    sheet.cell(row=row_index, column=column_index).value = \
-                        unicode(getattr(table_object, 'last_name')) +\
-                        ' ' + unicode(getattr(table_object, 'name')) +\
-                        ' ' + unicode(getattr(table_object, 'patronymic'))
+                    contact_faces = ContactFaces.objects.filter(organization=table_object.id, is_deleted=0).all()
+                    person_full_name = ''
+                    for contact_face in contact_faces:
+                        if person_full_name != '':
+                            person_full_name += ', '
+                        person_full_name = person_full_name + contact_face.last_name + ' ' \
+                                             + contact_face.name + ' ' + contact_face.patronymic
+                    sheet.cell(row=row_index, column=column_index).value = unicode(person_full_name)
+                elif col == u'email':
+                    contact_faces = ContactFaces.objects.filter(organization=table_object.id, is_deleted=0).all()
+                    full_email = ''
+                    for contact_face in contact_faces:
+                        for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                            if email.email:
+                                if full_email:
+                                    full_email += ', '
+                                full_email = full_email + email.email
+                    sheet.cell(row=row_index, column=column_index).value = unicode(full_email)
+                elif col == u'person_phone':
+                    contact_faces = ContactFaces.objects.filter(organization=table_object.id, is_deleted=0).all()
+                    full_person_phone = ''
+                    for contact_face in contact_faces:
+                        for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                            if phone.phone:
+                                if full_person_phone:
+                                    full_person_phone += ', '
+                                full_person_phone = full_person_phone + phone.phone + ' (' +\
+                                                    contact_face.last_name + ' ' + contact_face.name + ' ' +\
+                                                    contact_face.patronymic + ')'
+                    sheet.cell(row=row_index, column=column_index).value = unicode(full_person_phone)
                 else:
                     sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col))
                 column_index += 1
@@ -729,7 +782,27 @@ def search(request):
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
             order.client.organization_or_full_name = order.client.organization
-        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        order.client.full_name = ''
+        order.client.email = ''
+        order.client.phone = ''
+        contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
+        for contact_face in contact_faces:
+            if order.client.full_name != '':
+                order.client.full_name += ', '
+            order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
+                                 + contact_face.name + ' ' + contact_face.patronymic
+            for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                if email.email:
+                    if order.client.email:
+                        order.client.email += ', '
+                    order.client.email = order.client.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                              contact_face.patronymic + ')'
+            for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                if phone.phone:
+                    if order.client.person_phone:
+                        order.client.person_phone += ', '
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                     contact_face.name + ' ' + contact_face.patronymic + ')'
         prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
         products_list = []
         for pr in prs:
@@ -788,7 +861,27 @@ def search(request):
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
             order.client.organization_or_full_name = order.client.organization
-        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        order.client.full_name = ''
+        order.client.email = ''
+        order.client.person_phone = ''
+        contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
+        for contact_face in contact_faces:
+            if order.client.full_name != '':
+                order.client.full_name += ', '
+            order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
+                                 + contact_face.name + ' ' + contact_face.patronymic
+            for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                if email.email:
+                    if order.client.email:
+                        order.client.email += ', '
+                    order.client.email = order.client.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                              contact_face.patronymic + ')'
+            for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                if phone.phone:
+                    if order.client.person_phone:
+                        order.client.person_phone += ', '
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                     contact_face.name + ' ' + contact_face.patronymic + ')'
         prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
         products_list = []
         for pr in prs:
@@ -847,7 +940,27 @@ def search(request):
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
             order.client.organization_or_full_name = order.client.organization
-        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        order.client.full_name = ''
+        order.client.email = ''
+        order.client.person_phone = ''
+        contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
+        for contact_face in contact_faces:
+            if order.client.full_name != '':
+                order.client.full_name += ', '
+            order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
+                                 + contact_face.name + ' ' + contact_face.patronymic
+            for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                if email.email:
+                    if order.client.email:
+                        order.client.email += ', '
+                    order.client.email = order.client.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                              contact_face.patronymic + ')'
+            for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                if phone.phone:
+                    if order.client.person_phone:
+                        order.client.person_phone += ', '
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                     contact_face.name + ' ' + contact_face.patronymic + ')'
         prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
         products_list = []
         for pr in prs:
@@ -896,8 +1009,32 @@ def search(request):
         order.reason = CloseClaims.objects.filter(order=order.id).first()
 
     client_list = list(Clients.search.query(search_word).filter(is_deleted=0, is_interested=0))
+    contact_faces_list = list(ContactFaces.search.query(search_word)
+                              .filter(is_deleted=0))
+    contact_faces_list_ids = [object.organization_id for object in contact_faces_list]
+    client_list += list(Clients.objects.filter(pk__in=contact_faces_list_ids, is_interested=0, is_deleted=0))
     for c in client_list:
-        c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
+        c.person_full_name = ''
+        c.email = ''
+        c.person_phone = ''
+        contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
+        for contact_face in contact_faces:
+            if c.person_full_name != '':
+                c.person_full_name += ', '
+            c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
+                                 + contact_face.name + ' ' + contact_face.patronymic
+            for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                if email.email:
+                    if c.email:
+                        c.email += ', '
+                    c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                              contact_face.patronymic + ')'
+            for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                if phone.phone:
+                    if c.person_phone:
+                        c.person_phone += ', '
+                    c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                     contact_face.name + ' ' + contact_face.patronymic + ')'
         c.files = []
         if Client_Files.objects.filter(client_id=c.id).all() is not None:
             for client_file in Client_Files.objects.filter(client_id=c.id).all():
@@ -907,8 +1044,32 @@ def search(request):
                     c.files.append(client_file)
 
     interested_client_list = list(Clients.search.query(search_word).filter(is_deleted=0, is_interested=1))
+    contact_faces_list = list(ContactFaces.search.query(search_word)
+                              .filter(is_deleted=0))
+    contact_faces_list_ids = [object.organization_id for object in contact_faces_list]
+    interested_client_list += list(Clients.objects.filter(pk__in=contact_faces_list_ids, is_interested=1, is_deleted=0))
     for c in interested_client_list:
-        c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
+        c.person_full_name = ''
+        c.email = ''
+        c.person_phone = ''
+        contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
+        for contact_face in contact_faces:
+            if c.person_full_name != '':
+                c.person_full_name += ', '
+            c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
+                                 + contact_face.name + ' ' + contact_face.patronymic
+            for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                if email.email:
+                    if c.email:
+                        c.email += ', '
+                    c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                              contact_face.patronymic + ')'
+            for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                if phone.phone:
+                    if c.person_phone:
+                        c.person_phone += ', '
+                    c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                     contact_face.name + ' ' + contact_face.patronymic + ')'
         c.files = []
         if Client_Files.objects.filter(client_id=c.id).all() is not None:
             for client_file in Client_Files.objects.filter(client_id=c.id).all():
@@ -1030,8 +1191,8 @@ def get_reports(request):
         source = int(request.GET.get('source'))
         if source != -1:
             orders = orders.filter(source=source)
-    if 'month-date' in request.GET:
-        month_date = request.GET.get('month-date')
+    if 'month_date' in request.GET:
+        month_date = request.GET.get('month_date')
     else:
         month_date = date.today().strftime("%Y-%m")
     out.update({'month_date': month_date})
@@ -1060,7 +1221,28 @@ def get_reports(request):
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
             order.client.organization_or_full_name = order.client.organization
-        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        order.client.full_name = ''
+        order.client.email = ''
+        order.client.person_phone = ''
+        contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
+        for contact_face in contact_faces:
+            if order.client.full_name != '':
+                order.client.full_name += ', '
+            order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
+                                 + contact_face.name + ' ' + contact_face.patronymic
+            for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                if email.email:
+                    if order.client.email:
+                        order.client.email += ', '
+                    order.client.email = order.client.email + email.email + ' (' + contact_face.last_name + ' ' \
+                                         + contact_face.name + ' ' + contact_face.patronymic + ')'
+            for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                if phone.phone:
+                    if order.client.person_phone:
+                        order.client.person_phone += ', '
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + \
+                                                contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                                                contact_face.patronymic + ')'
         prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
         products_list = []
         for pr in prs:
@@ -1164,7 +1346,28 @@ def get_related_claims(request):
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
             order.client.organization_or_full_name = order.client.organization
-        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        order.client.full_name = ''
+        order.client.email = ''
+        order.client.person_phone = ''
+        contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
+        for contact_face in contact_faces:
+            if order.client.full_name != '':
+                order.client.full_name += ', '
+            order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
+                                 + contact_face.name + ' ' + contact_face.patronymic
+            for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                if email.email:
+                    if order.client.email:
+                        order.client.email += ', '
+                    order.client.email = order.client.email + email.email + ' (' + contact_face.last_name + ' ' \
+                                         + contact_face.name + ' ' + contact_face.patronymic + ')'
+            for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                if phone.phone:
+                    if order.client.person_phone:
+                        order.client.person_phone += ', '
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + \
+                                                contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                                                contact_face.patronymic + ')'
         prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
         products_list = []
         for pr in prs:
@@ -1265,7 +1468,28 @@ def get_client_claims(request):
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
             order.client.organization_or_full_name = order.client.organization
-        order.client.full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
+        order.client.full_name = ''
+        order.client.email = ''
+        order.client.phone = ''
+        contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
+        for contact_face in contact_faces:
+            if order.client.full_name != '':
+                order.client.full_name += ', '
+            order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
+                                 + contact_face.name + ' ' + contact_face.patronymic
+            for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                if email.email:
+                    if order.client.email:
+                        order.client.email += ', '
+                    order.client.email = order.client.email + email.email + ' (' + contact_face.last_name + ' ' \
+                                         + contact_face.name + ' ' + contact_face.patronymic + ')'
+            for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                if phone.phone:
+                    if order.client.person_phone:
+                        order.client.person_phone += ', '
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + \
+                                                contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                                                contact_face.patronymic + ')'
         prs = Order_Product.objects.filter(order_id=order.id, is_deleted=0)
         products_list = []
         for pr in prs:
@@ -1460,7 +1684,8 @@ def edit_kp(request):
             product.total_price = product.count_of_products * product.price
             product.title = product.product.title
         if claim.client.organization == '':
-            organization_or_full_name = claim.client.last_name + ' ' + claim.client.name + ' ' + claim.client.patronymic
+            contact_face = ContactFaces.objects.filter(organization=claim.client.id, is_deleted=0).first()
+            organization_or_full_name = contact_face.last_name + ' ' + contact_face.name + ' ' + contact_face.patronymic
         else:
             organization_or_full_name = claim.client.organization
         # TODO
@@ -1517,7 +1742,10 @@ def edit_kp(request):
         symbols = (u"абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ ",
                    u"abvgdeejzijklmnoprstufhzcss_y_euaABVGDEEJZIJKLMNOPRSTUFHZCSS_Y_EUA_")
         tr = dict( [ (ord(a), ord(b)) for (a, b) in zip(*symbols) ] )
-        filename = str(claim.account_number.translate(tr)) + '_' + str(claim.company.title.translate(tr)) + '_' + str(hash(datetime.now()))
+        if claim.company:
+            filename = str(claim.account_number.translate(tr)) + '_' + str(claim.company.title.translate(tr)) + '_' + str(hash(datetime.now()))
+        else:
+            filename = str(claim.account_number.translate(tr)) + '_' + str(hash(datetime.now()))
         out_filename_pdf = MEDIA_ROOT + '/' + str('uploads/') + filename + '.pdf'
         out_filename_html = MEDIA_ROOT + '/' + str('uploads/') + filename + '.html'
         form_file = open(out_filename_html, 'wb')

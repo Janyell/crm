@@ -1,0 +1,50 @@
+{% block contact-faces_db %}
+    {% if contact_faces %}
+        <ul class="contact-faces repeatable-items_db hide">
+            {% for contact_face in contact_faces %}
+                <li class="contact-face" data-id="{{ contact_face.pk }}"
+                    data-name="{{ contact_face.name }}" data-lastname="{{ contact_face.last_name }}" data-patronymic="{{ contact_face.patronymic }}">
+                    <ul class="contact-face__data-phones">
+                        {% for phone in contact_face.phones %}
+                            <li class="contact-face-phone" data-id="{{ phone.pk }}" data-data="{{ phone.phone }}"></li>
+                        {% endfor %}
+                    </ul>
+                    <ul class="contact-face__data-emails">
+                        {% for email in contact_face.emails %}
+                            <li class="contact-face-email" data-id="{{ email.pk }}" data-data="{{ email.email }}"></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+        <script type="text/javascript">
+            (function($) {
+                $(document).ready(function() {
+                    var $plus_root_item = $('#plus-root-item');
+                    var $repeatable_items_db = $('ul.repeatable-items_db');
+                    $repeatable_items_db.children('li').each(function() {
+                        var $item_db = $(this);
+                        var item_db_id = $item_db.attr('data-id');
+                        var $repeatable_block = handle_click($plus_root_item, item_db_id, false);
+                        $repeatable_block.find('.input_last-name').val($item_db.attr('data-lastname'));
+                        $repeatable_block.find('.input_name').val($item_db.attr('data-name'));
+                        $repeatable_block.find('.input_patronymic').val($item_db.attr('data-patronymic'));
+
+                        var $item_db_data = $item_db.children('ul');
+                        var i = 0;
+                        $item_db_data.each(function() {
+                            var $this = $(this);
+                            var $plus_data_item = $repeatable_block.find('.plus-item:eq(' + i++ + ')');
+                            $this.children('li').each(function() {
+                                var $item_db__data = $(this);
+                                var item_db__data_id = $item_db__data.attr('data-id');
+                                var $repeatable_data_block = handle_click($plus_data_item, item_db__data_id, false);
+                                $repeatable_data_block.find('input').val($item_db__data.attr('data-data'));
+                            });
+                        });
+                    });
+                });
+            })(jQuery);
+        </script>
+    {% endif %}
+{% endblock %}

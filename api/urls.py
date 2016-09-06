@@ -150,6 +150,7 @@ urlpatterns = patterns('',
                        # url(r'^fix_bd_org_type/$', 'base_api.views.fix_bd_org_type', name='fix_bd_org_type'),
                        # url(r'^fix_file_nodes/$', 'base_api.views.fix_file_nodes', name='fix_file_nodes'),
                        # url(r'^fix_cities/$', 'base_api.views.fix_cities', name='fix_cities'),
+                       # url(r'^fix_bd_client_faces/$', 'base_api.views.fix_bd_client_faces', name='fix_bd_client_faces'),
                        url(r'^search/$', 'base_api.views.search', name='search'),
                        url(r'^settings/$', 'base_api.views.get_settings', name='get_settings'),
 
