@@ -52,6 +52,23 @@
                 <input type="hidden" name="is_interested" value=1>
             {% endif %}
             <div class="control-group">
+                <label class="control-label" for="inputСontactPerson">
+                    Контактное лицо
+                    <span class="required-input">*</span>
+                </label>
+                <div class="controls">
+                    <div class="form-add__input">
+                        {{ client_form.last_name }}
+                    </div>
+                    <div class="form-add__input">
+                        {{ client_form.name }}
+                    </div>
+                    <div class="form-add__input_last">
+                        {{ client_form.patronymic }}
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
                 <label class="control-label" for="inputOrganization">
                     Организация
                     <span class="required-input">*</span>
@@ -87,11 +104,36 @@
                             <abbr title="Обособленное подразделение">ОП</abbr>
                         </label>
                         <label class="radio">
+                            <input type="radio" name="organization-type" value="ao">
+                            <abbr title="Акционерное общество">АО</abbr>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="organization-type" value="too">
+                            <abbr title="Товарищество с ограниченной ответственностью">ТОО</abbr>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="organization-type" value="mp">
+                            <abbr title="">МП</abbr>
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="organization-type" value="pao">
+                            <abbr title="Публичное акционерное общество">ПАО</abbr>
+                        </label>
+                        <label class="radio">
                             <input type="radio" name="organization-type" value="other" checked />
                             Другое
                         </label>
                     </div><!--
                     -->{{ client_form.organization }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPersonPhone">
+                    Телефон контактного лица
+                    <span class="required-input_second">*</span>
+                </label>
+                <div class="controls">
+                    {{ client_form.person_phone }}
                 </div>
             </div>
             <div class="control-group">
@@ -103,9 +145,35 @@
                     {{ client_form.organization_phone }}
                 </div>
             </div>
-
-            {% include "client/modules/add_edit_client__contact_faces_block.html" %}
-
+            <div class="control-group">
+                <label class="control-label" for="inputEmail">
+                    E-mail
+                    <span class="required-input_second">*</span>
+                </label>
+                <div class="controls">
+                    {{ client_form.email }}
+                </div>
+            </div>
+            <div class="control-group city">
+                <label class="control-label" for="id_client_city">
+                    Город
+                </label>
+                <div class="controls">
+                    {{ client_form.city }}
+                    <label for="inputCity" class="label_between">
+                        или добавьте новый город
+                    </label>
+                    <input id="inputCity" type="text" name="newCity"  placeholder="Название нового города"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputComment">
+                    Комментарий
+                </label>
+                <div class="controls">
+                    {{ client_form.comment }}
+                </div>
+            </div>
             {% url "edit_client" as edit_client_url %}
             {% if request.path == edit_client_url %}
                 <div class="control-group">
@@ -185,6 +253,20 @@
                     'data-items': "10",
                     'data-source': '[{% for organization in organizations %}"{{ organization }}", {% endfor %} ""]'
                 });
+
+                {# selectClientCity #}
+                var $select_client_city = $('#id_client_city');
+                $select_client_city.attr({
+                    'data-live-search': "true",
+                    'data-size': "10"
+                });
+                {# Первыми (после пустого -----) поставить записи с определенными value (Челябинск, Москва, Самовывоз) #}
+                var $select_city__empty_option = $select_client_city.find('option[value=""]');
+                var values = [19, 14, 10]; {# Самовывоз, Москва, Челябинск #}
+                values.forEach(function(item) {
+                    $select_city__empty_option.after($select_client_city.find('option[value='+ item +']'));
+                });
+                $select_client_city.selectpicker();
 
                 function get_get_params() {
                     var need_get_params = ['page', 'length', 'sort', 'search'];
@@ -306,5 +388,4 @@
             });
         })(jQuery);
     </script>
-
 {%endblock%}

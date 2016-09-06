@@ -69,6 +69,10 @@ class Roles(User):
     search = SphinxSearch()
 
 
+class Cities(models.Model):
+    name = models.CharField(max_length=255)
+
+
 class Clients(models.Model):
     name = models.CharField(max_length=25, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
@@ -82,6 +86,8 @@ class Clients(models.Model):
     is_interested = models.BooleanField(default=0)
     role = models.ForeignKey(Roles, null=True, blank=True)
     organization_type = models.CharField(max_length=255, blank=True, default='')
+    comment = models.TextField(null=True, blank=True, default='')
+    city = models.ForeignKey(Cities, null=True, blank=True, default='')
 
     search = SphinxSearch()
 
@@ -159,10 +165,6 @@ class Sources(models.Model):
     title = models.CharField(max_length=255)
     is_active = models.BooleanField(default=1)
     is_deleted = models.BooleanField(default=0)
-
-
-class Cities(models.Model):
-    name = models.CharField(max_length=255)
 
 
 class Orders(models.Model):

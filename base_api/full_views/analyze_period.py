@@ -84,6 +84,7 @@ def full_analyze_period_product_groups(request):
                                             .filter(order__order_date__gte=since_date)\
                                             .filter(order__order_date__lte=until_date)\
                                             .filter(Q(order__order_status=-1) | Q(order__order_status=2))\
+                                            .filter(Q(order__is_deleted=0))\
                                             .values("product__group__title")\
                                             .annotate(number=Sum('count_of_products'))\
                                             .order_by()

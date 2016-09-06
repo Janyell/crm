@@ -210,6 +210,20 @@
                 <div class="client-info__data">
                 </div>
             </div>
+            <div class="client-info__item client-info__city clearfix">
+                 <div class="client-info__head">
+                     Город
+                 </div>
+                 <div class="client-info__data">
+                 </div>
+            </div>
+            <div class="client-info__item client-info__comment clearfix">
+                <div class="client-info__head">
+                    Коментарий
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
@@ -347,6 +361,7 @@
                 var length = "{% if request.GET.length %}length={{ request.GET.length }}{% endif %}";
                 var sort = "{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}";
                 var source = "{% if request.GET.source %}source={{ request.GET.source }}{% endif %}";
+                var month_date = "month_date={{ request.GET.month_date }}";
                 var managers = "";
                 {% if managers %}
                     {% for manager in managers %}
@@ -363,6 +378,7 @@
                     if (sort) { get_params += "&" + sort; }
                     if (source) { get_params += "&" + source; }
                     if (managers) { get_params += "&" + managers; }
+                    if (month_date) { get_params += "&" + month_date; }
                     return get_params;
                 }
 
@@ -372,6 +388,7 @@
                 function get_url(without) {
                     var url = path + "?";
                     if (page) { url += page + "&"; }
+                    if (month_date) { url += month_date + "&"; }
                     if (without == "length") {
                         if (sort) { url += sort + "&";}
                         if (source) { url += source + "&";}
@@ -405,6 +422,10 @@
                     var email = $(this).find('.client-data__email').text();
                     $client_info__data.find('.client-info__email > .client-info__data')
                             .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
+                    var city = $(this).find('.client-data__city').text();
+                    if (city != 'None') { $client_info__data.find('.client-info__city > .client-info__data').text(city); }
+                    var comment = $(this).find('.client-data__comment').text();
+                    $client_info__data.find('.client-info__comment > .client-info__data').text(comment);
                 });
                 $('.delete-button').bind('click', function(){
                     var id = $(this).attr('value');
@@ -505,6 +526,7 @@
                     if (length) { url += length + "&"; }
                     if (sort) { url += sort + "&";}
                     if (source) { url += source + "&";}
+                    if (month_date) { url += month_date + "&";}
                     if (managers) {
                         {% if managers %}
                             {% for manager in managers %}

@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from base_api.full_views.order_views import right_money_format
 from base_api.form import *
 from django.http import *
+from django.db.models import Q
 
 
 def full_analyze_products(request):
@@ -197,39 +198,45 @@ def full_view_analyzed_product_groups(request):
         current_mounth = current_time[5:]
         current_mounth = current_mounth[:2]
         current_year = current_time[:4]
-        # product_in_orders = Order_Product.objects.filter(product__group__id=product_group_id, is_deleted=0)
-        product_in_orders = Order_Product.objects.filter(is_deleted=0)
-        # product_in_orders = [1]
+        start_period_time = datetime.strptime(start_period, "%Y-%m-%d").date()
+        end_period_time = datetime.strptime(end_period, "%Y-%m-%d").date()
+        product_in_orders = Order_Product.objects.filter(product__group__id=product_group_id, is_deleted=0)\
+                                                 .filter(order__order_date__gte=start_period_time)\
+                                                 .filter(order__order_date__lte=end_period_time)\
+                                                 .filter(Q(order__order_status=-1) | Q(order__order_status=2))\
+                                                 .filter(Q(order__is_deleted=0))
         period = []
         period_str = ''
         amount = []
         sum_of_pr = []
         all_sum = 0
         all_amount = 0
-        start_period_time = datetime.strptime(start_period, "%Y-%m-%d").date()
-        end_period_time = datetime.strptime(end_period, "%Y-%m-%d").date()
         # по часам
         if start_period == end_period:
             for i in range(24):
                 period.append(str(i+1) + ':00')
                 amount.append(0)
                 sum_of_pr.append(0)
+            end_period_time = (datetime.strptime(start_period, "%Y-%m-%d") + timedelta(days=1)).date()
+            product_in_orders = Order_Product.objects.filter(product__group__id=product_group_id, is_deleted=0)\
+                                         .filter(order__order_date__gte=start_period_time)\
+                                         .filter(order__order_date__lte=end_period_time)\
+                                         .filter(Q(order__order_status=-1) | Q(order__order_status=2))\
+                                         .filter(Q(order__is_deleted=0))
             for pr in product_in_orders:
-                order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
-                if order and order.order_status == -1:
-                    data = str(order.order_date)
-                    data_mounth = data[5:]
-                    data_mounth = data_mounth[:2]
-                    data_day = data[8:]
-                    data_day = data_day[:2]
-                    data_year = data[:4]
-                    data_hour = data[:13]
-                    data_hour = data_hour[-2:]
-                    if data_year == current_year and data_mounth == current_mounth and data_day == current_day:
-                        amount[int(data_hour) - 1] = int(amount[int(data_hour) - 1] + pr.count_of_products)
-                        sum_of_pr[int(data_hour) - 1] = int(sum_of_pr[int(data_hour) - 1] + pr.count_of_products * pr.price)
-                        all_sum = all_sum + pr.count_of_products * pr.price
-                        all_amount = all_amount + pr.count_of_products
+                data = str(pr.order_date)
+                data_mounth = data[5:]
+                data_mounth = data_mounth[:2]
+                data_day = data[8:]
+                data_day = data_day[:2]
+                data_year = data[:4]
+                data_hour = data[:13]
+                data_hour = data_hour[-2:]
+                # if data_year == current_year and data_mounth == current_mounth and data_day == current_day:
+                amount[int(data_hour) - 1] = int(amount[int(data_hour) - 1] + pr.count_of_products)
+                sum_of_pr[int(data_hour) - 1] = int(sum_of_pr[int(data_hour) - 1] + pr.count_of_products * pr.price)
+                all_sum = all_sum + pr.count_of_products * pr.price
+                all_amount = all_amount + pr.count_of_products
             period_str = period
 
         # по дням
@@ -239,14 +246,11 @@ def full_view_analyzed_product_groups(request):
                 amount.append(0)
                 sum_of_pr.append(0)
             for pr in product_in_orders:
-                order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
-                if order and order.order_status == -1:
-                    data = order.order_date.date()
-                    if start_period_time <= data and data <= end_period_time:
-                        amount[(data - start_period_time).days] = int(amount[(data - start_period_time).days] + pr.count_of_products)
-                        sum_of_pr[(data - start_period_time).days] = int(sum_of_pr[(data - start_period_time).days] + pr.count_of_products * pr.price)
-                        all_sum = all_sum + pr.count_of_products * pr.price
-                        all_amount = all_amount + pr.count_of_products
+                data = pr.order_date.date()
+                amount[(data - start_period_time).days] = int(amount[(data - start_period_time).days] + pr.count_of_products)
+                sum_of_pr[(data - start_period_time).days] = int(sum_of_pr[(data - start_period_time).days] + pr.count_of_products * pr.price)
+                all_sum = all_sum + pr.count_of_products * pr.price
+                all_amount = all_amount + pr.count_of_products
             period_str = period
         else:
             end_year = str(end_period_time)[:4]
@@ -259,19 +263,15 @@ def full_view_analyzed_product_groups(request):
                 amount.append(0)
                 sum_of_pr.append(0)
             for pr in product_in_orders:
-                order = Orders.objects.filter(id=pr.order_id, is_deleted=0).first()
-                if order and order.order_status == -1:
-                    data = order.order_date.date()
-                    now_year = str(data)[:4]
-                    now_month = str(data)[:7][-2:]
-                    if start_period_time <= data and data <= end_period_time:
-                        count = (int(now_year) - int(start_year))*12 + int(now_month) - int(start_month)
-                        amount[count] = int(amount[count] + pr.count_of_products)
-                        sum_of_pr[count] = int(sum_of_pr[count] + pr.count_of_products * pr.price)
-                        all_sum = all_sum + pr.count_of_products * pr.price
-                        all_amount = all_amount + pr.count_of_products
+                data = pr.order_date.date()
+                now_year = str(data)[:4]
+                now_month = str(data)[:7][-2:]
+                count = (int(now_year) - int(start_year))*12 + int(now_month) - int(start_month)
+                amount[count] = int(amount[count] + pr.count_of_products)
+                sum_of_pr[count] = int(sum_of_pr[count] + pr.count_of_products * pr.price)
+                all_sum = all_sum + pr.count_of_products * pr.price
+                all_amount = all_amount + pr.count_of_products
             period_str = period
-
         amount_str = str(amount)[1:-1]
         sum_str = str(sum_of_pr)[1:-1]
         if all_amount == 0:

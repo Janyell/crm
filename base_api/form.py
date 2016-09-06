@@ -63,7 +63,8 @@ class TaskTypeChoiceField(ModelChoiceField):
 class ClientModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         if obj.organization == '':
-            return obj.last_name + ' ' + obj.name + ' ' + obj.patronymic
+            contact_face = ContactFaces.objects.filter(organization=obj.id, is_deleted=0).first()
+            return contact_face.last_name + ' ' + contact_face.name + ' ' + contact_face.patronymic
         elif obj.organization_type != '':
             return '"' + obj.organization + '", ' + obj.organization_type
         else:
@@ -124,7 +125,12 @@ class ClientForm(ModelForm):
             'email': EmailInput(attrs={'id': "inputEmail",
                                        'placeholder': "E-mail"}),
             'account_number': TextInput(attrs={'id': 'inputAccountNumber',
-                                               'placeholder': 'Номер счета'})
+                                               'placeholder': 'Номер счета'}),
+            'comment': Textarea(attrs={'id': "inputComment",
+                                       'placeholder': "Комментарии",
+                                       'rows': "1"}),
+            'city': Select(attrs={'id': "id_client_city",
+                           'placeholder': "Город"}),
         }
 
 

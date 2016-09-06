@@ -24,6 +24,7 @@ def full_add_edit_client(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
+    ClientForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects, required=False)
     if request.method == 'POST':
         form = ClientForm(request.POST)
         if 'pk' in request.POST:
@@ -33,6 +34,16 @@ def full_add_edit_client(request):
             id_client = request.POST['pk']
             organization = request.POST['organization']
             organization_phone = request.POST['organization_phone']
+            comment = request.POST['comment']
+            city = request.POST['city']
+            if city:
+                city = Cities.objects.get(pk=city)
+            else:
+                city = None
+            if 'newCity' in request.POST:
+                newCity = request.POST['newCity']
+                if newCity:
+                    city = Cities.objects.create(name=newCity)
             items = request.POST.getlist('items[]')
             contact_faces = []
             for item in items:
@@ -99,6 +110,14 @@ def full_add_edit_client(request):
                 organization_type = u'ТСЖ'
             elif 'op' == type:
                 organization_type = u'ОП'
+            elif 'ao' == type:
+                organization_type = u'АО'
+            elif 'too' == type:
+                organization_type = u'ТОО'
+            elif 'mp' == type:
+                organization_type = u'МП'
+            elif 'pao' == type:
+                organization_type = u'ПАО'
             else:
                 organization_type = u''
             # if organization != '':
@@ -159,10 +178,11 @@ def full_add_edit_client(request):
                 new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                          patronymic=patronymic, person_phone=person_phone,
                                          organization_phone=organization_phone, email=email,
-                                         organization_type=organization_type, is_interested=is_interested)
+                                         organization_type=organization_type, is_interested=is_interested,
+                                     comment=comment, city=city)
                 new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
                                                    "person_phone", "organization_phone", "email", "is_interested",
-                                                   "organization_type"])
+                                                   "organization_type", "comment", "city"])
                 for contact_face in contact_faces:
                     if contact_face['id'] != 0:
                         if contact_face.get('is_deleted'):
@@ -204,10 +224,11 @@ def full_add_edit_client(request):
                 new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                          patronymic=patronymic, person_phone=person_phone,
                                          organization_phone=organization_phone, email=email,
-                                         organization_type=organization_type, is_interested=is_interested)
+                                         organization_type=organization_type, is_interested=is_interested,
+                                     comment=comment, city=city)
                 new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
                                                    "person_phone", "organization_phone", "email", "is_interested",
-                                                   "organization_type"])
+                                                   "organization_type", "comment", "city"])
                 for contact_face in contact_faces:
                     if contact_face['id'] != 0:
                         if contact_face.get('is_deleted'):
@@ -247,10 +268,11 @@ def full_add_edit_client(request):
                 new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                          patronymic=patronymic, person_phone=person_phone,
                                          organization_phone=organization_phone, email=email,
-                                         organization_type=organization_type, is_interested=is_interested)
+                                         organization_type=organization_type, is_interested=is_interested,
+                                     comment=comment, city=city)
                 new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
                                                    "person_phone", "organization_phone", "email", "is_interested",
-                                                   "organization_type"])
+                                                   "organization_type", "comment", "city"])
                 for contact_face in contact_faces:
                     if contact_face['id'] != 0:
                         if contact_face.get('is_deleted'):
@@ -298,6 +320,16 @@ def full_add_edit_client(request):
         else:
             organization = request.POST['organization']
             organization_phone = request.POST['organization_phone']
+            comment = request.POST['comment']
+            city = request.POST['city']
+            if city:
+                city = Cities.objects.get(pk=city)
+            else:
+                city = None
+            if 'newCity' in request.POST:
+                newCity = request.POST['newCity']
+                if newCity:
+                    city = Cities.objects.create(name=newCity)
             items = request.POST.getlist('items[]')
             contact_faces = []
             for item in items:
@@ -349,6 +381,14 @@ def full_add_edit_client(request):
                 organization_type = u'ТСЖ'
             elif 'op' == type:
                 organization_type = u'ОП'
+            elif 'ao' == type:
+                organization_type = u'АО'
+            elif 'too' == type:
+                organization_type = u'ТОО'
+            elif 'mp' == type:
+                organization_type = u'МП'
+            elif 'pao' == type:
+                organization_type = u'ПАО'
             else:
                 organization_type = u''
             role = Roles.objects.get(id=request.user.id, is_deleted=0)
@@ -367,7 +407,8 @@ def full_add_edit_client(request):
                                                             patronymic=patronymic, person_phone=person_phone,
                                                             organization_phone=organization_phone, email=email,
                                                             creation_date=datetime.now(), is_interested=is_interested,
-                                                            role=role, organization_type=organization_type)
+                                                            role=role, organization_type=organization_type,
+                                                            comment=comment, city=city)
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -388,7 +429,8 @@ def full_add_edit_client(request):
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
                                                                 creation_date=datetime.now(), is_interested=is_interested,
-                                                                role=role, organization_type=organization_type)
+                                                                role=role, organization_type=organization_type,
+                                                                comment=comment, city=city)
                             for contact_face in contact_faces:
                                 new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                                name=contact_face['name'],
@@ -406,7 +448,8 @@ def full_add_edit_client(request):
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
                                                                 creation_date=datetime.now(), role=role,
-                                                                organization_type=organization_type)
+                                                                organization_type=organization_type,
+                                                                comment=comment, city=city)
                             for contact_face in contact_faces:
                                 new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                                name=contact_face['name'],
@@ -426,7 +469,8 @@ def full_add_edit_client(request):
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
                                                                 creation_date=datetime.now(), is_interested=is_interested,
-                                                                role=role, organization_type=organization_type)
+                                                                role=role, organization_type=organization_type,
+                                                                comment=comment, city=city)
                             for contact_face in contact_faces:
                                 new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                                name=contact_face['name'],
@@ -444,7 +488,8 @@ def full_add_edit_client(request):
                                                                 patronymic=patronymic, person_phone=person_phone,
                                                                 organization_phone=organization_phone, email=email,
                                                                 creation_date=datetime.now(), role=role,
-                                                                organization_type=organization_type)
+                                                                organization_type=organization_type,
+                                                                comment=comment, city=city)
                             for contact_face in contact_faces:
                                 new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                                name=contact_face['name'],
@@ -471,7 +516,8 @@ def full_add_edit_client(request):
                                                             patronymic=patronymic, person_phone=person_phone,
                                                             organization_phone=organization_phone, email=email,
                                                             creation_date=datetime.now(), is_interested=is_interested,
-                                                            role=role, organization_type=organization_type)
+                                                            role=role, organization_type=organization_type,
+                                                            comment=comment, city=city)
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -489,7 +535,8 @@ def full_add_edit_client(request):
                                                             patronymic=patronymic, person_phone=person_phone,
                                                             organization_phone=organization_phone, email=email,
                                                             creation_date=datetime.now(), role=role,
-                                                            organization_type=organization_type)
+                                                            organization_type=organization_type,
+                                                            comment=comment, city=city)
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -507,7 +554,8 @@ def full_add_edit_client(request):
                                                             patronymic=patronymic, person_phone=person_phone,
                                                             organization_phone=organization_phone, email=email,
                                                             creation_date=datetime.now(), is_interested=is_interested,
-                                                            role=role, organization_type=organization_type)
+                                                            role=role, organization_type=organization_type,
+                                                            comment=comment, city=city)
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -528,7 +576,8 @@ def full_add_edit_client(request):
                                                             organization_phone=organization_phone, email=email,
                                                             creation_date=datetime.now(),
                                                             is_interested=is_interested, role=role,
-                                                            organization_type=organization_type)
+                                                            organization_type=organization_type,
+                                                            comment=comment, city=city)
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -546,7 +595,8 @@ def full_add_edit_client(request):
                                                             patronymic=patronymic, person_phone=person_phone,
                                                             organization_phone=organization_phone, email=email,
                                                             creation_date=datetime.now(), role=role,
-                                                            organization_type=organization_type)
+                                                            organization_type=organization_type,
+                                                            comment=comment, city=city)
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -568,7 +618,8 @@ def full_add_edit_client(request):
             form = ClientForm({'last_name': client.last_name, 'name': client.name, 'patronymic': client.patronymic,
                                'organization': client.organization, 'person_phone': client.person_phone, 'pk': id_client,
                                'organization_phone': client.organization_phone, 'email': client.email,
-                               'organization_type': client.organization_type})
+                               'organization_type': client.organization_type, 'comment': client.comment,
+                               'city': client.city})
             contact_faces = ContactFaces.objects.filter(is_deleted=0, organization=client).all()
             for contact_face in contact_faces:
                 contact_face.phones = ContactPhone.objects.filter(is_deleted=0, face=contact_face.id).all()
@@ -650,10 +701,12 @@ def full_get_clients(request):
     except EmptyPage:
         client_list = clients_pages.page(clients_pages.num_pages)
     for c in client_list:
-        c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
+        c.person_full_name = ''
+        c.email = ''
+        c.person_phone = ''
         contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            if c.person_full_name != '  ':
+            if c.person_full_name != '':
                 c.person_full_name += ', '
             c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
@@ -712,10 +765,12 @@ def full_get_interested_clients(request):
     except EmptyPage:
         client_list = clients_pages.page(clients_pages.num_pages)
     for c in client_list:
-        c.person_full_name = c.last_name + ' ' + c.name + ' ' + c.patronymic
+        c.person_full_name = ''
+        c.email = ''
+        c.person_phone = ''
         contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            if c.person_full_name != '  ':
+            if c.person_full_name != '':
                 c.person_full_name += ', '
             c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic

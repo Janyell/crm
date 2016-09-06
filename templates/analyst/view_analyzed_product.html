@@ -8,7 +8,7 @@
     <a href="{% if request.path == url_analyze_products %}{{ url_analyze_products }}{% else %}{% url "analyze_product_groups" %}{% endif %}" class="btn">Назад</a>
         <h2 class="center">{{ page_title }} {{ product_name }}</h2>
         <div class="new-period">
-            <form method="post" action="{% url "view_analyzed_product" %}?id={{ request.GET.id }}" class="analyzed-product form-horizontal clearfix">
+            <form method="post" action="{% if request.path == url_analyze_products %}{% url "view_analyzed_product" %}{% else %}{% url "view_analyzed_product_group" %}{% endif %}?id={{ request.GET.id }}" class="analyzed-product form-horizontal clearfix">
                 <input type="hidden" class="analyzed-product__id" name="id" value="{{ request.GET.id }}" />
                 <div class="control-group analyzed-product__graphic">
                     <label class="control-label">
@@ -152,7 +152,7 @@
                 }
                 set_daterangepicker(this);
                 set_submit_handler(this);
-                var new_period_url = "{% url "view_analyzed_product" %}?id={{ request.GET.id }}";
+                var new_period_url = "{% if request.path == url_analyze_products %}{% url "view_analyzed_product" %}{% else %}{% url "view_analyzed_product_group" %}{% endif %}?id={{ request.GET.id }}";
                 var $plus_period = $('.plus_period');
                 var $plus_period_parent = $plus_period.parent();
                 $plus_period.click(function() {
