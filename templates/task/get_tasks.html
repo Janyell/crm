@@ -44,7 +44,24 @@
                                     {% include "task/modules/get_tasks__claim_cell.html" %}
                                 </td>
                                 <td>
-                                    {{ task.order.client.organization_type }} {{ task.order.client.organization }}
+                                    <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
+                                        <div class="get-client-info__head">
+                                            {{ task.order.client.organization_type }} {{ task.order.client.organization }}
+                                        </div>
+                                        <div class="hidden get-client-info__data">
+                                            <div class="client-data__full-name">{{ task.order.client.full_name }}</div>
+                                            <div class="client-data__contact-person-phone">{{ task.order.client.person_phone }}</div>
+                                            <div class="client-data__organization">
+                                                {% if task.order.client.organization %}
+                                                    {{ task.order.client.organization }}{% if task.order.client.organization_type %}, {{ task.order.client.organization_type }}{% endif %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="client-data__organization-phone">{{ task.order.client.organization_phone }}</div>
+                                            <div class="client-data__email">{{ task.order.client.email }}</div>
+                                            <div class="client-data__city">{{ task.order.client.city.name }}</div>
+                                            <div class="client-data__comment">{{ task.order.client.comment }}</div>
+                                        </div>
+                                    </a>
                                 </td>
                                 <td>
                                     {% include "task/modules/get_tasks__client_cell.html" %}
