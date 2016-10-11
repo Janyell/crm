@@ -21,10 +21,10 @@
                 <div class="dataTables_length">
                     <label>Показать
                         <select id="selectLength" name="length">
+                            <option value="100"{% if request.GET.length == "100" %} selected="selected"{% endif %}>100</option>
                             <option value="10"{% if request.GET.length == "10" %} selected="selected"{% endif %}>10</option>
                             <option value="25"{% if request.GET.length == "25" %} selected="selected"{% endif %}>25</option>
                             <option value="50"{% if request.GET.length == "50" %} selected="selected"{% endif %}>50</option>
-                            <option value="100"{% if request.GET.length == "100" %} selected="selected"{% endif %}>100</option>
                         </select>
                         записей
                     </label>

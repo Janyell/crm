@@ -1013,6 +1013,7 @@ def search(request):
                               .filter(is_deleted=0))
     contact_faces_list_ids = [object.organization_id for object in contact_faces_list]
     client_list += list(Clients.objects.filter(pk__in=contact_faces_list_ids, is_interested=0, is_deleted=0))
+    client_list = list(set(client_list))
     for c in client_list:
         c.person_full_name = ''
         c.email = ''
