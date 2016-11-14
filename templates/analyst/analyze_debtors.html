@@ -2,7 +2,9 @@
 
 {%block content%}
     <div class="container">
-        <a href="{% url "analyst" %}" class="btn">Назад</a>
+        {% if user_role == 0 %}
+            <a href="{% url "analyst" %}" class="btn">Назад</a>
+        {% endif %}
         <h2 class="center">{{ page_title }}</h2>
         {% if debts %}
             <table class="table table-hover table-bordered" id="debt-table">

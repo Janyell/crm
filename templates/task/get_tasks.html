@@ -44,7 +44,30 @@
                                     {% include "task/modules/get_tasks__claim_cell.html" %}
                                 </td>
                                 <td>
-                                    {{ task.order.client.organization_type }} {{ task.order.client.organization }}
+                                    <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
+                                        <div class="get-client-info__head">
+                                            {% if task.order.client.organization %}
+                                                {{ task.order.client.organization }}{% if task.order.client.organization_type %}, {{ task.order.client.organization_type }}{% endif %}
+                                            {% else %}
+                                                {{ task.order.client.full_name }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="hidden get-client-info__data">
+                                            <div class="client-data__full-name">{{ task.order.client.full_name }}</div>
+                                            <div class="client-data__contact-person-phone">{{ task.order.client.person_phone }}</div>
+                                            <div class="client-data__organization">
+                                                {% if task.order.client.organization %}
+                                                    {{ task.order.client.organization }}{% if task.order.client.organization_type %}, {{ task.order.client.organization_type }}{% endif %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="client-data__organization-phone">{{ task.order.client.organization_phone }}</div>
+                                            <div class="client-data__email">{{ task.order.client.email }}</div>
+                                            <div class="client-data__city">{{ task.order.client.city.name }}</div>
+                                            <div class="client-data__comment">{{ task.order.client.comment }}</div>
+
+                                        </div>
+                                    </a>
+{#                                    {{ task.order.client.organization_type }} {{ task.order.client.organization }}#}
                                 </td>
                                 <td>
                                     {% include "task/modules/get_tasks__client_cell.html" %}
@@ -90,6 +113,67 @@
         {% endif %}
     </div>
 
+    <div class="modal hide fade" id="client-info" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 class="center">Информация о клиенте</h3>
+        </div>
+        <div class="modal-body client-info">
+            <div class="client-info__item client-info__organization clearfix">
+                <div class="client-info__head">
+                    Организация
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__organization-phone clearfix">
+                <div class="client-info__head">
+                    Телефон организации
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__contact-person clearfix">
+                <div class="client-info__head">
+                    Контактные лица
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__contact-person-phone clearfix">
+                <div class="client-info__head">
+                    Телефоны контактных лиц
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__email clearfix">
+                <div class="client-info__head">
+                    E-mail
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__city clearfix">
+                <div class="client-info__head">
+                    Город
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__comment clearfix">
+                <div class="client-info__head">
+                    Коментарий
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+
     {% block tasks_script %}
         {% if tasks %}
             <script type="text/javascript">
@@ -111,6 +195,25 @@
                             {% if request.GET.search %}
                                 "oSearch": {"sSearch": "{{ request.GET.search }}"}
                             {% endif %}
+                        });
+
+                        $('.get-client-info').bind('click', function(){
+                            var $client_info__data = $('#client-info').find('.modal-body');
+                            var full_name = $(this).find('.client-data__full-name').text();
+                            $client_info__data.find('.client-info__contact-person > .client-info__data').text(full_name);
+                            var person_phone = $(this).find('.client-data__contact-person-phone').text();
+                            $client_info__data.find('.client-info__contact-person-phone > .client-info__data').text(person_phone);
+                            var organization = $(this).find('.client-data__organization').text();
+                            $client_info__data.find('.client-info__organization > .client-info__data').text(organization);
+                            var organization_phone = $(this).find('.client-data__organization-phone').text();
+                            $client_info__data.find('.client-info__organization-phone > .client-info__data').text(organization_phone);
+                            var email = $(this).find('.client-data__email').text();
+                            $client_info__data.find('.client-info__email > .client-info__data')
+                                    .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
+                            var city = $(this).find('.client-data__city').text();
+                            if (city != 'None') { $client_info__data.find('.client-info__city > .client-info__data').text(city); }
+                            var comment = $(this).find('.client-data__comment').text();
+                            $client_info__data.find('.client-info__comment > .client-info__data').text(comment);
                         });
                     });
                 })(jQuery);

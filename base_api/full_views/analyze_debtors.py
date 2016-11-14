@@ -4,7 +4,7 @@ from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from base_api.full_views.order_views import right_money_format
-from base_api.models import Roles, Orders
+from base_api.models import Roles, Orders, ContactFaces, ContactEmail, ContactPhone
 
 
 def full_analyze_debtors(request):
@@ -12,7 +12,7 @@ def full_analyze_debtors(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role != 0:
+    if user_role != 0 and user_role != 1:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -28,8 +28,8 @@ def full_analyze_debtors(request):
         order.client.person_phone = ''
         contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            if order.client.person_full_name != '':
-                order.client.person_full_name += ', '
+            if order.client.full_name != '':
+                order.client.full_name += ', '
             order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
