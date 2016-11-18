@@ -445,3 +445,7 @@ class TaskForm(ModelForm):
             'type': Select(attrs={'id': "selectTaskType",
                                   'class': "input_task-type"})
         }
+
+
+class FileFieldForm(forms.Form):
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))

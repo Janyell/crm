@@ -21,11 +21,29 @@
                     {% for debt in debts %}
                         <tr>
                             <td>
-                                {% if debt.client.organization %}
-                                    {{ debt.client.organization }}{% if debt.client.organization_type %}, {{ debt.client.organization_type }}{% endif %}
-                                {% else %}
-                                    {{ debt.client.full_name }}
-                                {% endif %}
+                                <a href="#client-info" role="button" data-toggle="modal" class="get-client-info">
+                                    <div class="get-client-info__head">
+                                        {% if debt.client.organization %}
+                                            {{ debt.client.organization }}{% if debt.client.organization_type %}, {{ debt.client.organization_type }}{% endif %}
+                                        {% else %}
+                                            {{ debt.client.full_name }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="hidden get-client-info__data">
+                                        <div class="client-data__full-name">{{ debt.client.full_name }}</div>
+                                        <div class="client-data__contact-person-phone">{{ debt.client.person_phone }}</div>
+                                        <div class="client-data__organization">
+                                            {% if debt.client.organization %}
+                                                {{ debt.client.organization }}{% if debt.client.organization_type %}, {{ debt.client.organization_type }}{% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="client-data__organization-phone">{{ debt.client.organization_phone }}</div>
+                                        <div class="client-data__email">{{ debt.client.email }}</div>
+                                        <div class="client-data__city">{{ debt.client.city.name }}</div>
+                                        <div class="client-data__comment">{{ debt.client.comment }}</div>
+
+                                    </div>
+                                </a>
                             </td>
                             <td>{{ debt.company.title }}</td>
                             <td>
@@ -42,6 +60,68 @@
             <h5 class="center">Нет ни одного должника</h5>
         {% endif %}
     </div>
+
+    <div class="modal hide fade" id="client-info" tabindex="-1" role="dialog" aria-labelledby="clientInfoLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 class="center">Информация о клиенте</h3>
+        </div>
+        <div class="modal-body client-info">
+            <div class="client-info__item client-info__organization clearfix">
+                <div class="client-info__head">
+                    Организация
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__organization-phone clearfix">
+                <div class="client-info__head">
+                    Телефон организации
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__contact-person clearfix">
+                <div class="client-info__head">
+                    Контактные лица
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__contact-person-phone clearfix">
+                <div class="client-info__head">
+                    Телефоны контактных лиц
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__email clearfix">
+                <div class="client-info__head">
+                    E-mail
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__city clearfix">
+                <div class="client-info__head">
+                    Город
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+            <div class="client-info__item client-info__comment clearfix">
+                <div class="client-info__head">
+                    Коментарий
+                </div>
+                <div class="client-info__data">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        </div>
+    </div>
+
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -55,6 +135,25 @@
                     ]
                 });
                 var table = $debt_table.DataTable();
+
+                $('.get-client-info').bind('click', function(){
+                    var $client_info__data = $('#client-info').find('.modal-body');
+                    var full_name = $(this).find('.client-data__full-name').text();
+                    $client_info__data.find('.client-info__contact-person > .client-info__data').text(full_name);
+                    var person_phone = $(this).find('.client-data__contact-person-phone').text();
+                    $client_info__data.find('.client-info__contact-person-phone > .client-info__data').text(person_phone);
+                    var organization = $(this).find('.client-data__organization').text();
+                    $client_info__data.find('.client-info__organization > .client-info__data').text(organization);
+                    var organization_phone = $(this).find('.client-data__organization-phone').text();
+                    $client_info__data.find('.client-info__organization-phone > .client-info__data').text(organization_phone);
+                    var email = $(this).find('.client-data__email').text();
+                    $client_info__data.find('.client-info__email > .client-info__data')
+                            .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
+                    var city = $(this).find('.client-data__city').text();
+                    if (city != 'None') { $client_info__data.find('.client-info__city > .client-info__data').text(city); }
+                    var comment = $(this).find('.client-data__comment').text();
+                    $client_info__data.find('.client-info__comment > .client-info__data').text(comment);
+                });
             });
         })(jQuery);
     </script>

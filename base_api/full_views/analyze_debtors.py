@@ -19,6 +19,11 @@ def full_analyze_debtors(request):
     orders = Orders.objects.exclude(bill_status=2)
     orders = orders.filter(is_deleted=0, is_claim=0, brought_sum__isnull=False).exclude(bill__lt=F('brought_sum'))
     for order in orders:
+        if order.brought_sum is not None and order.bill is not None:
+            debt = int(order.bill) - int(order.brought_sum)
+            if debt == 0:
+                orders = orders.exclude(pk=order.id)
+    for order in orders:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
         else:
@@ -40,9 +45,9 @@ def full_analyze_debtors(request):
                                          + contact_face.name + ' ' + contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
                 if phone.phone:
-                    if order.client.person_phone:
+                    if order.client.person_phone and order.client.person_phone != ' ':
                         order.client.person_phone += ', '
-                    order.client.person_phone = order.client.person_phone + ', ' + phone.phone + ' (' + \
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + \
                                                 contact_face.last_name + ' ' + contact_face.name + ' ' + \
                                                 contact_face.patronymic + ')'
         order.debt_right_format = 0

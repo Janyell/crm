@@ -37,8 +37,9 @@ SORT_TYPE_FOR_ORDER = {
     'transport_company': ['-order_status', '-became_claim_date', 'transport_campaign'],
     'transport_company_d': ['-order_status', '-became_claim_date', '-transport_campaign'],
     'factory': ['-order_status', 'ready_date'],
+    'manager': ['-order_status', 'shipped_date'],
 }
-DEFAULT_SORT_TYPE_FOR_ORDER = 'factory'
+DEFAULT_SORT_TYPE_FOR_ORDER = 'manager'
 DEFAULT_SORT_TYPE_FOR_ORDER_IN_ARCHIVE = 'order_date_d'
 
 SORT_TYPE_FOR_CLIENT = {

@@ -804,8 +804,8 @@ def full_get_orders(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_ORDER)
-    # if Roles.objects.get(id=request.user.id).role == 2:
-    #     sort_key = 'factory'
+    if Roles.objects.get(id=request.user.id).role == 2:
+        sort_key = 'factory'
     sort = SORT_TYPE_FOR_ORDER.get(sort_key, DEFAULT_SORT_TYPE_FOR_ORDER)
     orders = Orders.objects.filter(is_deleted=0, is_claim=0)
     if 'source' in request.GET:

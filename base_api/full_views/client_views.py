@@ -25,6 +25,7 @@ def full_add_edit_client(request):
     else:
         out.update({'user_role': user_role})
     ClientForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects, required=False)
+    ClientForm.base_fields['city'].widget.attrs = {'id': "id_client_city"}
     if request.method == 'POST':
         form = ClientForm(request.POST)
         if 'pk' in request.POST:
