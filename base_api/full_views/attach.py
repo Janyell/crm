@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from media_tree.models import FileNode
 from media_tree.utils import multi_splitext
-from base_api.form import ProductForm, UploadFileForOrderForm, UploadFileForClientForm
+from base_api.form import ProductForm, UploadFileForOrderForm, UploadFileForClientForm, FileFieldForm
 from base_api.models import Order_Files, Orders, Roles, Client_Files, Clients
 from django.template.defaultfilters import slugify
 
@@ -35,17 +35,18 @@ def upload_order_file(request):
                 files.append(order_file)
     out.update({'files': files})
     if request.method == 'POST':
-        form = UploadFileForOrderForm(request.POST, request.FILES)
+        form = FileFieldForm(request.POST, request.FILES)
+        files = request.FILES.getlist('file')
         if form.is_valid():
             # file is saved
-            obj = form.save(commit=False)
-            obj.order = Orders.objects.get(id=order_id)
-            if obj.file is not None and str(obj.file) != '':
-                if obj.title is None or obj.title == '':
-                    obj.title = request.FILES['file'].name
-                obj.save()
-                save_file_in_node(obj)
-            form_new = UploadFileForOrderForm()
+            for f in files:
+                order_file = Order_Files.objects.create(
+                    order=Orders.objects.get(id=order_id),
+                    file=f,
+                    title=f.name
+                )
+                save_file_in_node(order_file)
+            form_new = FileFieldForm()
             out.update({'form': form_new})
             order_files = Order_Files.objects.filter(order_id=order_id).all()
             files = []
@@ -58,7 +59,7 @@ def upload_order_file(request):
             out.update({'files': files})
             return render(request, 'files.html', out)
     else:
-        form = UploadFileForOrderForm()
+        form = FileFieldForm()
     out.update({'form': form})
     return render(request, 'files.html', out)
 
@@ -101,17 +102,18 @@ def upload_client_file(request):
                 files.append(client_file)
     out.update({'files': files})
     if request.method == 'POST':
-        form = UploadFileForClientForm(request.POST, request.FILES)
+        form = FileFieldForm(request.POST, request.FILES)
+        files = request.FILES.getlist('file')
         if form.is_valid():
             # file is saved
-            obj = form.save(commit=False)
-            obj.client = Clients.objects.get(id=client_id)
-            if obj.file is not None and str(obj.file) != '':
-                if obj.title is None or obj.title == '':
-                    obj.title = request.FILES['file'].name
-                obj.save()
-                save_file_in_node(obj)
-            form_new = UploadFileForClientForm()
+            for f in files:
+                client_file = Client_Files.objects.create(
+                    client=Clients.objects.get(id=client_id),
+                    file=f,
+                    title=f.name
+                )
+                save_file_in_node(client_file)
+            form_new = FileFieldForm()
             out.update({'form': form_new})
             client_files = Client_Files.objects.filter(client_id=client_id).all()
             files = []
@@ -124,7 +126,7 @@ def upload_client_file(request):
             out.update({'files': files})
             return render(request, 'files.html', out)
     else:
-        form = UploadFileForClientForm()
+        form = FileFieldForm()
     out.update({'form': form})
     return render(request, 'files.html', out)
 

@@ -78,6 +78,32 @@ def full_get_tasks(request):
     from collections import OrderedDict
     task_date_dict = defaultdict(list)
     for task in tasks.order_by('date', 'is_done').all():
+        if task.order.client.organization == '':
+            task.order.client.organization_or_full_name = task.order.client.last_name + ' ' + task.order.client.name + ' ' + task.order.client.patronymic
+        else:
+            task.order.client.organization_or_full_name = task.order.client.organization
+        task.order.client.full_name = ''
+        task.order.client.email = ''
+        task.order.client.person_phone = ''
+        contact_faces = ContactFaces.objects.filter(organization=task.order.client.id, is_deleted=0).all()
+        for contact_face in contact_faces:
+            if task.order.client.full_name and task.order.client.full_name != '':
+                task.order.client.full_name += ', '
+            task.order.client.full_name = task.order.client.full_name + contact_face.last_name + ' ' \
+                                 + contact_face.name + ' ' + contact_face.patronymic
+            for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                if email.email:
+                    if task.order.client.email and task.order.client.email != '':
+                        task.order.client.email += ', '
+                    task.order.client.email = task.order.client.email + email.email + ' (' + contact_face.last_name + ' ' \
+                                         + contact_face.name + ' ' + contact_face.patronymic + ')'
+            for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                if phone.phone:
+                    if task.order.client.person_phone and task.order.client.person_phone != '':
+                        task.order.client.person_phone += ', '
+                    task.order.client.person_phone = task.order.client.person_phone + phone.phone + ' (' + \
+                                                contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                                                contact_face.patronymic + ')'
         if task.is_done:
             task.results = task.results
         task_date = task.date.date()

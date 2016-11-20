@@ -109,6 +109,11 @@
                                     <a href="{% url "get_reports" %}">Мои отчеты</a>
                                 </li>
                             {% endif %}
+                            {% if user_role == 1 %}{# только для менеджеров #}
+                                <li class={% navactive request 'analyze_debtors' %}>
+                                    <a href="{% url "analyze_debtors" %}">Должники</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>

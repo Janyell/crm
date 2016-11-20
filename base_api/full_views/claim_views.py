@@ -315,6 +315,8 @@ def full_add_edit_claim(request):
                     price_of_pr = 'select-product__price_' + id_of_pr
                     price_of_products = request.POST[price_of_pr]
                     product = Products.objects.get(id=id_of_pr, is_deleted=0)
+                    if price_of_products == '':
+                        price_of_products = 0
                     product.price = price_of_products
                     product.save(force_update=True)
                 if int(count_of_products) > 0:

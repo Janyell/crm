@@ -4,7 +4,7 @@ from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from base_api.full_views.order_views import right_money_format
-from base_api.models import Roles, Orders
+from base_api.models import Roles, Orders, ContactFaces, ContactEmail, ContactPhone
 
 
 def full_analyze_debtors(request):
@@ -12,12 +12,17 @@ def full_analyze_debtors(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role != 0:
+    if user_role != 0 and user_role != 1:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
     orders = Orders.objects.exclude(bill_status=2)
     orders = orders.filter(is_deleted=0, is_claim=0, brought_sum__isnull=False).exclude(bill__lt=F('brought_sum'))
+    for order in orders:
+        if order.brought_sum is not None and order.bill is not None:
+            debt = int(order.bill) - int(order.brought_sum)
+            if debt == 0:
+                orders = orders.exclude(pk=order.id)
     for order in orders:
         if order.client.organization == '':
             order.client.organization_or_full_name = order.client.last_name + ' ' + order.client.name + ' ' + order.client.patronymic
@@ -28,8 +33,8 @@ def full_analyze_debtors(request):
         order.client.person_phone = ''
         contact_faces = ContactFaces.objects.filter(organization=order.client.id, is_deleted=0).all()
         for contact_face in contact_faces:
-            if order.client.person_full_name != '':
-                order.client.person_full_name += ', '
+            if order.client.full_name != '':
+                order.client.full_name += ', '
             order.client.full_name = order.client.full_name + contact_face.last_name + ' ' \
                                  + contact_face.name + ' ' + contact_face.patronymic
             for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
@@ -40,9 +45,9 @@ def full_analyze_debtors(request):
                                          + contact_face.name + ' ' + contact_face.patronymic + ')'
             for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
                 if phone.phone:
-                    if order.client.person_phone:
+                    if order.client.person_phone and order.client.person_phone != ' ':
                         order.client.person_phone += ', '
-                    order.client.person_phone = order.client.person_phone + ', ' + phone.phone + ' (' + \
+                    order.client.person_phone = order.client.person_phone + phone.phone + ' (' + \
                                                 contact_face.last_name + ' ' + contact_face.name + ' ' + \
                                                 contact_face.patronymic + ')'
         order.debt_right_format = 0

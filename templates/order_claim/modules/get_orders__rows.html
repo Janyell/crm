@@ -59,6 +59,15 @@
                 {{ order.account_number }}
             {% endif %}
         </td>
+        <td>
+        {% if order.bill_status == 2 %}
+            100
+        {% elif order.brought_sum == None %}
+            0
+        {% else %}
+            {{ order.brought_sum|mul:100|intdiv:order.bill }}
+        {% endif %}
+        </td>
         <td class="no-wrap">
             {% if order.bill_right_format != None %}
                 {% if is_in_debt.is_in_debt %}

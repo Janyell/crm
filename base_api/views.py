@@ -592,7 +592,7 @@ def made_excel(request):
                         sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).title)
                 elif col == u'products':
                     old_row_index = row_index
-                    products = Order_Product.objects.filter(order=table_object).all()
+                    products = Order_Product.objects.filter(order=table_object, is_deleted=0).all()
                     for pr in products:
                         product_row = unicode(pr.product.title) + u' - ' + \
                                       unicode(pr.count_of_products) + u' шт.'
@@ -685,7 +685,7 @@ def made_excel(request):
                         sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).name)
                 elif col == u'products':
                     old_row_index = row_index
-                    products = Order_Product.objects.filter(order=table_object).all()
+                    products = Order_Product.objects.filter(order=table_object, is_deleted=0).all()
                     for pr in products:
                         product_row = unicode(pr.product.title) + u' - ' + \
                                       unicode(pr.count_of_products) + u' шт.'
@@ -1013,6 +1013,7 @@ def search(request):
                               .filter(is_deleted=0))
     contact_faces_list_ids = [object.organization_id for object in contact_faces_list]
     client_list += list(Clients.objects.filter(pk__in=contact_faces_list_ids, is_interested=0, is_deleted=0))
+    client_list = list(set(client_list))
     for c in client_list:
         c.person_full_name = ''
         c.email = ''

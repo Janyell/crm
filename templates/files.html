@@ -33,15 +33,6 @@
             {% else %}
             <h5 class="center">Нет ни одного прикрепленного файла</h5>
         {% endif %}
-            <h5 class="form-add-heading">Для добавления файла заполните, пожалуйста, следующую форму:</h5>
-            <div class="control-group">
-                    <label class="control-label">
-                        Название
-                    </label>
-                    <div class="controls">
-                        {{ form.title }}
-                    </div>
-                </div>
             <div class="control-group">
                 <label class="control-label">
                     Файл
@@ -49,7 +40,7 @@
                 </label>
                 <div class="controls clearfix">
                     <span class="btn btn-file">
-                        <span>Выберите файл</span>
+                        <span>Выберите файлы</span>
                         {{ form.file }}
                     </span>
                 </div>
@@ -61,7 +52,7 @@
             </div>
             </div>
             <div class="form-add__submits">
-                <button type="submit" class="btn btn-primary">Добавить файл</button>
+                <button type="submit" class="btn btn-primary">Добавить файлы</button>
             </div>
         </form>
     <div class="text-center">
