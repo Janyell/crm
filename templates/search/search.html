@@ -3,6 +3,49 @@
 {%block content%}
     <div class="container container_full-width">
         <h2 class="center">Поиск по {{ request.GET.search }}</h2>
+
+        <form class="form-horizontal form-add form-search" method="get" action="{% url "search" %}">
+            <div class="control-group">
+                <label class="control-label" for="inputSearch">
+                    Поиск
+                    <span class="required-input">*</span>
+                </label>
+                <div class="controls">
+                    <input id="inputSearch" type="search" name="search" placeholder="Поиск" value="{{ request.GET.search }}" required="required">
+                </div>
+            </div>
+            <div class="control-group control-group_inline">
+                <label class="control-label">
+                    Параметры поиска
+                </label>
+                <div class="controls">
+                    <label class="checkbox">
+                        <input type="checkbox" name="params[]" value="unique_number"
+                            {% if "unique_number" in params %} checked="checked"{% endif %} />
+                            Номер счета
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="params[]" value="kp"
+                            {% if "kp" in params %} checked="checked"{% endif %} />
+                            КП
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="params[]" value="phone"
+                            {% if "phone" in params %} checked="checked"{% endif %} />
+                            Телефон
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="params[]" value="email"
+                            {% if "email" in params %} checked="checked"{% endif %} />
+                            E-mail
+                    </label>
+                </div>
+            </div>
+            <div class="form-add__submits">
+                <button type="submit" class="btn btn-primary">Найти</button>
+                <button type="reset" class="btn">Очистить</button>
+            </div>
+        </form>
         {% if search_results %}
             <h4>Результаты поиска:</h4>
             <ul class="search-results">
