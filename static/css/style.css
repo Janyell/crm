@@ -467,3 +467,10 @@ input.select-product__title {
 .blank-row:last-child {
     display: none;
 }
+.textarea_comment {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    resize: vertical;
+    width: 100%;
+}

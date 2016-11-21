@@ -121,17 +121,23 @@
         <td>{{ order.transport_campaign.title }}</td>
         <td>
             {% if order.comment %}
-                <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
-                <a class="comment-button" data-toggle="modal" href="#view-order-comment"
-                    value="{{ order.comment }}">...</a>
+                <div>
+                    <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
+                    <a class="edit-order-comment-button" data-toggle="modal" href="#edit-comment"
+                        value="{{ order.pk }}">
+                        <div class="hidden edit-comment__data">{{ order.comment }}</div>
+                        ...</a>
+                </div>
             {% endif %}
             {% if order.factory_comment %}
-                <span class="bold">Информация для пр-ва:</span>
-                <span class="order-factory-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">
-                    {{ order.factory_comment }}
-                </span>
-                <a class="factory-comment-button no-print" data-toggle="modal" href="#view-order-comment"
-                    value="{{ order.factory_comment }}">...</a>
+                <div>
+                    <span class="bold">Информация для пр-ва:</span>
+                    <span class="order-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.factory_comment }}</span>
+                    <a class="edit-order-factory-comment-button no-print" data-toggle="modal" href="#edit-comment"
+                        value="{{ order.pk }}">
+                        <div class="hidden edit-comment__data">{{ order.factory_comment }}</div>
+                        ...</a>
+                </div>
             {% endif %}
         </td>
         <td>

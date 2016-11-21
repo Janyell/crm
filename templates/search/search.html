@@ -150,16 +150,18 @@
                                         <td>
                                             {% if order.comment %}
                                                 <span class="comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
-                                                <a class="comment-order-button" data-toggle="modal" href="#view-info"
-                                                    value="{{ order.comment }}">...</a>
+                                                <a class="edit-order-comment-button" data-toggle="modal" href="#view-info"
+                                                    value="{{ order.pk }}">
+                                                    <div class="hidden edit-comment__data">{{ order.comment }}</div>
+                                                    ...</a>
                                             {% endif %}
                                             {% if order.factory_comment %}
                                                 <span class="bold">Информация для пр-ва:</span>
-                                                <span class="order-factory-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">
-                                                    {{ order.factory_comment }}
-                                                </span>
-                                                <a class="factory-comment-order-button" data-toggle="modal" href="#view-info"
-                                                    value="{{ order.factory_comment }}">...</a>
+                                                <span class="comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.factory_comment }}</span>
+                                                <a class="edit-order-factory-comment-button" data-toggle="modal" href="#view-info"
+                                                    value="{{ order.pk }}">
+                                                    <div class="hidden edit-comment__data">{{ order.factory_comment }}</div>
+                                                    ...</a>
                                             {% endif %}
                                         </td>
                                         <td>
@@ -319,16 +321,18 @@
                                         <td>
                                             {% if order.comment %}
                                                 <span class="comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
-                                                <a class="comment-order-button" data-toggle="modal" href="#view-info"
-                                                    value="{{ order.comment }}">...</a>
+                                                <a class="edit-order-comment-button" data-toggle="modal" href="#view-info"
+                                                    value="{{ order.pk }}">
+                                                    <div class="hidden edit-comment__data">{{ order.comment }}</div>
+                                                    ...</a>
                                             {% endif %}
                                             {% if order.factory_comment %}
                                                 <span class="bold">Информация для пр-ва:</span>
-                                                <span class="order-factory-comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">
-                                                    {{ order.factory_comment }}
-                                                </span>
-                                                <a class="factory-comment-order-button" data-toggle="modal" href="#view-info"
-                                                    value="{{ order.factory_comment }}">...</a>
+                                                <span class="comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.factory_comment }}</span>
+                                                <a class="edit-order-factory-comment-button" data-toggle="modal" href="#view-info"
+                                                    value="{{ order.pk }}">
+                                                    <div class="hidden edit-comment__data">{{ order.factory_comment }}</div>
+                                                    ...</a>
                                             {% endif %}
                                         </td>
                                         <td>
@@ -453,8 +457,10 @@
                                             <td>
                                                 {% if claim.comment %}
                                                     <span class="comment{% if claim.role|urlencode:"" == user.username|urlencode:"" and not claim.is_comment_my %} comment_highlighted{% endif %}">{{ claim.comment }}</span>
-                                                    <a class="comment-claim-button" data-toggle="modal" href="#view-info"
-                                                        value="{{ claim.comment }}">...</a>
+                                                    <a class="edit-claim-comment-button" data-toggle="modal" href="#edit-comment"
+                                                        value="{{ claim.pk }}">
+                                                        <div class="hidden edit-comment__data">{{ claim.comment }}</div>
+                                                        ...</a>
                                                 {% endif %}
                                             </td>
                                             <td>
@@ -948,6 +954,7 @@
                 </script>
             {% include "search/modules/change_manager.html" %}
             {% include "order_claim/modules/get_claims__closed_claim_info_modal.html" %}
+            {% include "order_claim/modules/edit_comment_modal.html" %}
         {% else %}
            <h4 class="center">Ничего не найдено по Вашему запросу. Попробуйте еще раз.</h4>
         {% endif %}

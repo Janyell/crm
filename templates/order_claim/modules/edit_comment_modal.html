@@ -1,0 +1,77 @@
+{% block edit-claim-comment_modal %}
+    <div class="modal hide fade" id="edit-comment" tabindex="-1" role="dialog" aria-hidden="true">
+        <form class="form-horizontal form-add_modal form-edit-comment" method="post" action="">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3 class="center"></h3>
+            </div>
+            <div class="modal-body">
+                <div class="edit-comment__data_modal">
+                    <input class="id" type="hidden" name="pk">
+                    <textarea class="textarea_comment" name="comment" placeholder="Комментарии"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button type="reset" class="btn btn-reset">Очистить изменения</button>
+                <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block edit-claim-comment_script %}
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                var $modal = $('#edit-comment');
+                var $modal_form = $modal.find('.form-edit-comment');
+                var $modal_header = $modal.find('h3');
+                var $modal_data = $modal.find('.edit-comment__data_modal');
+                var $modal_input_id = $modal_data.find('.id');
+                var $modal_textarea_comment = $modal_data.find('.textarea_comment');
+                var $modal_form_reset = $modal_form.find('.btn-reset');
+
+                {% if not entity or entity == "claims" %}
+                    $('.edit-claim-comment-button').bind('click', function(){
+                        var $this = $(this);
+                        var id = $this.attr('value');
+                        var comment = $this.find('.edit-comment__data').text();
+                        $modal_header.text("Комментарии к заявке");
+                        $modal_form.attr('action', '{% url "edit_claim_for_other_managers" %}?id=' + id);
+                        $modal_input_id.val(id);
+                        $modal_textarea_comment.text(comment);
+                        $modal_textarea_comment.attr('name', 'comment');
+                        $modal_form_reset.click();
+                    });
+                {% endif %}
+                {% if not entity or entity == "orders" %}
+                    $('.edit-order-comment-button').bind('click', function(){
+                        var $this = $(this);
+                        var id = $this.attr('value');
+                        var comment = $this.find('.edit-comment__data').text();
+                        var $edit_comment_modal = $('#edit-comment');
+                        $modal_header.text("Комментарии к заказу");
+                        $modal_form.attr('action', '{% url "edit_order_for_other_managers" %}?id=' + id);
+                        $modal_input_id.val(id);
+                        $modal_textarea_comment.text(comment);
+                        $modal_textarea_comment.attr('name', 'comment');
+                        $modal_form_reset.click();
+                    });
+                    $('.edit-order-factory-comment-button').bind('click', function(){
+                        var $this = $(this);
+                        var id = $this.attr('value');
+                        var comment = $this.find('.edit-comment__data').text();
+                        var $edit_comment_modal = $('#edit-comment');
+                        $modal_header.text("Информация для производства");
+                        $modal_form.attr('action', '{% url "edit_order_for_other_managers" %}?id=' + id);
+                        $modal_input_id.val(id);
+                        $modal_textarea_comment.text(comment);
+                        $modal_textarea_comment.attr('name', 'factory_comment');
+                        $modal_form_reset.click();
+                    });
+                {% endif %}
+            });
+        })(jQuery);
+    </script>
+{% endblock %}
