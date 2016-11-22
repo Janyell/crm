@@ -347,6 +347,9 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    {% with entity='orders' %}
+        {% include "order_claim/modules/edit_comment_modal.html" %}
+    {% endwith %}
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -373,7 +376,7 @@
                 var sort = "{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}";
                 var source = "{% if request.GET.source %}source={{ request.GET.source }}{% endif %}";
                 var status = "{% if request.GET.status %}status={{ request.GET.status }}{% endif %}";
-                var month_date = "month_date={{ request.GET.month_date }}";
+                var month_date = "{% if request.GET.month_date %}month_date={{ request.GET.month_date }}{% endif %}";
                 var managers = "";
                 {% if managers %}
                     {% for manager in managers %}
@@ -658,11 +661,17 @@
                         $form.append( '<input type="hidden" name="manager_id" value="' + value + '"/>{% if request.path == get_old_orders_url %}<input type="hidden" name="in_archive" value="1"/>{% endif %}').attr('action', '{% url "massive_change_manager_in_order" %}?' + get_params__slice).submit();
                     });
                 }
+                if (get_params__slice) {
+                    $('#edit-comment').find('.form-edit-comment').submit(function(){
+                        var $this = $(this);
+                        var action = $this.attr('action');
+                        $this.attr('action', action + '&' + get_params__slice);
+                    });
+                }
             });
         })(jQuery);
     </script>
     {% with entity='orders' %}
         {% include "export_to_excel_modal.html" %}
-        {% include "order_claim/modules/edit_comment_modal.html" %}
     {% endwith %}
 {%endblock%}

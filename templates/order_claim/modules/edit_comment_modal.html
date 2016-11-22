@@ -8,11 +8,12 @@
             <div class="modal-body">
                 <div class="edit-comment__data_modal">
                     <input class="id" type="hidden" name="pk">
+                    {% if request.path == get_old_orders_url %}<input type="hidden" name="in_archive" value="1"/>{% endif %}
                     <textarea class="textarea_comment" name="comment" placeholder="Комментарии"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button id="#edit-comment__ok" type="submit" class="btn btn-primary">Сохранить</button>
                 <button type="reset" class="btn btn-reset">Очистить изменения</button>
                 <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
             </div>

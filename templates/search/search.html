@@ -741,11 +741,28 @@
                 </div>
             </div>
             <script type="text/javascript">
-                    (function($){
-                        $(document).ready(function(){
-                            var $info_data = $('.info__data_modal');
-                            var $delete_ok = $('#delete__ok');
-                            {% if orders %}
+                (function($){
+                    $(document).ready(function(){
+                        var search = "search={{ request.GET.search }}";
+                        var params = "";
+                        {% if params %}
+                            {% for param in params %}
+                                params += "params[]={{ param }}&";
+                            {% endfor %}
+                        {% endif %}
+
+
+                        function get_get_params() {
+                            var get_params = search;
+                            if (params) { get_params += "&" + params }
+                            return get_params;
+                        }
+
+                        var get_params__slice = get_get_params();
+
+                        var $info_data = $('.info__data_modal');
+                        var $delete_ok = $('#delete__ok');
+                        {% if orders %}
 {#                                0     <th>Менеджер</th>#}
 {#                                1     <th>Название организации</th>#}
 {#                                2     <th>Номер заказа</th>#}
@@ -766,52 +783,52 @@
 {#                                17    <th></th> {# Удалить #}
 {#                                18    <th></th> {# Дата заказа #}
 {#                                19    <th></th> {# Признак готовности #}
-                                $("#search-order-table").dataTable({
-                                    "language": {
-                                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
-                                    },
-                                    {% block search-order-table-scripts__datatable-params %}
-                                    "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19 ] },
-                                        { "sType": "de_datetime", "aTargets": [ 6, 9, 18 ]},
-                                        {% if user_role == 0 %}
-                                           { "bVisible": false,  "aTargets": [ 18, 19 ]},
-                                        {% else %}
-                                            { "bVisible": false,  "aTargets": [ 12, 18, 19 ]},
-                                        {% endif %}
-                                    ],
-                                    "order": [
-                                        [ 19, 'desc' ],
-                                        [ 9, 'asc' ]
-                                    ],
-                                    "aaSortingFixed": [
-                                        [19, 'desc']
-                                    ],
-                                    {% endblock %}
-                                    "bFilter": false
-                                });
-                            {% endif %}
-                            {% if user.role == 0 and old_orders %}
-                                $("#search-old-order-table").dataTable({
-                                    "language": {
-                                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
-                                    },
-                                    "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 12, 13, 14, 15, 16, 17 ] },
-                                        { "sType": "de_datetime", "aTargets": [ 6, 9, 17 ] },
-                                        { "bVisible": false,  "aTargets": [ 17, 18 ]}
-                                    ],
-                                    "order": [
-                                        [ 18, 'desc' ],
-                                        [ 9, 'asc' ]
-                                    ],
-                                    "aaSortingFixed": [
-                                        [18, 'desc']
-                                    ],
-                                    "bFilter": false
-                                });
-                            {% endif %}
-                            {% if claims %}
+                            $("#search-order-table").dataTable({
+                                "language": {
+                                    "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                                },
+                                {% block search-order-table-scripts__datatable-params %}
+                                "aoColumnDefs": [
+                                    { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19 ] },
+                                    { "sType": "de_datetime", "aTargets": [ 6, 9, 18 ]},
+                                    {% if user_role == 0 %}
+                                       { "bVisible": false,  "aTargets": [ 18, 19 ]},
+                                    {% else %}
+                                        { "bVisible": false,  "aTargets": [ 12, 18, 19 ]},
+                                    {% endif %}
+                                ],
+                                "order": [
+                                    [ 19, 'desc' ],
+                                    [ 9, 'asc' ]
+                                ],
+                                "aaSortingFixed": [
+                                    [19, 'desc']
+                                ],
+                                {% endblock %}
+                                "bFilter": false
+                            });
+                        {% endif %}
+                        {% if user.role == 0 and old_orders %}
+                            $("#search-old-order-table").dataTable({
+                                "language": {
+                                    "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                                },
+                                "aoColumnDefs": [
+                                    { "bSortable": false, "aTargets": [ 2, 4, 5, 7, 8, 12, 13, 14, 15, 16, 17 ] },
+                                    { "sType": "de_datetime", "aTargets": [ 6, 9, 17 ] },
+                                    { "bVisible": false,  "aTargets": [ 17, 18 ]}
+                                ],
+                                "order": [
+                                    [ 18, 'desc' ],
+                                    [ 9, 'asc' ]
+                                ],
+                                "aaSortingFixed": [
+                                    [18, 'desc']
+                                ],
+                                "bFilter": false
+                            });
+                        {% endif %}
+                        {% if claims %}
 {#                                0     <th>Менеджер</th>#}
 {#                                1     <th>Дата заявки</th>#}
 {#                                2     <th>Название организации</th>#}
@@ -825,133 +842,123 @@
 {#                                10    <th></th> {# Аттачи #}
 {#                                11    <th></th> {# Редактировать #}
 {#                                12    <th></th> {# Удалить #}
-                                $("#search-claim-table").dataTable({
-                                    "language": {
-                                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
-                                    },
-                                    "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 4, 5, 6, 7, 8, 9, 10, 11{% if user_role == 0 %}, 12{% endif %} ] },
-                                        { "sType": "de_datetime", "aTargets": [ 1 ]},
-                                        {% if user_role == 1 %}
-                                            { "bVisible": false,  "aTargets": [ 9 ]}
-                                        {% endif %}
-                                    ],
-                                    "order": [
-                                        [ 1, "desc" ]
-                                    ],
-                                    "bFilter": false
-                                });
-                            {% endif %}
-                            {% if clients %}
-                                $("#search-client-table").dataTable({
-                                    "language": {
-                                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
-                                    },
-                                    "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 6, 7, 8, 9, 10{% if user_role == 0 %}, 11{% endif %} ] }
-                                    ],
-                                    "bFilter": false
-                                });
-                            {% endif %}
-                            {% if interested_clients %}
-                                $("#search-interested-client-table").dataTable({
-                                    "language": {
-                                        "url": "{{ STATIC_URL }}language/ru_RU.txt"
-                                    },
-                                    "aoColumnDefs": [
-                                        { "bSortable": false, "aTargets": [ 6, 7, 8, 9{% if user_role == 0 %}, 10{% endif %}] }
-                                    ],
-                                    "bFilter": false
-                                });
-                            {% endif %}
-                            {% if orders or user.role == 0 and old_orders %}
-                                $('.delete-order-button').bind('click', function(){
-                                    $("#delete").find("h3").text("Вы уверены, что хотите удалить этот заказ?");
-                                    var id = $(this).attr('value');
-                                    $delete_ok.attr({'href': '{% url "delete_order" %}?id=' + id + '&search={{ request.GET.search }}'});
-                                });
-                                $('.comment-order-button').bind('click', function(){
-                                    $("#view-info").find("h3").text("Комментарий к заказу");
-                                    var comment = $(this).attr('value');
-                                    $info_data.html(comment);
-                                });
-                                $('.factory-comment-order-button').bind('click', function(){
-                                    $("#view-info").find("h3").text("Информация для производства");
-                                    var comment = $(this).attr('value');
-                                    $info_data.html(comment);
-                                });
-                                $('.files-order-button').bind('click', function(){
-                                    $("#view-info").find("h3").text("Прикрепленные к заказу файлы");
-                                    var files = $(this).attr('value');
-                                    $info_data.html(files);
-                                });
-                            {% endif %}
-                            {% if claims %}
-                                $('.delete-claim-button').bind('click', function(){
-                                    $("#delete").find("h3").text("Вы уверены, что хотите удалить эту заявку?");
-                                    var id = $(this).attr('value');
-                                    $delete_ok.attr({'href': '{% url "delete_claim" %}?id=' + id + '&search={{ request.GET.search }}'});
-                                });
-                                $('.comment-claim-button').bind('click', function(){
-                                    $("#view-info").find("h3").text("Комментарий к заявке");
-                                    var comment = $(this).attr('value');
-                                    $info_data.html(comment);
-                                });
-                                $('.files-claim-button').bind('click', function(){
-                                    $("#view-info").find("h3").text("Прикрепленные к заявке файлы");
-                                    var files = $(this).attr('value');
-                                    $info_data.html(files);
-                                });
-                            {% endif %}
-                            {% if clients or interested_clients %}
-                                $('.delete-client-button').bind('click', function(){
-                                    $("#delete").find("h3").text("Вы уверены, что хотите удалить этого клиента?");
-                                    var id = $(this).attr('value');
-                                    $delete_ok.attr({'href': '{% url "delete_client" %}?id=' + id + '&search={{ request.GET.search }}'});
-                                });
-                                $('.files-client-button').bind('click', function(){
-                                    $("#view-info").find("h3").text("Прикрепленные к клиенту файлы");
-                                    var files = $(this).attr('value');
-                                    $info_data.html(files);
-                                });
-                            {% endif %}
-                            $('.comment').each(function() {
-                                var $this = $(this);
-                                var comment = $this.text();
-                                var MAX_LENGTH = 30;
-                                if (comment.length < MAX_LENGTH) {
-                                    return;
-                                }
-                                comment = comment.substring(0, MAX_LENGTH);
-                                var last_space = comment.regexLastIndexOf(/\s/m);
-                                if (last_space != -1) {
-                                    comment = comment.substring(0, last_space);
-                                }
-                                $this.text(comment);
+                            $("#search-claim-table").dataTable({
+                                "language": {
+                                    "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                                },
+                                "aoColumnDefs": [
+                                    { "bSortable": false, "aTargets": [ 4, 5, 6, 7, 8, 9, 10, 11{% if user_role == 0 %}, 12{% endif %} ] },
+                                    { "sType": "de_datetime", "aTargets": [ 1 ]},
+                                    {% if user_role == 1 %}
+                                        { "bVisible": false,  "aTargets": [ 9 ]}
+                                    {% endif %}
+                                ],
+                                "order": [
+                                    [ 1, "desc" ]
+                                ],
+                                "bFilter": false
                             });
-                            {% if orders or claims or user.role == 0 and old_orders %}
-                                $('.get-client-info').bind('click', function(){
-                                    var $client_info__data = $('#client-info').find('.modal-body');
-                                    var full_name = $(this).find('.client-data__full-name').text();
-                                    $client_info__data.find('.client-info__contact-person > .client-info__data').text(full_name);
-                                    var person_phone = $(this).find('.client-data__contact-person-phone').text();
-                                    $client_info__data.find('.client-info__contact-person-phone > .client-info__data').text(person_phone);
-                                    var organization = $(this).find('.client-data__organization').text();
-                                    $client_info__data.find('.client-info__organization > .client-info__data').text(organization);
-                                    var organization_phone = $(this).find('.client-data__organization-phone').text();
-                                    $client_info__data.find('.client-info__organization-phone > .client-info__data').text(organization_phone);
-                                    var email = $(this).find('.client-data__email').text();
-                                    $client_info__data.find('.client-info__email > .client-info__data')
-                                            .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
-                                    var city = $(this).find('.client-data__city').text();
-                                    if (city != 'None') { $client_info__data.find('.client-info__city > .client-info__data').text(city); }
-                                    var comment = $(this).find('.client-data__comment').text();
-                                    $client_info__data.find('.client-info__comment > .client-info__data').text(comment);
-                                });
-                            {% endif %}
+                        {% endif %}
+                        {% if clients %}
+                            $("#search-client-table").dataTable({
+                                "language": {
+                                    "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                                },
+                                "aoColumnDefs": [
+                                    { "bSortable": false, "aTargets": [ 6, 7, 8, 9, 10{% if user_role == 0 %}, 11{% endif %} ] }
+                                ],
+                                "bFilter": false
+                            });
+                        {% endif %}
+                        {% if interested_clients %}
+                            $("#search-interested-client-table").dataTable({
+                                "language": {
+                                    "url": "{{ STATIC_URL }}language/ru_RU.txt"
+                                },
+                                "aoColumnDefs": [
+                                    { "bSortable": false, "aTargets": [ 6, 7, 8, 9{% if user_role == 0 %}, 10{% endif %}] }
+                                ],
+                                "bFilter": false
+                            });
+                        {% endif %}
+                        {% if orders or user.role == 0 and old_orders %}
+                            $('.delete-order-button').bind('click', function(){
+                                $("#delete").find("h3").text("Вы уверены, что хотите удалить этот заказ?");
+                                var id = $(this).attr('value');
+                                $delete_ok.attr({'href': '{% url "delete_order" %}?id=' + id + '&' + get_params__slice});
+                            });
+                            $('.files-order-button').bind('click', function(){
+                                $("#view-info").find("h3").text("Прикрепленные к заказу файлы");
+                                var files = $(this).attr('value');
+                                $info_data.html(files);
+                            });
+                        {% endif %}
+                        {% if claims %}
+                            $('.delete-claim-button').bind('click', function(){
+                                $("#delete").find("h3").text("Вы уверены, что хотите удалить эту заявку?");
+                                var id = $(this).attr('value');
+                                $delete_ok.attr({'href': '{% url "delete_claim" %}?id=' + id + '&' + get_params__slice});
+                            });
+                            $('.files-claim-button').bind('click', function(){
+                                $("#view-info").find("h3").text("Прикрепленные к заявке файлы");
+                                var files = $(this).attr('value');
+                                $info_data.html(files);
+                            });
+                        {% endif %}
+                        {% if clients or interested_clients %}
+                            $('.delete-client-button').bind('click', function(){
+                                $("#delete").find("h3").text("Вы уверены, что хотите удалить этого клиента?");
+                                var id = $(this).attr('value');
+                                $delete_ok.attr({'href': '{% url "delete_client" %}?id=' + id + '&' + get_params__slice});
+                            });
+                            $('.files-client-button').bind('click', function(){
+                                $("#view-info").find("h3").text("Прикрепленные к клиенту файлы");
+                                var files = $(this).attr('value');
+                                $info_data.html(files);
+                            });
+                        {% endif %}
+                        $('.comment').each(function() {
+                            var $this = $(this);
+                            var comment = $this.text();
+                            var MAX_LENGTH = 30;
+                            if (comment.length < MAX_LENGTH) {
+                                return;
+                            }
+                            comment = comment.substring(0, MAX_LENGTH);
+                            var last_space = comment.regexLastIndexOf(/\s/m);
+                            if (last_space != -1) {
+                                comment = comment.substring(0, last_space);
+                            }
+                            $this.text(comment);
                         });
-                    })(jQuery);
-                </script>
+                        {% if orders or claims or user.role == 0 and old_orders %}
+                            $('.get-client-info').bind('click', function(){
+                                var $client_info__data = $('#client-info').find('.modal-body');
+                                var full_name = $(this).find('.client-data__full-name').text();
+                                $client_info__data.find('.client-info__contact-person > .client-info__data').text(full_name);
+                                var person_phone = $(this).find('.client-data__contact-person-phone').text();
+                                $client_info__data.find('.client-info__contact-person-phone > .client-info__data').text(person_phone);
+                                var organization = $(this).find('.client-data__organization').text();
+                                $client_info__data.find('.client-info__organization > .client-info__data').text(organization);
+                                var organization_phone = $(this).find('.client-data__organization-phone').text();
+                                $client_info__data.find('.client-info__organization-phone > .client-info__data').text(organization_phone);
+                                var email = $(this).find('.client-data__email').text();
+                                $client_info__data.find('.client-info__email > .client-info__data')
+                                        .html('<a href="mailto:'+ email + '">'+ email+ '</a>');
+                                var city = $(this).find('.client-data__city').text();
+                                if (city != 'None') { $client_info__data.find('.client-info__city > .client-info__data').text(city); }
+                                var comment = $(this).find('.client-data__comment').text();
+                                $client_info__data.find('.client-info__comment > .client-info__data').text(comment);
+                            });
+                             $('#edit-comment').find('.form-edit-comment').submit(function(){
+                                var $this = $(this);
+                                var action = $this.attr('action');
+                                $this.attr('action', action + '&' + get_params__slice);
+                            });
+                        {% endif %}
+                    });
+                })(jQuery);
+            </script>
             {% include "search/modules/change_manager.html" %}
             {% include "order_claim/modules/get_claims__closed_claim_info_modal.html" %}
             {% include "order_claim/modules/edit_comment_modal.html" %}

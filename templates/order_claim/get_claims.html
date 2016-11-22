@@ -368,6 +368,9 @@
             <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
         </div>
     </div>
+    {% with entity='claims' %}
+        {% include "order_claim/modules/edit_comment_modal.html" %}
+    {% endwith %}
     <script type="text/javascript">
         (function($){
             $(document).ready(function(){
@@ -626,6 +629,13 @@
                         $form.append( '<input type="hidden" name="manager_id" value="' + value + '"/><input type="hidden" name="is_claim" value="1"/>').attr('action', '{% url "massive_change_manager_in_order" %}?' + get_params__slice).submit();
                     });
                 }
+                if (get_params__slice) {
+                    $('#edit-comment').find('.form-edit-comment').submit(function(){
+                        var $this = $(this);
+                        var action = $this.attr('action');
+                        $this.attr('action', action + '&' + get_params__slice);
+                    });
+                }
             });
         })(jQuery);
     </script>
@@ -633,6 +643,5 @@
     {% include "order_claim/modules/get_claims__closed_claim_info_modal.html" %}
     {% with entity='claims' %}
         {% include "export_to_excel_modal.html" %}
-        {% include "order_claim/modules/edit_comment_modal.html" %}
     {% endwith %}
 {%endblock%}
