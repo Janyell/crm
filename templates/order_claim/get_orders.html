@@ -110,7 +110,7 @@
                             {# 5 #}<th value="account_number">Номер счета</th>
                             {# 6 #}<th>%</th>
                             {# 7 #}<th value="bill">Сумма счета</th>
-                            {# 8 #}<th class="sortable{% if request.GET.sort == "payment_date" %} sorting_asc{% elif request.GET.sort == "payment_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="payment_date">Дата оплаты</th>
+                            {# 8 #}<th class="sortable{% if request.GET.sort == "payment_date" %} sorting_asc{% elif request.GET.sort == "payment_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="payment_date">Дата запуска</th>
                             {# 9 #}<th value="products">Продукция</th>
                             {# 10 #}<th value="order_status">Статус</th>
                             {# 11 #}<th class="sortable{% if not request.GET.sort or request.GET.sort == "ready_date" %} sorting_asc{% elif request.GET.sort == "ready_date_d" %} sorting_desc{% else %} sorting{% endif %}" value="ready_date">Дата готовности</th>

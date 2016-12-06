@@ -495,25 +495,25 @@ def full_add_edit_claim(request):
                                                                           count_of_products=count_of_products,
                                                                           price=price_of_products)
                     client.save(update_fields=["is_interested"])
-            if 'items[]' in request.POST:
-                tasks_list = int(request.POST.get('items[]')) * -1
-                for task_id in range(1, tasks_list+1):
-                    task_id = str(task_id)
-                    task_comment = request.POST.get('task_comment', '')
-                    # task_comment = request.POST['task_comment_-' + task_id]
-                    task_type_id = request.POST['type_-' + task_id]
-                    if task_type_id:
-                        task_type = TaskTypes.objects.get(id=task_type_id)
-                        task_date = request.POST.get('date', datetime.now())
-                        # task_date = request.POST['date_-' + task_id]
-                        task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
-                        task_is_important = False
-                        if 'is_important_-' + task_id in request.POST:
-                            task_is_important = True
-                        task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
-                                                    is_important=task_is_important, order=new_claim,
-                                                    role=Roles.objects.get(id=request.user.id))
             if is_claim_create:
+                if 'items[]' in request.POST:
+                    tasks_list = int(request.POST.get('items[]')) * -1
+                    for task_id in range(1, tasks_list+1):
+                        task_id = str(task_id)
+                        task_comment = request.POST.get('task_comment', '')
+                        # task_comment = request.POST['task_comment_-' + task_id]
+                        task_type_id = request.POST['type_-' + task_id]
+                        if task_type_id:
+                            task_type = TaskTypes.objects.get(id=task_type_id)
+                            task_date = request.POST.get('date', datetime.now())
+                            # task_date = request.POST['date_-' + task_id]
+                            task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
+                            task_is_important = False
+                            if 'is_important_-' + task_id in request.POST:
+                                task_is_important = True
+                            task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
+                                                        is_important=task_is_important, order=new_claim,
+                                                        role=Roles.objects.get(id=request.user.id))
                 if 'only-save' in form.data:
                     if displacement == 1:
                         get_params = '&'

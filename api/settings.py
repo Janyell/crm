@@ -227,3 +227,30 @@ DATABASE_PORT = '5432'
 DATABASE_NAME = 'base_for_api'
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = ''
+
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/django_app.log'),
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'base_api.full_views.client_views': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}

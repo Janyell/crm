@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import logging
+
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.http import *
@@ -8,6 +10,9 @@ from base_api.constants import SORT_TYPE_FOR_CLIENT, DEFAULT_SORT_TYPE_FOR_CLIEN
 
 from base_api.form import *
 from base_api.full_views.helper import get_request_param_as_string
+
+
+logger = logging.getLogger(__name__)
 
 
 def full_add_edit_client(request):
@@ -27,6 +32,7 @@ def full_add_edit_client(request):
     ClientForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects, required=False)
     ClientForm.base_fields['city'].widget.attrs = {'id': "id_client_city"}
     if request.method == 'POST':
+        logger.info(u'New client: {}'.format(request.POST))
         form = ClientForm(request.POST)
         if 'pk' in request.POST:
             is_interested = 0
@@ -79,11 +85,11 @@ def full_add_edit_client(request):
                         out.update({'client_form': form})
                         out.update({'page_title': "Редактирование клиента"})
                         return render(request, 'client/add_edit_client.html', out)
-                    # if ''.join(phones) == '' and organization_phone == '' and ''.join(emails) == '':
-                    #     out.update({"error": 2})
-                    #     out.update({'client_form': form})
-                    #     out.update({'page_title': "Редактирование клиента"})
-                    #     return render(request, 'client/add_edit_client.html', out)
+                    if ''.join(phones) == '' and organization_phone == '' and ''.join(emails) == '':
+                        out.update({"error": 2})
+                        out.update({'client_form': form})
+                        out.update({'page_title': "Редактирование клиента"})
+                        return render(request, 'client/add_edit_client.html', out)
                     contact_face.update({'last_name': last_name})
                     contact_face.update({'name': name})
                     contact_face.update({'patronymic': patronymic})
@@ -350,11 +356,11 @@ def full_add_edit_client(request):
                     out.update({'client_form': form})
                     out.update({'page_title': "Редактирование клиента"})
                     return render(request, 'client/add_edit_client.html', out)
-                # if person_phone == '' and organization_phone == '' and email == '':
-                #     out.update({"error": 2})
-                #     out.update({'client_form': form})
-                #     out.update({'page_title': "Редактирование клиента"})
-                #     return render(request, 'client/add_edit_client.html', out)
+                if ''.join(phones) == '' and organization_phone == '' and ''.join(emails) == '':
+                    out.update({"error": 2})
+                    out.update({'client_form': form})
+                    out.update({'page_title': "Редактирование клиента"})
+                    return render(request, 'client/add_edit_client.html', out)
                 contact_faces.append({
                     'last_name': last_name,
                     'name': name,

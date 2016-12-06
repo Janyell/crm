@@ -52,23 +52,6 @@
                 <input type="hidden" name="is_interested" value=1>
             {% endif %}
             <div class="control-group">
-                <label class="control-label" for="inputСontactPerson">
-                    Контактное лицо
-                    <span class="required-input">*</span>
-                </label>
-                <div class="controls">
-                    <div class="form-add__input">
-                        {{ client_form.last_name }}
-                    </div>
-                    <div class="form-add__input">
-                        {{ client_form.name }}
-                    </div>
-                    <div class="form-add__input_last">
-                        {{ client_form.patronymic }}
-                    </div>
-                </div>
-            </div>
-            <div class="control-group">
                 <label class="control-label" for="inputOrganization">
                     Организация
                     <span class="required-input">*</span>
@@ -128,30 +111,12 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="inputPersonPhone">
-                    Телефон контактного лица
-                    <span class="required-input_second">*</span>
-                </label>
-                <div class="controls">
-                    {{ client_form.person_phone }}
-                </div>
-            </div>
-            <div class="control-group">
                 <label class="control-label" for="inputOrganizationPhone">
                     Телефон организации
                     <span class="required-input_second">*</span>
                 </label>
                 <div class="controls">
                     {{ client_form.organization_phone }}
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="inputEmail">
-                    E-mail
-                    <span class="required-input_second">*</span>
-                </label>
-                <div class="controls">
-                    {{ client_form.email }}
                 </div>
             </div>
             <div class="control-group city">
@@ -174,6 +139,9 @@
                     {{ client_form.comment }}
                 </div>
             </div>
+
+            {% include "client/modules/add_edit_client__contact_faces_block.html" %}
+
             {% url "edit_client" as edit_client_url %}
             {% if request.path == edit_client_url %}
                 <div class="control-group">

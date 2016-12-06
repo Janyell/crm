@@ -28,7 +28,7 @@ def full_analyze_managers(request):
     current_mounth = current_time[5:]
     current_mounth = current_mounth[:2]
     current_year = current_time[:4]
-    if 'graphic' and 'id' and 'period' in request.GET:
+    if 'graphic[]' in request.GET and 'id[]' in request.GET and 'period' in request.GET:
         type_of_period = request.GET['period']
         type_of_graphic = request.GET.getlist('graphic[]')
         managers_id = request.GET.getlist('id[]')

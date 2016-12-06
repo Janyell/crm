@@ -51,9 +51,10 @@ def full_get_tasks(request):
         is_senior = True
         out.update({'is_senior': is_senior})
     tasks = Tasks.objects.filter(is_deleted=0, order__is_deleted=0)
-    # because fuck the logic
-    if request.GET.get('is_done', 0) == '1':
-        tasks = tasks.filter(is_done=0)
+    try:
+        tasks = tasks.filter(is_done=int(request.GET.get('is_done', '0')))
+    except Exception:
+        pass
     period = 'today'
     if 'period' in request.GET:
         period = request.GET['period']

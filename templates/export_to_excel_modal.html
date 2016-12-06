@@ -33,11 +33,19 @@
                     var $exported_table__th = $exported_table.find('th');
                     var $export_modal = $('#export-to-excel');
                     var $modal__exported_cols = $export_modal.find('.modal__exported-cols');
+                    if ('/clients/' == window.location.pathname || '/clients/interested/' == window.location.pathname) {
+                    $modal__exported_cols.append('<label class="checkbox">' +
+                            '<input class="checkbox_export_one" type="checkbox" name="cols[]" value="' + 'status' + '"/>' +
+                            'Статус' + '</label>');
+                    }
                     $exported_table__th.each(function() {
                         var $this = $(this);
                         var text = $this.text();
                         if (text != '') {
                             var value = $(this).attr('value');
+                            if (value == undefined) {
+                                value = 'comment';
+                            }
                             $modal__exported_cols.append('<label class="checkbox">' +
                                     '<input class="checkbox_export_one" type="checkbox" name="cols[]" value="' + value + '"/>' +
                                     text + '</label>');

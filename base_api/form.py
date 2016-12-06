@@ -62,13 +62,42 @@ class TaskTypeChoiceField(ModelChoiceField):
 
 class ClientModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
+        info = u''
         if obj.organization == '':
             contact_face = ContactFaces.objects.filter(organization=obj.id, is_deleted=0).first()
-            return contact_face.last_name + ' ' + contact_face.name + ' ' + contact_face.patronymic
+            if contact_face:
+                contact_emails = ContactEmail.objects.filter(face_id=contact_face.id).all()
+                contact_phones = ContactPhone.objects.filter(face_id=contact_face.id).all()
+                contact_emails_str = ''
+                contact_phones_str = ''
+                for contact_email in contact_emails:
+                    if contact_emails_str:
+                        contact_emails_str = contact_emails_str + ', ' + contact_email.email
+                    else:
+                        contact_emails_str = contact_email.email
+                for contact_phone in contact_phones:
+                    if contact_phones_str:
+                        contact_phones_str = contact_phones_str + ', ' + contact_phone.phone
+                    else:
+                        contact_phones_str = contact_phone.phone
+                if contact_phones_str:
+                    if contact_emails_str:
+                        info = u' ({}, {})'.format(contact_emails_str, contact_phones_str)
+                    else:
+                        info = u' ({})'.format(contact_phones_str)
+                elif contact_emails_str:
+                    info = u' ({})'.format(contact_emails_str)
+                return contact_face.last_name + ' ' + contact_face.name + ' ' + contact_face.patronymic + info
+            else:
+                return ''
         elif obj.organization_type != '':
-            return '"' + obj.organization + '", ' + obj.organization_type
+            if obj.organization_phone:
+                info = u' ({})'.format(obj.organization_phone)
+            return '"' + obj.organization + '", ' + obj.organization_type + info
         else:
-            return '"' + obj.organization + '"'
+            if obj.organization_phone:
+                info = u' ({})'.format(obj.organization_phone)
+            return '"' + obj.organization + '"' + info
 
 
 class RoleForm(ModelForm):
