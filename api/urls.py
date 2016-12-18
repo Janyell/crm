@@ -193,6 +193,12 @@ urlpatterns = patterns('',
                        # hidden page
                        url(r'^claims/related/$', 'base_api.views.get_related_claims', name='get_related_claims'),
                        url(r'^claims/client/$', 'base_api.views.get_client_claims', name='get_client_claims'),
+                       url(r'^script_phone_to_numeric/$', 'base_api.views.script_phone_to_numeric',
+                           name='script_phone_to_numeric'),
+
+                       # ajax
+                       url(r'^get_clients/$', 'base_api.full_views.ajax.get_clients', name='ajax_get_clients'),
+
                        url(r'^robots.txt$',
                            lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")),
                        url(r'^admin/', include(admin.site.urls)),

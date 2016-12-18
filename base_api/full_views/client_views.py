@@ -29,7 +29,7 @@ def full_add_edit_client(request):
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
-    ClientForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects, required=False)
+    ClientForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects.order_by("name").order_by("name"), required=False)
     ClientForm.base_fields['city'].widget.attrs = {'id': "id_client_city"}
     if request.method == 'POST':
         logger.info(u'New client: {}'.format(request.POST))

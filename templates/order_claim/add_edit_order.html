@@ -6,11 +6,6 @@
     {% url 'add_order' as add_order_url %}
     {% url 'edit_order' as edit_order_url %}
     <div class="container container_horizontal-scroll{% if request.path == add_order_url or request.path == edit_order_url %} container_horizontal-scroll_order{% endif %}">
-        <style scoped="">
-            .typeahead {
-                top: 300px !important;
-            }
-        </style>
         <a href="{% if request.GET.search %}
             {% url "search" %}{% elif request.path == add_claim_url and client_id >= 0 %}
             {% url "get_interested_clients" %}{% elif request.GET.archive %}
@@ -35,6 +30,7 @@
             <a href="{% url 'edit_kp' %}?id={{ request.GET.id }}" target="_blank" class="btn pull-right pull-right_second generate-kp-button">Сформировать КП</a>
         {% endif %}
         <form class="form-horizontal form-add form-add-order" method="post" action="">
+            <input type="hidden" id="client_id_id" name="client_id_value" value="{{ claim_client_id }}">
             <h2 class="form-add__head">{{ page_title }}</h2>
             <h5 class="form-add__please text-align_initial">Пожалуйста, заполните следующую форму:</h5>
             {% if error == 1 %}
@@ -498,6 +494,28 @@
                     'data-live-search': "true",
                     'data-size': "10"
                 });
+                var client_id_form_field = $('#client_id_id');
+                $('input#selectClient').typeahead({
+                    ajax: {
+                        url: "/get_clients/",
+                        timeout: 500,
+                        displayField: "title",
+                        triggerLength: 1,
+                        method: "get",
+                        loadingClass: "loading-circle",
+                        valueField: 'id',
+                        preDispatch: function (query) {
+                            return {
+                                search: query
+                            }
+                        }
+                    },
+                    items: 16,
+                    onSelect: function (item) {
+                        client_id_form_field.val(item.value);
+                    }
+                });
+
                 {# Первыми (после пустого -----) поставить записи с определенными value (Челябинск, Москва, Самовывоз) #}
                 var $select_city__empty_option = $select_city.find('option[value=""]');
                 var values = [19, 14, 10]; {# Самовывоз, Москва, Челябинск #}

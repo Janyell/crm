@@ -60,44 +60,48 @@ class TaskTypeChoiceField(ModelChoiceField):
         return obj.title
 
 
+def client_label_from_instance(obj):
+    info = u''
+    if obj.organization == '':
+        contact_face = ContactFaces.objects.filter(organization=obj.id, is_deleted=0).first()
+        if contact_face:
+            contact_emails = ContactEmail.objects.filter(face_id=contact_face.id).all()
+            contact_phones = ContactPhone.objects.filter(face_id=contact_face.id).all()
+            contact_emails_str = ''
+            contact_phones_str = ''
+            for contact_email in contact_emails:
+                if contact_emails_str:
+                    contact_emails_str = contact_emails_str + ', ' + contact_email.email
+                else:
+                    contact_emails_str = contact_email.email
+            for contact_phone in contact_phones:
+                if contact_phones_str:
+                    contact_phones_str = contact_phones_str + ', ' + contact_phone.phone
+                else:
+                    contact_phones_str = contact_phone.phone
+            if contact_phones_str:
+                if contact_emails_str:
+                    info = u' ({}, {})'.format(contact_emails_str, contact_phones_str)
+                else:
+                    info = u' ({})'.format(contact_phones_str)
+            elif contact_emails_str:
+                info = u' ({})'.format(contact_emails_str)
+            return contact_face.last_name + ' ' + contact_face.name + ' ' + contact_face.patronymic + info
+        else:
+            return ''
+    elif obj.organization_type != '':
+        if obj.organization_phone:
+            info = u' ({})'.format(obj.organization_phone)
+        return '"' + obj.organization + '", ' + obj.organization_type + info
+    else:
+        if obj.organization_phone:
+            info = u' ({})'.format(obj.organization_phone)
+        return '"' + obj.organization + '"' + info
+
+
 class ClientModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
-        info = u''
-        if obj.organization == '':
-            contact_face = ContactFaces.objects.filter(organization=obj.id, is_deleted=0).first()
-            if contact_face:
-                contact_emails = ContactEmail.objects.filter(face_id=contact_face.id).all()
-                contact_phones = ContactPhone.objects.filter(face_id=contact_face.id).all()
-                contact_emails_str = ''
-                contact_phones_str = ''
-                for contact_email in contact_emails:
-                    if contact_emails_str:
-                        contact_emails_str = contact_emails_str + ', ' + contact_email.email
-                    else:
-                        contact_emails_str = contact_email.email
-                for contact_phone in contact_phones:
-                    if contact_phones_str:
-                        contact_phones_str = contact_phones_str + ', ' + contact_phone.phone
-                    else:
-                        contact_phones_str = contact_phone.phone
-                if contact_phones_str:
-                    if contact_emails_str:
-                        info = u' ({}, {})'.format(contact_emails_str, contact_phones_str)
-                    else:
-                        info = u' ({})'.format(contact_phones_str)
-                elif contact_emails_str:
-                    info = u' ({})'.format(contact_emails_str)
-                return contact_face.last_name + ' ' + contact_face.name + ' ' + contact_face.patronymic + info
-            else:
-                return ''
-        elif obj.organization_type != '':
-            if obj.organization_phone:
-                info = u' ({})'.format(obj.organization_phone)
-            return '"' + obj.organization + '", ' + obj.organization_type + info
-        else:
-            if obj.organization_phone:
-                info = u' ({})'.format(obj.organization_phone)
-            return '"' + obj.organization + '"' + info
+        return client_label_from_instance(obj)
 
 
 class RoleForm(ModelForm):
@@ -192,7 +196,7 @@ class LoginForm(ModelForm):
         }
 
 orders_form_widgets = {
-    'client': Select(attrs={'id': "selectClient", 'required': 1, 'class': 'selectpicker'}),
+    'client': TextInput(attrs={'id': "selectClient", 'required': 1, 'class': 'typeahead'}),
     'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker'}),
     'bill': NumberInput(attrs={'id': "inputBill"}),
     'payment_date': TextInput(attrs={'id': "inputPaymentDate",
@@ -236,7 +240,7 @@ class OrdersFormForAdmins(forms.ModelForm):
         widgets = orders_form_widgets
 
 claims_form_widgets = {
-    'client': Select(attrs={'id': "selectClient", 'required': 1, 'class': 'selectpicker'}),
+    'client': TextInput(attrs={'id': "selectClient", 'required': 1, 'class': 'typeahead'}),
     'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker', 'required': 0}),
     'bill': NumberInput(attrs={'id': "inputBill"}),
     'payment_date': TextInput(attrs={'id': "inputPaymentDate",

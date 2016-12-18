@@ -1044,8 +1044,8 @@ def search(request):
             emails_list_ids = [object.face_id for object in emails_list]
             contact_faces_list = list(ContactFaces.objects.filter(pk__in=emails_list_ids, is_deleted=0))
         elif 'phone' in params:
-            client_list = list(Clients.objects.filter(is_deleted=0, is_interested=0).filter(organization_phone__icontains=search_word))
-            phones_list = list(ContactPhone.objects.filter(is_deleted=0).filter(phone__icontains=search_word))
+            client_list = list(Clients.objects.filter(is_deleted=0, is_interested=0).filter(numeric_organization_phone__icontains=search_word))
+            phones_list = list(ContactPhone.objects.filter(is_deleted=0).filter(numeric_phone__icontains=search_word))
             phones_list_ids = [object.face_id for object in phones_list]
             contact_faces_list = list(ContactFaces.objects.filter(pk__in=phones_list_ids, is_deleted=0))
         else:
@@ -1091,8 +1091,8 @@ def search(request):
             emails_list_ids = [object.face_id for object in emails_list]
             contact_faces_list = list(ContactFaces.objects.filter(pk__in=emails_list_ids, is_deleted=0))
         elif 'phone' in params:
-            interested_client_list = list(Clients.objects.filter(is_deleted=0, is_interested=0).filter(organization_phone__icontains=search_word))
-            phones_list = list(ContactPhone.objects.filter(is_deleted=0).filter(phone__icontains=search_word))
+            interested_client_list = list(Clients.objects.filter(is_deleted=0, is_interested=0).filter(numeric_organization_phone__icontains=search_word))
+            phones_list = list(ContactPhone.objects.filter(is_deleted=0).filter(numeric_phone__icontains=search_word))
             phones_list_ids = [object.face_id for object in phones_list]
             contact_faces_list = list(ContactFaces.objects.filter(pk__in=phones_list_ids, is_deleted=0))
         else:
@@ -1864,3 +1864,15 @@ def close_claim(request):
 
 def do_task(request):
     pass
+
+
+def script_phone_to_numeric(request):
+    for phone in ContactPhone.objects.all():
+        if phone.phone:
+            phone.numeric_phone = u''.join(c for c in phone.phone if '0' <= c <= '9')
+            phone.save()
+    for phone in Clients.objects.all():
+        if phone.organization_phone:
+            phone.numeric_organization_phone = u''.join(c for c in phone.organization_phone if '0' <= c <= '9')
+            phone.save()
+    return HttpResponseRedirect('/login/')

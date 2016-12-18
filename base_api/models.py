@@ -6,6 +6,8 @@ from time import strftime
 from django.contrib.auth.models import User, UserManager
 from djangosphinx.models import SphinxSearch
 from media_tree.models import FileNode
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 class UnixTimestampField(models.DateTimeField):
@@ -88,6 +90,7 @@ class Clients(models.Model):
     organization_type = models.CharField(max_length=255, blank=True, default='')
     comment = models.TextField(null=True, blank=True, default='')
     city = models.ForeignKey(Cities, null=True, blank=True, default='')
+    numeric_organization_phone = models.CharField(max_length=15, null=True, blank=True)
 
     search = SphinxSearch()
 
@@ -112,6 +115,17 @@ class ContactPhone(models.Model):
     face = models.ForeignKey(ContactFaces, null=True, blank=True)
     phone = models.CharField(max_length=15, null=True, blank=True)
     is_deleted = models.BooleanField(default=0)
+    numeric_phone = models.CharField(max_length=15, null=True, blank=True)
+
+
+@receiver(pre_save, sender=ContactPhone)
+def update_numeric_phone(sender, instance, *args, **kwargs):
+    instance.numeric_phone = u''.join(c for c in instance.phone if '0' <= c <= '9')
+
+
+@receiver(pre_save, sender=Clients)
+def update_numeric_organization_phone(sender, instance, *args, **kwargs):
+    instance.numeric_organization_phone = u''.join(c for c in instance.organization_phone if '0' <= c <= '9')
 
 
 class Companies(models.Model):
