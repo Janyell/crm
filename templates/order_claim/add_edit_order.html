@@ -404,7 +404,6 @@
                     <button type="button" class="btn close_reset" data-dismiss="modal" aria-hidden="true">Закрыть</button>
                 </div>
             </form>
-            {% include "client/modules/add_edit_client__contact_faces_block.html" %}
         </div>
     {% endif %}
     {% if request.path == edit_order_url or request.path == edit_claim_url %}
@@ -673,7 +672,6 @@
                                         });
                                         $select_client_city.selectpicker();
                                         $style.html(".typeahead { top: 300px !important; }");
-                                        $('#plus-root-item').click();
                                     });
                                     $('.form-add__client').html($(data).find(".form-add__client").children());
                                     var $select_client = $('#id_client');
@@ -712,7 +710,6 @@
                                             $style.html(".typeahead { top: 350px !important; }");
                                         }
                                     }
-                                    $('#plus-root-item').click();
                                 }
                             }
                         });

@@ -12,13 +12,12 @@
                 Еще
             </label>
             <div class="controls">
-                <a id="plus-root-item" class="btn btn-success plus-item">+</a>
+                <a id="plus-root-item_tasks" class="btn btn-success plus-item">+</a>
             </div>
         </div>
     </div>
     <select multiple class="repeatable-items hidden" name="items[]"></select>
 </div>
-<script type="text/javascript" src="{{ STATIC_URL }}js/repeat-item.js"></script>
 
 {#{% url "edit_claim" as edit_claim_url %}#}
 {#{% if request.path == edit_claim_url %}#}
@@ -27,7 +26,7 @@
     <script type="text/javascript">
         (function($) {
             $(document).ready(function() {
-                $('#plus-root-item').click();
+                $('#plus-root-item_tasks').click();
             });
         })(jQuery);
     </script>
