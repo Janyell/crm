@@ -366,8 +366,13 @@ def full_add_edit_claim(request):
                 get_params += get_request_param_as_string(request)
                 return HttpResponseRedirect('/claims/' + get_params)
         form.is_valid()
-        if form and request.POST['client_id_value']:
+        if request.POST['client_id_value']:
             client = Clients.objects.get(pk=int(request.POST['client_id_value']))
+        else:
+            client = Clients.objects\
+                .filter(is_deleted=0)\
+                .filter(client_label_from_instance__icontains=request.POST['client']).first()
+        if form and client:
             source = form.cleaned_data['source']
             transport_campaign = form.cleaned_data['transport_campaign']
             role = Roles.objects.get(id=request.user.id, is_deleted=0)
@@ -490,6 +495,13 @@ def full_add_edit_claim(request):
                                               transport_campaign=transport_campaign, ready_date=ready_date, city=city,
                                               payment_date=payment_date, order_status=order_status,
                                               became_claim_date=became_claim_date, is_set_via_kp=is_set_via_kp)
+                        no_our_products = request.POST.get('no-our-products', 'off')
+                        if no_our_products == 'on':
+                            reason = CloseReasons.objects.get(id=7)
+                            final_comment = comment
+                            CloseClaims.objects.create(order=new_claim, reason=reason, final_comment=final_comment)
+                            new_claim.bill_status = 6
+                            new_claim.save(update_fields=["bill_status"])
                     new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
                                                                           order_date=datetime.now(),
                                                                           count_of_products=count_of_products,
@@ -705,7 +717,8 @@ def full_add_edit_claim(request):
             # ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_id = request.GET['client-id']
             client = Clients.objects.get(id=client_id, is_deleted=0)
-            form = ClaimsForm({'client': client})
+            form = ClaimsForm({'client': client_label_from_instance(client)})
+            out.update({'claim_client_id': client.id})
             form.products = Products.objects.filter(is_deleted=0)
             for product in form.products:
                 product.price_right_format = right_money_format(product.price)

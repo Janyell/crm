@@ -91,6 +91,7 @@ class Clients(models.Model):
     comment = models.TextField(null=True, blank=True, default='')
     city = models.ForeignKey(Cities, null=True, blank=True, default='')
     numeric_organization_phone = models.CharField(max_length=15, null=True, blank=True)
+    client_label_from_instance = models.CharField(max_length=250, null=True, blank=True)
 
     search = SphinxSearch()
 

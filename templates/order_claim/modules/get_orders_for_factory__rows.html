@@ -21,8 +21,10 @@
             100
         {% elif order.brought_sum == None %}
             0
-        {% else %}
+        {% elif order.bill == None %}
             {{ order.brought_sum|mul:100|intdiv:order.bill }}
+        {% else %}
+            0
         {% endif %}
     </td>
     <td>

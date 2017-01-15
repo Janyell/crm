@@ -195,6 +195,8 @@ urlpatterns = patterns('',
                        url(r'^claims/client/$', 'base_api.views.get_client_claims', name='get_client_claims'),
                        url(r'^script_phone_to_numeric/$', 'base_api.views.script_phone_to_numeric',
                            name='script_phone_to_numeric'),
+                       url(r'^script_client_label_from_instance/$', 'base_api.views.script_client_label_from_instance',
+                           name='script_client_label_from_instance'),
 
                        # ajax
                        url(r'^get_clients/$', 'base_api.full_views.ajax.get_clients', name='ajax_get_clients'),

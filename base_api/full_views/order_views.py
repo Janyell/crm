@@ -376,11 +376,16 @@ def full_add_edit_order(request):
                 return HttpResponseRedirect('/orders/archive/' + get_params)
             return HttpResponseRedirect('/orders/' + get_params)
         form.is_valid()
+        if request.POST['client_id_value']:
+            client = Clients.objects.get(pk=int(request.POST['client_id_value']))
+        else:
+            client = Clients.objects\
+                .filter(is_deleted=0)\
+                .filter(client_label_from_instance__icontains=request.POST['client']).first()
         if form and \
                 (form.cleaned_data['order_status'] != -1 or \
                     form.cleaned_data['order_status'] == -1 and form.cleaned_data['shipped_date']) and \
-                    request.POST['client_id_value']:
-            client = Clients.objects.get(pk=int(request.POST['client_id_value']))
+                    client:
             source = form.cleaned_data['source']
             transport_campaign = form.cleaned_data['transport_campaign']
             unique_number = id_generator()
@@ -672,7 +677,8 @@ def full_add_edit_order(request):
             # OrdersForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
             client_id = request.GET['client-id']
             client = Clients.objects.get(id=client_id, is_deleted=0)
-            form = OrdersForm({'client': client})
+            form = OrdersForm({'client': client_label_from_instance(client)})
+            out.update({'claim_client_id': client.id})
             form.products = Products.objects.filter(is_deleted=0)
             for product in form.products:
                 product.price_right_format = right_money_format(product.price)

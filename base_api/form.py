@@ -92,11 +92,11 @@ def client_label_from_instance(obj):
     elif obj.organization_type != '':
         if obj.organization_phone:
             info = u' ({})'.format(obj.organization_phone)
-        return '"' + obj.organization + '", ' + obj.organization_type + info
+        return obj.organization + ', ' + obj.organization_type + info
     else:
         if obj.organization_phone:
             info = u' ({})'.format(obj.organization_phone)
-        return '"' + obj.organization + '"' + info
+        return obj.organization + info
 
 
 class ClientModelChoiceField(ModelChoiceField):

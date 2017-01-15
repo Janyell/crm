@@ -1876,3 +1876,10 @@ def script_phone_to_numeric(request):
             phone.numeric_organization_phone = u''.join(c for c in phone.organization_phone if '0' <= c <= '9')
             phone.save()
     return HttpResponseRedirect('/login/')
+
+
+def script_client_label_from_instance(request):
+    for client in Clients.objects.all():
+        client.client_label_from_instance = client_label_from_instance(client)
+        client.save()
+    return HttpResponseRedirect('/login/')

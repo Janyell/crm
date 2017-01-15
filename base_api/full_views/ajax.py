@@ -17,14 +17,16 @@ import json
 def get_clients(request):
     data = []
     search_word = request.GET['search']
-    client_list = list(Clients.objects.filter(organization__icontains=search_word).filter(is_deleted=0))
-    contact_faces_list = list(ContactFaces.objects.filter(
-        Q(name__icontains=search_word) |
-        Q(last_name__icontains=search_word) |
-        Q(patronymic__icontains=search_word)
-    ).filter(is_deleted=0))
-    contact_faces_list_ids = [object.organization_id for object in contact_faces_list]
-    client_list += list(Clients.objects.filter(pk__in=contact_faces_list_ids, is_deleted=0))
+    client_list = list(Clients.objects.filter(organization=search_word).filter(is_deleted=0))
+    if not client_list:
+        client_list = list(Clients.objects.filter(organization__icontains=search_word).filter(is_deleted=0))
+        contact_faces_list = list(ContactFaces.objects.filter(
+            Q(name__icontains=search_word) |
+            Q(last_name__icontains=search_word) |
+            Q(patronymic__icontains=search_word)
+        ).filter(is_deleted=0))
+        contact_faces_list_ids = [object.organization_id for object in contact_faces_list]
+        client_list += list(Clients.objects.filter(pk__in=contact_faces_list_ids, is_deleted=0))
     client_list = list(set(client_list))
     for client in client_list:
         data.append(
