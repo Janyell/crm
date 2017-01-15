@@ -139,8 +139,9 @@
                     {{ client_form.comment }}
                 </div>
             </div>
-
-            {% include "client/modules/add_edit_client__contact_faces_block.html" %}
+            {% with html=True %}
+                {% include "client/modules/add_edit_client__contact_faces_block.html" %}
+            {% endwith %}
 
             {% url "edit_client" as edit_client_url %}
             {% if request.path == edit_client_url %}
