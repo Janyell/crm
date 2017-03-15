@@ -91,9 +91,9 @@ class Clients(models.Model):
     comment = models.TextField(null=True, blank=True, default='')
     city = models.ForeignKey(Cities, null=True, blank=True, default='')
     numeric_organization_phone = models.CharField(max_length=15, null=True, blank=True)
-    client_label_from_instance = models.CharField(max_length=250, null=True, blank=True)
+    client_label_from_instance = models.CharField(max_length=500, null=True, blank=True)
 
-    search = SphinxSearch()
+    search = SphinxSearch(limit=100, mode='SPH_MATCH_ANY')
 
 
 class ContactFaces(models.Model):
@@ -287,7 +287,7 @@ class Order_Product(models.Model):
 
 class Order_Files(models.Model):
     order = models.ForeignKey(Orders, null=True, blank=True)
-    title = models.CharField(max_length=50, null=False, blank=True)
+    title = models.CharField(max_length=500, null=False, blank=True)
     file = models.FileField(upload_to="uploads/", null=True, blank=True)
     file_node = models.ForeignKey(FileNode, null=True, blank=True)
 

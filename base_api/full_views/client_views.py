@@ -226,9 +226,7 @@ def full_add_edit_client(request):
                         if phone:
                             new_phone = ContactPhone(face=new_contact_face, phone=phone)
                             new_phone.save()
-                if is_interested == 1:
-                        return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
-                return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
+                return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
             elif 'save-and-upload-file' in form.data:
                 new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
                                          patronymic=patronymic, person_phone=person_phone,
@@ -238,8 +236,6 @@ def full_add_edit_client(request):
                 new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
                                                    "person_phone", "organization_phone", "email", "is_interested",
                                                    "organization_type", "comment", "city"])
-                new_client.client_label_from_instance = client_label_from_instance(new_client)
-                new_client.save()
                 for contact_face in contact_faces:
                     if contact_face['id'] != 0:
                         if contact_face.get('is_deleted'):
@@ -274,6 +270,8 @@ def full_add_edit_client(request):
                         if phone:
                             new_phone = ContactPhone(face=new_contact_face, phone=phone)
                             new_phone.save()
+                new_client.client_label_from_instance = client_label_from_instance(new_client)
+                new_client.save()
                 return HttpResponseRedirect('/uploads/client/?id=%s' % new_client.id)
             else:
                 new_client = Clients(id=id_client, organization=organization, last_name=last_name, name=name,
@@ -284,8 +282,6 @@ def full_add_edit_client(request):
                 new_client.save(update_fields=["organization", "last_name", "name", "patronymic",
                                                    "person_phone", "organization_phone", "email", "is_interested",
                                                    "organization_type", "comment", "city"])
-                new_client.client_label_from_instance = client_label_from_instance(new_client)
-                new_client.save()
                 for contact_face in contact_faces:
                     if contact_face['id'] != 0:
                         if contact_face.get('is_deleted'):
@@ -320,6 +316,8 @@ def full_add_edit_client(request):
                         if phone:
                             new_phone = ContactPhone(face=new_contact_face, phone=phone)
                             new_phone.save()
+                new_client.client_label_from_instance = client_label_from_instance(new_client)
+                new_client.save()
                 get_params = '?'
                 if 'search' in request.GET:
                     search = request.GET.get('search')
@@ -408,13 +406,13 @@ def full_add_edit_client(request):
             is_interested = 0
             if 'is_interested' in request.POST:
                 is_interested = 1
+            print '1'
             if organization != '':
-                try:
-                    is_org_exist = Clients.objects.get(organization_type=organization_type,
-                                                       organization=organization,
-                                                       organization_phone=organization_phone,
-                                                       is_deleted=0)
-                except ObjectDoesNotExist:
+                is_org_exist = Clients.objects.filter(organization_type=organization_type,
+                                                   organization=organization,
+                                                   organization_phone=organization_phone,
+                                                   is_deleted=0).all()
+                if not is_org_exist:
                     if 'save-and-upload-file' in form.data:
                         new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
                                                             patronymic=patronymic, person_phone=person_phone,
@@ -422,8 +420,6 @@ def full_add_edit_client(request):
                                                             creation_date=datetime.now(), is_interested=is_interested,
                                                             role=role, organization_type=organization_type,
                                                             comment=comment, city=city)
-                        new_client.client_label_from_instance = client_label_from_instance(new_client)
-                        new_client.save()
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -435,6 +431,8 @@ def full_add_edit_client(request):
                             for phone in contact_face['phones']:
                                 if phone:
                                     new_phone = ContactPhone.objects.create(face=new_contact_face, phone=phone)
+                        new_client.client_label_from_instance = client_label_from_instance(new_client)
+                        new_client.save()
                         return HttpResponseRedirect('/uploads/client/?id=%s' % new_client.pk)
                     elif 'only-save' in form.data:
                         get_params = '?'
@@ -446,8 +444,6 @@ def full_add_edit_client(request):
                                                                 creation_date=datetime.now(), is_interested=is_interested,
                                                                 role=role, organization_type=organization_type,
                                                                 comment=comment, city=city)
-                            new_client.client_label_from_instance = client_label_from_instance(new_client)
-                            new_client.save()
                             for contact_face in contact_faces:
                                 new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                                name=contact_face['name'],
@@ -459,6 +455,8 @@ def full_add_edit_client(request):
                                 for phone in contact_face['phones']:
                                     if phone:
                                         new_phone = ContactPhone.objects.create(face=new_contact_face, phone=phone)
+                            new_client.client_label_from_instance = client_label_from_instance(new_client)
+                            new_client.save()
                             return HttpResponseRedirect('/clients/interested/' + get_params)
                         else:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
@@ -467,8 +465,6 @@ def full_add_edit_client(request):
                                                                 creation_date=datetime.now(), role=role,
                                                                 organization_type=organization_type,
                                                                 comment=comment, city=city)
-                            new_client.client_label_from_instance = client_label_from_instance(new_client)
-                            new_client.save()
                             for contact_face in contact_faces:
                                 new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                                name=contact_face['name'],
@@ -480,6 +476,8 @@ def full_add_edit_client(request):
                                 for phone in contact_face['phones']:
                                     if phone:
                                         new_phone = ContactPhone.objects.create(face=new_contact_face, phone=phone)
+                            new_client.client_label_from_instance = client_label_from_instance(new_client)
+                            new_client.save()
                             return HttpResponseRedirect('/clients/' + get_params)
                     # if 'save-and-add-order' in form.data:
                     else:
@@ -490,8 +488,6 @@ def full_add_edit_client(request):
                                                                 creation_date=datetime.now(), is_interested=is_interested,
                                                                 role=role, organization_type=organization_type,
                                                                 comment=comment, city=city)
-                            new_client.client_label_from_instance = client_label_from_instance(new_client)
-                            new_client.save()
                             for contact_face in contact_faces:
                                 new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                                name=contact_face['name'],
@@ -503,6 +499,8 @@ def full_add_edit_client(request):
                                 for phone in contact_face['phones']:
                                     if phone:
                                         new_phone = ContactPhone.objects.create(face=new_contact_face, phone=phone)
+                            new_client.client_label_from_instance = client_label_from_instance(new_client)
+                            new_client.save()
                             return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                         else:
                             new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
@@ -511,8 +509,6 @@ def full_add_edit_client(request):
                                                                 creation_date=datetime.now(), role=role,
                                                                 organization_type=organization_type,
                                                                 comment=comment, city=city)
-                            new_client.client_label_from_instance = client_label_from_instance(new_client)
-                            new_client.save()
                             for contact_face in contact_faces:
                                 new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                                name=contact_face['name'],
@@ -524,13 +520,16 @@ def full_add_edit_client(request):
                                 for phone in contact_face['phones']:
                                     if phone:
                                         new_phone = ContactPhone.objects.create(face=new_contact_face, phone=phone)
-                            return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
+                            new_client.client_label_from_instance = client_label_from_instance(new_client)
+                            new_client.save()
+                            return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                     return HttpResponseRedirect('/clients/')
                 out.update({"error": 1})
                 out.update({'client_form': form})
                 out.update({'page_title': "Добавление клиента"})
                 return render(request, 'client/add_edit_client.html', out)
             else:
+                print '2'
                 if 'only-save' in form.data:
                     get_params = '?'
                     get_params += get_request_param_as_string(request)
@@ -541,8 +540,6 @@ def full_add_edit_client(request):
                                                             creation_date=datetime.now(), is_interested=is_interested,
                                                             role=role, organization_type=organization_type,
                                                             comment=comment, city=city)
-                        new_client.client_label_from_instance = client_label_from_instance(new_client)
-                        new_client.save()
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -554,6 +551,8 @@ def full_add_edit_client(request):
                             for phone in contact_face['phones']:
                                 if phone:
                                     new_phone = ContactPhone.objects.create(face=new_contact_face, phone=phone)
+                        new_client.client_label_from_instance = client_label_from_instance(new_client)
+                        new_client.save()
                         return HttpResponseRedirect('/clients/interested/' + get_params)
                     else:
                         new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
@@ -562,8 +561,6 @@ def full_add_edit_client(request):
                                                             creation_date=datetime.now(), role=role,
                                                             organization_type=organization_type,
                                                             comment=comment, city=city)
-                        new_client.client_label_from_instance = client_label_from_instance(new_client)
-                        new_client.save()
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -575,6 +572,8 @@ def full_add_edit_client(request):
                             for phone in contact_face['phones']:
                                 if phone:
                                     new_phone = ContactPhone.objects.create(face=new_contact_face, phone=phone)
+                        new_client.client_label_from_instance = client_label_from_instance(new_client)
+                        new_client.save()
                         return HttpResponseRedirect('/clients/' + get_params)
                 elif 'save-and-upload-file' in form.data:
                         new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
@@ -583,8 +582,6 @@ def full_add_edit_client(request):
                                                             creation_date=datetime.now(), is_interested=is_interested,
                                                             role=role, organization_type=organization_type,
                                                             comment=comment, city=city)
-                        new_client.client_label_from_instance = client_label_from_instance(new_client)
-                        new_client.save()
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -596,6 +593,8 @@ def full_add_edit_client(request):
                             for phone in contact_face['phones']:
                                 if phone:
                                     new_phone = ContactPhone.objects.create(face=new_contact_face, phone=phone)
+                        new_client.client_label_from_instance = client_label_from_instance(new_client)
+                        new_client.save()
                         return HttpResponseRedirect('/uploads/client/?id=%s' % new_client.pk)
                 # elif 'save-and-add-order' in form.data:
                 else:
@@ -607,8 +606,6 @@ def full_add_edit_client(request):
                                                             is_interested=is_interested, role=role,
                                                             organization_type=organization_type,
                                                             comment=comment, city=city)
-                        new_client.client_label_from_instance = client_label_from_instance(new_client)
-                        new_client.save()
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -620,6 +617,8 @@ def full_add_edit_client(request):
                             for phone in contact_face['phones']:
                                 if phone:
                                     new_phone = ContactPhone.objects.create(face=new_contact_face, phone=phone)
+                        new_client.client_label_from_instance = client_label_from_instance(new_client)
+                        new_client.save()
                         return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                     else:
                         new_client = Clients.objects.create(organization=organization, last_name=last_name, name=name,
@@ -628,8 +627,6 @@ def full_add_edit_client(request):
                                                             creation_date=datetime.now(), role=role,
                                                             organization_type=organization_type,
                                                             comment=comment, city=city)
-                        new_client.client_label_from_instance = client_label_from_instance(new_client)
-                        new_client.save()
                         for contact_face in contact_faces:
                             new_contact_face = ContactFaces.objects.create(last_name=contact_face['last_name'],
                                                                            name=contact_face['name'],
@@ -641,7 +638,9 @@ def full_add_edit_client(request):
                             for phone in contact_face['phones']:
                                 if phone:
                                     new_phone = ContactPhone.objects.create(face=new_contact_face, phone=phone)
-                        return HttpResponseRedirect('/orders/add/?client-id=' + str(new_client.pk))
+                        new_client.client_label_from_instance = client_label_from_instance(new_client)
+                        new_client.save()
+                        return HttpResponseRedirect('/claims/add/?client-id=' + str(new_client.pk))
                 return HttpResponseRedirect('/clients/')
     else:
         if 'id' in request.GET:

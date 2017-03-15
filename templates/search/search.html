@@ -149,6 +149,17 @@
                                                     value="{{ order.pk }}">
                                                     <div class="hidden edit-comment__data">{{ order.comment }}</div>
                                                     ...</a>
+                                            {% else %}
+                                                <span class="comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
+                                                <a class="edit-order-comment-button" data-toggle="modal" href="#edit-comment"
+                                                    value="{{ order.pk }}">
+                                                    <div class="hidden edit-comment__data">{{ order.comment }}</div>
+                                                    Добавить комментарий</a>
+                                            {% endif %}
+                                            {% if order.tasks %}
+                                                <span class="bold" style="color:#ffd700">Комментарии из задач:</span>
+                                                <a class="task-comment-button no-print" data-toggle="modal" href="#view-claim-comment"
+                                                    value="{% for task in order.tasks %} {{ task.comment }}. {% if task.results %}Результат:{% endif %} {{ task.results }} <br>{% endfor %}">...</a>
                                             {% endif %}
                                             {% if order.factory_comment %}
                                                 <span class="bold">Информация для пр-ва:</span>
@@ -320,6 +331,17 @@
                                                     value="{{ order.pk }}">
                                                     <div class="hidden edit-comment__data">{{ order.comment }}</div>
                                                     ...</a>
+                                            {% else %}
+                                                <span class="comment{% if order.role|urlencode:"" == user.username|urlencode:"" and not order.is_comment_my %} comment_highlighted{% endif %}">{{ order.comment }}</span>
+                                                <a class="edit-order-comment-button" data-toggle="modal" href="#edit-comment"
+                                                    value="{{ order.pk }}">
+                                                    <div class="hidden edit-comment__data">{{ order.comment }}</div>
+                                                    Добавить комментарий</a>
+                                            {% endif %}
+                                            {% if order.tasks %}
+                                                <span class="bold" style="color:#ffd700">Комментарии из задач:</span>
+                                                <a class="task-comment-button no-print" data-toggle="modal" href="#view-claim-comment"
+                                                    value="{% for task in order.tasks %} {{ task.comment }}. {% if task.results %}Результат:{% endif %} {{ task.results }} <br>{% endfor %}">...</a>
                                             {% endif %}
                                             {% if order.factory_comment %}
                                                 <span class="bold">Информация для пр-ва:</span>
@@ -456,6 +478,17 @@
                                                         value="{{ claim.pk }}">
                                                         <div class="hidden edit-comment__data">{{ claim.comment }}</div>
                                                         ...</a>
+                                                {% else %}
+                                                    <span class="comment{% if claim.role|urlencode:"" == user.username|urlencode:"" and not claim.is_comment_my %} comment_highlighted{% endif %}">{{ claim.comment }}</span>
+                                                    <a class="edit-claim-comment-button" data-toggle="modal" href="#edit-comment"
+                                                        value="{{ claim.pk }}">
+                                                        <div class="hidden edit-comment__data">{{ claim.comment }}</div>
+                                                        Добавить комментарий</a>
+                                                {% endif %}
+                                                {% if claim.tasks %}
+                                                    <span class="bold" style="color:#ffd700">Комментарии из задач:</span>
+                                                    <a class="task-comment-button no-print" data-toggle="modal" href="#view-claim-comment"
+                                                        value="{% for task in claim.tasks %} {{ task.comment }}. {% if task.results %}Результат:{% endif %} {{ task.results }} <br>{% endfor %}">...</a>
                                                 {% endif %}
                                             </td>
                                             <td>
@@ -515,6 +548,7 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
+                                        <th></th>
                                         {% if user_role == 0 %}<th></th>{% endif %}
                                     </tr>
                                 </thead>
@@ -544,6 +578,9 @@
                                             <td><a class="btn" href="{% url "get_orders" %}?client-id={{ client.pk }}">Заказы</a></td>
                                             <td>
                                                 <a class="btn add-order-button" href="{% url "add_order" %}?client-id={{ client.pk }}">Добавить заказ</a>
+                                            </td>
+                                            <td>
+                                                <a class="btn add-order-button" href="{% url "add_claim" %}?client-id={{ client.pk }}">Добавить заявку</a>
                                             </td>
                                             <td>
                                                 {% if client.files %}
@@ -729,6 +766,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="info__data_modal">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                </div>
+            </div>
+            <div class="modal hide fade" id="view-claim-comment" tabindex="-1" role="dialog" aria-labelledby="CommentLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>Комментарий к заявке</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="comment__data_modal">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -925,6 +975,11 @@
                                 comment = comment.substring(0, last_space);
                             }
                             $this.text(comment);
+                        });
+                        $('.task-comment-button').bind('click', function(){
+                            $("#view-order-comment").find("h3").text("Комментарии из задач");
+                            var comment = $(this).attr('value');
+                            $('.comment__data_modal').html(comment);
                         });
                         {% if orders or claims or user.role == 0 and old_orders %}
                             $('.get-client-info').bind('click', function(){

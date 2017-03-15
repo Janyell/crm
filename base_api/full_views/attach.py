@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+import logging
 from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, render
@@ -9,6 +10,8 @@ from media_tree.utils import multi_splitext
 from base_api.form import ProductForm, UploadFileForOrderForm, UploadFileForClientForm, FileFieldForm
 from base_api.models import Order_Files, Orders, Roles, Client_Files, Clients
 from django.template.defaultfilters import slugify
+
+logger = logging.getLogger(__name__)
 
 
 def upload_order_file(request):
@@ -35,29 +38,32 @@ def upload_order_file(request):
                 files.append(order_file)
     out.update({'files': files})
     if request.method == 'POST':
-        form = FileFieldForm(request.POST, request.FILES)
-        files = request.FILES.getlist('file')
-        if form.is_valid():
-            # file is saved
-            for f in files:
-                order_file = Order_Files.objects.create(
-                    order=Orders.objects.get(id=order_id),
-                    file=f,
-                    title=f.name
-                )
-                save_file_in_node(order_file)
-            form_new = FileFieldForm()
-            out.update({'form': form_new})
-            order_files = Order_Files.objects.filter(order_id=order_id).all()
-            files = []
-            if order_files is not None:
-                for order_file in order_files:
-                    order_file.name = order_file.title
-                    if order_file.file:
-                        order_file.url = order_file.file.url
-                        files.append(order_file)
-            out.update({'files': files})
-            return render(request, 'files.html', out)
+        try:
+            form = FileFieldForm(request.POST, request.FILES)
+            files = request.FILES.getlist('file')
+            if form.is_valid():
+                # file is saved
+                for f in files:
+                    order_file = Order_Files.objects.create(
+                        order=Orders.objects.get(id=order_id),
+                        file=f,
+                        title=f.name
+                    )
+                    save_file_in_node(order_file)
+                form_new = FileFieldForm()
+                out.update({'form': form_new})
+                order_files = Order_Files.objects.filter(order_id=order_id).all()
+                files = []
+                if order_files is not None:
+                    for order_file in order_files:
+                        order_file.name = order_file.title
+                        if order_file.file:
+                            order_file.url = order_file.file.url
+                            files.append(order_file)
+                out.update({'files': files})
+                return render(request, 'files.html', out)
+        except Exception as e:
+            logger.info(u'Exception {}'.format(e))
     else:
         form = FileFieldForm()
     out.update({'form': form})

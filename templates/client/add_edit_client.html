@@ -164,11 +164,7 @@
             </div>
             </div>
             <div class="form-add__submits">
-                {% if not request.GET.is_interested %}
-                    <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заказа</button>
-                {% else %}
-                    <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заявки</button>
-                {% endif %}
+                <button type="submit" class="btn btn-primary"  name="save-and-add-order" value="save-and-add-order">Сохранить и перейти к оформлению заявки</button>
                 {% url "add_client" as add_client_url %}
                 {% if request.path == add_client_url %}
                     <button type="submit" class="btn" name="save-and-upload-file" value="save-and-upload-file">Сохранить и перейти к загрузке файлов</button>

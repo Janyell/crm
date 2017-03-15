@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import raven
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -43,7 +44,8 @@ INSTALLED_APPS = (
     'media_tree',
     'bootstrap_pagination',
     'djangosphinx',
-    'mathfilters'
+    'mathfilters',
+    'raven.contrib.django.raven_compat',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -252,5 +254,15 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
+        'base_api.full_views.attach': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
     },
+}
+
+# Sentry
+RAVEN_CONFIG = {
+    'dsn': 'https://fe422bd37a174a969df3588c61528937:ffada146ad4340b4899d549e960bed09@sentry.io/136888',
 }

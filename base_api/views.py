@@ -776,16 +776,112 @@ def search(request):
     params = []
     if 'search' in request.GET:
         if 'params[]' in request.GET:
-            search_word = request.GET['search']
+            search_word = request.GET['search'].lstrip().rstrip()
             params = request.GET.getlist('params[]')
-            print params
         else:
-            search_word = request.GET['search'] + '*'
+            search_word = request.GET['search'].lstrip().rstrip() + '*'
     else:
         search_word = u'*'
     is_search_throw_clients = True
     client_list = []
     interested_client_list = []
+    if is_search_throw_clients:
+        if 'email' in params:
+            client_list = list(Clients.objects.filter(is_deleted=0, is_interested=0).filter(email__icontains=search_word))
+            emails_list = list(ContactEmail.objects.filter(is_deleted=0).filter(email__icontains=search_word))
+            emails_list_ids = [object.face_id for object in emails_list]
+            contact_faces_list = list(ContactFaces.objects.filter(pk__in=emails_list_ids, is_deleted=0))
+        elif 'phone' in params:
+            search_word = u''.join(c for c in search_word if '0' <= c <= '9')
+            client_list = list(Clients.objects.filter(is_deleted=0, is_interested=0).filter(numeric_organization_phone__icontains=search_word))
+            phones_list = list(ContactPhone.objects.filter(is_deleted=0).filter(numeric_phone__icontains=search_word))
+            phones_list_ids = [object.face_id for object in phones_list]
+            contact_faces_list = list(ContactFaces.objects.filter(pk__in=phones_list_ids, is_deleted=0))
+        else:
+            client_list = list(Clients.search.query(search_word).filter(is_deleted=0, is_interested=0))
+            contact_faces_list = list(ContactFaces.search.query(search_word)
+                                      .filter(is_deleted=0))
+        contact_faces_list_ids = [object.organization_id for object in contact_faces_list]
+        client_list += list(Clients.objects.filter(pk__in=contact_faces_list_ids, is_interested=0, is_deleted=0))
+        client_list = list(set(client_list))
+        for c in client_list:
+            c.person_full_name = ''
+            c.email = ''
+            c.person_phone = ''
+            contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
+            for contact_face in contact_faces:
+                if c.person_full_name != '':
+                    c.person_full_name += ', '
+                c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
+                                     + contact_face.name + ' ' + contact_face.patronymic
+                for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                    if email.email:
+                        if c.email:
+                            c.email += ', '
+                        c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                                  contact_face.patronymic + ')'
+                for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                    if phone.phone:
+                        if c.person_phone:
+                            c.person_phone += ', '
+                        c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                         contact_face.name + ' ' + contact_face.patronymic + ')'
+            c.files = []
+            if Client_Files.objects.filter(client_id=c.id).all() is not None:
+                for client_file in Client_Files.objects.filter(client_id=c.id).all():
+                    if client_file.file is not None and client_file.file != '':
+                        client_file.name = client_file.title
+                        client_file.url = client_file.file.url
+                        c.files.append(client_file)
+
+        if 'email' in params:
+            interested_client_list = list(Clients.objects.filter(is_deleted=0, is_interested=1).filter(email__icontains=search_word))
+            emails_list = list(ContactEmail.objects.filter(is_deleted=0).filter(email__icontains=search_word))
+            emails_list_ids = [object.face_id for object in emails_list]
+            contact_faces_list = list(ContactFaces.objects.filter(pk__in=emails_list_ids, is_deleted=0))
+        elif 'phone' in params:
+            search_word = u''.join(c for c in search_word if '0' <= c <= '9')
+            interested_client_list = list(Clients.objects.filter(is_deleted=0, is_interested=0).filter(numeric_organization_phone__icontains=search_word))
+            phones_list = list(ContactPhone.objects.filter(is_deleted=0).filter(numeric_phone__icontains=search_word))
+            phones_list_ids = [object.face_id for object in phones_list]
+            contact_faces_list = list(ContactFaces.objects.filter(pk__in=phones_list_ids, is_deleted=0))
+        else:
+            interested_client_list = list(Clients.search.query(search_word).filter(is_deleted=0, is_interested=1))
+            contact_faces_list = list(ContactFaces.search.query(search_word)
+                                      .filter(is_deleted=0))
+        contact_faces_list_ids = [object.organization_id for object in contact_faces_list]
+        interested_client_list += list(Clients.objects.filter(pk__in=contact_faces_list_ids, is_interested=1, is_deleted=0))
+        interested_client_list = list(set(interested_client_list))
+        for c in interested_client_list:
+            c.person_full_name = ''
+            c.email = ''
+            c.person_phone = ''
+            contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
+            for contact_face in contact_faces:
+                if c.person_full_name != '':
+                    c.person_full_name += ', '
+                c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
+                                     + contact_face.name + ' ' + contact_face.patronymic
+                for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
+                    if email.email:
+                        if c.email:
+                            c.email += ', '
+                        c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
+                                  contact_face.patronymic + ')'
+                for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
+                    if phone.phone:
+                        if c.person_phone:
+                            c.person_phone += ', '
+                        c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
+                                         contact_face.name + ' ' + contact_face.patronymic + ')'
+            c.files = []
+            if Client_Files.objects.filter(client_id=c.id).all() is not None:
+                for client_file in Client_Files.objects.filter(client_id=c.id).all():
+                    if client_file.file is not None and client_file.file != '':
+                        client_file.name = client_file.title
+                        client_file.url = client_file.file.url
+                        c.files.append(client_file)
+    all_clients_for_search = interested_client_list + client_list
     if 'unique_number' in params or 'kp' in params:
         order_list = list(Orders.objects.filter(is_deleted=0, is_claim=0, in_archive=0).filter(account_number__icontains=search_word))
         is_search_throw_clients = False
@@ -793,7 +889,7 @@ def search(request):
         order_list = list(Orders.search.query(search_word).filter(is_deleted=0, is_claim=0, in_archive=0))
         all_clients = list(Clients.search.query(search_word))
         orders_from_fk = []
-        for client in all_clients:
+        for client in all_clients_for_search:
             for order in Orders.objects.filter(client=client.id, is_deleted=0, is_claim=0, in_archive=0).all():
                 orders_from_fk.append(order)
         all_companies = list(Companies.search.query(search_word))
@@ -868,6 +964,7 @@ def search(request):
                     order_file.name = order_file.title
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
+        order.tasks = Tasks.objects.filter(order=order.id).all()
     if 'unique_number' in params or 'kp' in params:
         archive_order_list = list(Orders.objects.filter(is_deleted=0, is_claim=0, in_archive=1).filter(account_number__icontains=search_word))
         is_search_throw_clients = False
@@ -875,7 +972,7 @@ def search(request):
         archive_order_list = list(Orders.search.query(search_word).filter(is_deleted=0, is_claim=0, in_archive=1))
         all_clients = list(Clients.search.query(search_word))
         orders_from_fk = []
-        for client in all_clients:
+        for client in all_clients_for_search:
             for order in Orders.objects.filter(client=client.id, is_deleted=0, is_claim=0, in_archive=1).all():
                 orders_from_fk.append(order)
         all_companies = list(Companies.search.query(search_word))
@@ -950,6 +1047,7 @@ def search(request):
                     order_file.name = order_file.title
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
+        order.tasks = Tasks.objects.filter(order=order.id).all()
     if 'unique_number' in params or 'kp' in params:
         claim_list = list(Orders.objects.filter(is_deleted=0, is_claim=1, in_archive=0).filter(account_number__icontains=search_word))
         is_search_throw_clients = False
@@ -957,7 +1055,7 @@ def search(request):
         claim_list = list(Orders.search.query(search_word).filter(is_deleted=0, is_claim=1, in_archive=0))
         all_clients = list(Clients.search.query(search_word))
         orders_from_fk = []
-        for client in all_clients:
+        for client in all_clients_for_search:
             for order in Orders.objects.filter(client=client.id, is_deleted=0, is_claim=1, in_archive=0).all():
                 orders_from_fk.append(order)
         all_companies = list(Companies.search.query(search_word))
@@ -1037,100 +1135,7 @@ def search(request):
                     order_file.url = order_file.file.url
                     order.files.append(order_file)
         order.reason = CloseClaims.objects.filter(order=order.id).first()
-    if is_search_throw_clients:
-        if 'email' in params:
-            client_list = list(Clients.objects.filter(is_deleted=0, is_interested=0).filter(email__icontains=search_word))
-            emails_list = list(ContactEmail.objects.filter(is_deleted=0).filter(email__icontains=search_word))
-            emails_list_ids = [object.face_id for object in emails_list]
-            contact_faces_list = list(ContactFaces.objects.filter(pk__in=emails_list_ids, is_deleted=0))
-        elif 'phone' in params:
-            client_list = list(Clients.objects.filter(is_deleted=0, is_interested=0).filter(numeric_organization_phone__icontains=search_word))
-            phones_list = list(ContactPhone.objects.filter(is_deleted=0).filter(numeric_phone__icontains=search_word))
-            phones_list_ids = [object.face_id for object in phones_list]
-            contact_faces_list = list(ContactFaces.objects.filter(pk__in=phones_list_ids, is_deleted=0))
-        else:
-            client_list = list(Clients.search.query(search_word).filter(is_deleted=0, is_interested=0))
-            contact_faces_list = list(ContactFaces.search.query(search_word)
-                                      .filter(is_deleted=0))
-        contact_faces_list_ids = [object.organization_id for object in contact_faces_list]
-        client_list += list(Clients.objects.filter(pk__in=contact_faces_list_ids, is_interested=0, is_deleted=0))
-        client_list = list(set(client_list))
-        for c in client_list:
-            c.person_full_name = ''
-            c.email = ''
-            c.person_phone = ''
-            contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
-            for contact_face in contact_faces:
-                if c.person_full_name != '':
-                    c.person_full_name += ', '
-                c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
-                                     + contact_face.name + ' ' + contact_face.patronymic
-                for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
-                    if email.email:
-                        if c.email:
-                            c.email += ', '
-                        c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
-                                  contact_face.patronymic + ')'
-                for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
-                    if phone.phone:
-                        if c.person_phone:
-                            c.person_phone += ', '
-                        c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
-                                         contact_face.name + ' ' + contact_face.patronymic + ')'
-            c.files = []
-            if Client_Files.objects.filter(client_id=c.id).all() is not None:
-                for client_file in Client_Files.objects.filter(client_id=c.id).all():
-                    if client_file.file is not None and client_file.file != '':
-                        client_file.name = client_file.title
-                        client_file.url = client_file.file.url
-                        c.files.append(client_file)
-
-        if 'email' in params:
-            interested_client_list = list(Clients.objects.filter(is_deleted=0, is_interested=1).filter(email__icontains=search_word))
-            emails_list = list(ContactEmail.objects.filter(is_deleted=0).filter(email__icontains=search_word))
-            emails_list_ids = [object.face_id for object in emails_list]
-            contact_faces_list = list(ContactFaces.objects.filter(pk__in=emails_list_ids, is_deleted=0))
-        elif 'phone' in params:
-            interested_client_list = list(Clients.objects.filter(is_deleted=0, is_interested=0).filter(numeric_organization_phone__icontains=search_word))
-            phones_list = list(ContactPhone.objects.filter(is_deleted=0).filter(numeric_phone__icontains=search_word))
-            phones_list_ids = [object.face_id for object in phones_list]
-            contact_faces_list = list(ContactFaces.objects.filter(pk__in=phones_list_ids, is_deleted=0))
-        else:
-            interested_client_list = list(Clients.search.query(search_word).filter(is_deleted=0, is_interested=1))
-            contact_faces_list = list(ContactFaces.search.query(search_word)
-                                      .filter(is_deleted=0))
-        contact_faces_list_ids = [object.organization_id for object in contact_faces_list]
-        interested_client_list += list(Clients.objects.filter(pk__in=contact_faces_list_ids, is_interested=1, is_deleted=0))
-        interested_client_list = list(set(interested_client_list))
-        for c in interested_client_list:
-            c.person_full_name = ''
-            c.email = ''
-            c.person_phone = ''
-            contact_faces = ContactFaces.objects.filter(organization=c.id, is_deleted=0).all()
-            for contact_face in contact_faces:
-                if c.person_full_name != '':
-                    c.person_full_name += ', '
-                c.person_full_name = c.person_full_name + contact_face.last_name + ' ' \
-                                     + contact_face.name + ' ' + contact_face.patronymic
-                for email in ContactEmail.objects.filter(face=contact_face, is_deleted=0).all():
-                    if email.email:
-                        if c.email:
-                            c.email += ', '
-                        c.email = c.email + email.email + ' (' + contact_face.last_name + ' ' + contact_face.name + ' ' + \
-                                  contact_face.patronymic + ')'
-                for phone in ContactPhone.objects.filter(face=contact_face, is_deleted=0).all():
-                    if phone.phone:
-                        if c.person_phone:
-                            c.person_phone += ', '
-                        c.person_phone = c.person_phone + phone.phone + ' (' + contact_face.last_name + ' ' + \
-                                         contact_face.name + ' ' + contact_face.patronymic + ')'
-            c.files = []
-            if Client_Files.objects.filter(client_id=c.id).all() is not None:
-                for client_file in Client_Files.objects.filter(client_id=c.id).all():
-                    if client_file.file is not None and client_file.file != '':
-                        client_file.name = client_file.title
-                        client_file.url = client_file.file.url
-                        c.files.append(client_file)
+        order.tasks = Tasks.objects.filter(order=order.id).all()
     if client_list or interested_client_list or order_list or archive_order_list or claim_list:
         out.update({'search_results': 1})
     out.update({'page_title': "Клиенты"})
