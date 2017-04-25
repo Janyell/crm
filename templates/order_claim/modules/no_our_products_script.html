@@ -33,7 +33,6 @@
                 });
                 $form.submit(function() {
                     if ($input_no_our_products.is(":checked")) {
-                        $select_bill_status.val(4); // Устно
                         $select_product_table.find('.minus').click();
                         var table = $add_product_table.DataTable();
                         table.search("Другое").draw();

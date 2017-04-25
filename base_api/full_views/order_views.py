@@ -114,6 +114,60 @@ def full_add_edit_order(request):
                 role = request.POST['role']
             else:
                 role = request.user.id
+
+            if not city:
+                out.update({"error": 101})
+                if user_role == 0:
+                    OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                    queryset=Companies.objects.filter(is_deleted=0), required=False)
+                    OrdersFormForAdmins.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                    OrdersFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
+                    OrdersFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects.order_by("name"),
+                                                                                   required=False)
+                else:
+                    OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                    queryset=Companies.objects.filter(is_deleted=0), required=False)
+                    OrdersForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                    OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
+                    OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects.order_by("name"),
+                                                                          required=False)
+                if order.shipped_date is not None:
+                    shipped_day_month = order.shipped_date
+                else:
+                    shipped_day_month = None
+                if user_role == 0:
+                    form = OrdersFormForAdmins({'client': request.POST['client_id_value'] , 'company': company, 'bill': request.POST['bill'],
+                                   'payment_date': payment_date, 'order_status': order_status,
+                                   'bill_status': bill_status, 'city': city, 'comment': comment,
+                                   'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                                   'shipped_date': shipped_day_month, 'role': role, 'brought_sum': brought_sum,
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
+                else:
+                    form = OrdersForm({'client': request.POST['client_id_value'] , 'company': company, 'bill': request.POST['bill'],
+                                   'payment_date': payment_date, 'order_status': order_status,
+                                   'bill_status': bill_status, 'city': city, 'comment': comment,
+                                   'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                                   'shipped_date': shipped_day_month, 'brought_sum': brought_sum,
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
+                form.products = Products.objects.filter(is_deleted=0)
+                products_list = request.POST.getlist('products[]')
+                for product in form.products:
+                    if str(product.id) in products_list:
+                        name_of_pr = 'select-product__number_' + str(product.id)
+                        price_of_pr = 'select-product__price_' + str(product.id)
+                        count_of_products = request.POST[name_of_pr]
+                        price_of_products = request.POST[price_of_pr]
+                        product.count_of_products = count_of_products
+                        product.price = price_of_products
+                    product.price_right_format = right_money_format(product.price)
+                out.update({'order_form': form})
+                out.update({'page_title': "Редактирование заказа"})
+                return render(request, 'order_claim/add_edit_order.html', out)
+
             if request.POST['client_id_value'] != '' and is_date_for_status_exist:
                 id_client = int(request.POST['client_id_value'])
                 client = Clients.objects.get(id=id_client, is_deleted=0)
@@ -425,6 +479,54 @@ def full_add_edit_order(request):
                     city = Cities.objects.create(name=newCity)
             account_number = form.cleaned_data['account_number']
             role = Roles.objects.get(id=request.user.id, is_deleted=0)
+            if not city:
+                out.update({"error": 101})
+                if user_role == 0:
+                    OrdersFormForAdmins.base_fields['company'] = CompanyModelChoiceField(
+                    queryset=Companies.objects.filter(is_deleted=0), required=False)
+                    OrdersFormForAdmins.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                    OrdersFormForAdmins.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
+                    OrdersFormForAdmins.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects.order_by("name"),
+                                                                                   required=False)
+                else:
+                    OrdersForm.base_fields['company'] = CompanyModelChoiceField(
+                    queryset=Companies.objects.filter(is_deleted=0), required=False)
+                    OrdersForm.base_fields['source'] = SourceModelChoiceField(
+                                                    queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                    OrdersForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
+                    OrdersForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects.order_by("name"),
+                                                                          required=False)
+                if user_role == 0:
+                    form = OrdersFormForAdmins({'client': request.POST['client_id_value'] , 'company': company, 'bill': request.POST['bill'],
+                                   'payment_date': payment_date, 'order_status': order_status,
+                                   'bill_status': bill_status, 'city': city, 'comment': comment,
+                                   'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                                   'role': role, 'brought_sum': brought_sum,
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
+                else:
+                    form = OrdersForm({'client': request.POST['client_id_value'] , 'company': company, 'bill': request.POST['bill'],
+                                   'payment_date': payment_date, 'order_status': order_status,
+                                   'bill_status': bill_status, 'city': city, 'comment': comment,
+                                   'source': source, 'ready_date': ready_date, 'account_number': account_number,
+                                   'brought_sum': brought_sum,
+                                   'factory_comment': factory_comment, 'transport_campaign': transport_campaign})
+                form.products = Products.objects.filter(is_deleted=0)
+                products_list = request.POST.getlist('products[]')
+                for product in form.products:
+                    if str(product.id) in products_list:
+                        name_of_pr = 'select-product__number_' + str(product.id)
+                        price_of_pr = 'select-product__price_' + str(product.id)
+                        count_of_products = request.POST[name_of_pr]
+                        price_of_products = request.POST[price_of_pr]
+                        product.count_of_products = count_of_products
+                        product.price = price_of_products
+                    product.price_right_format = right_money_format(product.price)
+                out.update({'order_form': form})
+                out.update({'page_title': "Редактирование заказа"})
+                return render(request, 'order_claim/add_edit_order.html', out)
             products_list = request.POST.getlist('products[]')
             is_order_create = False
             new_order_was_not_created = True

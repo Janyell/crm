@@ -88,7 +88,7 @@
                         <tr>
                             <td>
                                 {% include "order_claim/modules/get_claims__related_with.html" %}
-                                {% if user_role == 0 %}
+                                {% if user_role == 0 or user_role == 3 %}
                                     <label class="checkbox">
                                         <input class="checkbox_one" type="checkbox" name="id[]" value="{{ claim.pk }}"/>
                                     </label>
@@ -214,7 +214,7 @@
                         </label>
                     </div>
                     <div class="action-bar__action">
-                        {% if user_role == 0 %}
+                        {% if user_role == 0 or user_role == 3 %}
                             <a class="btn massive-change-manager-button">
                                 Сменить менеджера
                             </a>
@@ -396,6 +396,7 @@
                 var length = "{% if request.GET.length %}length={{ request.GET.length }}{% endif %}";
                 var sort = "{% if request.GET.sort %}sort={{ request.GET.sort }}{% endif %}";
                 var source = "{% if request.GET.source %}source={{ request.GET.source }}{% endif %}";
+                var is_closed = "{% if request.GET.is_closed %}is_closed={{ request.GET.is_closed }}{% endif %}";
                 var managers = "";
                 {% if managers %}
                     {% for manager in managers %}
@@ -409,6 +410,7 @@
                     if (length) { get_params += "&" + length; }
                     if (sort) { get_params += "&" + sort; }
                     if (source) { get_params += "&" + source; }
+                    if (is_closed) { get_params += "&" + is_closed; }
                     if (managers) { get_params += "&" + managers; }
                     return get_params;
                 }
@@ -419,6 +421,7 @@
                 function get_url(without) {
                     var url = path + "?";
                     if (page) { url += page + "&"; }
+                    if (is_closed) { url += is_closed + "&";}
                     if (without == "length") {
                         if (sort) { url += sort + "&";}
                         if (source) { url += source + "&";}
@@ -546,6 +549,7 @@
                     if (length) { url += length + "&"; }
                     if (sort) { url += sort + "&";}
                     if (source) { url += source + "&";}
+                    if (is_closed) { url += is_closed + "&";}
                     if (managers) {
                         {% if managers %}
                             {% for manager in managers %}

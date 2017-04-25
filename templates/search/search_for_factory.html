@@ -36,10 +36,14 @@
         {% endif %}
     </td>
     <td>
-        {% if order.brought_sum == None %}
+        {% if order.bill_status == 2 %}
+            100
+        {% elif order.brought_sum == None %}
             0
-        {% else %}
+        {% elif order.bill %}
             {{ order.brought_sum|mul:100|intdiv:order.bill }}
+        {% else %}
+            0
         {% endif %}
     </td>
     <td>

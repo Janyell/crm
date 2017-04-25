@@ -1,5 +1,5 @@
 {% block change_manager_modal %}
-    {% if user_role == 0 %}
+    {% if user_role == 0 or user_role == 3 %}
         <div class="modal hide fade" id="change-manager" tabindex="-1" role="dialog" aria-labelledby="ChangeManagerLabel" aria-hidden="true">
             <form class="change-manager-form form-add_modal" method="POST" action='{% url "massive_change_manager_in_order" %}?search={{ request.GET.search }}'>
                 <div class="modal-header">

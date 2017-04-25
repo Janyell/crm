@@ -264,5 +264,4 @@ LOGGING = {
 
 # Sentry
 RAVEN_CONFIG = {
-    'dsn': 'https://fe422bd37a174a969df3588c61528937:ffada146ad4340b4899d549e960bed09@sentry.io/136888',
 }

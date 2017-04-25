@@ -128,13 +128,16 @@ def massive_add_in_archive(request):
 def massive_change_manager_in_order(request):
     if not request.user.is_active:
         return HttpResponseRedirect('/login/')
+    print(Roles.objects.get(id=request.user.id).role)
     if Roles.objects.get(id=request.user.id).role == 2:
         return HttpResponseRedirect('/oops/')
     ids = request.POST.getlist('id[]')
     manager_id = request.POST.get('manager_id')
     for id in ids:
         order = Orders.objects.get(pk=id, is_deleted=0)
-        if str(request.user.username) != str(order.role) and Roles.objects.get(id=request.user.id).role != 0:
+        if str(request.user.username) != str(order.role) and \
+                        Roles.objects.get(id=request.user.id).role != 0 and \
+                        Roles.objects.get(id=request.user.id).role != 3:
             return HttpResponseRedirect('/oops/')
         order.role = Roles.objects.get(id=manager_id)
         order.save(update_fields=["role"])

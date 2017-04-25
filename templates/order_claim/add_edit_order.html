@@ -48,6 +48,16 @@
                     Вы не добавили ни один продукт в заказ.
                 </div>
             {% endif %}
+            {% if error == 101 %}
+                <div class="text-error">
+                    Укажите город для доставки
+                </div>
+            {% endif %}
+            {% if error == 300 %}
+                <div class="text-error">
+                    Добавьте задачу
+                </div>
+            {% endif %}
             {% if request.GET.id %}
                 <input type="hidden" name="pk" value="{{ request.GET.id }}">
             {% endif %}
@@ -93,6 +103,7 @@
                                 {{ order_form.source }}
                             </div>
                         </div>
+                        <div class="only-for-our-products">
                         <div class="control-group">
                             <label class="control-label" for="selectBillStatus">
                                 Статус заявки
@@ -105,6 +116,7 @@
                                     Через КП
                                 </label>
                             </div>
+                        </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label" for="selectCompany">
@@ -227,6 +239,7 @@
                         <div class="control-group claim-to-order-group city{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
                             <label class="control-label" for="id_city">
                                 Доставка (город)
+                                <span class="required-input">*</span>
                             </label>
                             <div class="controls">
                                 {{ order_form.city }}
@@ -241,6 +254,9 @@
                         <div class="control-group claim-to-order-group transport-campaign{% if request.path == add_claim_url or request.path == edit_claim_url %} hide{% endif %}">
                             <label class="control-label" for="id_transport_campaign">
                                 Транспортная компания
+                                {% if request.path != add_claim_url and request.path != edit_claim_url %}
+                                    <span class="required-input">*</span>
+                                {% endif %}
                             </label>
                             <div class="controls">
                                 {{ order_form.transport_campaign }}
@@ -561,6 +577,11 @@
                 {#id_source -> required + первый option сделать disabled #}
                 var $select_source = $('#id_source');
                 $select_source.prop("required", true);
+
+                var $select_transport_campaign = $('#id_transport_campaign');
+                {% if request.path != add_claim_url and request.path != edit_claim_url %}
+                    $select_transport_campaign.prop("required", true);
+                {% endif %}
 
                 function get_get_params() {
                     var need_get_params = ['page', 'length', 'sort', 'source', 'managers', 'search'];

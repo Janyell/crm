@@ -71,7 +71,12 @@
                                     <a href="{% url "get_claims" %}">Заявки</a>
                                 </li>
                             {% endif %}
-                            {% if user_role == 0 %}
+                            {% if user_role == 0 or user_role == 3 %}
+                                <li class={% navactive request 'get_claims' %}>
+                                    <a href="{% url "get_claims" %}?is_closed=1">Закрытые заявки</a>
+                                </li>
+                            {% endif %}
+                            {% if user_role == 0 or user_role == 3 %}
                                 <li class={% navactive request 'analyst analyze_products view_analyzed_product analyze_product_groups view_analyzed_product_group analyze_managers analyze_period analyze_period_product_groups analyze_debtors analyze_cities' %}>
                                     <a href="{% url "analyst" %}">Аналитика</a>
                                 </li>

@@ -82,7 +82,7 @@ def analyst(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role != 0:
+    if user_role != 0 and user_role != 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -453,6 +453,7 @@ def made_excel(request):
     table_name = request.GET.get('table')
     table = EXCEL_TABLES.get(table_name)
     cols = request.POST.getlist('cols[]')
+    print cols
 
     if u'all' in cols:
         cols.remove(u'all')
@@ -557,7 +558,7 @@ def made_excel(request):
                 column_index += 1
 
     elif table_name == u'claims':
-        table_objects = table.objects.filter(is_deleted=0, is_claim=1).all()
+        table_objects = table.objects.filter(is_deleted=0, is_claim=1)
         column_index = 1
         if u'role' in cols:
             sheet.cell(row=row_index, column=column_index).value = "Менеджер"
@@ -585,6 +586,18 @@ def made_excel(request):
             column_index = column_index + 1
         if u'comment' in cols:
             sheet.cell(row=row_index, column=column_index).value = "Комментарии"
+            column_index = column_index + 1
+        if u'final_comment' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Финальный комментарий"
+            table_objects = table_objects.filter(bill_status=6)
+            column_index = column_index + 1
+        if u'reason' in cols:
+            sheet.cell(row=row_index, column=column_index).value = "Причина"
+            table_objects = table_objects.filter(bill_status=6)
+            column_index = column_index + 1
+        if int(request.GET.get('is_closed', 0)):
+            table_objects = table_objects.filter(bill_status=6)
+        table_objects = table_objects.all()
 
         for table_object in table_objects:
             row_index += 1
@@ -601,16 +614,23 @@ def made_excel(request):
                 elif col == u'company':
                     if getattr(table_object, col):
                         sheet.cell(row=row_index, column=column_index).value = unicode(getattr(table_object, col).title)
+                elif col == u'reason':
+                    close_info = CloseClaims.objects.filter(is_deleted=0, order=table_object).first()
+                    sheet.cell(row=row_index, column=column_index).value = unicode(close_info.reason.title)
+                elif col == u'final_comment':
+                    close_info = CloseClaims.objects.filter(is_deleted=0, order=table_object).first()
+                    sheet.cell(row=row_index, column=column_index).value = unicode(close_info.final_comment)
                 elif col == u'products':
-                    old_row_index = row_index
                     products = Order_Product.objects.filter(order=table_object, is_deleted=0).all()
+                    all_products_info_row = u''
                     for pr in products:
                         product_row = unicode(pr.product.title) + u' - ' + \
                                       unicode(pr.count_of_products) + u' шт.'
-                        sheet.cell(row=row_index, column=column_index).value = product_row
-                        row_index += 1
-                    new_row_index = row_index
-                    row_index = old_row_index
+                        if all_products_info_row:
+                            all_products_info_row = all_products_info_row + u', ' + product_row
+                        else:
+                            all_products_info_row = product_row
+                    sheet.cell(row=row_index, column=column_index).value = all_products_info_row
                 elif col == u'order_status':
                     bill_status = getattr(table_object, 'bill_status')
                     if bill_status == 0:
@@ -623,6 +643,8 @@ def made_excel(request):
                         sheet.cell(row=row_index, column=column_index).value = 'Устно'
                     elif bill_status == 5:
                         sheet.cell(row=row_index, column=column_index).value = 'Подбор'
+                    elif bill_status == 6:
+                        sheet.cell(row=row_index, column=column_index).value = 'Закрыта'
                     else:
                         sheet.cell(row=row_index, column=column_index).value = ''
                 else:

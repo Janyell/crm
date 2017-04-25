@@ -14,7 +14,7 @@ def full_analyze_total_sales(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role != 0:
+    if user_role != 0 and user_role != 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})

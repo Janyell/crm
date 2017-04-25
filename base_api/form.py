@@ -196,7 +196,7 @@ class LoginForm(ModelForm):
         }
 
 orders_form_widgets = {
-    'client': TextInput(attrs={'id': "selectClient", 'required': 1, 'class': 'typeahead'}),
+    'client': TextInput(attrs={'id': "selectClient", 'required': 1, 'class': 'typeahead', 'autocomplete': 'off'}),
     'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker'}),
     'bill': NumberInput(attrs={'id': "inputBill"}),
     'payment_date': TextInput(attrs={'id': "inputPaymentDate",
@@ -240,7 +240,7 @@ class OrdersFormForAdmins(forms.ModelForm):
         widgets = orders_form_widgets
 
 claims_form_widgets = {
-    'client': TextInput(attrs={'id': "selectClient", 'required': 1, 'class': 'typeahead'}),
+    'client': TextInput(attrs={'id': "selectClient", 'required': 1, 'class': 'typeahead', 'autocomplete': 'off'}),
     'company': Select(attrs={'id': "selectCompany", 'class': 'selectpicker', 'required': 0}),
     'bill': NumberInput(attrs={'id': "inputBill"}),
     'payment_date': TextInput(attrs={'id': "inputPaymentDate",

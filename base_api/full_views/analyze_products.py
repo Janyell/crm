@@ -14,7 +14,7 @@ def full_analyze_products(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role != 0:
+    if user_role != 0 and user_role != 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -31,7 +31,7 @@ def full_view_analyzed_product(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role != 0:
+    if user_role != 0 and user_role != 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -156,7 +156,7 @@ def full_analyze_products_groups(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role != 0:
+    if user_role != 0 and user_role != 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})
@@ -173,7 +173,7 @@ def full_view_analyzed_product_groups(request):
         return HttpResponseRedirect('/login/')
     out = {}
     user_role = Roles.objects.get(id=request.user.id).role
-    if user_role != 0:
+    if user_role != 0 and user_role != 3:
         return HttpResponseRedirect('/oops/')
     else:
         out.update({'user_role': user_role})

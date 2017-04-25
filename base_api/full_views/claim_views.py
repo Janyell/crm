@@ -175,14 +175,14 @@ def full_add_edit_claim(request):
                     # else:
                     #     ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                     # if user_role == 0:
-                        form = ClaimsFormForAdmins({'client': client, 'company': company, 'bill': request.POST['bill'],
+                        form = ClaimsFormForAdmins({'client': client_label_from_instance(client), 'company': company, 'bill': request.POST['bill'],
                                        'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                        'comment': comment, 'role': role, 'brought_sum': brought_sum,
                                        'factory_comment': factory_comment, 'transport_campaign': transport_campaign,
                                        'ready_date': ready_date, 'city': city, 'payment_date': payment_date,
                                        'order_status': order_status})
                     else:
-                        form = ClaimsForm({'client': client, 'company': company, 'bill': request.POST['bill'],
+                        form = ClaimsForm({'client': client_label_from_instance(client), 'company': company, 'bill': request.POST['bill'],
                                        'bill_status': bill_status, 'account_number': account_number, 'source': source,
                                        'comment': comment, 'brought_sum': brought_sum,
                                        'factory_comment': factory_comment, 'transport_campaign': transport_campaign,
@@ -271,14 +271,14 @@ def full_add_edit_claim(request):
                         # else:
                         #     ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                         if user_role == 0:
-                            form = ClaimsFormForAdmins({'client': client, 'company': company, 'bill': bill, 'source': source,
+                            form = ClaimsFormForAdmins({'client': client_label_from_instance(client), 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
                                            'comment': comment, 'role': role, 'brought_sum': brought_sum,
                                            'factory_comment': factory_comment,
                                            'transport_campaign': transport_campaign, 'ready_date': ready_date,
                                            'city': city, 'payment_date': payment_date, 'order_status': order_status})
                         else:
-                            form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
+                            form = ClaimsForm({'client': client_label_from_instance(client), 'company': company, 'bill': bill, 'source': source,
                                            'bill_status': bill_status, 'account_number': account_number,
                                            'comment': comment, 'brought_sum': brought_sum,
                                            'factory_comment': factory_comment,
@@ -424,130 +424,14 @@ def full_add_edit_claim(request):
             products_list = request.POST.getlist('products[]')
             is_claim_create = False
             new_claim_was_not_created = True
-            for id_of_pr in products_list:
-                if int(id_of_pr) < 0:
-                    name_of_pr = 'select-product__title_' + id_of_pr
-                    title_of_product = request.POST[name_of_pr]
-                    if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
-                        out.update({"error": 2})
-                        ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
-                                                                                    required=True)
-                        ClaimsForm.base_fields['source'] = SourceModelChoiceField(
-                                                    queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
-                        ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
-                                                    queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
-                        ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects.order_by("name"),
-                                                                                   required=False)
-                        # ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
-                        form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
-                                           'bill_status': bill_status, 'account_number': account_number,
-                                           'comment': comment, 'brought_sum': brought_sum,
-                                           'factory_comment': factory_comment,
-                                           'transport_campaign': transport_campaign, 'ready_date': ready_date,
-                                           'city': city, 'payment_date': payment_date, 'order_status': order_status})
-                        form.products = Products.objects.filter(is_deleted=0)
-                        products_list = request.POST.getlist('products[]')
-                        for product in form.products:
-                            if str(product.id) in products_list:
-                                name_of_pr = 'select-product__number_' + str(product.id)
-                                count_of_products = request.POST[name_of_pr]
-                                product.count_of_products = count_of_products
-                                price_of_pr = 'select-product__price_' + str(product.id)
-                                price_of_products = request.POST[price_of_pr]
-                                product.price = price_of_products
-                            product.price_right_format = right_money_format(product.price)
-                        out.update({'order_form': form})
-                        ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
-                        client_form = ClientRelatedForm()
-                        out.update({'form': client_form})
-                        out.update({'page_title': "Добавление заказа"})
-                        return render(request, 'order_claim/add_edit_order.html', out)
-                    else:
-                        name_of_pr = 'select-product__number_' + id_of_pr
-                        count_of_products = request.POST[name_of_pr]
-                        price_of_pr = 'select-product__price_' + id_of_pr
-                        price_of_products = request.POST[price_of_pr]
-                        if not price_of_products:
-                            price_of_products = 0
-                        if int(count_of_products) > 0:
-                            product = Products.objects.create(title=title_of_product, price=price_of_products)
-                else:
-                    name_of_pr = 'select-product__number_' + id_of_pr
-                    count_of_products = request.POST[name_of_pr]
-                    price_of_pr = 'select-product__price_' + id_of_pr
-                    price_of_products = request.POST[price_of_pr]
-                    try:
-                        product = Products.objects.get(id=id_of_pr, is_deleted=0)
-                        product.price = price_of_products
-                        product.save(force_update=True)
-                    except Exception:
-                        price_of_products = 0
-                if int(count_of_products) > 0:
-                    is_claim_create = True
-                    if new_claim_was_not_created:
-                        new_claim_was_not_created = False
-                        client.save(update_fields=["is_interested"])
-                        new_claim = Orders.objects.create(order_date=datetime.now(), client=client, role=role,
-                                              unique_number=unique_number, company=company, bill=bill,
-                                              bill_status=bill_status, is_claim=is_claim,
-                                              account_number=account_number, comment=comment, source=source,
-                                              brought_sum=brought_sum, factory_comment=factory_comment,
-                                              transport_campaign=transport_campaign, ready_date=ready_date, city=city,
-                                              payment_date=payment_date, order_status=order_status,
-                                              became_claim_date=became_claim_date, is_set_via_kp=is_set_via_kp)
-                        no_our_products = request.POST.get('no-our-products', 'off')
-                        if no_our_products == 'on':
-                            reason = CloseReasons.objects.get(id=7)
-                            final_comment = comment
-                            CloseClaims.objects.create(order=new_claim, reason=reason, final_comment=final_comment)
-                            new_claim.bill_status = 6
-                            new_claim.save(update_fields=["bill_status"])
-                    new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
-                                                                          order_date=datetime.now(),
-                                                                          count_of_products=count_of_products,
-                                                                          price=price_of_products)
-                    client.save(update_fields=["is_interested"])
-            if is_claim_create:
-                if 'items[]' in request.POST:
-                    tasks_list = int(request.POST.get('items[]')) * -1
-                    for task_id in range(1, tasks_list+1):
-                        task_id = str(task_id)
-                        task_comment = request.POST.get('task_comment', '')
-                        # task_comment = request.POST['task_comment_-' + task_id]
-                        task_type_id = request.POST['type_-' + task_id]
-                        if task_type_id:
-                            task_type = TaskTypes.objects.get(id=task_type_id)
-                            task_date = request.POST.get('date', datetime.now())
-                            # task_date = request.POST['date_-' + task_id]
-                            task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
-                            task_is_important = False
-                            if 'is_important_-' + task_id in request.POST:
-                                task_is_important = True
-                            task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
-                                                        is_important=task_is_important, order=new_claim,
-                                                        role=Roles.objects.get(id=request.user.id))
-                if 'only-save' in form.data:
-                    if displacement == 1:
-                        get_params = '&'
-                        get_params += get_request_param_as_string(request)
-                        return HttpResponseRedirect('/claims/?displacement=1' + get_params)
-                    else:
-                        get_params = '?'
-                        get_params += get_request_param_as_string(request)
-                        return HttpResponseRedirect('/claims/' + get_params)
-                elif 'save-and-generate-kp' in form.data:
-                    get_params = '&'
-                    if 'set-via-kp' in form.data:
-                        get_params += 'set_via_kp&'
-                    get_params += get_request_param_as_string(request)
-                    return HttpResponseRedirect('/claims/kp/edit/?id=%s' % new_claim.id + get_params)
-                elif 'save-and-bind' in form.data:
-                    get_params = '&'
-                    get_params += get_request_param_as_string(request)
-                    return HttpResponseRedirect('/related/claim/?id=%s' % new_claim.id + get_params)
-                else:
-                    return HttpResponseRedirect('/uploads/order/?id=%s' % new_claim.id)
-            else:
+            task_type_id = None
+            no_our_products = request.POST.get('no-our-products', 'off')
+            if 'items[]' in request.POST:
+                tasks_list = int(request.POST.get('items[]')) * -1
+                for task_id in range(1, tasks_list+1):
+                    task_id = str(task_id)
+                    task_type_id = request.POST['type_-' + task_id]
+            if no_our_products == 'off' and ('items[]' not in request.POST or not task_type_id):
                 ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
                                                                             required=True)
                 ClaimsForm.base_fields['source'] = SourceModelChoiceField(
@@ -557,7 +441,7 @@ def full_add_edit_claim(request):
                 ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects.order_by("name"),
                                                                                    required=False)
                 # ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
-                form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
+                form = ClaimsForm({'client': client_label_from_instance(client), 'company': company, 'bill': bill, 'source': source,
                                    'bill_status': bill_status, 'account_number': account_number,
                                    'comment': comment, 'brought_sum': brought_sum,
                                    'factory_comment': factory_comment, 'transport_campaign': transport_campaign,
@@ -574,12 +458,169 @@ def full_add_edit_claim(request):
                         price_of_products = request.POST[price_of_pr]
                         product.price = price_of_products
                     product.price_right_format = right_money_format(product.price)
-                out.update({'error': 3})
+                out.update({'error': 300})
                 out.update({'order_form': form})
                 ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
                 client_form = ClientRelatedForm()
                 out.update({'form': client_form})
                 out.update({'page_title': "Добавление заявки"})
+            else:
+                for id_of_pr in products_list:
+                    if int(id_of_pr) < 0:
+                        name_of_pr = 'select-product__title_' + id_of_pr
+                        title_of_product = request.POST[name_of_pr]
+                        if Products.objects.filter(title=title_of_product, is_deleted=0).count() != 0:
+                            out.update({"error": 2})
+                            ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
+                                                                                        required=True)
+                            ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                        queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                            ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                        queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
+                            ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects.order_by("name"),
+                                                                                       required=False)
+                            # ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                            form = ClaimsForm({'client': client_label_from_instance(client), 'company': company, 'bill': bill, 'source': source,
+                                               'bill_status': bill_status, 'account_number': account_number,
+                                               'comment': comment, 'brought_sum': brought_sum,
+                                               'factory_comment': factory_comment,
+                                               'transport_campaign': transport_campaign, 'ready_date': ready_date,
+                                               'city': city, 'payment_date': payment_date, 'order_status': order_status})
+                            form.products = Products.objects.filter(is_deleted=0)
+                            products_list = request.POST.getlist('products[]')
+                            for product in form.products:
+                                if str(product.id) in products_list:
+                                    name_of_pr = 'select-product__number_' + str(product.id)
+                                    count_of_products = request.POST[name_of_pr]
+                                    product.count_of_products = count_of_products
+                                    price_of_pr = 'select-product__price_' + str(product.id)
+                                    price_of_products = request.POST[price_of_pr]
+                                    product.price = price_of_products
+                                product.price_right_format = right_money_format(product.price)
+                            out.update({'order_form': form})
+                            ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                            client_form = ClientRelatedForm()
+                            out.update({'form': client_form})
+                            out.update({'page_title': "Добавление заказа"})
+                            return render(request, 'order_claim/add_edit_order.html', out)
+                        else:
+                            name_of_pr = 'select-product__number_' + id_of_pr
+                            count_of_products = request.POST[name_of_pr]
+                            price_of_pr = 'select-product__price_' + id_of_pr
+                            price_of_products = request.POST[price_of_pr]
+                            if not price_of_products:
+                                price_of_products = 0
+                            if int(count_of_products) > 0:
+                                product = Products.objects.create(title=title_of_product, price=price_of_products)
+                    else:
+                        name_of_pr = 'select-product__number_' + id_of_pr
+                        count_of_products = request.POST[name_of_pr]
+                        price_of_pr = 'select-product__price_' + id_of_pr
+                        price_of_products = request.POST[price_of_pr]
+                        try:
+                            product = Products.objects.get(id=id_of_pr, is_deleted=0)
+                            product.price = price_of_products
+                            product.save(force_update=True)
+                        except Exception:
+                            price_of_products = 0
+                    if int(count_of_products) > 0:
+                        is_claim_create = True
+                        if new_claim_was_not_created:
+                            new_claim_was_not_created = False
+                            client.save(update_fields=["is_interested"])
+                            new_claim = Orders.objects.create(order_date=datetime.now(), client=client, role=role,
+                                                  unique_number=unique_number, company=company, bill=bill,
+                                                  bill_status=bill_status, is_claim=is_claim,
+                                                  account_number=account_number, comment=comment, source=source,
+                                                  brought_sum=brought_sum, factory_comment=factory_comment,
+                                                  transport_campaign=transport_campaign, ready_date=ready_date, city=city,
+                                                  payment_date=payment_date, order_status=order_status,
+                                                  became_claim_date=became_claim_date, is_set_via_kp=is_set_via_kp)
+                            no_our_products = request.POST.get('no-our-products', 'off')
+                            if no_our_products == 'on':
+                                reason = CloseReasons.objects.get(id=7)
+                                final_comment = comment
+                                CloseClaims.objects.create(order=new_claim, reason=reason, final_comment=final_comment)
+                                new_claim.bill_status = 6
+                                new_claim.save(update_fields=["bill_status"])
+                        new_order_product_link = Order_Product.objects.create(order=new_claim, product=product,
+                                                                              order_date=datetime.now(),
+                                                                              count_of_products=count_of_products,
+                                                                              price=price_of_products)
+                        client.save(update_fields=["is_interested"])
+                if is_claim_create:
+                    if 'items[]' in request.POST:
+                        tasks_list = int(request.POST.get('items[]')) * -1
+                        for task_id in range(1, tasks_list+1):
+                            task_id = str(task_id)
+                            task_comment = request.POST.get('task_comment', '')
+                            # task_comment = request.POST['task_comment_-' + task_id]
+                            task_type_id = request.POST['type_-' + task_id]
+                            if task_type_id:
+                                task_type = TaskTypes.objects.get(id=task_type_id)
+                                task_date = request.POST.get('date', datetime.now())
+                                # task_date = request.POST['date_-' + task_id]
+                                task_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S')
+                                task_is_important = False
+                                if 'is_important_-' + task_id in request.POST:
+                                    task_is_important = True
+                                task = Tasks.objects.create(comment=task_comment, type=task_type, date=task_date,
+                                                            is_important=task_is_important, order=new_claim,
+                                                            role=Roles.objects.get(id=request.user.id))
+                    if 'only-save' in form.data:
+                        if displacement == 1:
+                            get_params = '&'
+                            get_params += get_request_param_as_string(request)
+                            return HttpResponseRedirect('/claims/?displacement=1' + get_params)
+                        else:
+                            get_params = '?'
+                            get_params += get_request_param_as_string(request)
+                            return HttpResponseRedirect('/claims/' + get_params)
+                    elif 'save-and-generate-kp' in form.data:
+                        get_params = '&'
+                        if 'set-via-kp' in form.data:
+                            get_params += 'set_via_kp&'
+                        get_params += get_request_param_as_string(request)
+                        return HttpResponseRedirect('/claims/kp/edit/?id=%s' % new_claim.id + get_params)
+                    elif 'save-and-bind' in form.data:
+                        get_params = '&'
+                        get_params += get_request_param_as_string(request)
+                        return HttpResponseRedirect('/related/claim/?id=%s' % new_claim.id + get_params)
+                    else:
+                        return HttpResponseRedirect('/uploads/order/?id=%s' % new_claim.id)
+                else:
+                    ClaimsForm.base_fields['company'] = CompanyModelChoiceField(queryset=Companies.objects.filter(is_deleted=0),
+                                                                                required=True)
+                    ClaimsForm.base_fields['source'] = SourceModelChoiceField(
+                                                        queryset=Sources.objects.filter(is_active=1, is_deleted=0), required=True)
+                    ClaimsForm.base_fields['transport_campaign'] = TransportCampaignsModelChoiceField(
+                                                        queryset=TransportCampaigns.objects.filter(is_active=1, is_deleted=0), required=False)
+                    ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects.order_by("name"),
+                                                                                       required=False)
+                    # ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                    form = ClaimsForm({'client': client_label_from_instance(client), 'company': company, 'bill': bill, 'source': source,
+                                       'bill_status': bill_status, 'account_number': account_number,
+                                       'comment': comment, 'brought_sum': brought_sum,
+                                       'factory_comment': factory_comment, 'transport_campaign': transport_campaign,
+                                       'ready_date': ready_date, 'city': city, 'payment_date': payment_date,
+                                       'order_status': order_status})
+                    form.products = Products.objects.filter(is_deleted=0)
+                    products_list = request.POST.getlist('products[]')
+                    for product in form.products:
+                        if str(product.id) in products_list:
+                            name_of_pr = 'select-product__number_' + str(product.id)
+                            count_of_products = request.POST[name_of_pr]
+                            product.count_of_products = count_of_products
+                            price_of_pr = 'select-product__price_' + str(product.id)
+                            price_of_products = request.POST[price_of_pr]
+                            product.price = price_of_products
+                        product.price_right_format = right_money_format(product.price)
+                    out.update({'error': 3})
+                    out.update({'order_form': form})
+                    ClientRelatedForm.base_fields['client_related_with'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
+                    client_form = ClientRelatedForm()
+                    out.update({'form': client_form})
+                    out.update({'page_title': "Добавление заявки"})
         else:
             print(form.errors)
             out.update({'claim_client_id': request.POST['client_id_value']})
@@ -638,7 +679,7 @@ def full_add_edit_claim(request):
             ClaimsForm.base_fields['city'] = CityModelChoiceField(queryset=Cities.objects.order_by("name"),
                                                                                    required=False)
             # ClaimsForm.base_fields['client'] = ClientModelChoiceField(queryset=Clients.objects.filter(is_deleted=0).extra(select={'org_or_name': "SELECT CASE WHEN organization = '' THEN CONCAT(last_name, name, patronymic) ELSE organization END"}, order_by=["org_or_name"]))
-            form = ClaimsForm({'client': client, 'company': company, 'bill': bill, 'source': source,
+            form = ClaimsForm({'client': client_label_from_instance(client), 'company': company, 'bill': bill, 'source': source,
                                'bill_status': bill_status, 'account_number': account_number,
                                'comment': comment, 'brought_sum': brought_sum,
                                'factory_comment': factory_comment, 'transport_campaign': transport_campaign,
@@ -846,6 +887,12 @@ def full_get_claims(request):
     sort_key = request.GET.get('sort', DEFAULT_SORT_TYPE_FOR_CLAIM)
     sort = SORT_TYPE_FOR_CLAIM.get(sort_key, DEFAULT_SORT_TYPE_FOR_CLAIM)
     orders = Orders.objects.filter(is_deleted=0, is_claim=1, in_archive=0)
+    is_closed = 0
+    if 'is_closed' in request.GET:
+        is_closed = int(request.GET.get('is_closed', 0))
+        if is_closed:
+            orders = orders.exclude(close_info__isnull=True)
+            orders = orders.filter(bill_status=6)
     if 'source' in request.GET:
         source = int(request.GET.get('source'))
         if source != -1:
@@ -937,6 +984,8 @@ def full_get_claims(request):
     user_role = Roles.objects.get(id=request.user.id).role
     out.update({'user_role': user_role})
     out.update({'page_title': "Заявки"})
+    if is_closed:
+        out.update({'page_title': "Закрытые заявки"})
     out.update({'claims': order_list})
     out.update({'count': orders.count()})
     return render(request, 'order_claim/get_claims.html', out)

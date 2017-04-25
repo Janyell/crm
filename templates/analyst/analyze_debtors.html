@@ -2,7 +2,7 @@
 
 {%block content%}
     <div class="container">
-        {% if user_role == 0 %}
+        {% if user_role == 0 or user_role == 3 %}
             <a href="{% url "analyst" %}" class="btn">Назад</a>
         {% endif %}
         <h2 class="center">{{ page_title }}</h2>

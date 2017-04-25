@@ -1,7 +1,7 @@
 {% if user_role == 0 %}
     {% block export-to-excel-modal %}
         <div class="modal hide fade" id="export-to-excel" tabindex="-1" role="dialog" aria-hidden="true">
-            <form class="form-horizontal form-add_modal form-export-to-excel" method="post" action="{% url "made_excel" %}?table={{ entity }}">
+            <form class="form-horizontal form-add_modal form-export-to-excel" method="post" action="{% url "made_excel" %}?table={{ entity }}{% if request.GET.is_closed %}&is_closed=1{% endif %}">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
                     <h3 class="center">Экспорт в Excel</h3>
@@ -34,7 +34,7 @@
                     var $export_modal = $('#export-to-excel');
                     var $modal__exported_cols = $export_modal.find('.modal__exported-cols');
                     if ('/clients/' == window.location.pathname || '/clients/interested/' == window.location.pathname) {
-                    $modal__exported_cols.append('<label class="checkbox">' +
+                        $modal__exported_cols.append('<label class="checkbox">' +
                             '<input class="checkbox_export_one" type="checkbox" name="cols[]" value="' + 'status' + '"/>' +
                             'Статус' + '</label>');
                     }
@@ -51,6 +51,14 @@
                                     text + '</label>');
                         }
                     });
+                    if ('/claims/' == window.location.pathname) {
+                        $modal__exported_cols.append('<label class="checkbox">' +
+                            '<input class="checkbox_export_one" type="checkbox" name="cols[]" value="' + 'final_comment' + '"/>' +
+                            'Финальный комментарий' + '</label>');
+                        $modal__exported_cols.append('<label class="checkbox">' +
+                            '<input class="checkbox_export_one" type="checkbox" name="cols[]" value="' + 'reason' + '"/>' +
+                            'Причина закрытия' + '</label>');
+                    }
 
                     var $checkboxes_one = $export_modal.find('.checkbox_export_one');
 

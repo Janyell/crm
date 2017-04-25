@@ -294,7 +294,7 @@ class Order_Files(models.Model):
 
 class Client_Files(models.Model):
     client = models.ForeignKey(Clients, null=True, blank=True)
-    title = models.CharField(max_length=50, null=False, blank=True)
+    title = models.CharField(max_length=500, null=False, blank=True)
     file = models.FileField(upload_to="uploads/", null=True, blank=True)
     file_node = models.ForeignKey(FileNode, null=True, blank=True)
 
@@ -331,7 +331,7 @@ class CloseReasons(models.Model):
 
 
 class CloseClaims(models.Model):
-    order = models.ForeignKey(Orders, null=False, blank=False)
+    order = models.ForeignKey(Orders, null=False, blank=False, related_name='close_info')
     reason = models.ForeignKey(CloseReasons, null=True, blank=True)
     final_comment = models.TextField(default='')
     is_deleted = models.BooleanField(default=0)
